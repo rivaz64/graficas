@@ -7,8 +7,9 @@
 #include <xnamath.h>
 class camera
 {
-	vector3 eye,at,up;
+	
 public:
+	vector3 eye, at, up;
 	void seteye(float x, float y, float z);
 	void setat(float x, float y, float z);
 	void setup(float x, float y, float z);

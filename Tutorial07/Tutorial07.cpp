@@ -12,6 +12,55 @@
 #include <xnamath.h>
 #include "resource.h"
 #include"camera.h"
+#include<thread>
+#include<atomic>
+#include<vector>
+#include<mutex>
+#include<list>
+#include"semaphore.h"
+bool playing = true;
+std::mutex m;
+semaphore s;
+std::list<int> inputs;
+void input() {
+    while (playing) {
+        if (inputs.size() < 8) {
+            int x=0;
+            if (GetKeyState('W') & 0x8000)
+            {
+                x= x|0X2;
+            }
+            if (GetKeyState('S') & 0x8000)
+            {
+                x = x | 0X3;
+            }
+            if (GetKeyState('Q') & 0x8000)
+            {
+                x = x | 0X8;
+            }
+            if (GetKeyState('A') & 0x8000)
+            {
+                x = x | 0Xc;
+            }
+            if (GetKeyState('X') & 0x8000)
+            {
+                x = x | 0X20;
+            }
+            if (GetKeyState('Z') & 0x8000)
+            {
+                x = x | 0X30;
+            }
+            if (x) {
+                m.lock();
+                inputs.push_back(x);
+                m.unlock();
+            }
+            
+        }
+    }
+    
+    
+}
 camera cam;
 //--------------------------------------------------------------------------------------
 // Structures
@@ -75,6 +124,7 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow );
 HRESULT InitDevice();
 void CleanupDevice();
 LRESULT CALLBACK    WndProc( HWND, UINT, WPARAM, LPARAM );
+void update();
 void Render();
 
 
@@ -84,6 +134,7 @@ void Render();
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
 {
+    std::thread qwerty(input);
     UNREFERENCED_PARAMETER( hPrevInstance );
     UNREFERENCED_PARAMETER( lpCmdLine );
 
@@ -105,12 +156,13 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
             TranslateMessage( &msg );
             DispatchMessage( &msg );
         }
-        else
         {
+            update();
             Render();
         }
     }
-
+    playing = false;
+    qwerty.join();
     CleanupDevice();
 
     return ( int )msg.wParam;
@@ -494,9 +546,9 @@ HRESULT InitDevice()
     g_pImmediateContext->UpdateSubresource( g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0 );
 
     // Initialize the projection matrix
-    g_Projection = XMMatrixPerspectiveFovLH( XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f );
-    g_Projection = XMMatrixOrthographicLH(width, height, 0.01f, 100.f);
-    //g_Projection = cam.getproyectionmatrixOrtograpyc( width ,height, 0.01f, 100.f);
+    //g_Projection = XMMatrixPerspectiveFovLH( XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f );
+    //g_Projection = XMMatrixOrthographicLH(width, height, 0.01f, 100.f);
+    g_Projection = cam.getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
     CBChangeOnResize cbChangesOnResize;
     cbChangesOnResize.mProjection = XMMatrixTranspose( g_Projection );
     g_pImmediateContext->UpdateSubresource( g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0 );
@@ -556,7 +608,84 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 
     return 0;
 }
+void update() {
+    static float t = 0.0f;
+    if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+    {
+        t += (float)XM_PI * 0.0125f;
+    }
+    else
+    {
+        static DWORD dwTimeStart = 0;
+        DWORD dwTimeCur = GetTickCount();
+        if (dwTimeStart == 0)
+            dwTimeStart = dwTimeCur;
+        t = (dwTimeCur - dwTimeStart) / 1000.0f;
+        // Rotate cube around the origin
 
+        
+        float vel = 1.f / 216.f;
+        if (inputs.size() > 1) {
+            int x = inputs.front();
+            if (inputs.front() & 0X2) {
+                if (inputs.front() & 0X1) {
+                    cam.eye.z += vel;
+                    cam.at.z += vel;
+                }
+                else {
+                    cam.eye.z -= vel;
+                    cam.at.z -= vel;
+                }
+            }
+            if (inputs.front() & 0X8) {
+                if (inputs.front() & 0X4) {
+                    cam.eye.y += vel;
+                    cam.at.y += vel;
+                }
+                else {
+                    cam.eye.y -= vel;
+                    cam.at.y -= vel;
+                }
+            }
+            if (inputs.front() & 0X20) {
+                if (inputs.front() & 0X10) {
+                    cam.eye.x += vel;
+                    cam.at.x += vel;
+                }
+                else {
+                    cam.eye.x -= vel;
+                    cam.at.x -= vel;
+                }
+            }
+            inputs.pop_front();
+            g_View = cam.getviewmatrix();
+            CBNeverChanges mv;
+            mv.mView = XMMatrixTranspose(g_View);
+            
+            g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
+            
+        }
+        g_World = XMMatrixRotationY(t);
+
+
+
+        // Modify the color
+        g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+        g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+        g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+    } float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+
+    //
+    // Update variables that change once per frame
+    //
+    CBChangesEveryFrame cb;
+    cb.mWorld = XMMatrixTranspose(g_World);
+    cb.vMeshColor = g_vMeshColor;
+    g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
+    g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+    g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
+    
+}
 
 //--------------------------------------------------------------------------------------
 // Render a frame
@@ -564,64 +693,27 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 void Render()
 {
     // Update our time
-    static float t = 0.0f;
-    if( g_driverType == D3D_DRIVER_TYPE_REFERENCE )
-    {
-        t += ( float )XM_PI * 0.0125f;
-    }
-    else
-    {
-        static DWORD dwTimeStart = 0;
-        DWORD dwTimeCur = GetTickCount();
-        if( dwTimeStart == 0 )
-            dwTimeStart = dwTimeCur;
-        t = ( dwTimeCur - dwTimeStart ) / 1000.0f;
-    }
+    
 
-    // Rotate cube around the origin
-    //g_World = XMMatrixRotationY( t );
-    //g_World.m[2][2] = 6;
-    //g_World.m[1][1] = 6;
-    //g_World.m[0][0] = 6;
-    // Modify the color
-    g_vMeshColor.x = ( sinf( t * 1.0f ) + 1.0f ) * 0.5f;
-    g_vMeshColor.y = ( cosf( t * 3.0f ) + 1.0f ) * 0.5f;
-    g_vMeshColor.z = ( sinf( t * 5.0f ) + 1.0f ) * 0.5f;
+    
 
     //
     // Clear the back buffer
     //
-    float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
-    g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
-
-    //
-    // Clear the depth buffer to 1.0 (max depth)
-    //
-    g_pImmediateContext->ClearDepthStencilView( g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
-
-    //
-    // Update variables that change once per frame
-    //
-    CBChangesEveryFrame cb;
-    cb.mWorld = XMMatrixTranspose( g_World );
-    cb.vMeshColor = g_vMeshColor;
-    g_pImmediateContext->UpdateSubresource( g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0 );
-
+   
     //
     // Render the cube
     //
-    g_pImmediateContext->VSSetShader( g_pVertexShader, NULL, 0 );
-    g_pImmediateContext->VSSetConstantBuffers( 0, 1, &g_pCBNeverChanges );
-    g_pImmediateContext->VSSetConstantBuffers( 1, 1, &g_pCBChangeOnResize );
-    g_pImmediateContext->VSSetConstantBuffers( 2, 1, &g_pCBChangesEveryFrame );
-    g_pImmediateContext->PSSetShader( g_pPixelShader, NULL, 0 );
-    g_pImmediateContext->PSSetConstantBuffers( 2, 1, &g_pCBChangesEveryFrame );
-    g_pImmediateContext->PSSetShaderResources( 0, 1, &g_pTextureRV );
-    g_pImmediateContext->PSSetSamplers( 0, 1, &g_pSamplerLinear );
-    g_pImmediateContext->DrawIndexed( 36, 0, 0 );
-
-    //
-    // Present our back buffer to our front buffer
-    //
-    g_pSwapChain->Present( 0, 0 );
+    g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
+    g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
+    g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
+    g_pImmediateContext->VSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+    g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
+    g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+    g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
+    g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
+    g_pImmediateContext->DrawIndexed(36, 0, 0);
+    g_pSwapChain->Present(0, 0);
+        
+    
 }
