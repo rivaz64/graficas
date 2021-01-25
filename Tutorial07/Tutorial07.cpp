@@ -13,15 +13,17 @@
 #include "resource.h"
 #include"camera.h"
 #include<thread>
-#include<atomic>
 #include<vector>
 #include<mutex>
 #include<list>
-#include"semaphore.h"
+#include<iostream>
+#include"mesh.h"
 bool playing = true;
+bool whatcam = true;
+bool presed=false;
 std::mutex m;
-semaphore s;
 std::list<int> inputs;
+mesh cubito;
 void input() {
     while (playing) {
         if (inputs.size() < 8) {
@@ -50,6 +52,15 @@ void input() {
             {
                 x = x | 0X30;
             }
+            if (GetKeyState(VK_TAB) & 0x8000) {
+                if (!presed) {
+                    x = x | 0x80;
+                    presed = true;
+                }
+            }
+            else {
+                presed = false;
+            }
             if (x) {
                 m.lock();
                 inputs.push_back(x);
@@ -61,7 +72,8 @@ void input() {
     
     
 }
-camera cam;
+
+camera* cam,cam1,cam2;
 //--------------------------------------------------------------------------------------
 // Structures
 //--------------------------------------------------------------------------------------
@@ -135,6 +147,7 @@ void Render();
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
 {
     std::thread qwerty(input);
+    
     UNREFERENCED_PARAMETER( hPrevInstance );
     UNREFERENCED_PARAMETER( lpCmdLine );
 
@@ -247,7 +260,7 @@ HRESULT InitDevice()
     HRESULT hr = S_OK;
 
     RECT rc;
-    GetClientRect( g_hWnd, &rc );
+    GetClientRect(g_hWnd, &rc);
     UINT width = rc.right - rc.left;
     UINT height = rc.bottom - rc.top;
 
@@ -262,7 +275,7 @@ HRESULT InitDevice()
         D3D_DRIVER_TYPE_WARP,
         D3D_DRIVER_TYPE_REFERENCE,
     };
-    UINT numDriverTypes = ARRAYSIZE( driverTypes );
+    UINT numDriverTypes = ARRAYSIZE(driverTypes);
 
     D3D_FEATURE_LEVEL featureLevels[] =
     {
@@ -270,10 +283,10 @@ HRESULT InitDevice()
         D3D_FEATURE_LEVEL_10_1,
         D3D_FEATURE_LEVEL_10_0,
     };
-    UINT numFeatureLevels = ARRAYSIZE( featureLevels );
+    UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
     DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory( &sd, sizeof( sd ) );
+    ZeroMemory(&sd, sizeof(sd));
     sd.BufferCount = 1;
     sd.BufferDesc.Width = width;
     sd.BufferDesc.Height = height;
@@ -286,31 +299,31 @@ HRESULT InitDevice()
     sd.SampleDesc.Quality = 0;
     sd.Windowed = TRUE;
 
-    for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
+    for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
         g_driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDeviceAndSwapChain( NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                                            D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext );
-        if( SUCCEEDED( hr ) )
+        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+            D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+        if (SUCCEEDED(hr))
             break;
     }
-    if( FAILED( hr ) )
+    if (FAILED(hr))
         return hr;
 
     // Create a render target view
     ID3D11Texture2D* pBackBuffer = NULL;
-    hr = g_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( LPVOID* )&pBackBuffer );
-    if( FAILED( hr ) )
+    hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+    if (FAILED(hr))
         return hr;
 
-    hr = g_pd3dDevice->CreateRenderTargetView( pBackBuffer, NULL, &g_pRenderTargetView );
+    hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
     pBackBuffer->Release();
-    if( FAILED( hr ) )
+    if (FAILED(hr))
         return hr;
 
     // Create depth stencil texture
     D3D11_TEXTURE2D_DESC descDepth;
-    ZeroMemory( &descDepth, sizeof(descDepth) );
+    ZeroMemory(&descDepth, sizeof(descDepth));
     descDepth.Width = width;
     descDepth.Height = height;
     descDepth.MipLevels = 1;
@@ -322,21 +335,21 @@ HRESULT InitDevice()
     descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     descDepth.CPUAccessFlags = 0;
     descDepth.MiscFlags = 0;
-    hr = g_pd3dDevice->CreateTexture2D( &descDepth, NULL, &g_pDepthStencil );
-    if( FAILED( hr ) )
+    hr = g_pd3dDevice->CreateTexture2D(&descDepth, NULL, &g_pDepthStencil);
+    if (FAILED(hr))
         return hr;
 
     // Create the depth stencil view
     D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-    ZeroMemory( &descDSV, sizeof(descDSV) );
+    ZeroMemory(&descDSV, sizeof(descDSV));
     descDSV.Format = descDepth.Format;
     descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     descDSV.Texture2D.MipSlice = 0;
-    hr = g_pd3dDevice->CreateDepthStencilView( g_pDepthStencil, &descDSV, &g_pDepthStencilView );
-    if( FAILED( hr ) )
+    hr = g_pd3dDevice->CreateDepthStencilView(g_pDepthStencil, &descDSV, &g_pDepthStencilView);
+    if (FAILED(hr))
         return hr;
 
-    g_pImmediateContext->OMSetRenderTargets( 1, &g_pRenderTargetView, g_pDepthStencilView );
+    g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
 
     // Setup the viewport
     D3D11_VIEWPORT vp;
@@ -346,22 +359,22 @@ HRESULT InitDevice()
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
-    g_pImmediateContext->RSSetViewports( 1, &vp );
+    g_pImmediateContext->RSSetViewports(1, &vp);
 
     // Compile the vertex shader
     ID3DBlob* pVSBlob = NULL;
-    hr = CompileShaderFromFile( L"Tutorial07.fx", "VS", "vs_4_0", &pVSBlob );
-    if( FAILED( hr ) )
+    hr = CompileShaderFromFile(L"Tutorial07.fx", "VS", "vs_4_0", &pVSBlob);
+    if (FAILED(hr))
     {
-        MessageBox( NULL,
-                    L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK );
+        MessageBox(NULL,
+            L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
         return hr;
     }
 
     // Create the vertex shader
-    hr = g_pd3dDevice->CreateVertexShader( pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader );
-    if( FAILED( hr ) )
-    {    
+    hr = g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
+    if (FAILED(hr))
+    {
         pVSBlob->Release();
         return hr;
     }
@@ -372,68 +385,67 @@ HRESULT InitDevice()
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
-    UINT numElements = ARRAYSIZE( layout );
+    UINT numElements = ARRAYSIZE(layout);
 
     // Create the input layout
-    hr = g_pd3dDevice->CreateInputLayout( layout, numElements, pVSBlob->GetBufferPointer(),
-                                          pVSBlob->GetBufferSize(), &g_pVertexLayout );
+    hr = g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
+        pVSBlob->GetBufferSize(), &g_pVertexLayout);
     pVSBlob->Release();
-    if( FAILED( hr ) )
+    if (FAILED(hr))
         return hr;
 
     // Set the input layout
-    g_pImmediateContext->IASetInputLayout( g_pVertexLayout );
+    g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
 
     // Compile the pixel shader
     ID3DBlob* pPSBlob = NULL;
-    hr = CompileShaderFromFile( L"Tutorial07.fx", "PS", "ps_4_0", &pPSBlob );
-    if( FAILED( hr ) )
+    hr = CompileShaderFromFile(L"Tutorial07.fx", "PS", "ps_4_0", &pPSBlob);
+    if (FAILED(hr))
     {
-        MessageBox( NULL,
-                    L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK );
+        MessageBox(NULL,
+            L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
         return hr;
     }
 
     // Create the pixel shader
-    hr = g_pd3dDevice->CreatePixelShader( pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader );
+    hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);
     pPSBlob->Release();
-    if( FAILED( hr ) )
+    if (FAILED(hr))
         return hr;
 
     // Create vertex buffer
-    SimpleVertex vertices[] =
-    {
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+    cubito.setvertex(
+        {
+            { {-1.0f, 1.0f, -1.0f}, {0,0} },
+            { { 1.0f, 1.0f, -1.0f }, { 1.0f, 0.0f } },
+            { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } },
+            { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
 
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+            { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } },
+            { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
+            { { 1.0f, -1.0f, 1.0f }, { 1.0f, 1.0f } },
+            { { -1.0f, -1.0f, 1.0f }, { 0.0f, 1.0f } },
 
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+            { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } },
+            { { -1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
+            { { -1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f } },
+            { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
 
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+            { { 1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } },
+            { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
+            { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f } },
+            { { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
 
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+            { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } },
+            { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
+            { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f } },
+            { { -1.0f, 1.0f, -1.0f }, { 0.0f, 1.0f } },
 
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
-    };
-
+            { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } },
+            { { 1.0f, -1.0f, 1.0f }, { 1.0f, 0.0f } },
+            { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } },
+            { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
+        });
     D3D11_BUFFER_DESC bd;
     ZeroMemory( &bd, sizeof(bd) );
     bd.Usage = D3D11_USAGE_DEFAULT;
@@ -442,7 +454,7 @@ HRESULT InitDevice()
     bd.CPUAccessFlags = 0;
     D3D11_SUBRESOURCE_DATA InitData;
     ZeroMemory( &InitData, sizeof(InitData) );
-    InitData.pSysMem = vertices;
+    InitData.pSysMem = cubito.getvertex();
     hr = g_pd3dDevice->CreateBuffer( &bd, &InitData, &g_pVertexBuffer );
     if( FAILED( hr ) )
         return hr;
@@ -454,7 +466,7 @@ HRESULT InitDevice()
 
     // Create index buffer
     // Create vertex buffer
-    WORD indices[] =
+    cubito.setindices(
     {
         3,1,0,
         2,1,3,
@@ -473,13 +485,13 @@ HRESULT InitDevice()
 
         22,20,21,
         23,20,22
-    };
-
+    });
+    //cubito.indices = indices;
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof( WORD ) * 36;
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd.CPUAccessFlags = 0;
-    InitData.pSysMem = indices;
+    InitData.pSysMem = cubito.getindices();
     hr = g_pd3dDevice->CreateBuffer( &bd, &InitData, &g_pIndexBuffer );
     if( FAILED( hr ) )
         return hr;
@@ -532,10 +544,16 @@ HRESULT InitDevice()
     g_World = XMMatrixIdentity();
     
     // Initialize the view matrix
-    cam.seteye(0.0f, 3.0f, -6.0f);
-    cam.setat(0.0f, 1.0f, 0.0f);
-    cam.setup(0.0f, 1.0f, 0.0f);
-    g_View = cam.getviewmatrix();
+    cam1.seteye(0.0f, 0, -1);
+    cam1.setat(0.0f, 0.f, 0);
+    cam1.setup(0.0f, 1.0f, 0);
+    cam1.axis();
+	cam2.seteye(0.0f, 0, -1);
+	cam2.setat(0.0f, 0.f, 0);
+	cam2.setup(0.0f, 1.0f, 0);
+	cam2.axis();
+    g_View = cam1.getviewmatrix();
+    cam = &cam1;
     /*XMVECTOR Eye = XMVectorSet( 0.0f, 3.0f, -6.0f, 0.0f );
     XMVECTOR At = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
     XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
@@ -545,10 +563,9 @@ HRESULT InitDevice()
     cbNeverChanges.mView = XMMatrixTranspose( g_View );
     g_pImmediateContext->UpdateSubresource( g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0 );
 
-    // Initialize the projection matrix
-    //g_Projection = XMMatrixPerspectiveFovLH( XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f );
-    //g_Projection = XMMatrixOrthographicLH(width, height, 0.01f, 100.f);
-    g_Projection = cam.getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
+    
+    g_Projection = cam1.getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
+    //g_Projection = cam.getproyectionmatrixOrtograpyc(6.4, 4.8, 0.01f, 100.0f);
     CBChangeOnResize cbChangesOnResize;
     cbChangesOnResize.mProjection = XMMatrixTranspose( g_Projection );
     g_pImmediateContext->UpdateSubresource( g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0 );
@@ -609,6 +626,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
     return 0;
 }
 void update() {
+    
     static float t = 0.0f;
     if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
     {
@@ -622,53 +640,81 @@ void update() {
             dwTimeStart = dwTimeCur;
         t = (dwTimeCur - dwTimeStart) / 1000.0f;
         // Rotate cube around the origin
+        /*LPPOINT p = new POINT;
+        cam.gira(p);
+		g_View = cam.getviewmatrix();
+		CBNeverChanges mv;
+		mv.mView = XMMatrixTranspose(g_View);
+		g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);*/
 
+		LPPOINT p = new POINT;
+		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0) {
+			GetCursorPos(p);
+			cam->gira(p);
+			g_View = cam->getviewmatrix();
+			CBNeverChanges mv;
+			mv.mView = XMMatrixTranspose(g_View);
+
+			g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
+
+		}
         
         float vel = 1.f / 216.f;
         if (inputs.size() > 1) {
             int x = inputs.front();
             if (inputs.front() & 0X2) {
                 if (inputs.front() & 0X1) {
-                    cam.eye.z += vel;
-                    cam.at.z += vel;
+                    cam->movez(-1);
                 }
                 else {
-                    cam.eye.z -= vel;
-                    cam.at.z -= vel;
+                    cam->movez(1);
                 }
             }
             if (inputs.front() & 0X8) {
                 if (inputs.front() & 0X4) {
-                    cam.eye.y += vel;
-                    cam.at.y += vel;
+                    cam->movey(-1);
                 }
                 else {
-                    cam.eye.y -= vel;
-                    cam.at.y -= vel;
+                    cam->movey(1);
                 }
             }
             if (inputs.front() & 0X20) {
                 if (inputs.front() & 0X10) {
-                    cam.eye.x += vel;
-                    cam.at.x += vel;
+                    cam->movex(-1);
                 }
                 else {
-                    cam.eye.x -= vel;
-                    cam.at.x -= vel;
+                    cam->movex(1);
                 }
             }
+            if (GetKeyState(VK_TAB) & 0x8000){
+                if (whatcam) {
+                    g_Projection = cam1.getproyectionmatrixPerspective(XM_PIDIV4, 64 / (FLOAT)48, 0.01f, 100.0f);
+                    cam = &cam1;
+                    whatcam = false;
+                }
+                else {
+                    g_Projection = cam2.getproyectionmatrixOrtograpyc(6.4, 4.8, 0.01f, 100.0f);
+                    cam = &cam2;
+                    whatcam = true;
+                }
+				
+				CBChangeOnResize cbChangesOnResize;
+				cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
+				g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
+            }
             inputs.pop_front();
-            g_View = cam.getviewmatrix();
+            g_View = cam->getviewmatrix();
             CBNeverChanges mv;
             mv.mView = XMMatrixTranspose(g_View);
             
             g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
             
         }
-        g_World = XMMatrixRotationY(t);
+        //g_World = XMMatrixRotationY(t);
 
-
-
+        g_World.m[3][0] = 0;
+        g_World.m[3][1] = 0;
+        g_World.m[3][2] = 5;
         // Modify the color
         g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
         g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;

@@ -1,5 +1,29 @@
 #include "camera.h"
 
+void camera::gira(LPPOINT punto)
+{
+	/*vector3 dir = at - eye;
+	vector3 zaxis = dir.normalize();
+	vector3 xaxis = up.cross(zaxis).normalize();
+	vector3 yaxis = zaxis.cross(xaxis);
+	at = zaxis + xaxis * .001;//- yaxis * (punto->y - p->y) * .02;
+	at = at.normalize();
+	at = at + eye;
+	p = punto;*/
+	if (!click) {
+		click = true;
+		p = punto;
+	}
+	else {
+		
+		at = zaxis + xaxis * (punto->x - p->x) * .003 - yaxis * (punto->y - p->y) * .003;
+		at = at.normalize();
+		p = punto;
+		at = at + eye;
+		axis();
+	}
+}
+
 void camera::seteye(float x, float y, float z)
 {
 	eye.x = x;
@@ -21,15 +45,35 @@ void camera::setup(float x, float y, float z)
 	up.z = z;
 }
 
+void camera::movex(float x)
+{
+	eye = eye + xaxis * vel*x;
+	at = at + xaxis * vel*x;
+}
+void camera::movey(float x)
+{
+	eye = eye + yaxis * vel * x;
+	at = at + yaxis * vel * x;
+}
+
+void camera::movez(float x)
+{
+	eye = eye + zaxis * vel*x;
+	at = at + zaxis * vel*x;
+}
+
+
+void camera::axis()
+{
+	vector3 dir = at - eye;
+	 zaxis = dir.normalize();
+	 xaxis = up.cross(zaxis).normalize();
+	 yaxis = zaxis.cross(xaxis);
+}
+
 XMMATRIX camera::getviewmatrix()
 {
-	vector3 dir;
-	dir.x = at.x - eye.x;
-	dir.y = at.y - eye.y;
-	dir.z = at.z - eye.z;
-	vector3 zaxis = dir.normalize();
-	vector3 xaxis = up.cross(zaxis).normalize();
-	vector3 yaxis = zaxis.cross(xaxis);
+	
 	XMMATRIX viewmatrix;
 	viewmatrix.m[0][0] = xaxis.x;
 	viewmatrix.m[0][1] = yaxis.x;
