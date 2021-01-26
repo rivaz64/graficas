@@ -18,9 +18,11 @@
 #include<list>
 #include<iostream>
 #include"mesh.h"
+#include"instancia.h"
 bool playing = true;
 bool whatcam = true;
 bool presed=false;
+std::vector<float*> instanses;
 std::mutex m;
 std::list<int> inputs;
 mesh cubito;
@@ -124,6 +126,7 @@ ID3D11Buffer*                       g_pCBChangesEveryFrame = NULL;
 ID3D11ShaderResourceView*           g_pTextureRV = NULL;
 ID3D11SamplerState*                 g_pSamplerLinear = NULL;
 XMMATRIX                            g_World;
+XMMATRIX                            g_World1;
 XMMATRIX                            g_View;
 XMMATRIX                            g_Projection;
 XMFLOAT4                            g_vMeshColor( 0.7f, 0.7f, 0.7f, 1.0f );
@@ -542,7 +545,7 @@ HRESULT InitDevice()
 
     // Initialize the world matrices
     g_World = XMMatrixIdentity();
-    
+    g_World1 = XMMatrixIdentity();
     // Initialize the view matrix
     cam1.seteye(0.0f, 0, -1);
     cam1.setat(0.0f, 0.f, 0);
@@ -552,22 +555,38 @@ HRESULT InitDevice()
 	cam2.setat(0.0f, 0.f, 0);
 	cam2.setup(0.0f, 1.0f, 0);
 	cam2.axis();
-    g_View = cam1.getviewmatrix();
     cam = &cam1;
+    for (int i = 0; i < 4; i++) {
+        instanses.push_back(new float[16]);
+        for (int o = 0; o < 16; o++) {
+            instanses[i][o] = 0;
+        }
+        instanses[i][0] = 1;
+        instanses[i][5] = 1;
+        instanses[i][10] = 1;
+        instanses[i][15] = 1;
+        instanses[i][14] = 5;
+    }
+    instanses[1][13] = 3;
+    instanses[2][12] = 3;
+    instanses[3][12] = -3;
+    //instanses[0][3] = 5;
+	
+
     /*XMVECTOR Eye = XMVectorSet( 0.0f, 3.0f, -6.0f, 0.0f );
     XMVECTOR At = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
     XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
     g_View = XMMatrixLookAtLH( Eye, At, Up );*/
     
     CBNeverChanges cbNeverChanges;
-    cbNeverChanges.mView = XMMatrixTranspose( g_View );
+    cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
     g_pImmediateContext->UpdateSubresource( g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0 );
 
     
     g_Projection = cam1.getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
     //g_Projection = cam.getproyectionmatrixOrtograpyc(6.4, 4.8, 0.01f, 100.0f);
     CBChangeOnResize cbChangesOnResize;
-    cbChangesOnResize.mProjection = XMMatrixTranspose( g_Projection );
+    cbChangesOnResize.mProjection = XMMatrixTranspose( cam->getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f) );
     g_pImmediateContext->UpdateSubresource( g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0 );
 
     return S_OK;
@@ -651,13 +670,14 @@ void update() {
 		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0) {
 			GetCursorPos(p);
 			cam->gira(p);
-			g_View = cam->getviewmatrix();
-			CBNeverChanges mv;
-			mv.mView = XMMatrixTranspose(g_View);
-
+            CBNeverChanges mv;
+			mv.mView = XMMatrixTranspose(cam->getview());
 			g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
 
-		}
+        } 
+        else {
+            cam->click = false;
+        }
         
         float vel = 1.f / 216.f;
         if (inputs.size() > 1) {
@@ -703,33 +723,24 @@ void update() {
 				g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
             }
             inputs.pop_front();
-            g_View = cam->getviewmatrix();
             CBNeverChanges mv;
-            mv.mView = XMMatrixTranspose(g_View);
+            mv.mView = XMMatrixTranspose(cam->getview());
             
             g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
             
         }
         //g_World = XMMatrixRotationY(t);
-
-        g_World.m[3][0] = 0;
-        g_World.m[3][1] = 0;
-        g_World.m[3][2] = 5;
+        
         // Modify the color
         g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
         g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
         g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
-    } float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+    }  // red, green, blue, alpha
 
     //
     // Update variables that change once per frame
     //
-    CBChangesEveryFrame cb;
-    cb.mWorld = XMMatrixTranspose(g_World);
-    cb.vMeshColor = g_vMeshColor;
-    g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
-    g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-    g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
+   
     
 }
 
@@ -750,6 +761,7 @@ void Render()
     //
     // Render the cube
     //
+    float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
     g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
     g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
@@ -758,7 +770,16 @@ void Render()
     g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
     g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
     g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
-    g_pImmediateContext->DrawIndexed(36, 0, 0);
+    CBChangesEveryFrame cb;
+	cb.vMeshColor = g_vMeshColor;
+	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
+	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+    for (float* i : instanses) {
+		cb.mWorld = XMMatrixTranspose(i);
+		g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
+		g_pImmediateContext->DrawIndexed(36, 0, 0);
+    }
+	
     g_pSwapChain->Present(0, 0);
         
     

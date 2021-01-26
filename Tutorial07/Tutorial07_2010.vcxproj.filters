@@ -18,6 +18,7 @@
     <ClInclude Include="vector3.h" />
     <ClInclude Include="semaphore.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="instancia.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tutorial07.cpp" />
@@ -25,6 +26,7 @@
     <ClCompile Include="vector3.cpp" />
     <ClCompile Include="semaphore.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="instancia.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fx">

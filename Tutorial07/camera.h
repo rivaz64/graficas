@@ -5,6 +5,7 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
+#include <array>
 class camera
 {
 
@@ -13,6 +14,7 @@ public:
 	vector3 zaxis, yaxis, xaxis;
 	LPPOINT p = new POINT;
 	bool click = false;
+	float* viewmatrix;
 	float vel=.001;
 	void gira(LPPOINT punto);
 	void seteye(float x, float y, float z);
@@ -22,8 +24,9 @@ public:
 	void movex(float x);
 	void movey(float x);
 	void movez(float x);
-	XMMATRIX getviewmatrix();
-	XMMATRIX getproyectionmatrixPerspective(float with,float ratio,float nearp,float farp);
-	XMMATRIX getproyectionmatrixOrtograpyc(float with, float height, float nearp, float farp);
+	
+	float* getview();
+	float* getproyectionmatrixPerspective(float with,float ratio,float nearp,float farp);
+	float* getproyectionmatrixOrtograpyc(float with, float height, float nearp, float farp);
 };
 
