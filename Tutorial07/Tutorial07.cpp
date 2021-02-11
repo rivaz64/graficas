@@ -20,6 +20,7 @@
 #include"mesh.h"
 #include"instancia.h"
 #include"Device.h"
+#include"DeviceContext.h"
 bool playing = true;
 bool whatcam = true;
 bool presed=false;
@@ -113,6 +114,7 @@ D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 ID3D11Device*                       g_pd3dDevice = NULL;
 Device*                             v_device = NULL;
 ID3D11DeviceContext*                g_pImmediateContext = NULL;
+DeviceContext*                      v_deviceContext = NULL;
 IDXGISwapChain*                     g_pSwapChain = NULL;
 ID3D11RenderTargetView*             g_pRenderTargetView = NULL;
 ID3D11Texture2D*                    g_pDepthStencil = NULL;
@@ -323,6 +325,8 @@ HRESULT InitDevice()
         return hr;
     v_device = new Device;
     v_device->g_pd3dDevice = g_pd3dDevice;
+    v_deviceContext = new DeviceContext;
+    v_deviceContext->g_pImmediateContext = g_pImmediateContext;
     hr = v_device->CreateRenderTargetView(pBackBuffer, &g_pRenderTargetView);
 
     pBackBuffer->Release();
@@ -353,10 +357,10 @@ HRESULT InitDevice()
     descDSV.Format = descDepth.Format;
     descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     descDSV.Texture2D.MipSlice = 0;*/
-    hr = v_device->CreateDepthStencilView( &g_pDepthStencilView);
+    hr = v_device->CreateDepthStencilView( );
     if (FAILED(hr))
         return hr;
-
+    v_deviceContext->OMSetRenderTargets(v_device);
     g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
 
     // Setup the viewport

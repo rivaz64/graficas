@@ -20,6 +20,7 @@
     <ClInclude Include="mesh.h" />
     <ClInclude Include="instancia.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="DeviceContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tutorial07.cpp" />
@@ -29,6 +30,7 @@
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="instancia.cpp" />
     <ClCompile Include="Device.cpp" />
+    <ClCompile Include="DeviceContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fx">

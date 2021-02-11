@@ -49,14 +49,16 @@ HRESULT Device::CreateTexture2D(UINT width, UINT height, ID3D11Texture2D** Depth
 	return g_pd3dDevice->CreateTexture2D(&descDepth, NULL, deptstencil);
 }
 
-HRESULT Device::CreateDepthStencilView(ID3D11DepthStencilView** DepthStencilView)
+HRESULT Device::CreateDepthStencilView()
 {
+
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
 	ZeroMemory(&descDSV, sizeof(descDSV));
 	descDSV.Format = descDepth.Format;
 	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	descDSV.Texture2D.MipSlice = 0;
-	return g_pd3dDevice->CreateDepthStencilView(*deptstencil, &descDSV, DepthStencilView);
+	DepthStencilView = NULL;
+	return g_pd3dDevice->CreateDepthStencilView(*deptstencil, &descDSV, &DepthStencilView);
 }
 
 HRESULT Device::CreateVertexShader(wchar_t* file, const char* vs, const char* vsv, ID3D11VertexShader** vertexshader)
@@ -70,4 +72,12 @@ HRESULT Device::CreateVertexShader(wchar_t* file, const char* vs, const char* vs
 		return hr;
 	}*/
 	return g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, vertexshader);
+}
+
+Device::~Device()
+{
+	/*delete g_pd3dDevice;
+	delete g_pRenderTargetView;
+	delete (*deptstencil);
+	delete deptstencil;*/
 }
