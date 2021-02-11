@@ -375,6 +375,7 @@
   <ItemGroup />
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="Device.cpp" />
     <ClCompile Include="instancia.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="semaphore.cpp" />
@@ -386,6 +387,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="Device.h" />
     <ClInclude Include="instancia.h" />
     <ClInclude Include="mesh.h" />
     <CLInclude Include="resource.h" />

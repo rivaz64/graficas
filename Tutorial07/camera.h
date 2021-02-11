@@ -15,7 +15,10 @@ public:
 	LPPOINT p = new POINT;
 	bool click = false;
 	float* viewmatrix;
-	float vel=.001;
+	float* proyectionmatrix;
+	float vel = .001;
+	camera();
+	~camera();
 	void gira(LPPOINT punto);
 	void seteye(float x, float y, float z);
 	void setat(float x, float y, float z);
@@ -24,9 +27,9 @@ public:
 	void movex(float x);
 	void movey(float x);
 	void movez(float x);
-	
+
 	float* getview();
-	float* getproyectionmatrixPerspective(float with,float ratio,float nearp,float farp);
+	float* getproyectionmatrixPerspective(float with, float ratio, float nearp, float farp);
 	float* getproyectionmatrixOrtograpyc(float with, float height, float nearp, float farp);
 };
 

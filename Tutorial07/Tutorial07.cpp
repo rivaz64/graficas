@@ -19,6 +19,7 @@
 #include<iostream>
 #include"mesh.h"
 #include"instancia.h"
+#include"Device.h"
 bool playing = true;
 bool whatcam = true;
 bool presed=false;
@@ -110,6 +111,7 @@ HWND                                g_hWnd = NULL;
 D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
 D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
 ID3D11Device*                       g_pd3dDevice = NULL;
+Device*                             v_device = NULL;
 ID3D11DeviceContext*                g_pImmediateContext = NULL;
 IDXGISwapChain*                     g_pSwapChain = NULL;
 ID3D11RenderTargetView*             g_pRenderTargetView = NULL;
@@ -305,6 +307,7 @@ HRESULT InitDevice()
     for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
         g_driverType = driverTypes[driverTypeIndex];
+        v_device = new Device;
         hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
             D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
         if (SUCCEEDED(hr))
@@ -318,14 +321,16 @@ HRESULT InitDevice()
     hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
     if (FAILED(hr))
         return hr;
+    v_device = new Device;
+    v_device->g_pd3dDevice = g_pd3dDevice;
+    hr = v_device->CreateRenderTargetView(pBackBuffer, &g_pRenderTargetView);
 
-    hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
     pBackBuffer->Release();
     if (FAILED(hr))
         return hr;
 
     // Create depth stencil texture
-    D3D11_TEXTURE2D_DESC descDepth;
+    /*D3D11_TEXTURE2D_DESC descDepth;
     ZeroMemory(&descDepth, sizeof(descDepth));
     descDepth.Width = width;
     descDepth.Height = height;
@@ -337,18 +342,18 @@ HRESULT InitDevice()
     descDepth.Usage = D3D11_USAGE_DEFAULT;
     descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     descDepth.CPUAccessFlags = 0;
-    descDepth.MiscFlags = 0;
-    hr = g_pd3dDevice->CreateTexture2D(&descDepth, NULL, &g_pDepthStencil);
+    descDepth.MiscFlags = 0;*/
+    hr = v_device->CreateTexture2D(width, height, &g_pDepthStencil);
     if (FAILED(hr))
         return hr;
 
     // Create the depth stencil view
-    D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+    /*D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
     ZeroMemory(&descDSV, sizeof(descDSV));
     descDSV.Format = descDepth.Format;
     descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-    descDSV.Texture2D.MipSlice = 0;
-    hr = g_pd3dDevice->CreateDepthStencilView(g_pDepthStencil, &descDSV, &g_pDepthStencilView);
+    descDSV.Texture2D.MipSlice = 0;*/
+    hr = v_device->CreateDepthStencilView( &g_pDepthStencilView);
     if (FAILED(hr))
         return hr;
 
@@ -366,6 +371,7 @@ HRESULT InitDevice()
 
     // Compile the vertex shader
     ID3DBlob* pVSBlob = NULL;
+
     hr = CompileShaderFromFile(L"Tutorial07.fx", "VS", "vs_4_0", &pVSBlob);
     if (FAILED(hr))
     {
@@ -375,6 +381,7 @@ HRESULT InitDevice()
     }
 
     // Create the vertex shader
+    hr = v_device->CreateVertexShader(L"Tutorial07.fx", "VS", "vs_4_0", &g_pVertexShader);
     hr = g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
     if (FAILED(hr))
     {
