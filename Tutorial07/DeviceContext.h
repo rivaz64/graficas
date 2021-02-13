@@ -7,8 +7,12 @@
 class DeviceContext
 {
 public:
+	Device* dev;
 	ID3D11DeviceContext* g_pImmediateContext;
 	void OMSetRenderTargets(Device* v_device);
 	void RSSetViewports(UINT width, UINT height);
+	void IASetInputLayout();
+	void IASetVertexBuffers();
+	void IASetIndexBuffer();
 };
 

@@ -327,7 +327,7 @@ HRESULT InitDevice()
     v_device->g_pd3dDevice = g_pd3dDevice;
     v_deviceContext = new DeviceContext;
     v_deviceContext->g_pImmediateContext = g_pImmediateContext;
-    hr = v_device->CreateRenderTargetView(pBackBuffer, &g_pRenderTargetView);
+    hr = v_device->CreateRenderTargetView(pBackBuffer);
 
     pBackBuffer->Release();
     if (FAILED(hr))
@@ -357,21 +357,22 @@ HRESULT InitDevice()
     descDSV.Format = descDepth.Format;
     descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     descDSV.Texture2D.MipSlice = 0;*/
-    hr = v_device->CreateDepthStencilView( );
+    hr = v_device->CreateDepthStencilView();
     if (FAILED(hr))
         return hr;
     v_deviceContext->OMSetRenderTargets(v_device);
-    g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+    //g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
 
     // Setup the viewport
-    D3D11_VIEWPORT vp;
+    /*D3D11_VIEWPORT vp;
     vp.Width = (FLOAT)width;
     vp.Height = (FLOAT)height;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
-    g_pImmediateContext->RSSetViewports(1, &vp);
+    g_pImmediateContext->RSSetViewports(1, &vp);*/
+    v_deviceContext->RSSetViewports(width, height);
 
     // Compile the vertex shader
     ID3DBlob* pVSBlob = NULL;
@@ -385,8 +386,9 @@ HRESULT InitDevice()
     }
 
     // Create the vertex shader
-    hr = v_device->CreateVertexShader(L"Tutorial07.fx", "VS", "vs_4_0", &g_pVertexShader);
-    hr = g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
+    hr = v_device->CreateVertexShader(L"Tutorial07.fx", "VS", "vs_4_0");
+
+    //hr = g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
     if (FAILED(hr))
     {
         pVSBlob->Release();
@@ -394,25 +396,28 @@ HRESULT InitDevice()
     }
 
     // Define the input layout
-    D3D11_INPUT_ELEMENT_DESC layout[] =
+    /*D3D11_INPUT_ELEMENT_DESC layout[] =
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
-    UINT numElements = ARRAYSIZE(layout);
+    UINT numElements = ARRAYSIZE(layout);*/
 
     // Create the input layout
-    hr = g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
-        pVSBlob->GetBufferSize(), &g_pVertexLayout);
-    pVSBlob->Release();
+    hr = v_device->CreateInputLayout();
+    /*hr = g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
+        pVSBlob->GetBufferSize(), &g_pVertexLayout);*/
+
+        //pVSBlob->Release();
     if (FAILED(hr))
         return hr;
 
     // Set the input layout
-    g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
+    v_deviceContext->IASetInputLayout();
+    //g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
 
     // Compile the pixel shader
-    ID3DBlob* pPSBlob = NULL;
+    /*ID3DBlob* pPSBlob = NULL;
     hr = CompileShaderFromFile(L"Tutorial07.fx", "PS", "ps_4_0", &pPSBlob);
     if (FAILED(hr))
     {
@@ -422,8 +427,9 @@ HRESULT InitDevice()
     }
 
     // Create the pixel shader
-    hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);
-    pPSBlob->Release();
+    hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);*/
+    hr = v_device->CreatePixelShader(L"Tutorial07.fx", "PS", "ps_4_0");
+    //pPSBlob->Release();
     if (FAILED(hr))
         return hr;
 
@@ -460,23 +466,25 @@ HRESULT InitDevice()
             { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } },
             { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
         });
-    D3D11_BUFFER_DESC bd;
-    ZeroMemory( &bd, sizeof(bd) );
+    /*D3D11_BUFFER_DESC bd;
+    ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof( SimpleVertex ) * 24;
+    bd.ByteWidth = sizeof(SimpleVertex) * 24;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
     D3D11_SUBRESOURCE_DATA InitData;
-    ZeroMemory( &InitData, sizeof(InitData) );
-    InitData.pSysMem = cubito.getvertex();
-    hr = g_pd3dDevice->CreateBuffer( &bd, &InitData, &g_pVertexBuffer );
+    ZeroMemory(&InitData, sizeof(InitData));
+    InitData.pSysMem = cubito.getvertex();*/
+    
+    //hr = g_pd3dDevice->CreateBuffer( &bd, &InitData, &g_pVertexBuffer );
     if( FAILED( hr ) )
         return hr;
 
     // Set vertex buffer
-    UINT stride = sizeof( SimpleVertex );
-    UINT offset = 0;
-    g_pImmediateContext->IASetVertexBuffers( 0, 1, &g_pVertexBuffer, &stride, &offset );
+    /*UINT stride = sizeof( SimpleVertex );
+    UINT offset = 0;*/
+    
+    //g_pImmediateContext->IASetVertexBuffers( 0, 1, &g_pVertexBuffer, &stride, &offset );
 
     // Create index buffer
     // Create vertex buffer
@@ -501,23 +509,27 @@ HRESULT InitDevice()
         23,20,22
     });
     //cubito.indices = indices;
-    bd.Usage = D3D11_USAGE_DEFAULT;
+    /*bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof( WORD ) * 36;
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd.CPUAccessFlags = 0;
     InitData.pSysMem = cubito.getindices();
-    hr = g_pd3dDevice->CreateBuffer( &bd, &InitData, &g_pIndexBuffer );
+    v_device->CreateBuffer();
+    hr = g_pd3dDevice->CreateBuffer( &bd, &InitData, &g_pIndexBuffer );*/
+    hr = v_device->CreateBuffer(&cubito);
+    v_deviceContext->IASetVertexBuffers();
+
     if( FAILED( hr ) )
         return hr;
 
     // Set index buffer
-    g_pImmediateContext->IASetIndexBuffer( g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0 );
-
+    //g_pImmediateContext->IASetIndexBuffer( g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0 );
+    v_deviceContext->IASetIndexBuffer();
     // Set primitive topology
-    g_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+    //g_pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
     // Create the constant buffers
-    bd.Usage = D3D11_USAGE_DEFAULT;
+    /*bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof(CBNeverChanges);
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     bd.CPUAccessFlags = 0;
@@ -533,7 +545,7 @@ HRESULT InitDevice()
     bd.ByteWidth = sizeof(CBChangesEveryFrame);
     hr = g_pd3dDevice->CreateBuffer( &bd, NULL, &g_pCBChangesEveryFrame );
     if( FAILED( hr ) )
-        return hr;
+        return hr;*/
 
     // Load the Texture
     hr = D3DX11CreateShaderResourceViewFromFile( g_pd3dDevice, L"seafloor.dds", NULL, NULL, &g_pTextureRV, NULL );

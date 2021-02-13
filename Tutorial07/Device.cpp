@@ -1,4 +1,18 @@
 #include "Device.h"
+struct CBNeverChanges
+{
+	float mView[16];
+};
+struct CBChangeOnResize
+{
+	float mProjection[16];
+};
+
+struct CBChangesEveryFrame
+{
+	float mWorld[16];
+	float vMeshColor[4];
+};
 HRESULT CompileShaderFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 {
 	HRESULT hr = S_OK;
@@ -26,9 +40,10 @@ HRESULT CompileShaderFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShade
 
 	return S_OK;
 }
-HRESULT Device::CreateRenderTargetView(ID3D11Texture2D* textura, ID3D11RenderTargetView** targetView)
+HRESULT Device::CreateRenderTargetView(ID3D11Texture2D* textura)
 {
-	return g_pd3dDevice->CreateRenderTargetView(textura, NULL, targetView);
+	//g_pRenderTargetView = targetView;
+	return g_pd3dDevice->CreateRenderTargetView(textura, NULL, &g_pRenderTargetView);
 }
 
 HRESULT Device::CreateTexture2D(UINT width, UINT height, ID3D11Texture2D** DepthStencil)
@@ -61,9 +76,10 @@ HRESULT Device::CreateDepthStencilView()
 	return g_pd3dDevice->CreateDepthStencilView(*deptstencil, &descDSV, &DepthStencilView);
 }
 
-HRESULT Device::CreateVertexShader(wchar_t* file, const char* vs, const char* vsv, ID3D11VertexShader** vertexshader)
+HRESULT Device::CreateVertexShader(wchar_t* file, const char* vs, const char* vsv)
 {
-	ID3DBlob* pVSBlob = NULL;
+	ID3D11VertexShader* vertexshader;
+	pVSBlob = NULL;
 	/*hr = */CompileShaderFile(file, vs, vsv, &pVSBlob);
 	/*if (FAILED(hr))
 	{
@@ -71,7 +87,65 @@ HRESULT Device::CreateVertexShader(wchar_t* file, const char* vs, const char* vs
 			L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
 		return hr;
 	}*/
-	return g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, vertexshader);
+	return g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &vertexshader);
+}
+
+HRESULT Device::CreateInputLayout()
+{
+	g_pVertexLayout = NULL;
+	D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+	UINT numElements = ARRAYSIZE(layout);
+	HRESULT r = g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
+		pVSBlob->GetBufferSize(), &g_pVertexLayout);
+	pVSBlob->Release();
+	return r;
+}
+
+HRESULT Device::CreatePixelShader(wchar_t* file, const char* s, const char* sv)
+{
+	ID3DBlob* pPSBlob = NULL;
+	CompileShaderFile(file, s, sv, &pPSBlob);
+	ID3D11PixelShader* g_pPixelShader;
+	HRESULT hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);;
+	pPSBlob->Release();
+	return hr;
+}
+
+HRESULT Device::CreateBuffer(mesh* m)
+{
+	ID3D11Buffer* g_pCBNeverChanges = NULL;
+	ID3D11Buffer* g_pCBChangeOnResize = NULL;
+	ID3D11Buffer* g_pCBChangesEveryFrame = NULL;
+	g_pVertexBuffer = NULL;
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(mesh::vertex) * 24;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	InitData.pSysMem = m->getvertex();
+	g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(WORD) * 36;
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+	InitData.pSysMem = m->getindices();
+	g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(CBNeverChanges);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.CPUAccessFlags = 0;
+	g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBNeverChanges);
+	bd.ByteWidth = sizeof(CBChangeOnResize);
+	g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
+	bd.ByteWidth = sizeof(CBChangesEveryFrame);
+	return g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
 }
 
 Device::~Device()

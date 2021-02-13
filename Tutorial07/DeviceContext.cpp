@@ -2,7 +2,8 @@
 
 void DeviceContext::OMSetRenderTargets(Device* v_device)
 {
-	g_pImmediateContext->OMSetRenderTargets(1,v_device->g_pRenderTargetView , v_device->DepthStencilView);
+	dev = v_device;
+	g_pImmediateContext->OMSetRenderTargets(1,&(v_device->g_pRenderTargetView) , v_device->DepthStencilView);
 }
 
 void DeviceContext::RSSetViewports(UINT width, UINT height)
@@ -14,5 +15,23 @@ void DeviceContext::RSSetViewports(UINT width, UINT height)
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
-	//g_pImmediateContext->RSSetViewports(1, &vp);
+	g_pImmediateContext->RSSetViewports(1, &vp);
+}
+
+void DeviceContext::IASetInputLayout()
+{
+	g_pImmediateContext->IASetInputLayout(dev->g_pVertexLayout);
+}
+
+void DeviceContext::IASetVertexBuffers()
+{
+	UINT stride = sizeof(mesh::vertex);
+	UINT offset = 0;
+	g_pImmediateContext->IASetVertexBuffers(0, 1, &(dev->g_pVertexBuffer), &stride, &offset);
+}
+
+void DeviceContext::IASetIndexBuffer()
+{
+	g_pImmediateContext->IASetIndexBuffer(dev->g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
