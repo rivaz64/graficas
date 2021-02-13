@@ -3,7 +3,23 @@
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
+#include <xnamath.h>
 #include "mesh.h"
+struct CBNeverChanges
+{
+	XMMATRIX mView;
+};
+
+struct CBChangeOnResize
+{
+	XMMATRIX mProjection;
+};
+
+struct CBChangesEveryFrame
+{
+	XMMATRIX mWorld;
+	XMFLOAT4 vMeshColor;
+};
 class Device
 {
 public:
@@ -17,6 +33,15 @@ public:
 	ID3D11InputLayout* g_pVertexLayout;
 	ID3D11Buffer* g_pVertexBuffer;
 	ID3D11Buffer* g_pIndexBuffer;
+	ID3D11Buffer* g_pCBNeverChanges = NULL;
+	ID3D11Buffer* g_pCBChangeOnResize = NULL;
+	ID3D11VertexShader* vertexshader=NULL;
+	ID3D11Buffer* g_pCBChangesEveryFrame = NULL;
+	ID3D11PixelShader* g_pPixelShader;
+	ID3D11ShaderResourceView* g_pTextureRV = NULL;
+	ID3D11SamplerState* g_pSamplerLinear = NULL;
+	D3D11_BUFFER_DESC bd;
+	HRESULT create();
 	HRESULT CreateRenderTargetView(ID3D11Texture2D* idTextura);
 	HRESULT CreateTexture2D(UINT width, UINT height, ID3D11Texture2D** DepthStencil);
 	HRESULT CreateDepthStencilView();
@@ -24,6 +49,8 @@ public:
 	HRESULT CreateInputLayout();
 	HRESULT CreatePixelShader(wchar_t* file, const char* s, const char* sv);
 	HRESULT CreateBuffer(mesh* m);
+	void CreateShaderResourceViewFromFile(wchar_t* file);
+	HRESULT CreateSamplerState();
 	~Device();
 };
 

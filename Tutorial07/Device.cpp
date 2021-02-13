@@ -1,18 +1,22 @@
 #include "Device.h"
-struct CBNeverChanges
+#include"DeviceContext.h"
+#include "SwapChain.h"
+/*D3D_DRIVER_TYPE driverTypes[] =
 {
-	float mView[16];
+	D3D_DRIVER_TYPE_HARDWARE,
+	D3D_DRIVER_TYPE_WARP,
+	D3D_DRIVER_TYPE_REFERENCE,
 };
-struct CBChangeOnResize
-{
-	float mProjection[16];
-};
+UINT numDriverTypes = ARRAYSIZE(driverTypes);
 
-struct CBChangesEveryFrame
+D3D_FEATURE_LEVEL featureLevels[] =
 {
-	float mWorld[16];
-	float vMeshColor[4];
+	D3D_FEATURE_LEVEL_11_0,
+	D3D_FEATURE_LEVEL_10_1,
+	D3D_FEATURE_LEVEL_10_0,
 };
+UINT numFeatureLevels = ARRAYSIZE(featureLevels);*/
+
 HRESULT CompileShaderFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 {
 	HRESULT hr = S_OK;
@@ -39,6 +43,17 @@ HRESULT CompileShaderFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShade
 	if (pErrorBlob) pErrorBlob->Release();
 
 	return S_OK;
+}
+HRESULT Device::create()
+{
+	/*DeviceContext* v_deviceContext = new DeviceContext;
+	v_deviceContext->dev = this;
+	SwapChain* v_swapChain = new SwapChain;
+	HRESULT hr= D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+		D3D11_SDK_VERSION, &sd, &v_swapChain->g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &v_deviceContext->g_pImmediateContext);
+	*/
+	HRESULT hr;
+	return hr;
 }
 HRESULT Device::CreateRenderTargetView(ID3D11Texture2D* textura)
 {
@@ -78,7 +93,7 @@ HRESULT Device::CreateDepthStencilView()
 
 HRESULT Device::CreateVertexShader(wchar_t* file, const char* vs, const char* vsv)
 {
-	ID3D11VertexShader* vertexshader;
+	
 	pVSBlob = NULL;
 	/*hr = */CompileShaderFile(file, vs, vsv, &pVSBlob);
 	/*if (FAILED(hr))
@@ -109,7 +124,7 @@ HRESULT Device::CreatePixelShader(wchar_t* file, const char* s, const char* sv)
 {
 	ID3DBlob* pPSBlob = NULL;
 	CompileShaderFile(file, s, sv, &pPSBlob);
-	ID3D11PixelShader* g_pPixelShader;
+	
 	HRESULT hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);;
 	pPSBlob->Release();
 	return hr;
@@ -117,11 +132,9 @@ HRESULT Device::CreatePixelShader(wchar_t* file, const char* s, const char* sv)
 
 HRESULT Device::CreateBuffer(mesh* m)
 {
-	ID3D11Buffer* g_pCBNeverChanges = NULL;
-	ID3D11Buffer* g_pCBChangeOnResize = NULL;
-	ID3D11Buffer* g_pCBChangesEveryFrame = NULL;
+	
 	g_pVertexBuffer = NULL;
-	D3D11_BUFFER_DESC bd;
+	
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(mesh::vertex) * 24;
@@ -146,6 +159,27 @@ HRESULT Device::CreateBuffer(mesh* m)
 	g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
 	bd.ByteWidth = sizeof(CBChangesEveryFrame);
 	return g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
+}
+
+void Device::CreateShaderResourceViewFromFile(wchar_t* file)
+{
+	D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, file, NULL, NULL, &g_pTextureRV, NULL);
+	
+}
+
+HRESULT Device::CreateSamplerState()
+{
+	
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	return g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);;
 }
 
 Device::~Device()

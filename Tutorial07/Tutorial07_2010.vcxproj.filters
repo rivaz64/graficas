@@ -21,6 +21,7 @@
     <ClInclude Include="instancia.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceContext.h" />
+    <ClInclude Include="SwapChain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tutorial07.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="instancia.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DeviceContext.cpp" />
+    <ClCompile Include="SwapChain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fx">

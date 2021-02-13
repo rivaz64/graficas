@@ -21,6 +21,7 @@
 #include"instancia.h"
 #include"Device.h"
 #include"DeviceContext.h"
+#include"SwapChain.h"
 bool playing = true;
 bool whatcam = true;
 bool presed=false;
@@ -81,7 +82,7 @@ camera* cam,cam1,cam2;
 //--------------------------------------------------------------------------------------
 // Structures
 //--------------------------------------------------------------------------------------
-struct SimpleVertex
+/*struct SimpleVertex
 {
     XMFLOAT3 Pos;
     XMFLOAT2 Tex;
@@ -102,7 +103,7 @@ struct CBChangesEveryFrame
     XMMATRIX mWorld;
     XMFLOAT4 vMeshColor;
 };
-
+*/
 
 //--------------------------------------------------------------------------------------
 // Global Variables
@@ -116,6 +117,7 @@ Device*                             v_device = NULL;
 ID3D11DeviceContext*                g_pImmediateContext = NULL;
 DeviceContext*                      v_deviceContext = NULL;
 IDXGISwapChain*                     g_pSwapChain = NULL;
+SwapChain*                           v_swapChain = NULL;
 ID3D11RenderTargetView*             g_pRenderTargetView = NULL;
 ID3D11Texture2D*                    g_pDepthStencil = NULL;
 ID3D11DepthStencilView*             g_pDepthStencilView = NULL;
@@ -242,7 +244,7 @@ HRESULT CompileShaderFromFile( WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR sz
     // the release configuration of this program.
     dwShaderFlags |= D3DCOMPILE_DEBUG;
 #endif
-
+    
     ID3DBlob* pErrorBlob;
     hr = D3DX11CompileFromFile( szFileName, NULL, NULL, szEntryPoint, szShaderModel, 
         dwShaderFlags, 0, NULL, ppBlobOut, &pErrorBlob, NULL );
@@ -275,7 +277,6 @@ HRESULT InitDevice()
 #ifdef _DEBUG
     createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-
     D3D_DRIVER_TYPE driverTypes[] =
     {
         D3D_DRIVER_TYPE_HARDWARE,
@@ -291,7 +292,6 @@ HRESULT InitDevice()
         D3D_FEATURE_LEVEL_10_0,
     };
     UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-
     DXGI_SWAP_CHAIN_DESC sd;
     ZeroMemory(&sd, sizeof(sd));
     sd.BufferCount = 1;
@@ -305,11 +305,11 @@ HRESULT InitDevice()
     sd.SampleDesc.Count = 1;
     sd.SampleDesc.Quality = 0;
     sd.Windowed = TRUE;
-
+    v_device = new Device;
     for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
         g_driverType = driverTypes[driverTypeIndex];
-        v_device = new Device;
+        //
         hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
             D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
         if (SUCCEEDED(hr))
@@ -319,14 +319,18 @@ HRESULT InitDevice()
         return hr;
 
     // Create a render target view
-    ID3D11Texture2D* pBackBuffer = NULL;
-    hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-    if (FAILED(hr))
-        return hr;
+    v_device->
+    /*ID3D11Texture2D* pBackBuffer = NULL;
+    hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);*/
+    
+    
     v_device = new Device;
     v_device->g_pd3dDevice = g_pd3dDevice;
     v_deviceContext = new DeviceContext;
+    v_deviceContext->dev = v_device;
     v_deviceContext->g_pImmediateContext = g_pImmediateContext;
+    v_swapChain->g_pSwapChain = g_pSwapChain;
+    v_swapChain->GetBuffer();
     hr = v_device->CreateRenderTargetView(pBackBuffer);
 
     pBackBuffer->Release();
@@ -548,12 +552,13 @@ HRESULT InitDevice()
         return hr;*/
 
     // Load the Texture
-    hr = D3DX11CreateShaderResourceViewFromFile( g_pd3dDevice, L"seafloor.dds", NULL, NULL, &g_pTextureRV, NULL );
+    //hr = D3DX11CreateShaderResourceViewFromFile(v_device->g_pd3dDevice, L"seafloor.dds", NULL, NULL, &g_pTextureRV, NULL );
+    v_device->CreateShaderResourceViewFromFile(L"seafloor.dds");
     if( FAILED( hr ) )
         return hr;
 
     // Create the sample state
-    D3D11_SAMPLER_DESC sampDesc;
+    /*D3D11_SAMPLER_DESC sampDesc;
     ZeroMemory( &sampDesc, sizeof(sampDesc) );
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -562,7 +567,8 @@ HRESULT InitDevice()
     sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-    hr = g_pd3dDevice->CreateSamplerState( &sampDesc, &g_pSamplerLinear );
+    hr = g_pd3dDevice->CreateSamplerState( &sampDesc, &g_pSamplerLinear );*/
+    hr = v_device->CreateSamplerState();
     if( FAILED( hr ) )
         return hr;
 
@@ -601,16 +607,17 @@ HRESULT InitDevice()
     XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
     g_View = XMMatrixLookAtLH( Eye, At, Up );*/
     
-    CBNeverChanges cbNeverChanges;
+    /*CBNeverChanges cbNeverChanges;
     cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
-    g_pImmediateContext->UpdateSubresource( g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0 );
-
+    g_pImmediateContext->UpdateSubresource( g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0 );*/
+    v_deviceContext->UpdateSubresource(cam);
     
     g_Projection = cam1.getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
     //g_Projection = cam.getproyectionmatrixOrtograpyc(6.4, 4.8, 0.01f, 100.0f);
-    CBChangeOnResize cbChangesOnResize;
-    cbChangesOnResize.mProjection = XMMatrixTranspose( cam->getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f) );
-    g_pImmediateContext->UpdateSubresource( g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0 );
+    //CBChangeOnResize cbChangesOnResize;
+    //cbChangesOnResize.mProjection = XMMatrixTranspose( cam->getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f) );
+    //g_pImmediateContext->UpdateSubresource( g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0 );
+    v_deviceContext->resizewindow(cam, width, height);
 
     return S_OK;
 }
@@ -694,7 +701,7 @@ void update() {
 			GetCursorPos(p);
 			cam->gira(p);
             CBNeverChanges mv;
-			mv.mView = XMMatrixTranspose(cam->getview());
+			//mv.mView = XMMatrixTranspose(cam->getview());
 			g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
 
         } 
@@ -742,12 +749,12 @@ void update() {
                 }
 				
 				CBChangeOnResize cbChangesOnResize;
-				cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
+				//cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
 				g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
             }
             inputs.pop_front();
             CBNeverChanges mv;
-            mv.mView = XMMatrixTranspose(cam->getview());
+            //mv.mView = XMMatrixTranspose(cam->getview());
             
             g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
             
@@ -784,7 +791,7 @@ void Render()
     //
     // Render the cube
     //
-    float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
+    /*float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
     g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
     g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
     g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
@@ -794,15 +801,15 @@ void Render()
     g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
     g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
     CBChangesEveryFrame cb;
-	cb.vMeshColor = g_vMeshColor;
+	//cb.vMeshColor = g_vMeshColor;
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
     for (float* i : instanses) {
-		cb.mWorld = XMMatrixTranspose(i);
+		//cb.mWorld = XMMatrixTranspose(i);
 		g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
 		g_pImmediateContext->DrawIndexed(36, 0, 0);
-    }
-	
+    }*/
+    v_deviceContext->render(instanses);
     g_pSwapChain->Present(0, 0);
         
     
