@@ -41,7 +41,7 @@ public:
 	ID3D11ShaderResourceView* g_pTextureRV = NULL;
 	ID3D11SamplerState* g_pSamplerLinear = NULL;
 	D3D11_BUFFER_DESC bd;
-	HRESULT create();
+	HRESULT create(HWND g_hWnd,UINT width, UINT height);
 	HRESULT CreateRenderTargetView(ID3D11Texture2D* idTextura);
 	HRESULT CreateTexture2D(UINT width, UINT height, ID3D11Texture2D** DepthStencil);
 	HRESULT CreateDepthStencilView();

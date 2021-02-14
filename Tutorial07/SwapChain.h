@@ -7,5 +7,6 @@ public:
 	IDXGISwapChain* g_pSwapChain = NULL;
 	ID3D11Texture2D* pBackBuffer = NULL;
 	HRESULT GetBuffer();
+	void Present();
 };
 

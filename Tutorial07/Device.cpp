@@ -44,20 +44,59 @@ HRESULT CompileShaderFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShade
 
 	return S_OK;
 }
-HRESULT Device::create()
+HRESULT Device::create(HWND g_hWnd, UINT width, UINT height)
 {
-	/*DeviceContext* v_deviceContext = new DeviceContext;
+	D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
+	D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
+	UINT createDeviceFlags = 0;
+#ifdef _DEBUG
+	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+	DeviceContext* v_deviceContext = new DeviceContext;
 	v_deviceContext->dev = this;
 	SwapChain* v_swapChain = new SwapChain;
-	HRESULT hr= D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-		D3D11_SDK_VERSION, &sd, &v_swapChain->g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &v_deviceContext->g_pImmediateContext);
-	*/
+	v_swapChain->dev = this;
+	D3D_DRIVER_TYPE driverTypes[] =
+	{
+		D3D_DRIVER_TYPE_HARDWARE,
+		D3D_DRIVER_TYPE_WARP,
+		D3D_DRIVER_TYPE_REFERENCE,
+	};
+	UINT numDriverTypes = ARRAYSIZE(driverTypes);
+
+	D3D_FEATURE_LEVEL featureLevels[] =
+	{
+		D3D_FEATURE_LEVEL_11_0,
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+	};
+	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+	DXGI_SWAP_CHAIN_DESC sd;
+	ZeroMemory(&sd, sizeof(sd));
+	sd.BufferCount = 1;
+	sd.BufferDesc.Width = width;
+	sd.BufferDesc.Height = height;
+	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.RefreshRate.Numerator = 60;
+	sd.BufferDesc.RefreshRate.Denominator = 1;
+	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.OutputWindow = g_hWnd;
+	sd.SampleDesc.Count = 1;
+	sd.SampleDesc.Quality = 0;
+	sd.Windowed = TRUE;
+	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
+	{
+		g_driverType = driverTypes[driverTypeIndex];
+		HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+			D3D11_SDK_VERSION, &sd, &v_swapChain->g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &v_deviceContext->g_pImmediateContext);
+	}
 	HRESULT hr;
 	return hr;
 }
 HRESULT Device::CreateRenderTargetView(ID3D11Texture2D* textura)
 {
 	//g_pRenderTargetView = targetView;
+	//g_pRenderTargetView = NULL;
 	return g_pd3dDevice->CreateRenderTargetView(textura, NULL, &g_pRenderTargetView);
 }
 

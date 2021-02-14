@@ -277,7 +277,7 @@ HRESULT InitDevice()
 #ifdef _DEBUG
     createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-    D3D_DRIVER_TYPE driverTypes[] =
+    /*D3D_DRIVER_TYPE driverTypes[] =
     {
         D3D_DRIVER_TYPE_HARDWARE,
         D3D_DRIVER_TYPE_WARP,
@@ -314,26 +314,29 @@ HRESULT InitDevice()
             D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
         if (SUCCEEDED(hr))
             break;
-    }
+    }*/
+    hr = v_device->create(g_hWnd,width,height);
     if (FAILED(hr))
         return hr;
 
     // Create a render target view
-    v_device->
+    
     /*ID3D11Texture2D* pBackBuffer = NULL;
     hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);*/
     
     
-    v_device = new Device;
+    /*v_device = new Device;
     v_device->g_pd3dDevice = g_pd3dDevice;
     v_deviceContext = new DeviceContext;
     v_deviceContext->dev = v_device;
     v_deviceContext->g_pImmediateContext = g_pImmediateContext;
+    v_swapChain = new SwapChain;
     v_swapChain->g_pSwapChain = g_pSwapChain;
+    v_swapChain->dev = v_device;*/
     v_swapChain->GetBuffer();
-    hr = v_device->CreateRenderTargetView(pBackBuffer);
+    
 
-    pBackBuffer->Release();
+    
     if (FAILED(hr))
         return hr;
 
@@ -810,7 +813,7 @@ void Render()
 		g_pImmediateContext->DrawIndexed(36, 0, 0);
     }*/
     v_deviceContext->render(instanses);
-    g_pSwapChain->Present(0, 0);
-        
     
+        
+    v_swapChain->Present();
 }
