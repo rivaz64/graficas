@@ -39,7 +39,7 @@ void DeviceContext::IASetIndexBuffer()
 void DeviceContext::UpdateSubresource(camera* cam)
 {
 	CBNeverChanges cbNeverChanges;
-	cbNeverChanges.mView = cam->getview();
+	cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
 	g_pImmediateContext->UpdateSubresource(dev->g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);
 }
 
@@ -66,7 +66,7 @@ void DeviceContext::render(std::vector<float*>& instanses)
 	g_pImmediateContext->ClearRenderTargetView(dev->g_pRenderTargetView, ClearColor);
 	g_pImmediateContext->ClearDepthStencilView(dev->DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	for (float* i : instanses) {
-		//cb.mWorld = XMMatrixTranspose(i);
+		cb.mWorld = XMMatrixTranspose(i);
 		g_pImmediateContext->UpdateSubresource(dev->g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
 		g_pImmediateContext->DrawIndexed(36, 0, 0);
 	}
