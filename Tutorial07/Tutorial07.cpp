@@ -277,7 +277,7 @@ HRESULT InitDevice()
 #ifdef _DEBUG
     createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-    /*D3D_DRIVER_TYPE driverTypes[] =
+    D3D_DRIVER_TYPE driverTypes[] =
     {
         D3D_DRIVER_TYPE_HARDWARE,
         D3D_DRIVER_TYPE_WARP,
@@ -306,16 +306,19 @@ HRESULT InitDevice()
     sd.SampleDesc.Quality = 0;
     sd.Windowed = TRUE;
     v_device = new Device;
+    v_deviceContext = new DeviceContext;
+    v_swapChain = new SwapChain;
+    //v_device->g_pd3dDevice = g_pd3dDevice;
     for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
         g_driverType = driverTypes[driverTypeIndex];
         //
         hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-            D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+            D3D11_SDK_VERSION, &sd, &v_swapChain->g_pSwapChain, &v_device->g_pd3dDevice, &g_featureLevel, &v_deviceContext->g_pImmediateContext);
         if (SUCCEEDED(hr))
             break;
-    }*/
-    hr = v_device->create(g_hWnd,width,height);
+    }
+    //hr = v_device->create(g_hWnd,width,height);
     if (FAILED(hr))
         return hr;
 
@@ -324,15 +327,9 @@ HRESULT InitDevice()
     /*ID3D11Texture2D* pBackBuffer = NULL;
     hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);*/
     
-    
-    /*v_device = new Device;
-    v_device->g_pd3dDevice = g_pd3dDevice;
-    v_deviceContext = new DeviceContext;
     v_deviceContext->dev = v_device;
-    v_deviceContext->g_pImmediateContext = g_pImmediateContext;
-    v_swapChain = new SwapChain;
-    v_swapChain->g_pSwapChain = g_pSwapChain;
-    v_swapChain->dev = v_device;*/
+    //v_deviceContext->g_pImmediateContext = g_pImmediateContext;
+    v_swapChain->dev = v_device;
     v_swapChain->GetBuffer();
     
 
@@ -705,7 +702,7 @@ void update() {
 			cam->gira(p);
             CBNeverChanges mv;
 			//mv.mView = XMMatrixTranspose(cam->getview());
-			g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
+			//g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
 
         } 
         else {
