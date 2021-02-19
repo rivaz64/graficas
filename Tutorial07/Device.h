@@ -27,6 +27,7 @@ public:
 	ID3D11Texture2D** deptstencil;
 	D3D11_TEXTURE2D_DESC descDepth;
 	ID3D11Device* g_pd3dDevice = NULL;
+    ID3DBlob* pPSBlob = NULL;
 	ID3D11RenderTargetView* g_pRenderTargetView = NULL;
 	ID3D11DepthStencilView* DepthStencilView=NULL;
 	ID3DBlob* pVSBlob;

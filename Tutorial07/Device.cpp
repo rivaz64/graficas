@@ -161,7 +161,7 @@ HRESULT Device::CreateInputLayout()
 
 HRESULT Device::CreatePixelShader(wchar_t* file, const char* s, const char* sv)
 {
-	ID3DBlob* pPSBlob = NULL;
+	
 	CompileShaderFile(file, s, sv, &pPSBlob);
 	
 	HRESULT hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);;

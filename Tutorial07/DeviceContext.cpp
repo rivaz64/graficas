@@ -43,6 +43,13 @@ void DeviceContext::UpdateSubresource(camera* cam)
 	g_pImmediateContext->UpdateSubresource(dev->g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);
 }
 
+void DeviceContext::UpdateView(camera* cam)
+{
+    /*CBChangesEveryFrame cbChangesEveryFrame;
+    cbChangesEveryFrame.mView = XMMatrixTranspose(cam->getview());
+    g_pImmediateContext->UpdateSubresource(dev->g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);*/
+}
+
 void DeviceContext::resizewindow(camera* cam, UINT width, UINT height)
 {
 	CBChangeOnResize cbChangesOnResize;

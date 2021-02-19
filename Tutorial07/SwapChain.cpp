@@ -2,7 +2,6 @@
 
 HRESULT SwapChain::GetBuffer()
 {
-	ID3D11Texture2D* pBackBuffer = NULL;
 	g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 	HRESULT hr=dev->CreateRenderTargetView(pBackBuffer);
 	pBackBuffer->Release();

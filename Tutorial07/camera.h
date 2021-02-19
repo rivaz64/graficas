@@ -17,6 +17,7 @@ public:
 	float* viewmatrix;
 	float* proyectionmatrix;
 	float vel = .001;
+    float x, y;
 	camera();
 	~camera();
 	void gira(LPPOINT punto);

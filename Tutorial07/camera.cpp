@@ -14,12 +14,15 @@ void camera::gira(LPPOINT punto)
 	if (!click) {
 		click = true;
 		p = punto;
+        x = punto->x;
+        y = punto->y;
 	}
 	else {
 
-		at = zaxis + xaxis * (punto->x - p->x) * .003 - yaxis * (punto->y - p->y) * .003;
+		at = zaxis + xaxis * (punto->x - x) * .003 - yaxis * (punto->y - y) * .003;
 		at = at.normalize();
-		p = punto;
+        x = punto->x;
+        y = punto->y;
 		at = at + eye;
 		axis();
 	}
@@ -76,6 +79,7 @@ void camera::axis()
 
 
 float* camera::getview() {
+    axis();
 	viewmatrix[0] = xaxis.x;
 	viewmatrix[1] = yaxis.x;
 	viewmatrix[2] = zaxis.x;

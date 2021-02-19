@@ -21,7 +21,7 @@ public:
 	void IASetVertexBuffers();
 	void IASetIndexBuffer();
 	void UpdateSubresource(camera* cam);
-	// ver si esta funciona
+    void UpdateView(camera* cam);
 	void resizewindow(camera* cam, UINT width, UINT height);
 	void render(std::vector<float*>& instanses);
 };
