@@ -355,8 +355,7 @@ HRESULT InitDevice()
     hr = v_device->CreateDepthStencilView();
     if (FAILED(hr))
         return hr;
-    v_deviceContext->OMSetRenderTargets(v_device);
-    v_deviceContext->RSSetViewports(width, height);
+    v_deviceContext->OMSetRenderTargets();
 
     // Compile the vertex shader
     ID3DBlob* pVSBlob = NULL;
@@ -450,7 +449,12 @@ HRESULT InitDevice()
     });
     hr = v_device->CreateBuffer(&cubito);
     v_deviceContext->IASetVertexBuffers();
-
+    cam1.seteye(0.0f, 0, -1);
+    cam1.setat(0.0f, 0.f, 0);
+    cam1.setup(0.0f, 1.0f, 0);
+    cam1.axis();
+    cam = &cam1;
+    v_deviceContext->resizewindow(cam, g_hWnd);
     if( FAILED( hr ) )
         return hr;
 
@@ -469,15 +473,11 @@ HRESULT InitDevice()
     g_World = XMMatrixIdentity();
     g_World1 = XMMatrixIdentity();
     // Initialize the view matrix
-    cam1.seteye(0.0f, 0, -1);
-    cam1.setat(0.0f, 0.f, 0);
-    cam1.setup(0.0f, 1.0f, 0);
-    cam1.axis();
+   
 	cam2.seteye(0.0f, 0, -1);
 	cam2.setat(0.0f, 0.f, 0);
 	cam2.setup(0.0f, 1.0f, 0);
 	cam2.axis();
-    cam = &cam1;
     for (int i = 0; i < 4; i++) {
         instanses.push_back(new float[16]);
         for (int o = 0; o < 16; o++) {

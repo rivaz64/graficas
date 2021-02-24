@@ -1,9 +1,8 @@
 #include "DeviceContext.h"
 #include "camera.h"
-void DeviceContext::OMSetRenderTargets(Device* v_device)
+void DeviceContext::OMSetRenderTargets()
 {
-	dev = v_device;
-	g_pImmediateContext->OMSetRenderTargets(1,&(v_device->g_pRenderTargetView) , v_device->DepthStencilView);
+	g_pImmediateContext->OMSetRenderTargets(1,&(dev->g_pRenderTargetView) , dev->DepthStencilView);
 }
 
 void DeviceContext::RSSetViewports(UINT width, UINT height)
