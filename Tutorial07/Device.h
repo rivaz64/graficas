@@ -37,8 +37,8 @@ public:
     Buffer indexB;
     Buffer neverChangesB;
     Buffer changesOnReziseB;
+    Buffer changeveryFrameB;
 	ID3D11VertexShader* vertexshader=NULL;
-	ID3D11Buffer* g_pCBChangesEveryFrame = NULL;
 	ID3D11PixelShader* g_pPixelShader;
 	ID3D11ShaderResourceView* g_pTextureRV = NULL;
 	ID3D11SamplerState* g_pSamplerLinear = NULL;

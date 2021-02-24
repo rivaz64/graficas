@@ -75,9 +75,9 @@ void DeviceContext::render(std::vector<float*>& instanses)
 	g_pImmediateContext->VSSetShader(dev->vertexshader, NULL, 0);
 	g_pImmediateContext->VSSetConstantBuffers(0, 1, &dev->neverChangesB.buf);
 	g_pImmediateContext->VSSetConstantBuffers(1, 1, &dev->changesOnReziseB.buf);
-	g_pImmediateContext->VSSetConstantBuffers(2, 1, &dev->g_pCBChangesEveryFrame);
+	g_pImmediateContext->VSSetConstantBuffers(2, 1, &dev->changeveryFrameB.buf);
 	g_pImmediateContext->PSSetShader(dev->g_pPixelShader, NULL, 0);
-	g_pImmediateContext->PSSetConstantBuffers(2, 1, &dev->g_pCBChangesEveryFrame);
+	g_pImmediateContext->PSSetConstantBuffers(2, 1, &dev->changeveryFrameB.buf);
 	g_pImmediateContext->PSSetShaderResources(0, 1, &dev->g_pTextureRV);
 	g_pImmediateContext->PSSetSamplers(0, 1, &dev->g_pSamplerLinear);
 	CBChangesEveryFrame cb;
@@ -86,7 +86,7 @@ void DeviceContext::render(std::vector<float*>& instanses)
 	g_pImmediateContext->ClearDepthStencilView(dev->DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	for (float* i : instanses) {
 		cb.mWorld = XMMatrixTranspose(i);
-		g_pImmediateContext->UpdateSubresource(dev->g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
+		g_pImmediateContext->UpdateSubresource(dev->changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
 		g_pImmediateContext->DrawIndexed(36, 0, 0);
 	}
 }

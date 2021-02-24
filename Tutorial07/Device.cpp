@@ -179,7 +179,7 @@ HRESULT Device::CreateBuffers()
 	bd.ByteWidth = sizeof(CBChangeOnResize);
 	g_pd3dDevice->CreateBuffer(&bd, NULL, &changesOnReziseB.buf);
 	bd.ByteWidth = sizeof(CBChangesEveryFrame);
-	return g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
+	return g_pd3dDevice->CreateBuffer(&bd, NULL, &changeveryFrameB.buf);
 }
 
 void Device::setmesh(mesh* m)
