@@ -35,7 +35,7 @@ public:
 	ID3D11InputLayout* g_pVertexLayout;
     Buffer vertexB;
     Buffer indexB;
-	ID3D11Buffer* g_pCBNeverChanges = NULL;
+    Buffer neverChangesB;
 	ID3D11Buffer* g_pCBChangeOnResize = NULL;
 	ID3D11VertexShader* vertexshader=NULL;
 	ID3D11Buffer* g_pCBChangesEveryFrame = NULL;

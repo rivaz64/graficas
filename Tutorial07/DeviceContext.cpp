@@ -39,7 +39,7 @@ void DeviceContext::UpdateSubresource(camera* cam)
 {
 	CBNeverChanges cbNeverChanges;
 	cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
-	g_pImmediateContext->UpdateSubresource(dev->g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);
+	g_pImmediateContext->UpdateSubresource(dev->neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
 }
 
 void DeviceContext::UpdateView(camera* cam)
@@ -73,7 +73,7 @@ void DeviceContext::render(std::vector<float*>& instanses)
 {
 	
 	g_pImmediateContext->VSSetShader(dev->vertexshader, NULL, 0);
-	g_pImmediateContext->VSSetConstantBuffers(0, 1, &dev->g_pCBNeverChanges);
+	g_pImmediateContext->VSSetConstantBuffers(0, 1, &dev->neverChangesB.buf);
 	g_pImmediateContext->VSSetConstantBuffers(1, 1, &dev->g_pCBChangeOnResize);
 	g_pImmediateContext->VSSetConstantBuffers(2, 1, &dev->g_pCBChangesEveryFrame);
 	g_pImmediateContext->PSSetShader(dev->g_pPixelShader, NULL, 0);

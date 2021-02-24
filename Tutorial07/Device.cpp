@@ -175,7 +175,7 @@ HRESULT Device::CreateBuffers()
 	bd.ByteWidth = sizeof(CBNeverChanges);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
-	g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBNeverChanges);
+	g_pd3dDevice->CreateBuffer(&bd, NULL, &neverChangesB.buf);
 	bd.ByteWidth = sizeof(CBChangeOnResize);
 	g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
 	bd.ByteWidth = sizeof(CBChangesEveryFrame);
