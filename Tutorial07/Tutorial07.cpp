@@ -447,7 +447,8 @@ HRESULT InitDevice()
         22,20,21,
         23,20,22
     });
-    hr = v_device->CreateBuffer(&cubito);
+    v_device->setmesh(&cubito);
+    v_device->CreateBuffers();
     v_deviceContext->IASetVertexBuffers();
     cam1.seteye(0.0f, 0, -1);
     cam1.setat(0.0f, 0.f, 0);

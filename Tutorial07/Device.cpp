@@ -169,26 +169,8 @@ HRESULT Device::CreatePixelShader(wchar_t* file, const char* s, const char* sv)
 	return hr;
 }
 
-HRESULT Device::CreateBuffer(mesh* m)
+HRESULT Device::CreateBuffers()
 {
-	
-	g_pVertexBuffer = NULL;
-	
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(mesh::vertex) * 24;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = m->getvertex();
-	g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(WORD) * 36;
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	InitData.pSysMem = m->getindices();
-	g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(CBNeverChanges);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -198,6 +180,24 @@ HRESULT Device::CreateBuffer(mesh* m)
 	g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
 	bd.ByteWidth = sizeof(CBChangesEveryFrame);
 	return g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
+}
+
+void Device::setmesh(mesh* m)
+{
+    ZeroMemory(&bd, sizeof(bd));
+    bd.Usage = D3D11_USAGE_DEFAULT;
+    bd.ByteWidth = sizeof(mesh::vertex) * 24;
+    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    bd.CPUAccessFlags = 0;
+    ZeroMemory(&InitData, sizeof(InitData));
+    InitData.pSysMem = m->getvertex();
+    g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
+    bd.Usage = D3D11_USAGE_DEFAULT;
+    bd.ByteWidth = sizeof(WORD) * 36;
+    bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    bd.CPUAccessFlags = 0;
+    InitData.pSysMem = m->getindices();
+    g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
 }
 
 void Device::CreateShaderResourceViewFromFile(wchar_t* file)

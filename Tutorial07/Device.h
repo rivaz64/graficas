@@ -42,6 +42,7 @@ public:
 	ID3D11ShaderResourceView* g_pTextureRV = NULL;
 	ID3D11SamplerState* g_pSamplerLinear = NULL;
 	D3D11_BUFFER_DESC bd;
+    D3D11_SUBRESOURCE_DATA InitData;
 	HRESULT create(HWND g_hWnd,UINT width, UINT height);
 	HRESULT CreateRenderTargetView(ID3D11Texture2D* idTextura);
 	HRESULT CreateTexture2D(UINT width, UINT height, ID3D11Texture2D** DepthStencil);
@@ -49,7 +50,8 @@ public:
 	HRESULT CreateVertexShader(wchar_t* file, const char* vs, const char* vsv);
 	HRESULT CreateInputLayout();
 	HRESULT CreatePixelShader(wchar_t* file, const char* s, const char* sv);
-	HRESULT CreateBuffer(mesh* m);
+	HRESULT CreateBuffers();
+    void setmesh(mesh* m);
 	void CreateShaderResourceViewFromFile(wchar_t* file);
 	HRESULT CreateSamplerState();
 	~Device();
