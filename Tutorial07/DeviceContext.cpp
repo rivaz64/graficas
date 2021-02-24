@@ -50,11 +50,24 @@ void DeviceContext::UpdateView(camera* cam)
     g_pImmediateContext->UpdateSubresource(dev->g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);*/
 }
 
-void DeviceContext::resizewindow(camera* cam, UINT width, UINT height)
+void DeviceContext::resizewindow(camera* cam, HWND& g_hWnd)
 {
-	CBChangeOnResize cbChangesOnResize;
-	cbChangesOnResize.mProjection = XMMatrixTranspose( cam->getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f) );
-	g_pImmediateContext->UpdateSubresource(dev->g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
+    g_pImmediateContext->OMSetRenderTargets(1, &dev->g_pRenderTargetView, NULL);
+    RECT rc;
+    GetClientRect(g_hWnd, &rc);
+    UINT width = rc.right - rc.left;
+    UINT height = rc.bottom - rc.top;
+    D3D11_VIEWPORT vp;
+    vp.Width = (FLOAT)width;
+    vp.Height = (FLOAT)height;
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
+    vp.TopLeftX = 0;
+    vp.TopLeftY = 0;
+    g_pImmediateContext->RSSetViewports(1, &vp);
+    CBChangeOnResize cbChangesOnResize;
+    cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f));
+    g_pImmediateContext->UpdateSubresource(dev->g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
 }
 
 void DeviceContext::render(std::vector<float*>& instanses)

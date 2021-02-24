@@ -22,7 +22,7 @@ public:
 	void IASetIndexBuffer();
 	void UpdateSubresource(camera* cam);
     void UpdateView(camera* cam);
-	void resizewindow(camera* cam, UINT width, UINT height);
+	void resizewindow(camera* cam, HWND& g_hWnd);
 	void render(std::vector<float*>& instanses);
 };
 

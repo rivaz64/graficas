@@ -496,8 +496,7 @@ HRESULT InitDevice()
 	
     v_deviceContext->UpdateSubresource(cam);
     
-    g_Projection = cam1.getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
-    v_deviceContext->resizewindow(cam, width, height);
+    v_deviceContext->resizewindow(cam, g_hWnd);
     InitImgUI();
     return S_OK;
 }
@@ -543,7 +542,12 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
             hdc = BeginPaint( hWnd, &ps );
             EndPaint( hWnd, &ps );
             break;
-
+        case WM_SIZE:
+            if (wParam != SIZE_MINIMIZED && v_device) {
+                v_swapChain->rezise(lParam);
+                v_deviceContext->resizewindow(cam, g_hWnd);
+            }
+            break;
         case WM_DESTROY:
             PostQuitMessage( 0 );
             break;
