@@ -7,5 +7,6 @@ class viewport
 {
 public:
     ID3D11RenderTargetView* g_pRenderTargetView = NULL;
+    void release();
 };
 
