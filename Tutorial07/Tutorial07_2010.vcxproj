@@ -513,6 +513,7 @@
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="semaphore.cpp" />
     <ClCompile Include="SwapChain.cpp" />
+    <ClCompile Include="Textura.cpp" />
     <ClCompile Include="Tutorial07.cpp" />
     <ClCompile Include="vector3.cpp" />
     <ClCompile Include="viewport.cpp" />
@@ -530,6 +531,7 @@
     <CLInclude Include="resource.h" />
     <ClInclude Include="semaphore.h" />
     <ClInclude Include="SwapChain.h" />
+    <ClInclude Include="Textura.h" />
     <ClInclude Include="vector3.h" />
     <ClInclude Include="viewport.h" />
     <ResourceCompile Include="Tutorial07.rc" />

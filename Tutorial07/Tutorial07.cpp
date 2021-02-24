@@ -122,7 +122,7 @@ DeviceContext*                      v_deviceContext = NULL;
 IDXGISwapChain*                     g_pSwapChain = NULL;
 SwapChain*                           v_swapChain = NULL;
 ID3D11RenderTargetView*             g_pRenderTargetView = NULL;
-ID3D11Texture2D*                    g_pDepthStencil = NULL;
+
 ID3D11DepthStencilView*             g_pDepthStencilView = NULL;
 ID3D11VertexShader*                 g_pVertexShader = NULL;
 ID3D11PixelShader*                  g_pPixelShader = NULL;
@@ -348,7 +348,7 @@ HRESULT InitDevice()
     if (FAILED(hr))
         return hr;
 
-    hr = v_device->CreateTexture2D(width, height, &g_pDepthStencil);
+    hr = v_device->CreateTexture2D(width, height);
     if (FAILED(hr))
         return hr;
 
@@ -520,7 +520,7 @@ void CleanupDevice()
     if( g_pVertexLayout ) g_pVertexLayout->Release();
     if( g_pVertexShader ) g_pVertexShader->Release();
     if( g_pPixelShader ) g_pPixelShader->Release();
-    if( g_pDepthStencil ) g_pDepthStencil->Release();
+    //if( g_pDepthStencil ) g_pDepthStencil->Release();
     if( g_pDepthStencilView ) g_pDepthStencilView->Release();
     if( g_pRenderTargetView ) g_pRenderTargetView->Release();
     if( g_pSwapChain ) g_pSwapChain->Release();

@@ -24,6 +24,7 @@
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="viewport.h" />
+    <ClInclude Include="Textura.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tutorial07.cpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="viewport.cpp" />
+    <ClCompile Include="Textura.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fx">

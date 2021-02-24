@@ -7,6 +7,7 @@
 #include "mesh.h"
 #include"Buffer.h"
 #include"viewport.h"
+#include"Textura.h"
 struct CBNeverChanges
 {
 	XMMATRIX mView;
@@ -25,8 +26,8 @@ struct CBChangesEveryFrame
 class Device
 {
 public:
-
-	ID3D11Texture2D** deptstencil;
+    Textura depstencil;
+	//ID3D11Texture2D** deptstencil;
 	D3D11_TEXTURE2D_DESC descDepth;
 	ID3D11Device* g_pd3dDevice = NULL;
     ID3DBlob* pPSBlob = NULL;
@@ -47,7 +48,7 @@ public:
     D3D11_SUBRESOURCE_DATA InitData;
 	HRESULT create(HWND g_hWnd,UINT width, UINT height);
 	HRESULT CreateRenderTargetView(ID3D11Texture2D* idTextura);
-	HRESULT CreateTexture2D(UINT width, UINT height, ID3D11Texture2D** DepthStencil);
+	HRESULT CreateTexture2D(UINT width, UINT height);
 	HRESULT CreateDepthStencilView();
 	HRESULT CreateVertexShader(wchar_t* file, const char* vs, const char* vsv);
 	HRESULT CreateInputLayout();
