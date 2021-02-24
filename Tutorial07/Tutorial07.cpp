@@ -498,7 +498,7 @@ HRESULT InitDevice()
     
     g_Projection = cam1.getproyectionmatrixPerspective(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
     v_deviceContext->resizewindow(cam, width, height);
-    //InitImgUI();
+    InitImgUI();
     return S_OK;
 }
 
@@ -655,7 +655,7 @@ void update() {
 }
 void UIrender() {
     
-    /*ImGui_ImplDX11_NewFrame();
+    ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
@@ -668,43 +668,14 @@ void UIrender() {
 
     // render UI
     ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());*/
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 //--------------------------------------------------------------------------------------
 // Render a frame
 //--------------------------------------------------------------------------------------
 void Render()
 {
-    // Update our time
     
-
-    
-
-    //
-    // Clear the back buffer
-    //
-   
-    //
-    // Render the cube
-    //
-    /*float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
-    g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
-    g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
-    g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
-    g_pImmediateContext->VSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
-    g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
-    g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
-    g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
-    g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
-    CBChangesEveryFrame cb;
-	//cb.vMeshColor = g_vMeshColor;
-	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
-	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-    for (float* i : instanses) {
-		//cb.mWorld = XMMatrixTranspose(i);
-		g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
-		g_pImmediateContext->DrawIndexed(36, 0, 0);
-    }*/
     v_deviceContext->render(instanses);
     UIrender();
         
