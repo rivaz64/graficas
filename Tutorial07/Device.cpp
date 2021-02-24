@@ -177,7 +177,7 @@ HRESULT Device::CreateBuffers()
 	bd.CPUAccessFlags = 0;
 	g_pd3dDevice->CreateBuffer(&bd, NULL, &neverChangesB.buf);
 	bd.ByteWidth = sizeof(CBChangeOnResize);
-	g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
+	g_pd3dDevice->CreateBuffer(&bd, NULL, &changesOnReziseB.buf);
 	bd.ByteWidth = sizeof(CBChangesEveryFrame);
 	return g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
 }

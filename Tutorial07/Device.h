@@ -36,7 +36,7 @@ public:
     Buffer vertexB;
     Buffer indexB;
     Buffer neverChangesB;
-	ID3D11Buffer* g_pCBChangeOnResize = NULL;
+    Buffer changesOnReziseB;
 	ID3D11VertexShader* vertexshader=NULL;
 	ID3D11Buffer* g_pCBChangesEveryFrame = NULL;
 	ID3D11PixelShader* g_pPixelShader;

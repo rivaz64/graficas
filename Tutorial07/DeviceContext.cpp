@@ -66,7 +66,7 @@ void DeviceContext::resizewindow(camera* cam, HWND& g_hWnd)
     g_pImmediateContext->RSSetViewports(1, &vp);
     CBChangeOnResize cbChangesOnResize;
     cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f));
-    g_pImmediateContext->UpdateSubresource(dev->g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
+    g_pImmediateContext->UpdateSubresource(dev->changesOnReziseB.buf, 0, NULL, &cbChangesOnResize, 0, 0);
 }
 
 void DeviceContext::render(std::vector<float*>& instanses)
@@ -74,7 +74,7 @@ void DeviceContext::render(std::vector<float*>& instanses)
 	
 	g_pImmediateContext->VSSetShader(dev->vertexshader, NULL, 0);
 	g_pImmediateContext->VSSetConstantBuffers(0, 1, &dev->neverChangesB.buf);
-	g_pImmediateContext->VSSetConstantBuffers(1, 1, &dev->g_pCBChangeOnResize);
+	g_pImmediateContext->VSSetConstantBuffers(1, 1, &dev->changesOnReziseB.buf);
 	g_pImmediateContext->VSSetConstantBuffers(2, 1, &dev->g_pCBChangesEveryFrame);
 	g_pImmediateContext->PSSetShader(dev->g_pPixelShader, NULL, 0);
 	g_pImmediateContext->PSSetConstantBuffers(2, 1, &dev->g_pCBChangesEveryFrame);
