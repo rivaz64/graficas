@@ -12,7 +12,6 @@ class DeviceContext
 public:
 	Device* dev;
 	ID3D11DeviceContext* g_pImmediateContext;
-	ID3D11Buffer* g_pCBNeverChanges = NULL;
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
 	XMFLOAT4 g_vMeshColor= XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
 	void OMSetRenderTargets();

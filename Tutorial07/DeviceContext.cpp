@@ -2,7 +2,7 @@
 #include "camera.h"
 void DeviceContext::OMSetRenderTargets()
 {
-	g_pImmediateContext->OMSetRenderTargets(1,&(dev->g_pRenderTargetView) , dev->DepthStencilView);
+	g_pImmediateContext->OMSetRenderTargets(1,&(dev->vp.g_pRenderTargetView) , dev->DepthStencilView);
 }
 
 void DeviceContext::RSSetViewports(UINT width, UINT height)
@@ -51,7 +51,7 @@ void DeviceContext::UpdateView(camera* cam)
 
 void DeviceContext::resizewindow(camera* cam, HWND& g_hWnd)
 {
-    g_pImmediateContext->OMSetRenderTargets(1, &dev->g_pRenderTargetView, NULL);
+    g_pImmediateContext->OMSetRenderTargets(1, &dev->vp.g_pRenderTargetView, NULL);
     RECT rc;
     GetClientRect(g_hWnd, &rc);
     UINT width = rc.right - rc.left;
@@ -82,7 +82,7 @@ void DeviceContext::render(std::vector<float*>& instanses)
 	g_pImmediateContext->PSSetSamplers(0, 1, &dev->g_pSamplerLinear);
 	CBChangesEveryFrame cb;
 	cb.vMeshColor = g_vMeshColor;
-	g_pImmediateContext->ClearRenderTargetView(dev->g_pRenderTargetView, ClearColor);
+	g_pImmediateContext->ClearRenderTargetView(dev->vp.g_pRenderTargetView, ClearColor);
 	g_pImmediateContext->ClearDepthStencilView(dev->DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	for (float* i : instanses) {
 		cb.mWorld = XMMatrixTranspose(i);

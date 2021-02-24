@@ -95,9 +95,7 @@ HRESULT Device::create(HWND g_hWnd, UINT width, UINT height)
 }
 HRESULT Device::CreateRenderTargetView(ID3D11Texture2D* textura)
 {
-	//g_pRenderTargetView = targetView;
-	//g_pRenderTargetView = NULL;
-	return g_pd3dDevice->CreateRenderTargetView(textura, NULL, &g_pRenderTargetView);
+	return g_pd3dDevice->CreateRenderTargetView(textura, NULL, &vp.g_pRenderTargetView);
 }
 
 HRESULT Device::CreateTexture2D(UINT width, UINT height, ID3D11Texture2D** DepthStencil)

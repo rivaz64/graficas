@@ -10,7 +10,7 @@ HRESULT SwapChain::GetBuffer()
 
 void SwapChain::rezise(LPARAM lParam)
 {
-    dev->g_pRenderTargetView->Release();
+    dev->vp.g_pRenderTargetView->Release();
     g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
     GetBuffer();
 }

@@ -6,6 +6,7 @@
 #include <xnamath.h>
 #include "mesh.h"
 #include"Buffer.h"
+#include"viewport.h"
 struct CBNeverChanges
 {
 	XMMATRIX mView;
@@ -29,7 +30,7 @@ public:
 	D3D11_TEXTURE2D_DESC descDepth;
 	ID3D11Device* g_pd3dDevice = NULL;
     ID3DBlob* pPSBlob = NULL;
-	ID3D11RenderTargetView* g_pRenderTargetView = NULL;
+    viewport vp;
 	ID3D11DepthStencilView* DepthStencilView=NULL;
 	ID3DBlob* pVSBlob;
 	ID3D11InputLayout* g_pVertexLayout;

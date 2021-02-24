@@ -23,6 +23,7 @@
     <ClInclude Include="DeviceContext.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Buffer.h" />
+    <ClInclude Include="viewport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tutorial07.cpp" />
@@ -41,6 +42,7 @@
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial07.fx">
