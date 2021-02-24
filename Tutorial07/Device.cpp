@@ -191,7 +191,7 @@ void Device::setmesh(mesh* m)
     bd.CPUAccessFlags = 0;
     ZeroMemory(&InitData, sizeof(InitData));
     InitData.pSysMem = m->getvertex();
-    g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
+    g_pd3dDevice->CreateBuffer(&bd, &InitData, &vertexB.buf);
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof(WORD) * 36;
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;

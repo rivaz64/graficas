@@ -26,7 +26,7 @@ void DeviceContext::IASetVertexBuffers()
 {
 	UINT stride = sizeof(mesh::vertex);
 	UINT offset = 0;
-	g_pImmediateContext->IASetVertexBuffers(0, 1, &(dev->g_pVertexBuffer), &stride, &offset);
+	g_pImmediateContext->IASetVertexBuffers(0, 1, &(dev->vertexB.buf), &stride, &offset);
 }
 
 void DeviceContext::IASetIndexBuffer()
