@@ -31,7 +31,7 @@ void DeviceContext::IASetVertexBuffers()
 
 void DeviceContext::IASetIndexBuffer()
 {
-	g_pImmediateContext->IASetIndexBuffer(dev->g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	g_pImmediateContext->IASetIndexBuffer(dev->indexB.buf, DXGI_FORMAT_R16_UINT, 0);
 	g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 

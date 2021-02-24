@@ -197,7 +197,7 @@ void Device::setmesh(mesh* m)
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd.CPUAccessFlags = 0;
     InitData.pSysMem = m->getindices();
-    g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
+    g_pd3dDevice->CreateBuffer(&bd, &InitData, &indexB.buf);
 }
 
 void Device::CreateShaderResourceViewFromFile(wchar_t* file)

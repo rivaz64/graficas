@@ -33,9 +33,8 @@ public:
 	ID3D11DepthStencilView* DepthStencilView=NULL;
 	ID3DBlob* pVSBlob;
 	ID3D11InputLayout* g_pVertexLayout;
-	//ID3D11Buffer* g_pVertexBuffer;
     Buffer vertexB;
-	ID3D11Buffer* g_pIndexBuffer;
+    Buffer indexB;
 	ID3D11Buffer* g_pCBNeverChanges = NULL;
 	ID3D11Buffer* g_pCBChangeOnResize = NULL;
 	ID3D11VertexShader* vertexshader=NULL;
