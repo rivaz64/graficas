@@ -17,7 +17,7 @@ D3D_FEATURE_LEVEL featureLevels[] =
 };
 UINT numFeatureLevels = ARRAYSIZE(featureLevels);*/
 
-HRESULT CompileShaderFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+HRESULT CompileShaderFile(LPCSTR szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 {
 	HRESULT hr = S_OK;
 
@@ -90,8 +90,7 @@ HRESULT Device::create(HWND g_hWnd, UINT width, UINT height)
 		HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
 			D3D11_SDK_VERSION, &sd, &v_swapChain->g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &v_deviceContext->g_pImmediateContext);
 	}
-	HRESULT hr;
-	return hr;
+	return S_OK;
 }
 HRESULT Device::CreateRenderTargetView(ID3D11Texture2D* textura)
 {
@@ -127,7 +126,7 @@ HRESULT Device::CreateDepthStencilView()
 	return g_pd3dDevice->CreateDepthStencilView(depstencil.deptstencil, &descDSV, &DepthStencilView);
 }
 
-HRESULT Device::CreateVertexShader(wchar_t* file, const char* vs, const char* vsv)
+HRESULT Device::CreateVertexShader(LPCSTR file, const char* vs, const char* vsv)
 {
 	
 	pVSBlob = NULL;
@@ -156,7 +155,7 @@ HRESULT Device::CreateInputLayout()
 	return r;
 }
 
-HRESULT Device::CreatePixelShader(wchar_t* file, const char* s, const char* sv)
+HRESULT Device::CreatePixelShader(LPCSTR file, const char* s, const char* sv)
 {
 	
 	CompileShaderFile(file, s, sv, &pPSBlob);
@@ -197,7 +196,7 @@ void Device::setmesh(mesh* m)
     g_pd3dDevice->CreateBuffer(&bd, &InitData, &indexB.buf);
 }
 
-void Device::CreateShaderResourceViewFromFile(wchar_t* file)
+void Device::CreateShaderResourceViewFromFile(LPCSTR file)
 {
 	D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, file, NULL, NULL, &g_pTextureRV, NULL);
 	

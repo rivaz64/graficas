@@ -50,12 +50,12 @@ public:
 	HRESULT CreateRenderTargetView(ID3D11Texture2D* idTextura);
 	HRESULT CreateTexture2D(UINT width, UINT height);
 	HRESULT CreateDepthStencilView();
-	HRESULT CreateVertexShader(wchar_t* file, const char* vs, const char* vsv);
+	HRESULT CreateVertexShader(LPCSTR file, const char* vs, const char* vsv);
 	HRESULT CreateInputLayout();
-	HRESULT CreatePixelShader(wchar_t* file, const char* s, const char* sv);
+	HRESULT CreatePixelShader(LPCSTR file, const char* s, const char* sv);
 	HRESULT CreateBuffers();
     void setmesh(mesh* m);
-	void CreateShaderResourceViewFromFile(wchar_t* file);
+	void CreateShaderResourceViewFromFile(LPCSTR file);
 	HRESULT CreateSamplerState();
 	~Device();
 };
