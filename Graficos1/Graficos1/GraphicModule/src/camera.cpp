@@ -142,3 +142,9 @@ float* camera::getproyectionmatrixOrtograpyc(float with, float height, float nea
 	proyectionmatrix[15] = 1;
 	return proyectionmatrix;
 }
+
+
+
+
+
+
