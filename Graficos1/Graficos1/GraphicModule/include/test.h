@@ -5,7 +5,15 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
-
+#include"Device.h"
+#include"DeviceContext.h"
+#include"SwapChain.h"
+#include"camera.h"
+#include<thread>
+#include<vector>
+#include<mutex>
+#include<list>
+#include<iostream>
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -32,11 +40,19 @@ namespace GraphicsModule
 
   class test
   {
+      bool playing = true;
+      bool whatcam = true;
+      bool presed = false;
+      std::vector<float*> instanses;
+      std::mutex m;
+      std::list<int> inputs;
+      mesh cubito;
+      camera* cam, cam1, cam2;
     D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
     D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
-    ID3D11Device* g_pd3dDevice = NULL;
-    ID3D11DeviceContext* g_pImmediateContext = NULL;
-    IDXGISwapChain* g_pSwapChain = NULL;
+    Device* v_device = NULL;
+    DeviceContext* v_deviceContext = NULL;
+    SwapChain* v_swapChain = NULL;
     ID3D11RenderTargetView* g_pRenderTargetView = NULL;
     ID3D11Texture2D* g_pDepthStencil = NULL;
     ID3D11DepthStencilView* g_pDepthStencilView = NULL;
