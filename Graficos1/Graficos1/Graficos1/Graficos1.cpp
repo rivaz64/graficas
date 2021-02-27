@@ -107,39 +107,41 @@ HRESULT InitWindow(LONG _width, LONG _height)
  * @bug     No know Bugs.
  * @return  #HRESULT: Status code.
  */
-/*HRESULT InitImgUI()
+
+HRESULT InitImgUI()
 {
-  // Setup Dear ImGui context
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
 
-  // Setup Dear ImGui style
-  ImGui::StyleColorsDark();
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
 
-  // Setup Platform/Renderer back ends
-  ImGui_ImplWin32_Init(g_hwnd);
-  ImGui_ImplDX11_Init(g_pd3dDevice, g_pImmediateContext);
+    // Setup Platform/Renderer back ends
+    
+    ImGui_ImplWin32_Init(MiObj.m_hwnd);
+    ImGui_ImplDX11_Init( MiObj.getdevice(), MiObj.getcontext());
 
-  return S_OK;
-}*/
-
-/*void UIRender()
-{
-  // Start the Dear ImGui frame
-  ImGui_ImplDX11_NewFrame();
-  ImGui_ImplWin32_NewFrame();
-  ImGui::NewFrame();
-
-  // example window
-  if (ImGui::Begin("Another Window", nullptr))
-  {
-  }
-  ImGui::End();
-
-  // render UI
-  ImGui::Render();
-  ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    return S_OK;
 }
+void UIrender() {
+
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
+    // example window
+    if (ImGui::Begin("Another Window", nullptr))
+    {
+        ImGui::Text("Hello from another window!");
+    }
+    ImGui::End();
+
+    // render UI
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+}
+
 
 /**
  * @brief   Entry point.
@@ -154,7 +156,7 @@ int main()
     DestroyWindow(g_hwnd);
     return 0;
   }
-
+  
   // create Graphic API interface
   if (FAILED(MiObj.InitDevice(g_hwnd)))
   {
@@ -163,13 +165,13 @@ int main()
   }
 
   // create UI
-  /*if (FAILED(InitImgUI()))
+  if (FAILED(InitImgUI()))
   {
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
     return 0;
-  }*/
+  }
 
   // main loop
   MSG msg = { 0 };
@@ -182,10 +184,12 @@ int main()
     }
     else
     {
-      MiObj.Render();
+    
+        MiObj.Updeate();
+        MiObj.Render(UIrender);
+     
     }
   }
-
   // clean resources
   //ImGui_ImplDX11_Shutdown();
   //ImGui_ImplWin32_Shutdown();

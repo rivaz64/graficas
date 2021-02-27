@@ -40,6 +40,7 @@ namespace GraphicsModule
 
   class test
   {
+  public:
       bool playing = true;
       bool whatcam = true;
       bool presed = false;
@@ -79,11 +80,13 @@ namespace GraphicsModule
     ID3D11RasterizerState* g_Rasterizer2 = NULL;
     ID3D11InputLayout* g_pVertexLayout2 = NULL;
   public:
+      ID3D11Device* getdevice();
+      ID3D11DeviceContext* getcontext();
     HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 
     HRESULT InitDevice(HWND _hwnd);
-
-    void Render();
+    void Updeate();
+    void Render(void(*UI)());
 
     void CleanupDevice();
 

@@ -683,6 +683,5 @@ void Render()
     
     v_deviceContext->render(instanses);
     UIrender();
-        
     v_swapChain->Present();
 }

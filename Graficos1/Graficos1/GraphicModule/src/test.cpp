@@ -1,9 +1,16 @@
 #include "test.h"
 
-
 namespace GraphicsModule
 {
-  HRESULT test::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+    ID3D11Device* test::getdevice()
+    {
+        return (v_device->g_pd3dDevice);
+    }
+    ID3D11DeviceContext* test::getcontext()
+    {
+        return v_deviceContext->g_pImmediateContext;
+    }
+    HRESULT test::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
   {
     HRESULT hr = S_OK;
 
@@ -248,11 +255,107 @@ namespace GraphicsModule
     v_deviceContext->UpdateSubresource(cam);
 
     v_deviceContext->resizewindow(cam, m_hwnd);
-    //InitImgUI();
     return S_OK;
   }
-  void test::Render() {
+  void test::Updeate()
+  {
 
+      static float t = 0.0f;
+      if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+      {
+          t += (float)XM_PI * 0.0125f;
+      }
+      else
+      {
+          static DWORD dwTimeStart = 0;
+          DWORD dwTimeCur = GetTickCount();
+          if (dwTimeStart == 0)
+              dwTimeStart = dwTimeCur;
+          t = (dwTimeCur - dwTimeStart) / 1000.0f;
+          // Rotate cube around the origin
+          /*LPPOINT p = new POINT;
+          cam.gira(p);
+          g_View = cam.getviewmatrix();
+          CBNeverChanges mv;
+          mv.mView = XMMatrixTranspose(g_View);
+          g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);*/
+
+          LPPOINT p = new POINT;
+          if ((GetKeyState(VK_LBUTTON) & 0x100) != 0) {
+              GetCursorPos(p);
+              cam->gira(p);
+              //CBNeverChanges mv;
+              v_deviceContext->UpdateSubresource(cam);
+              //mv.mView = XMMatrixTranspose(cam->getview());
+              //v_deviceContext->g_pImmediateContext->UpdateSubresource(v_device->g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
+          }
+          else {
+              cam->click = false;
+          }
+          delete p;
+          float vel = 1.f / 216.f;
+          if (inputs.size() > 1) {
+              int x = inputs.front();
+              if (inputs.front() & 0X2) {
+                  if (inputs.front() & 0X1) {
+                      cam->movez(-1);
+                  }
+                  else {
+                      cam->movez(1);
+                  }
+              }
+              if (inputs.front() & 0X8) {
+                  if (inputs.front() & 0X4) {
+                      cam->movey(-1);
+                  }
+                  else {
+                      cam->movey(1);
+                  }
+              }
+              if (inputs.front() & 0X20) {
+                  if (inputs.front() & 0X10) {
+                      cam->movex(-1);
+                  }
+                  else {
+                      cam->movex(1);
+                  }
+              }
+              if (GetKeyState(VK_TAB) & 0x8000) {
+                  if (whatcam) {
+                      g_Projection = cam1.getproyectionmatrixPerspective(XM_PIDIV4, 64 / (FLOAT)48, 0.01f, 100.0f);
+                      cam = &cam1;
+                      whatcam = false;
+                  }
+                  else {
+                      g_Projection = cam2.getproyectionmatrixOrtograpyc(6.4, 4.8, 0.01f, 100.0f);
+                      cam = &cam2;
+                      whatcam = true;
+                  }
+
+                  CBChangeOnResize cbChangesOnResize;
+                  //cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
+                  //g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
+              }
+              inputs.pop_front();
+              CBNeverChanges mv;
+              //mv.mView = XMMatrixTranspose(cam->getview());
+
+              //g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
+
+          }
+          //g_World = XMMatrixRotationY(t);
+
+          // Modify the color
+          g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+          g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+          g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+      }  // red, green, blue, alpha
+
+  }
+  void test::Render(void(* UI)()) {
+      v_deviceContext->render(instanses);
+      UI();
+      v_swapChain->Present();
   }
   void test::CleanupDevice()
   {
