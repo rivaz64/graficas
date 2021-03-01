@@ -1,5 +1,7 @@
 #include "DeviceContext.h"
 #include "camera.h"
+#include"test.h"
+
 void DeviceContext::OMSetRenderTargets()
 {
 	g_pImmediateContext->OMSetRenderTargets(1,&(dev->vp.g_pRenderTargetView) , dev->DepthStencilView);
@@ -37,7 +39,7 @@ void DeviceContext::IASetIndexBuffer()
 
 void DeviceContext::UpdateSubresource(camera* cam)
 {
-	CBNeverChanges cbNeverChanges;
+	GraphicsModule::CBNeverChanges cbNeverChanges;
 	cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
 	g_pImmediateContext->UpdateSubresource(dev->neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
 }
@@ -64,7 +66,7 @@ void DeviceContext::resizewindow(camera* cam, HWND& g_hWnd)
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
     g_pImmediateContext->RSSetViewports(1, &vp);
-    CBChangeOnResize cbChangesOnResize;
+    GraphicsModule::CBChangeOnResize cbChangesOnResize;
     cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f));
     g_pImmediateContext->UpdateSubresource(dev->changesOnReziseB.buf, 0, NULL, &cbChangesOnResize, 0, 0);
 }
@@ -80,7 +82,7 @@ void DeviceContext::render(std::vector<float*>& instanses)
 	g_pImmediateContext->PSSetConstantBuffers(2, 1, &dev->changeveryFrameB.buf);
 	g_pImmediateContext->PSSetShaderResources(0, 1, &dev->g_pTextureRV);
 	g_pImmediateContext->PSSetSamplers(0, 1, &dev->g_pSamplerLinear);
-	CBChangesEveryFrame cb;
+	GraphicsModule::CBChangesEveryFrame cb;
 	cb.vMeshColor = g_vMeshColor;
 	g_pImmediateContext->ClearRenderTargetView(dev->vp.g_pRenderTargetView, ClearColor);
 	g_pImmediateContext->ClearDepthStencilView(dev->DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);

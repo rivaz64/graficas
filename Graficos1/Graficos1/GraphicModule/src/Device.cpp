@@ -1,6 +1,7 @@
 #include "Device.h"
 #include"DeviceContext.h"
 #include "SwapChain.h"
+#include"test.h"
 /*D3D_DRIVER_TYPE driverTypes[] =
 {
 	D3D_DRIVER_TYPE_HARDWARE,
@@ -17,87 +18,21 @@ D3D_FEATURE_LEVEL featureLevels[] =
 };
 UINT numFeatureLevels = ARRAYSIZE(featureLevels);*/
 
-HRESULT CompileShaderFile(LPCSTR szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+
+HRESULT Device::create(HWND g_hWnd )
 {
-	HRESULT hr = S_OK;
-
-	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#if defined( DEBUG ) || defined( _DEBUG )
-	// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
-	// Setting this flag improves the shader debugging experience, but still allows 
-	// the shaders to be optimized and to run exactly the way they will run in 
-	// the release configuration of this program.
-	dwShaderFlags |= D3DCOMPILE_DEBUG;
-#endif
-
-	ID3DBlob* pErrorBlob;
-	hr = D3DX11CompileFromFile(szFileName, NULL, NULL, szEntryPoint, szShaderModel,
-		dwShaderFlags, 0, NULL, ppBlobOut, &pErrorBlob, NULL);
-	if (FAILED(hr))
-	{
-		if (pErrorBlob != NULL)
-			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
-		if (pErrorBlob) pErrorBlob->Release();
-		return hr;
-	}
-	if (pErrorBlob) pErrorBlob->Release();
-
-	return S_OK;
-}
-HRESULT Device::create(HWND g_hWnd, UINT width, UINT height)
-{
-	D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
-	D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
-	UINT createDeviceFlags = 0;
-#ifdef _DEBUG
-	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-	DeviceContext* v_deviceContext = new DeviceContext;
-	v_deviceContext->dev = this;
-	SwapChain* v_swapChain = new SwapChain;
-	v_swapChain->dev = this;
-	D3D_DRIVER_TYPE driverTypes[] =
-	{
-		D3D_DRIVER_TYPE_HARDWARE,
-		D3D_DRIVER_TYPE_WARP,
-		D3D_DRIVER_TYPE_REFERENCE,
-	};
-	UINT numDriverTypes = ARRAYSIZE(driverTypes);
-
-	D3D_FEATURE_LEVEL featureLevels[] =
-	{
-		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_10_1,
-		D3D_FEATURE_LEVEL_10_0,
-	};
-	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-	DXGI_SWAP_CHAIN_DESC sd;
-	ZeroMemory(&sd, sizeof(sd));
-	sd.BufferCount = 1;
-	sd.BufferDesc.Width = width;
-	sd.BufferDesc.Height = height;
-	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	sd.BufferDesc.RefreshRate.Numerator = 60;
-	sd.BufferDesc.RefreshRate.Denominator = 1;
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.OutputWindow = g_hWnd;
-	sd.SampleDesc.Count = 1;
-	sd.SampleDesc.Quality = 0;
-	sd.Windowed = TRUE;
-	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-	{
-		g_driverType = driverTypes[driverTypeIndex];
-		HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-			D3D11_SDK_VERSION, &sd, &v_swapChain->g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &v_deviceContext->g_pImmediateContext);
-	}
-	return S_OK;
+	RECT rc;
+	GetClientRect(g_hWnd, &rc);
+	 width = rc.right - rc.left;
+	 height = rc.bottom - rc.top;
+	 return S_OK;
 }
 HRESULT Device::CreateRenderTargetView(ID3D11Texture2D* textura)
 {
 	return g_pd3dDevice->CreateRenderTargetView(textura, NULL, &vp.g_pRenderTargetView);
 }
 
-HRESULT Device::CreateTexture2D(UINT width, UINT height)
+HRESULT Device::CreateTexture2D()
 {
 	ZeroMemory(&descDepth, sizeof(descDepth));
 	descDepth.Width = width;
@@ -126,11 +61,10 @@ HRESULT Device::CreateDepthStencilView()
 	return g_pd3dDevice->CreateDepthStencilView(depstencil.deptstencil, &descDSV, &DepthStencilView);
 }
 
-HRESULT Device::CreateVertexShader(LPCSTR file, const char* vs, const char* vsv)
+HRESULT Device::CreateVertexShader(ID3DBlob* pPSBlob)
 {
 	
-	pVSBlob = NULL;
-	/*hr = */CompileShaderFile(file, vs, vsv, &pVSBlob);
+	/*hr = */
 	/*if (FAILED(hr))
 	{
 		MessageBox(NULL,
@@ -155,11 +89,9 @@ HRESULT Device::CreateInputLayout()
 	return r;
 }
 
-HRESULT Device::CreatePixelShader(LPCSTR file, const char* s, const char* sv)
+HRESULT Device::CreatePixelShader(ID3DBlob* pPSBlob)
 {
-	
-	CompileShaderFile(file, s, sv, &pPSBlob);
-	
+
 	HRESULT hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);;
 	pPSBlob->Release();
 	return hr;
@@ -168,13 +100,13 @@ HRESULT Device::CreatePixelShader(LPCSTR file, const char* s, const char* sv)
 HRESULT Device::CreateBuffers()
 {
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(CBNeverChanges);
+	bd.ByteWidth = sizeof(GraphicsModule::CBNeverChanges);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
 	g_pd3dDevice->CreateBuffer(&bd, NULL, &neverChangesB.buf);
-	bd.ByteWidth = sizeof(CBChangeOnResize);
+	bd.ByteWidth = sizeof(GraphicsModule::CBChangeOnResize);
 	g_pd3dDevice->CreateBuffer(&bd, NULL, &changesOnReziseB.buf);
-	bd.ByteWidth = sizeof(CBChangesEveryFrame);
+	bd.ByteWidth = sizeof(GraphicsModule::CBChangesEveryFrame);
 	return g_pd3dDevice->CreateBuffer(&bd, NULL, &changeveryFrameB.buf);
 }
 

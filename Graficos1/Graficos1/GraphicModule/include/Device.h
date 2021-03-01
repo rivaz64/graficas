@@ -9,21 +9,7 @@
 #include"viewport.h"
 #include"Textura.h"
 
-struct CBNeverChanges
-{
-	XMMATRIX mView;
-};
 
-struct CBChangeOnResize
-{
-	XMMATRIX mProjection;
-};
-
-struct CBChangesEveryFrame
-{
-	XMMATRIX mWorld;
-	XMFLOAT4 vMeshColor;
-};
 class Device
 {
 public:
@@ -31,7 +17,7 @@ public:
 	//ID3D11Texture2D** deptstencil;
 	D3D11_TEXTURE2D_DESC descDepth;
 	ID3D11Device* g_pd3dDevice = NULL;
-    ID3DBlob* pPSBlob = NULL;
+    
     viewport vp;
 	ID3D11DepthStencilView* DepthStencilView=NULL;
 	ID3DBlob* pVSBlob;
@@ -47,13 +33,15 @@ public:
 	ID3D11SamplerState* g_pSamplerLinear = NULL;
 	D3D11_BUFFER_DESC bd;
     D3D11_SUBRESOURCE_DATA InitData;
-	HRESULT create(HWND g_hWnd,UINT width, UINT height);
+	HWND g_hWndM;
+	UINT width, height;
+	HRESULT create(HWND g_hWnd);
 	HRESULT CreateRenderTargetView(ID3D11Texture2D* idTextura);
-	HRESULT CreateTexture2D(UINT width, UINT height);
+	HRESULT CreateTexture2D();
 	HRESULT CreateDepthStencilView();
-	HRESULT CreateVertexShader(LPCSTR file, const char* vs, const char* vsv);
+	HRESULT CreateVertexShader(ID3DBlob* pPSBlob);
 	HRESULT CreateInputLayout();
-	HRESULT CreatePixelShader(LPCSTR file, const char* s, const char* sv);
+	HRESULT CreatePixelShader(ID3DBlob* pPSBlob);
 	HRESULT CreateBuffers();
     void setmesh(mesh* m);
 	void CreateShaderResourceViewFromFile(LPCSTR file);

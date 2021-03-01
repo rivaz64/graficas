@@ -40,62 +40,46 @@ namespace GraphicsModule
 
   HRESULT test::InitDevice(HWND _hwnd)
   {
-    m_hwnd = _hwnd;
+    //m_hwnd = _hwnd;
 
     HRESULT hr = S_OK;
+    v_device = new Device;
+    v_device->create(_hwnd);
+    
 
-    RECT rc;
-    GetClientRect(m_hwnd, &rc);
-    UINT width = rc.right - rc.left;
-    UINT height = rc.bottom - rc.top;
-
+                         g_driverType = DT_NULL;
+    featurL                   g_featureLevel = F_LEVEL_11_0;
     UINT createDeviceFlags = 0;
 #ifdef _DEBUG
     createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-    D3D_DRIVER_TYPE driverTypes[] =
+    driverT driverTypes[] =
     {
-        D3D_DRIVER_TYPE_HARDWARE,
-        D3D_DRIVER_TYPE_WARP,
-        D3D_DRIVER_TYPE_REFERENCE,
+        DT_HARDWARE,
+        DT_WARP,
+        DT_REFERENCE,
     };
+    //UINT numDriverTypes = ARRAYSIZE(driverT);
     UINT numDriverTypes = ARRAYSIZE(driverTypes);
 
-    D3D_FEATURE_LEVEL featureLevels[] =
+    featurL featureLevels[] =
     {
-        D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0,
+        F_LEVEL_11_0,
+        F_LEVEL_10_1,
+        F_LEVEL_10_0,
     };
     UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-    DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory(&sd, sizeof(sd));
-    sd.BufferCount = 1;
-    sd.BufferDesc.Width = width;
-    sd.BufferDesc.Height = height;
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = m_hwnd;
-    sd.SampleDesc.Count = 1;
-    sd.SampleDesc.Quality = 0;
-    sd.Windowed = TRUE;
-    v_device = new Device;
-    v_deviceContext = new DeviceContext;
-    v_swapChain = new SwapChain;
-    //v_device->g_pd3dDevice = g_pd3dDevice;
+
     for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
         g_driverType = driverTypes[driverTypeIndex];
-        //
-        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-            D3D11_SDK_VERSION, &sd, &v_swapChain->g_pSwapChain, &v_device->g_pd3dDevice, &g_featureLevel, &v_deviceContext->g_pImmediateContext);
-        if (SUCCEEDED(hr))
-            break;
+        HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)g_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
+            D3D11_SDK_VERSION, &v_swapChain->sd, &v_swapChain->g_pSwapChain, &v_device->g_pd3dDevice, ((D3D_FEATURE_LEVEL*)&g_featureLevel), &v_deviceContext->g_pImmediateContext);
     }
-    if (FAILED(hr))
-        return hr;
+    
+    v_deviceContext = new DeviceContext;
+    v_swapChain = new SwapChain;
+    v_device->create(_hwnd);
     v_deviceContext->dev = v_device;
     v_swapChain->dev = v_device;
     v_swapChain->GetBuffer();
@@ -105,7 +89,7 @@ namespace GraphicsModule
     if (FAILED(hr))
         return hr;
 
-    hr = v_device->CreateTexture2D(width, height);
+    hr = v_device->CreateTexture2D();
     if (FAILED(hr))
         return hr;
 
@@ -124,9 +108,11 @@ namespace GraphicsModule
             "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
         return hr;
     }
-
+    pVSBlob->Release();
+    pVSBlob = NULL;
     // Create the vertex shader
-    hr = v_device->CreateVertexShader("Tutorial07.fx", "VS", "vs_4_0");
+    CompileShaderFromFile("Tutorial07.fx", "VS", "vs_4_0", &pVSBlob);
+    hr = v_device->CreateVertexShader(pVSBlob);
 
     //hr = g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
     if (FAILED(hr))
@@ -144,7 +130,8 @@ namespace GraphicsModule
 
     // Set the input layout
     v_deviceContext->IASetInputLayout();
-    hr = v_device->CreatePixelShader("Tutorial07.fx", "PS", "ps_4_0");
+    CompileShaderFromFile("Tutorial07.fx", "PS", "ps_4_0", &pPSBlob);
+    hr = v_device->CreatePixelShader(pPSBlob);
     //pPSBlob->Release();
     if (FAILED(hr))
         return hr;
@@ -228,7 +215,7 @@ namespace GraphicsModule
         return hr;
 
     // Initialize the world matrices
-    g_World = XMMatrixIdentity();
+    //g_World = XMMatrixIdentity();
     //g_World1 = XMMatrixIdentity();
     // Initialize the view matrix
 
@@ -261,7 +248,7 @@ namespace GraphicsModule
   {
 
       static float t = 0.0f;
-      if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+      if (g_driverType == DT_REFERENCE)
       {
           t += (float)XM_PI * 0.0125f;
       }
@@ -361,7 +348,7 @@ namespace GraphicsModule
   {
     //if (g_pImmediateContext) g_pImmediateContext->ClearState();
 
-    if (g_pSamplerLinear) g_pSamplerLinear->Release();
+    /*if (g_pSamplerLinear) g_pSamplerLinear->Release();
     if (g_pTextureRV) g_pTextureRV->Release();
     if (g_pCBNeverChanges) g_pCBNeverChanges->Release();
     if (g_pCBChangeOnResize) g_pCBChangeOnResize->Release();
@@ -373,9 +360,14 @@ namespace GraphicsModule
     if (g_pPixelShader) g_pPixelShader->Release();
     if (g_pDepthStencil) g_pDepthStencil->Release();
     if (g_pDepthStencilView) g_pDepthStencilView->Release();
-    if (g_pRenderTargetView) g_pRenderTargetView->Release();
+    if (g_pRenderTargetView) g_pRenderTargetView->Release();*/
     //if (g_pSwapChain) g_pSwapChain->Release();
     //if (g_pImmediateContext) g_pImmediateContext->Release();
     //if (g_pd3dDevice) g_pd3dDevice->Release();
+  }
+  test* gettestobj()
+  {
+      static test* ptest = NULL;
+      return ptest;
   }
 }
