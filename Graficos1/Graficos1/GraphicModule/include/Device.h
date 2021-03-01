@@ -8,6 +8,7 @@
 #include"Buffer.h"
 #include"viewport.h"
 #include"Textura.h"
+
 struct CBNeverChanges
 {
 	XMMATRIX mView;
