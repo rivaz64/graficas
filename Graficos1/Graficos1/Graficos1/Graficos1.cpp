@@ -7,7 +7,7 @@
 
 // -----------------Global var-----------------------------------------------------------------
 HWND g_hwnd;
-GraphicsModule::test MiObj;
+GraphicsModule::test *MiObj;
 
 /**
  * @brief   Forward declare message handler from imgui_impl_win32.cpp
@@ -118,9 +118,9 @@ HRESULT InitImgUI()
     ImGui::StyleColorsDark();
 
     // Setup Platform/Renderer back ends
-    
-    ImGui_ImplWin32_Init(MiObj.m_hwnd);
-    ImGui_ImplDX11_Init( MiObj.getdevice(), MiObj.getcontext());
+    //MiObj = GraphicsModule::gettestobj(g_hwnd);
+    //ImGui_ImplWin32_Init(MiObj->m_hwnd);
+    //ImGui_ImplDX11_Init( MiObj->g_pd3dDevice, MiObj->g_pImmediateContext);
 
     return S_OK;
 }
@@ -158,9 +158,10 @@ int main()
   }
   
   // create Graphic API interface
-  if (FAILED(MiObj.InitDevice(g_hwnd)))
+  MiObj = new GraphicsModule::test;
+  if (FAILED(MiObj->InitDevice(g_hwnd)))
   {
-    MiObj.CleanupDevice();
+    MiObj->CleanupDevice();
     return 0;
   }
 
@@ -184,9 +185,9 @@ int main()
     }
     else
     {
-    
-        MiObj.Updeate();
-        MiObj.Render(UIrender);
+
+        //MiObj->Updeate();
+        MiObj->Render();
      
     }
   }
@@ -194,7 +195,7 @@ int main()
   //ImGui_ImplDX11_Shutdown();
   //ImGui_ImplWin32_Shutdown();
   //ImGui::DestroyContext();
-  MiObj.CleanupDevice();
+  MiObj->CleanupDevice();
   DestroyWindow(g_hwnd);
   return (int)msg.wParam;
 }

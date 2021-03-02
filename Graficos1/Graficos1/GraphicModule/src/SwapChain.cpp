@@ -8,18 +8,18 @@ HRESULT SwapChain::GetBuffer()
 	return S_OK;
 }
 
-void SwapChain::createdesctriptor(HWND g_hWnd, UINT width, UINT height)
+void SwapChain::createdesctriptor()
 {
-	
+
 	ZeroMemory(&sd, sizeof(sd));
 	sd.BufferCount = 1;
-	sd.BufferDesc.Width = width;
-	sd.BufferDesc.Height = height;
+	sd.BufferDesc.Width = dev->width;
+	sd.BufferDesc.Height = dev->height;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.OutputWindow = g_hWnd;
+	sd.OutputWindow = dev->g_hWndM;
 	sd.SampleDesc.Count = 1;
 	sd.SampleDesc.Quality = 0;
 	sd.Windowed = TRUE;
@@ -27,7 +27,7 @@ void SwapChain::createdesctriptor(HWND g_hWnd, UINT width, UINT height)
 
 void SwapChain::rezise(LPARAM lParam)
 {
-    vp.release();
+	g_pRenderTargetView->Release();
     g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
     GetBuffer();
 }

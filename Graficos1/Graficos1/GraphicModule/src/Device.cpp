@@ -29,7 +29,7 @@ HRESULT Device::create(HWND g_hWnd )
 }
 HRESULT Device::CreateRenderTargetView(ID3D11Texture2D* textura)
 {
-	return g_pd3dDevice->CreateRenderTargetView(textura, NULL, &vp.g_pRenderTargetView);
+	return g_pd3dDevice->CreateRenderTargetView(textura, NULL, &g_pRenderTargetView);
 }
 
 HRESULT Device::CreateTexture2D()
@@ -71,7 +71,8 @@ HRESULT Device::CreateVertexShader(ID3DBlob* pPSBlob)
 			L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
 		return hr;
 	}*/
-	return g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &vertexshader);
+	pVSBlob = pPSBlob;
+	return g_pd3dDevice->CreateVertexShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &vertexshader);
 }
 
 HRESULT Device::CreateInputLayout()

@@ -7,10 +7,19 @@
 #include<vector>
 using std::vector;
 class camera;
+struct viewport {
+	FLOAT TopLeftX;
+	FLOAT TopLeftY;
+	FLOAT Width;
+	FLOAT Height;
+	FLOAT MinDepth;
+	FLOAT MaxDepth;
+};
 class DeviceContext
 {
 public:
 	Device* dev;
+	
 	ID3D11DeviceContext* g_pImmediateContext;
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
 	XMFLOAT4 g_vMeshColor= XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);

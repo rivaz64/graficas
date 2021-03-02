@@ -9,8 +9,8 @@ public:
 	ID3D11Texture2D* pBackBuffer = NULL;
 	HRESULT GetBuffer();
 	DXGI_SWAP_CHAIN_DESC sd;
-	viewport vp;
-	void createdesctriptor(HWND g_hWnd, UINT width, UINT height);
+	ID3D11RenderTargetView* g_pRenderTargetView;
+	void createdesctriptor();
     void rezise(LPARAM lparam);
 	void Present();
 };
