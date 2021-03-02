@@ -8,5 +8,6 @@ class Buffer
 {
 public:
     ID3D11Buffer* buf = NULL;
+    ID3D11Buffer* get() { return buf; };
     ~Buffer();
 };

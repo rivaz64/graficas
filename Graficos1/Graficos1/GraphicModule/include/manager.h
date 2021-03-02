@@ -13,6 +13,7 @@
 #include"DepthStencil.h"
 #include"RenderTargetView.h"
 #include"Viewport.h"
+#include"Buffer.h"
 namespace GraphicsModule {
     class manager
     {

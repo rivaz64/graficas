@@ -156,7 +156,7 @@ namespace GraphicsModule
         }
 
         // Create the vertex shader
-        hr = man->getDevice()->g_pd3dDevice->CreateVertexShader(pVSBlob2->GetBufferPointer(), pVSBlob2->GetBufferSize(), NULL, &g_pVertexShader2);
+        hr = man->getDevice()->CreateVertexShader(pVSBlob2, &g_pVertexShader2);
         if (FAILED(hr))
         {
             pVSBlob2->Release();
@@ -166,8 +166,8 @@ namespace GraphicsModule
         // Define the input layout
         D3D11_INPUT_ELEMENT_DESC layout2[] =
         {
-            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { "POSITION", 0, (DXGI_FORMAT)FORMAT::R32G32B32_FLOAT, 0, 0, (D3D11_INPUT_CLASSIFICATION)INPUT_C::VERTEX_DATA, 0 },
+            { "TEXCOORD", 0, (DXGI_FORMAT)FORMAT::R32G32B32_FLOAT, 0, 12, (D3D11_INPUT_CLASSIFICATION)INPUT_C::VERTEX_DATA, 0 }
         };
         UINT numElements2 = ARRAYSIZE(layout2);
 
@@ -189,7 +189,7 @@ namespace GraphicsModule
         }
 
         // Create the pixel shader
-        hr = man->getDevice()->g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);
+        hr = man->getDevice()->CreatePixelShader(pPSBlob, &g_pPixelShader);
         pPSBlob->Release();
         if (FAILED(hr))
             return hr;
@@ -205,92 +205,93 @@ namespace GraphicsModule
         }
 
         // Create the pixel shader
-        hr = man->getDevice()->g_pd3dDevice->CreatePixelShader(pPSBlob2->GetBufferPointer(), pPSBlob2->GetBufferSize(), NULL, &g_pPixelShader2);
+        hr = man->getDevice()->CreatePixelShader(pPSBlob2, &g_pPixelShader2);
         pPSBlob2->Release();
         if (FAILED(hr))
             return hr;
 
         // Create vertex buffer
-        SimpleVertex vertices[] =
-        {
-            { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-            { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-            { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
-            { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+        
+        cubito.setvertex(
+            {
+                { {-1.0f, 1.0f, -1.0f}, {0,0} },
+                { { 1.0f, 1.0f, -1.0f }, { 1.0f, 0.0f } },
+                { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } },
+                { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
 
-            { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-            { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-            { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
-            { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+                { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } },
+                { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
+                { { 1.0f, -1.0f, 1.0f }, { 1.0f, 1.0f } },
+                { { -1.0f, -1.0f, 1.0f }, { 0.0f, 1.0f } },
 
-            { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-            { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-            { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-            { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+                { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } },
+                { { -1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
+                { { -1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f } },
+                { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
 
-            { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-            { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-            { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-            { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+                { { 1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } },
+                { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
+                { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f } },
+                { { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
 
-            { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-            { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-            { XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-            { XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
+                { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } },
+                { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
+                { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f } },
+                { { -1.0f, 1.0f, -1.0f }, { 0.0f, 1.0f } },
 
-            { XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-            { XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 0.0f) },
-            { XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
-            { XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-        };
-
+                { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } },
+                { { 1.0f, -1.0f, 1.0f }, { 1.0f, 0.0f } },
+                { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } },
+                { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
+            });
         D3D11_BUFFER_DESC bd;
         ZeroMemory(&bd, sizeof(bd));
-        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
         bd.ByteWidth = sizeof(SimpleVertex) * 24;
-        bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::VERTEX_BUFFER;
         bd.CPUAccessFlags = 0;
         D3D11_SUBRESOURCE_DATA InitData;
         ZeroMemory(&InitData, sizeof(InitData));
-        InitData.pSysMem = vertices;
-        hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
+        InitData.pSysMem = cubito.getvertex();;
+        
+        hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &vertexB.buf);
         if (FAILED(hr))
             return hr;
 
         // Create index buffer
         // Create vertex buffer
-        WORD indices[] =
-        {
-            3,1,0,
-            2,1,3,
+        cubito.setindices(
+            {
+                3,1,0,
+                2,1,3,
 
-            6,4,5,
-            7,4,6,
+                6,4,5,
+                7,4,6,
 
-            11,9,8,
-            10,9,11,
+                11,9,8,
+                10,9,11,
 
-            14,12,13,
-            15,12,14,
+                14,12,13,
+                15,12,14,
 
-            19,17,16,
-            18,17,19,
+                19,17,16,
+                18,17,19,
 
-            22,20,21,
-            23,20,22
-        };
+                22,20,21,
+                23,20,22
+            });
 
-        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
         bd.ByteWidth = sizeof(WORD) * 36;
-        bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+        bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::INDEX_BUFFER;
         bd.CPUAccessFlags = 0;
-        InitData.pSysMem = indices;
-        hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
+        InitData.pSysMem = cubito.getindices();
+        hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &indexB.buf);
         if (FAILED(hr))
             return hr;
 
         // Create vertex buffer
-        SimpleVertex vertices2[] =
+        /*SimpleVertex vertices2[] =
         {
              { XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
             { XMFLOAT3(1.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
@@ -327,7 +328,7 @@ namespace GraphicsModule
         InitData2.pSysMem = indices2;
         hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd2, &InitData2, &g_pIndexBuffer2);
         if (FAILED(hr))
-            return hr;
+            return hr;*/
 
 
 
@@ -335,21 +336,21 @@ namespace GraphicsModule
         man->getConext()->g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
         // Create the constant buffers
-        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;;
         bd.ByteWidth = sizeof(CBNeverChanges);
-        bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::CONSTANT_BUFFER;
         bd.CPUAccessFlags = 0;
-        hr = hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBNeverChanges);
+        hr = hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, NULL, &neverChangesB.buf);
         if (FAILED(hr))
             return hr;
 
         bd.ByteWidth = sizeof(CBChangeOnResize);
-        hr = hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
+        hr = hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, NULL, &changesOnReziseB.buf);
         if (FAILED(hr))
             return hr;
 
         bd.ByteWidth = sizeof(CBChangesEveryFrame);
-        hr = hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
+        hr = hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, NULL, &changeveryFrameB.buf);
         if (FAILED(hr))
             return hr;
 
@@ -383,14 +384,14 @@ namespace GraphicsModule
 
         CBNeverChanges cbNeverChanges;
         cbNeverChanges.mView = XMMatrixTranspose(g_View);
-        man->getConext()->g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);
+        man->getConext()->g_pImmediateContext->UpdateSubresource(neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
 
         // Initialize the projection matrix
         g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
 
         CBChangeOnResize cbChangesOnResize;
         cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
-        man->getConext()->g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
+        man->getConext()->g_pImmediateContext->UpdateSubresource(changesOnReziseB.buf, 0, NULL, &cbChangesOnResize, 0, 0);
 
 
         // create rasterizer state
@@ -452,7 +453,7 @@ namespace GraphicsModule
         CBChangesEveryFrame cb;
         cb.mWorld = XMMatrixTranspose(g_World);
         cb.vMeshColor = g_vMeshColor;
-        man->getConext()->g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
+        man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
 
 
         UINT stride = sizeof(SimpleVertex);
@@ -464,14 +465,14 @@ namespace GraphicsModule
         // Set the input layout
          man->getConext()->g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
          man->getConext()->g_pImmediateContext->RSSetState(g_Rasterizer);
-         man->getConext()->g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
-         man->getConext()->g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+         man->getConext()->g_pImmediateContext->IASetVertexBuffers(0, 1, &vertexB.buf, &stride, &offset);
+         man->getConext()->g_pImmediateContext->IASetIndexBuffer(indexB.buf, DXGI_FORMAT_R16_UINT, 0);
          man->getConext()->g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
-         man->getConext()->g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
-         man->getConext()->g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
-         man->getConext()->g_pImmediateContext->VSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+         man->getConext()->g_pImmediateContext->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
+         man->getConext()->g_pImmediateContext->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
+         man->getConext()->g_pImmediateContext->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
          man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
-         man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+         man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
          man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
          man->getConext()->g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
          man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
@@ -500,9 +501,9 @@ namespace GraphicsModule
 
         if (g_pSamplerLinear) g_pSamplerLinear->Release();
         if (g_pTextureRV) g_pTextureRV->Release();
-        if (g_pCBNeverChanges) g_pCBNeverChanges->Release();
-        if (g_pCBChangeOnResize) g_pCBChangeOnResize->Release();
-        if (g_pCBChangesEveryFrame) g_pCBChangesEveryFrame->Release();
+        if (neverChangesB.buf) neverChangesB.buf->Release();
+        if (changesOnReziseB.buf) changesOnReziseB.buf->Release();
+        if (changeveryFrameB.buf) changeveryFrameB.buf->Release();
         if (g_pVertexBuffer) g_pVertexBuffer->Release();
         if (g_pIndexBuffer) g_pIndexBuffer->Release();
         if (g_pVertexLayout) g_pVertexLayout->Release();
