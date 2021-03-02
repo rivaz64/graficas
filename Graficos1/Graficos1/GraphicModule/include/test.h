@@ -17,6 +17,15 @@ namespace GraphicsModule
         DT_SOFTWARE = (DT_NULL + 1),
         DT_WARP = (DT_SOFTWARE + 1)
     };
+    enum FEATURE_LEVEL
+    {
+        LEVEL_9_1 = 0x9100,
+        LEVEL_9_2 = 0x9200,
+        LEVEL_9_3 = 0x9300,
+        LEVEL_10_0 = 0xa000,
+        LEVEL_10_1 = 0xa100,
+        LEVEL_11_0 = 0xb000
+    };
     struct SimpleVertex
     {
         XMFLOAT3 Pos;
@@ -43,7 +52,7 @@ namespace GraphicsModule
     {
     public:
         DRIVER_TYPE                     g_driverType = DT_NULL;
-        D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
+        FEATURE_LEVEL                   g_featureLevel = LEVEL_11_0;
         Device dev;
         ID3D11Device* g_pd3dDevice = NULL;
         ID3D11DeviceContext* g_pImmediateContext = NULL;

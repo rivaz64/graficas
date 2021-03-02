@@ -55,11 +55,11 @@ namespace GraphicsModule
         };
         UINT numDriverTypes = ARRAYSIZE(driverTypes);
 
-        D3D_FEATURE_LEVEL featureLevels[] =
+        FEATURE_LEVEL featureLevels[] =
         {
-            D3D_FEATURE_LEVEL_11_0,
-            D3D_FEATURE_LEVEL_10_1,
-            D3D_FEATURE_LEVEL_10_0,
+            LEVEL_11_0,
+            LEVEL_10_1,
+            LEVEL_10_0,
         };
         UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
@@ -80,8 +80,8 @@ namespace GraphicsModule
         for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
         {
             g_driverType = driverTypes[driverTypeIndex];
-            hr = D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+            hr = D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)g_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
+                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &g_pImmediateContext);
             if (SUCCEEDED(hr))
                 break;
         }
