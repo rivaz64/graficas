@@ -76,7 +76,7 @@ namespace GraphicsModule
         }
         if (FAILED(hr))
             return hr;
-        RenderTargetView rtv;
+        //RenderTargetView rtv;
         rtv.get = NULL;
         man->createrendertarget(rtv);
         
@@ -86,7 +86,7 @@ namespace GraphicsModule
         
         if (FAILED(hr))
             return hr;
-        rendertarget.get = rtv.get;
+        rtv.get;
         // Create depth stencil texture
         depstencil.descrivetextur();
         man->CreateTexture2D(depstencil.textur);
@@ -98,9 +98,9 @@ namespace GraphicsModule
         
        
        
-        man->OMSetRenderTargets(rendertarget, depstencil);
-        g_pDepthStencilView = depstencil.view;
-        g_pDepthStencil = depstencil.textur.get;
+        man->OMSetRenderTargets(rtv, depstencil);
+        //g_pDepthStencilView = depstencil.view;
+        //g_pDepthStencil = depstencil.textur.get;
         //Setup the viewport
         CD3D11_VIEWPORT v;
         Viewport vp;
@@ -362,11 +362,11 @@ namespace GraphicsModule
         // Create the sample state
         D3D11_SAMPLER_DESC sampDesc;
         ZeroMemory(&sampDesc, sizeof(sampDesc));
-        sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-        sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+        sampDesc.Filter = (D3D11_FILTER)FILTER::COMPARISON_MIN_MAG_MIP_LINEAR;
+        sampDesc.AddressU = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+        sampDesc.AddressV = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+        sampDesc.AddressW = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+        sampDesc.ComparisonFunc = (D3D11_COMPARISON_FUNC)COMPARISON_FUNC::NEVER;
         sampDesc.MinLOD = 0;
         sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
         hr = hr = man->getDevice()->g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
@@ -407,7 +407,21 @@ namespace GraphicsModule
         hr = hr = man->getDevice()->g_pd3dDevice->CreateRasterizerState(&desc, &g_Rasterizer2);
         if (FAILED(hr))
             return hr;
+        //Para ka textura nueva
+        //rtv2.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
+        //man->CreateTexture2D(textur2);
+        if (FAILED(hr))
+            return hr;
 
+        // create the rt Shader resource view
+        /*D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
+        ZeroMemory(&descViewRT, sizeof(descViewRT));
+        descViewRT.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        descViewRT.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        descViewRT.Texture2D.MostDetailedMip = 0;
+        descViewRT.Texture2D.MipLevels = 1;
+        hr = g_pd3dDevice->CreateShaderResourceView(g_pTextRT2, &descViewRT, &g_pViewRT2);*/
+        
         return S_OK;
     }
 
@@ -440,12 +454,12 @@ namespace GraphicsModule
         // Clear the back buffer
         //
         float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
-        man->getConext()->g_pImmediateContext->ClearRenderTargetView(rendertarget.get, ClearColor);
+        man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv.get, ClearColor);
 
         //
         // Clear the depth buffer to 1.0 (max depth)
         //
-        man->getConext()->g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+        man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
         //
         // Update variables that change once per frame
@@ -480,18 +494,20 @@ namespace GraphicsModule
         //
         // Render the SAQ
         //
-         man->getConext()->g_pImmediateContext->IASetInputLayout(g_pVertexLayout2);
-         man->getConext()->g_pImmediateContext->RSSetState(g_Rasterizer2);
-         man->getConext()->g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer2, &stride, &offset);
-         man->getConext()->g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer2, DXGI_FORMAT_R16_UINT, 0);
-         man->getConext()->g_pImmediateContext->VSSetShader(g_pVertexShader2, NULL, 0);
-         man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader2, NULL, 0);
+         
+
         //g_pImmediateContext->DrawIndexed(6, 0, 0);
         //
         // Present our back buffer to our front buffer
         //
 
         //UIRender();
+         /*for (float* i : instanses) {
+             cb.mWorld = XMMatrixTranspose(i);
+             g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+             g_pImmediateContext->DrawIndexed(36, 0, 0);
+         }*/
+        
          man->getSwapchain()->Present();
     }
 

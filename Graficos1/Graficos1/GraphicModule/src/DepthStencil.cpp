@@ -3,7 +3,7 @@
 namespace GraphicsModule {
     void DepthStencil::descrivetextur()
     {
-        textur.describe();
+        textur.describe(FORMAT::TYPELESS, BIND_FLAG::DEPTH_STENCIL);
     }
 
     void DepthStencil::describeview()

@@ -36,19 +36,22 @@ namespace GraphicsModule
     {
         manager* man;
     public:
+        std::vector<float*> instanses;
         DRIVER_TYPE                     g_driverType = DRIVER_TYPE::DT_NULL;
         FEATURE_LEVEL                   g_featureLevel = FEATURE_LEVEL::LEVEL_11_0;
         ID3D11Device* g_pd3dDevice = NULL;
         ID3D11DeviceContext* g_pImmediateContext = NULL;
         IDXGISwapChain* g_pSwapChain = NULL;
         ID3D11RenderTargetView* g_pRenderTargetView = NULL;
-        RenderTargetView rendertarget;
+        RenderTargetView rtv;
         //Textura depthstencil;
         mesh cubito;
         DepthStencil depstencil;
-        ID3D11Texture2D* g_pDepthStencil;
-        ID3D11DepthStencilView* g_pDepthStencilView = NULL;
-        ID3D11ShaderResourceView* g_pDepthStencilSRV = NULL;
+        //ID3D11Texture2D* g_pDepthStencil;
+        //ID3D11DepthStencilView* g_pDepthStencilView = NULL;
+        //ID3D11ShaderResourceView* g_pDepthStencilSRV = NULL;
+        ID3D11ShaderResourceView* rsv2 = NULL;
+        RenderTargetView rtv2;
         ID3D11VertexShader* g_pVertexShader = NULL;
         ID3D11PixelShader* g_pPixelShader = NULL;
         ID3D11InputLayout* g_pVertexLayout = NULL;
