@@ -33,7 +33,7 @@ namespace GraphicsModule
 
     class test
     {
-        manager man;
+        manager* man;
     public:
         DRIVER_TYPE                     g_driverType = DRIVER_TYPE::DT_NULL;
         FEATURE_LEVEL                   g_featureLevel = FEATURE_LEVEL::LEVEL_11_0;

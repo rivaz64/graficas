@@ -33,7 +33,8 @@ namespace GraphicsModule
     HRESULT test::InitDevice(HWND _hwnd)
     {
         m_hwnd = _hwnd;
-        man.create(_hwnd);
+        man = getmanager();
+        man->create(_hwnd);
         HRESULT hr = S_OK;
 
         RECT rc;
@@ -61,7 +62,7 @@ namespace GraphicsModule
             FEATURE_LEVEL::LEVEL_10_0,
         };
         UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-        man.descrivesch();
+        man->descrivesch();
         
 
         for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
@@ -70,17 +71,17 @@ namespace GraphicsModule
             /*hr = D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)g_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
                 D3D11_SDK_VERSION, &v_swapchain.sd, &g_pSwapChain, &g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &g_pImmediateContext);
             if (SUCCEEDED(hr))*/
-            hr = man.init(g_driverType, createDeviceFlags, featureLevels, numFeatureLevels, g_featureLevel);
+            hr = man->init(g_driverType, createDeviceFlags, featureLevels, numFeatureLevels, g_featureLevel);
                 break;
         }
         if (FAILED(hr))
             return hr;
         RenderTargetView rtv;
         rtv.get = NULL;
-        man.createrendertarget(rtv);
-        g_pd3dDevice = man.getDevice();
-        g_pImmediateContext = man.getConext();
-        g_pSwapChain = man.getSwapchain();
+        man->createrendertarget(rtv);
+        g_pd3dDevice = man->getDevice();
+        g_pImmediateContext = man->getConext();
+        g_pSwapChain = man->getSwapchain();
         //
         // Create a render target view
         /*Textura pBackBuffer;
@@ -94,25 +95,13 @@ namespace GraphicsModule
             return hr;
         g_pRenderTargetView = rtv.get;
         // Create depth stencil texture
-        //depthstencil.describe();
-        //man.CreateTexture2D(depthstencil);
-        D3D11_TEXTURE2D_DESC descDepth;
-        ZeroMemory(&descDepth, sizeof(descDepth));
-        descDepth.Width = width;
-        descDepth.Height = height;
-        descDepth.MipLevels = 1;
-        descDepth.ArraySize = 1;
-        descDepth.Format = DXGI_FORMAT_R32_TYPELESS;
-        descDepth.SampleDesc.Count = 1;
-        descDepth.SampleDesc.Quality = 0;
-        descDepth.Usage = D3D11_USAGE_DEFAULT;
-        descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
-        descDepth.CPUAccessFlags = 0;
-        descDepth.MiscFlags = 0;
-        hr = g_pd3dDevice->CreateTexture2D(&descDepth, NULL, &g_pDepthStencil);
+        depthstencil.describe();
+
+        hr = g_pd3dDevice->CreateTexture2D(&depthstencil.des, NULL, &depthstencil.get);
+        g_pDepthStencil = depthstencil.get;
         if (FAILED(hr))
             return hr;
-        //g_pDepthStencil = depthstencil.get;
+        
         // Create the depth stencil view
         D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
         ZeroMemory(&descDSV, sizeof(descDSV));
@@ -387,7 +376,7 @@ namespace GraphicsModule
             return hr;
 
         // Load the Texture
-        hr = D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, "seafloor.dds", NULL, NULL, &g_pTextureRV, NULL);
+        hr = D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, "bitco.dds", NULL, NULL, &g_pTextureRV, NULL);
         if (FAILED(hr))
             return hr;
 
