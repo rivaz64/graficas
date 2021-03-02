@@ -46,7 +46,7 @@ namespace GraphicsModule {
         void CreateDepthStencilView(DepthStencil& ds);
         void OMSetRenderTargets(RenderTargetView& rtv, DepthStencil& ds);
         void RSSetViewports(Viewport& vp);
-        void CreateShaderResourceView(Textura& t, D3D11_SHADER_RESOURCE_VIEW_DESC& des);
+        void CreateRenderTargetView(RenderTargetView& t);
     };
     extern manager* getmanager();
 }

@@ -46,7 +46,7 @@ namespace GraphicsModule
 #ifdef _DEBUG
         createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-        
+
         DRIVER_TYPE driverTypes[] =
         {
             DRIVER_TYPE::DT_HARDWARE,
@@ -63,7 +63,7 @@ namespace GraphicsModule
         };
         UINT numFeatureLevels = ARRAYSIZE(featureLevels);
         man->descrivesch();
-        
+
 
         for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
         {
@@ -72,32 +72,29 @@ namespace GraphicsModule
                 D3D11_SDK_VERSION, &v_swapchain.sd, &g_pSwapChain, &g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &g_pImmediateContext);
             if (SUCCEEDED(hr))*/
             hr = man->init(g_driverType, createDeviceFlags, featureLevels, numFeatureLevels, g_featureLevel);
-                break;
+            break;
         }
         if (FAILED(hr))
             return hr;
         //RenderTargetView rtv;
         rtv.get = NULL;
         man->createrendertarget(rtv);
-        
-        g_pd3dDevice = (ID3D11Device*)man->getDevice();
-        g_pImmediateContext = (ID3D11DeviceContext*)man->getConext();
-        g_pSwapChain = (IDXGISwapChain*)man->getSwapchain();
-        
+
+
+
         if (FAILED(hr))
             return hr;
-        rtv.get;
         // Create depth stencil texture
         depstencil.descrivetextur();
         man->CreateTexture2D(depstencil.textur);
-        
-        
+
+
         // Create the depth stencil view
         depstencil.describeview();
         man->CreateDepthStencilView(depstencil);
-        
-       
-       
+
+
+
         man->OMSetRenderTargets(rtv, depstencil);
         //g_pDepthStencilView = depstencil.view;
         //g_pDepthStencil = depstencil.textur.get;
@@ -110,7 +107,7 @@ namespace GraphicsModule
         vp.MaxDepth = 1.0f;
         vp.TopLeftX = 0;
         vp.TopLeftY = 0;
-       
+
         man->RSSetViewports(vp);
 
         // Compile the vertex shader
@@ -211,7 +208,7 @@ namespace GraphicsModule
             return hr;
 
         // Create vertex buffer
-        
+
         cubito.setvertex(
             {
                 { {-1.0f, 1.0f, -1.0f}, {0,0} },
@@ -253,7 +250,7 @@ namespace GraphicsModule
         D3D11_SUBRESOURCE_DATA InitData;
         ZeroMemory(&InitData, sizeof(InitData));
         InitData.pSysMem = cubito.getvertex();;
-        
+
         hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &vertexB.buf);
         if (FAILED(hr))
             return hr;
@@ -332,7 +329,7 @@ namespace GraphicsModule
 
 
 
-        // Set primitive topology
+            // Set primitive topology
         man->getConext()->g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
         // Create the constant buffers
@@ -408,20 +405,22 @@ namespace GraphicsModule
         if (FAILED(hr))
             return hr;
         //Para ka textura nueva
-        //rtv2.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
-        //man->CreateTexture2D(textur2);
+        rtv2.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
+        man->CreateTexture2D(rtv2.textur);
         if (FAILED(hr))
             return hr;
 
         // create the rt Shader resource view
-        /*D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
+        D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
         ZeroMemory(&descViewRT, sizeof(descViewRT));
-        descViewRT.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        descViewRT.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        descViewRT.Format = (DXGI_FORMAT)FORMAT::R8G8B8A8_UNORM;
+        //si algo sale mal revisar esta flag v
+        descViewRT.ViewDimension = (D3D_SRV_DIMENSION)DIMENSION::TEXTURE2DARRAY;
         descViewRT.Texture2D.MostDetailedMip = 0;
         descViewRT.Texture2D.MipLevels = 1;
-        hr = g_pd3dDevice->CreateShaderResourceView(g_pTextRT2, &descViewRT, &g_pViewRT2);*/
-        
+        man->getDevice()->g_pd3dDevice->CreateShaderResourceView(rtv2.textur.get, &descViewRT, &g_pViewRT2);
+
+        man->CreateRenderTargetView(rtv2);
         return S_OK;
     }
 

@@ -87,9 +87,9 @@ namespace GraphicsModule {
         BORDER = 4,
         MIRROR_ONCE = 5
     };
-    enum class COMPARISON_FUNC
-    {NEVER = 1,
-   LESS = 2,
+    enum class COMPARISON_FUNC{
+        NEVER = 1,
+        LESS = 2,
    EQUAL = 3,
    LESS_EQUAL = 4,
    GREATER = 5,
@@ -97,4 +97,6 @@ namespace GraphicsModule {
    GREATER_EQUAL = 7,
    ALWAYS = 8
     };
+    
+        
 }

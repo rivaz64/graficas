@@ -4,9 +4,14 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
-class RenderTargetView
-{
-public:
-	ID3D11RenderTargetView* get=NULL;
-};
+#include "Textura.h"
+namespace GraphicsModule {
+	class RenderTargetView
+	{
+	public:
+		ID3D11RenderTargetView* get = NULL;
+		Textura textur;
+	};
+}
+
 

@@ -44,6 +44,7 @@ namespace GraphicsModule
         IDXGISwapChain* g_pSwapChain = NULL;
         ID3D11RenderTargetView* g_pRenderTargetView = NULL;
         RenderTargetView rtv;
+        ID3D11ShaderResourceView* g_pViewRT2 = NULL;
         //Textura depthstencil;
         mesh cubito;
         DepthStencil depstencil;

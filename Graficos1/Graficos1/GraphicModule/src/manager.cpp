@@ -65,10 +65,12 @@ namespace GraphicsModule {
 		v.TopLeftY = vp.TopLeftY;
 		devcon.g_pImmediateContext->RSSetViewports(1, &v);
 	}
-	void manager::CreateShaderResourceView(Textura& t, D3D11_SHADER_RESOURCE_VIEW_DESC &des)
+
+	void manager::CreateRenderTargetView(RenderTargetView& t)
 	{
-		//dev.g_pd3dDevice->CreateShaderResourceView(t.get,&des,)
+		dev.g_pd3dDevice->CreateRenderTargetView(t.textur.get, NULL, &t.get);
 	}
+	
 	manager* getmanager()
 	{
 		static manager* man;
