@@ -7,6 +7,6 @@
 class RenderTargetView
 {
 public:
-	ID3D11RenderTargetView* get;
+	ID3D11RenderTargetView* get=NULL;
 };
 

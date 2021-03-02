@@ -6,6 +6,7 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #include"manager.h"
+
 namespace GraphicsModule
 {
     
@@ -41,7 +42,9 @@ namespace GraphicsModule
         ID3D11DeviceContext* g_pImmediateContext = NULL;
         IDXGISwapChain* g_pSwapChain = NULL;
         ID3D11RenderTargetView* g_pRenderTargetView = NULL;
-        Textura depthstencil;
+        RenderTargetView rendertarget;
+        //Textura depthstencil;
+        DepthStencil depstencil;
         ID3D11Texture2D* g_pDepthStencil;
         ID3D11DepthStencilView* g_pDepthStencilView = NULL;
         ID3D11ShaderResourceView* g_pDepthStencilSRV = NULL;

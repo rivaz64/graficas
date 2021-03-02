@@ -4,34 +4,47 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
+#include "Device.h"
+#include"DeviceContext.h"
+#include"SwapChain.h"
 #include"flags.h"
 #include"RenderTargetView.h"
 #include"Textura.h"
+#include"DepthStencil.h"
+#include"RenderTargetView.h"
+#include"Viewport.h"
 namespace GraphicsModule {
     class manager
     {
-        ID3D11Device* g_pd3dDevice;
-        ID3D11DeviceContext* g_pImmediateContext = NULL;
-        IDXGISwapChain* g_pSwapChain = NULL;
+        Device dev;
+        DeviceContext devcon;
+        SwapChain eswap;
+        //ID3D11Device* g_pd3dDevice;
+        //ID3D11DeviceContext* g_pImmediateContext = NULL;
+        //IDXGISwapChain* g_pSwapChain = NULL;
         HWND g_hWndM;
         DXGI_SWAP_CHAIN_DESC sd;
     public:
+        CD3D11_VIEWPORT v;
         UINT width;
         UINT height;
-        ID3D11Device* getDevice() {
-            return g_pd3dDevice;
+        Device* getDevice() {
+            return &dev;
         }
-        ID3D11DeviceContext* getConext() {
-            return g_pImmediateContext;
+        DeviceContext* getConext() {
+            return &devcon;
         }
-        IDXGISwapChain* getSwapchain() {
-            return g_pSwapChain;
+        SwapChain* getSwapchain() {
+            return &eswap;
         }
         void create(HWND g_hWnd);
         void descrivesch();
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);
         void createrendertarget(RenderTargetView& rtv);
         void CreateTexture2D(Textura& tx);
+        void CreateDepthStencilView(DepthStencil& ds);
+        void OMSetRenderTargets(RenderTargetView& rtv, DepthStencil& ds);
+        void RSSetViewports(Viewport& vp);
     };
     extern manager* getmanager();
 }

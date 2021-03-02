@@ -20,7 +20,8 @@ namespace GraphicsModule {
         LEVEL_11_0 = 0xb000
     };
     enum class FORMAT {
-        TYPELESS = 39
+        TYPELESS = 39,
+        FLOAT
     };
     enum class USAGE
     {
@@ -39,5 +40,15 @@ namespace GraphicsModule {
         RENDER_TARGET = 0x20L,
         DEPTH_STENCIL = 0x40L,
         UNORDERED_ACCESS = 0x80L
+    };
+    enum class DIMENSION
+    {
+        UNKNOWN = 0,
+        TEXTURE1D = 1,
+        TEXTURE1DARRAY = 2,
+        TEXTURE2D = 3,
+        TEXTURE2DARRAY = 4,
+        TEXTURE2DMS = 5,
+        TEXTURE2DMSARRAY = 6
     };
 }

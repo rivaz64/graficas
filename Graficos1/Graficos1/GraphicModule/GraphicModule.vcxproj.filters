@@ -42,9 +42,6 @@
     <ClInclude Include="include\vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\viewport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -58,6 +55,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\DepthStencil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Viewport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -84,9 +84,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\vector3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\viewport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\manager.cpp">

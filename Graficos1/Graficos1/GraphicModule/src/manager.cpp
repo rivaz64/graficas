@@ -28,21 +28,45 @@ namespace GraphicsModule {
 	HRESULT manager::init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel)
 	{
 		return D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)v_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
-			D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &g_pImmediateContext);
+			D3D11_SDK_VERSION, &sd, &eswap.g_pSwapChain, &dev.g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &devcon.g_pImmediateContext);
 	}
 	void manager::createrendertarget(RenderTargetView& rtv)
 	{
-		ID3D11Texture2D* pBackBuffer = NULL;
-		g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+		Textura pBackBuffer;
+		eswap.g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer.get);
 		
-		g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &rtv.get);
-		pBackBuffer->Release();
+		dev.g_pd3dDevice->CreateRenderTargetView(pBackBuffer.get, NULL, &rtv.get);
+		pBackBuffer.get->Release();
 	}
 
 	void manager::CreateTexture2D(Textura& tx)
 	{
-		g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
+		dev.g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
 	}
+
+	void manager::CreateDepthStencilView(DepthStencil& ds)
+	{
+		dev.g_pd3dDevice->CreateDepthStencilView(ds.textur.get, &ds.des, &ds.view);
+	}
+
+	void manager::OMSetRenderTargets(RenderTargetView& rtv, DepthStencil& ds)
+	{
+		devcon.g_pImmediateContext->OMSetRenderTargets(1, &rtv.get, ds.view);
+	}
+
+	void manager::RSSetViewports(Viewport& vp)
+	{
+		
+		v.Width = vp.Width;
+		v.Height = vp.Height;
+		v.MinDepth = vp.MinDepth;
+		v.MaxDepth = vp.MaxDepth;
+		v.TopLeftX = vp.TopLeftX;
+		v.TopLeftY = vp.TopLeftY;
+		devcon.g_pImmediateContext->RSSetViewports(1, &v);
+	}
+
+	
 	
 	manager* getmanager()
 	{

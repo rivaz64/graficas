@@ -205,7 +205,7 @@
     <ClInclude Include="include\test.h" />
     <ClInclude Include="include\Textura.h" />
     <ClInclude Include="include\vector3.h" />
-    <ClInclude Include="include\viewport.h" />
+    <ClInclude Include="include\Viewport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Buffer.cpp" />
@@ -219,7 +219,6 @@
     <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\Textura.cpp" />
     <ClCompile Include="src\vector3.cpp" />
-    <ClCompile Include="src\viewport.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
