@@ -11,6 +11,7 @@ namespace GraphicsModule {
 	public:
 		ID3D11RenderTargetView* get = NULL;
 		Textura textur;
+		ID3D11ShaderResourceView* srv = NULL;
 	};
 }
 

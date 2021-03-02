@@ -418,7 +418,7 @@ namespace GraphicsModule
         descViewRT.ViewDimension = (D3D_SRV_DIMENSION)DIMENSION::TEXTURE2DARRAY;
         descViewRT.Texture2D.MostDetailedMip = 0;
         descViewRT.Texture2D.MipLevels = 1;
-        man->getDevice()->g_pd3dDevice->CreateShaderResourceView(rtv2.textur.get, &descViewRT, &g_pViewRT2);
+        man->getDevice()->g_pd3dDevice->CreateShaderResourceView(rtv2.textur.get, &descViewRT,& rtv2.srv);
 
         man->CreateRenderTargetView(rtv2);
         return S_OK;
