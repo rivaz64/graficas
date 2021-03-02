@@ -5,28 +5,10 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
-#include"Device.h"
-#include"SwapChain.h"
+#include"manager.h"
 namespace GraphicsModule
 {
-    enum DRIVER_TYPE
-    {
-        DT_UNKNOWN = 0,
-        DT_HARDWARE = (DT_UNKNOWN + 1),
-        DT_REFERENCE = (DT_HARDWARE + 1),
-        DT_NULL = (DT_REFERENCE + 1),
-        DT_SOFTWARE = (DT_NULL + 1),
-        DT_WARP = (DT_SOFTWARE + 1)
-    };
-    enum FEATURE_LEVEL
-    {
-        LEVEL_9_1 = 0x9100,
-        LEVEL_9_2 = 0x9200,
-        LEVEL_9_3 = 0x9300,
-        LEVEL_10_0 = 0xa000,
-        LEVEL_10_1 = 0xa100,
-        LEVEL_11_0 = 0xb000
-    };
+    
     struct SimpleVertex
     {
         XMFLOAT3 Pos;
@@ -51,11 +33,10 @@ namespace GraphicsModule
 
     class test
     {
+        manager man;
     public:
-        DRIVER_TYPE                     g_driverType = DT_NULL;
-        FEATURE_LEVEL                   g_featureLevel = LEVEL_11_0;
-        Device dev;
-        SwapChain v_swapchain;
+        DRIVER_TYPE                     g_driverType = DRIVER_TYPE::DT_NULL;
+        FEATURE_LEVEL                   g_featureLevel = FEATURE_LEVEL::LEVEL_11_0;
         ID3D11Device* g_pd3dDevice = NULL;
         ID3D11DeviceContext* g_pImmediateContext = NULL;
         IDXGISwapChain* g_pSwapChain = NULL;

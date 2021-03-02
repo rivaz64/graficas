@@ -1,6 +1,5 @@
 #include "test.h"
 
-
 namespace GraphicsModule
 {
     HRESULT test::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
@@ -34,7 +33,7 @@ namespace GraphicsModule
     HRESULT test::InitDevice(HWND _hwnd)
     {
         m_hwnd = _hwnd;
-
+        man.create(_hwnd);
         HRESULT hr = S_OK;
 
         RECT rc;
@@ -46,38 +45,39 @@ namespace GraphicsModule
 #ifdef _DEBUG
         createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-
+        
         DRIVER_TYPE driverTypes[] =
         {
-            DT_HARDWARE,
-            DT_WARP,
-            DT_REFERENCE,
+            DRIVER_TYPE::DT_HARDWARE,
+             DRIVER_TYPE::DT_WARP,
+             DRIVER_TYPE::DT_REFERENCE,
         };
         UINT numDriverTypes = ARRAYSIZE(driverTypes);
 
         FEATURE_LEVEL featureLevels[] =
         {
-            LEVEL_11_0,
-            LEVEL_10_1,
-            LEVEL_10_0,
+            FEATURE_LEVEL::LEVEL_11_0,
+            FEATURE_LEVEL::LEVEL_10_1,
+            FEATURE_LEVEL::LEVEL_10_0,
         };
         UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-        dev.create(m_hwnd);
-        v_swapchain.dev = &dev;
-        v_swapchain.createdesctriptor();
+        man.descrivesch();
         
 
         for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
         {
             g_driverType = driverTypes[driverTypeIndex];
-            hr = D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)g_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
+            /*hr = D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)g_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
                 D3D11_SDK_VERSION, &v_swapchain.sd, &g_pSwapChain, &g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &g_pImmediateContext);
-            if (SUCCEEDED(hr))
+            if (SUCCEEDED(hr))*/
+            hr = man.init(g_driverType, createDeviceFlags, featureLevels, numFeatureLevels, g_featureLevel);
                 break;
         }
         if (FAILED(hr))
             return hr;
-
+        g_pd3dDevice = man.getDevice();
+        g_pImmediateContext = man.getConext();
+        g_pSwapChain = man.getSwapchain();
         // Create a render target view
         ID3D11Texture2D* pBackBuffer = NULL;
         hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
@@ -441,7 +441,7 @@ namespace GraphicsModule
     {
         // Update our time
         static float t = 0.0f;
-        if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+        if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
         {
             t += (float)XM_PI * 0.0125f;
         }

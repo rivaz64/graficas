@@ -192,6 +192,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DepthStencil.h" />
+    <ClInclude Include="flags.h" />
     <ClInclude Include="include\Buffer.h" />
     <ClInclude Include="include\camera.h" />
     <ClInclude Include="include\Device.h" />
@@ -203,9 +204,11 @@
     <ClInclude Include="include\Textura.h" />
     <ClInclude Include="include\vector3.h" />
     <ClInclude Include="include\viewport.h" />
+    <ClInclude Include="manager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DepthStencil.cpp" />
+    <ClCompile Include="manager.cpp" />
     <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\Device.cpp" />
