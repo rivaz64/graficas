@@ -22,6 +22,7 @@ UINT numFeatureLevels = ARRAYSIZE(featureLevels);*/
 HRESULT Device::create(HWND g_hWnd )
 {
 	RECT rc;
+	g_hWndM = g_hWnd;
 	GetClientRect(g_hWnd, &rc);
 	 width = rc.right - rc.left;
 	 height = rc.bottom - rc.top;

@@ -6,6 +6,7 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #include"Device.h"
+#include"SwapChain.h"
 namespace GraphicsModule
 {
     enum DRIVER_TYPE
@@ -54,6 +55,7 @@ namespace GraphicsModule
         DRIVER_TYPE                     g_driverType = DT_NULL;
         FEATURE_LEVEL                   g_featureLevel = LEVEL_11_0;
         Device dev;
+        SwapChain v_swapchain;
         ID3D11Device* g_pd3dDevice = NULL;
         ID3D11DeviceContext* g_pImmediateContext = NULL;
         IDXGISwapChain* g_pSwapChain = NULL;

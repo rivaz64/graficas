@@ -62,26 +62,16 @@ namespace GraphicsModule
             LEVEL_10_0,
         };
         UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-
-        DXGI_SWAP_CHAIN_DESC sd;
-        ZeroMemory(&sd, sizeof(sd));
-        sd.BufferCount = 1;
-        sd.BufferDesc.Width = width;
-        sd.BufferDesc.Height = height;
-        sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        sd.BufferDesc.RefreshRate.Numerator = 60;
-        sd.BufferDesc.RefreshRate.Denominator = 1;
-        sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.OutputWindow = m_hwnd;
-        sd.SampleDesc.Count = 1;
-        sd.SampleDesc.Quality = 0;
-        sd.Windowed = TRUE;
+        dev.create(m_hwnd);
+        v_swapchain.dev = &dev;
+        v_swapchain.createdesctriptor();
+        
 
         for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
         {
             g_driverType = driverTypes[driverTypeIndex];
             hr = D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)g_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
-                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &g_pImmediateContext);
+                D3D11_SDK_VERSION, &v_swapchain.sd, &g_pSwapChain, &g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &g_pImmediateContext);
             if (SUCCEEDED(hr))
                 break;
         }
