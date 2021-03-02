@@ -39,9 +39,6 @@
     <ClInclude Include="include\SwapChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Textura.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -51,10 +48,16 @@
     <ClInclude Include="DepthStencil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="manager.h">
+    <ClInclude Include="include\manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="flags.h">
+    <ClInclude Include="include\RenderTargetView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Textura.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\flags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,9 +83,6 @@
     <ClCompile Include="src\SwapChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Textura.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\vector3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -92,7 +92,10 @@
     <ClCompile Include="DepthStencil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="manager.cpp">
+    <ClCompile Include="src\manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Textura.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

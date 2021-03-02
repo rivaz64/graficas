@@ -19,4 +19,25 @@ namespace GraphicsModule {
         LEVEL_10_1 = 0xa100,
         LEVEL_11_0 = 0xb000
     };
+    enum class FORMAT {
+        TYPELESS = 39
+    };
+    enum class USAGE
+    {
+        DEFAULT = 0,
+        IMMUTABLE = 1,
+        DYNAMIC = 2,
+        STAGING = 3
+    };
+    enum class BIND_FLAG
+    {
+        VERTEX_BUFFER = 0x1L,
+        INDEX_BUFFER = 0x2L,
+        CONSTANT_BUFFER = 0x4L,
+        SHADER_RESOURCE = 0x8L,
+        STREAM_OUTPUT = 0x10L,
+        RENDER_TARGET = 0x20L,
+        DEPTH_STENCIL = 0x40L,
+        UNORDERED_ACCESS = 0x80L
+    };
 }

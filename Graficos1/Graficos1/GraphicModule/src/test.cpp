@@ -75,21 +75,27 @@ namespace GraphicsModule
         }
         if (FAILED(hr))
             return hr;
+        RenderTargetView rtv;
+        rtv.get = NULL;
+        man.createrendertarget(rtv);
         g_pd3dDevice = man.getDevice();
         g_pImmediateContext = man.getConext();
         g_pSwapChain = man.getSwapchain();
+        //
         // Create a render target view
-        ID3D11Texture2D* pBackBuffer = NULL;
-        hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+        /*Textura pBackBuffer;
+        hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer.get);
         if (FAILED(hr))
             return hr;
 
-        hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
-        pBackBuffer->Release();
+        hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer.get, NULL, &rtv.get);
+        pBackBuffer.get->Release();*/
         if (FAILED(hr))
             return hr;
-
+        g_pRenderTargetView = rtv.get;
         // Create depth stencil texture
+        //depthstencil.describe();
+        //man.CreateTexture2D(depthstencil);
         D3D11_TEXTURE2D_DESC descDepth;
         ZeroMemory(&descDepth, sizeof(descDepth));
         descDepth.Width = width;
@@ -106,7 +112,7 @@ namespace GraphicsModule
         hr = g_pd3dDevice->CreateTexture2D(&descDepth, NULL, &g_pDepthStencil);
         if (FAILED(hr))
             return hr;
-
+        //g_pDepthStencil = depthstencil.get;
         // Create the depth stencil view
         D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
         ZeroMemory(&descDSV, sizeof(descDSV));

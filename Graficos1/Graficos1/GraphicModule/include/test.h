@@ -41,7 +41,8 @@ namespace GraphicsModule
         ID3D11DeviceContext* g_pImmediateContext = NULL;
         IDXGISwapChain* g_pSwapChain = NULL;
         ID3D11RenderTargetView* g_pRenderTargetView = NULL;
-        ID3D11Texture2D* g_pDepthStencil = NULL;
+        Textura depthstencil;
+        ID3D11Texture2D* g_pDepthStencil;
         ID3D11DepthStencilView* g_pDepthStencilView = NULL;
         ID3D11ShaderResourceView* g_pDepthStencilSRV = NULL;
         ID3D11VertexShader* g_pVertexShader = NULL;
