@@ -91,29 +91,14 @@ namespace GraphicsModule
         depstencil.descrivetextur();
         man->CreateTexture2D(depstencil.textur);
         
-        if (FAILED(hr))
-            return hr;
         
         // Create the depth stencil view
         depstencil.describeview();
         man->CreateDepthStencilView(depstencil);
-        //hr = g_pd3dDevice->CreateDepthStencilView(depstencil.textur.get, &depstencil.des, &depstencil.view);
-        if (FAILED(hr))
-            return hr;
         
        
-        // and the resource view for the shader
-        /*D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-        ZeroMemory(&srvDesc, sizeof(srvDesc));
-        srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-        srvDesc.Texture2D.MipLevels = 1; // same as orig texture
-        hr = g_pd3dDevice->CreateShaderResourceView(g_pDepthStencil, &srvDesc, &g_pDepthStencilSRV);
-        if (FAILED(hr))
-            return hr;*/
+       
         man->OMSetRenderTargets(rendertarget, depstencil);
-        //g_pImmediateContext->OMSetRenderTargets(1, &rendertarget.get, depstencil.view);
-        //rendertarget.get = rendertarget.get;
         g_pDepthStencilView = depstencil.view;
         g_pDepthStencil = depstencil.textur.get;
         //Setup the viewport
@@ -126,8 +111,6 @@ namespace GraphicsModule
         vp.TopLeftX = 0;
         vp.TopLeftY = 0;
        
-       // reinterpret_cast<CD3D11_VIEWPORT>(vp);
-        //g_pImmediateContext->RSSetViewports(1,&v);
         man->RSSetViewports(vp);
 
         // Compile the vertex shader
@@ -140,9 +123,7 @@ namespace GraphicsModule
             return hr;
         }
 
-        // Create the vertex shader
-        //man->getDevice()->CreateVertexShader(pVSBlob);
-        hr = man->getDevice()->g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
+        hr = man->getDevice()->CreateVertexShader(pVSBlob, &g_pVertexShader);
         if (FAILED(hr))
         {
             pVSBlob->Release();
@@ -152,8 +133,8 @@ namespace GraphicsModule
         // Define the input layout
         D3D11_INPUT_ELEMENT_DESC layout[] =
         {
-            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { "POSITION", 0, (DXGI_FORMAT)FORMAT::R32G32B32_FLOAT, 0, 0, (D3D11_INPUT_CLASSIFICATION)INPUT_C::VERTEX_DATA, 0 },
+            { "TEXCOORD", 0, (DXGI_FORMAT)FORMAT::R32G32B32_FLOAT, 0, 12, (D3D11_INPUT_CLASSIFICATION)INPUT_C::VERTEX_DATA, 0 },
         };
         UINT numElements = ARRAYSIZE(layout);
 
@@ -515,7 +496,7 @@ namespace GraphicsModule
 
     void test::CleanupDevice()
     {
-        if (g_pImmediateContext) g_pImmediateContext->ClearState();
+        /*if (g_pImmediateContext) g_pImmediateContext->ClearState();
 
         if (g_pSamplerLinear) g_pSamplerLinear->Release();
         if (g_pTextureRV) g_pTextureRV->Release();
@@ -532,6 +513,6 @@ namespace GraphicsModule
         if (rendertarget.get) rendertarget.get->Release();
         if (g_pSwapChain) g_pSwapChain->Release();
         if (g_pImmediateContext) g_pImmediateContext->Release();
-        if (g_pd3dDevice) g_pd3dDevice->Release();
+        if (g_pd3dDevice) g_pd3dDevice->Release();*/
     }
 }

@@ -39,7 +39,7 @@ public:
 	HRESULT CreateRenderTargetView(ID3D11Texture2D* idTextura);
 	HRESULT CreateTexture2D();
 	HRESULT CreateDepthStencilView();
-	HRESULT CreateVertexShader(ID3DBlob* pPSBlob);
+	HRESULT CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader);
 	HRESULT CreateInputLayout();
 	HRESULT CreatePixelShader(ID3DBlob* pPSBlob);
 	HRESULT CreateBuffers();

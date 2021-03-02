@@ -64,18 +64,10 @@ HRESULT Device::CreateDepthStencilView()
 	return S_OK;
 }
 
-HRESULT Device::CreateVertexShader(ID3DBlob* pPSBlob)
+HRESULT Device::CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader)
 {
-	
-	/*hr = */
-	/*if (FAILED(hr))
-	{
-		MessageBox(NULL,
-			L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
-		return hr;
-	}*/
 	pVSBlob = pPSBlob;
-	return g_pd3dDevice->CreateVertexShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &vertexshader);
+	return g_pd3dDevice->CreateVertexShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, vertexshader);
 }
 
 HRESULT Device::CreateInputLayout()

@@ -20,8 +20,9 @@ namespace GraphicsModule {
         LEVEL_11_0 = 0xb000
     };
     enum class FORMAT {
+        R32G32B32_FLOAT = 6,
         TYPELESS = 39,
-        FLOAT
+        FLOAT =40
     };
     enum class USAGE
     {
@@ -50,5 +51,10 @@ namespace GraphicsModule {
         TEXTURE2DARRAY = 4,
         TEXTURE2DMS = 5,
         TEXTURE2DMSARRAY = 6
+    };
+    enum class INPUT_C
+    {
+        VERTEX_DATA = 0,
+        INSTANCE_DATA = 1
     };
 }
