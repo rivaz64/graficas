@@ -47,11 +47,11 @@ namespace GraphicsModule
         createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-        D3D_DRIVER_TYPE driverTypes[] =
+        DRIVER_TYPE driverTypes[] =
         {
-            D3D_DRIVER_TYPE_HARDWARE,
-            D3D_DRIVER_TYPE_WARP,
-            D3D_DRIVER_TYPE_REFERENCE,
+            DT_HARDWARE,
+            DT_WARP,
+            DT_REFERENCE,
         };
         UINT numDriverTypes = ARRAYSIZE(driverTypes);
 
@@ -80,7 +80,7 @@ namespace GraphicsModule
         for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
         {
             g_driverType = driverTypes[driverTypeIndex];
-            hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+            hr = D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
                 D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
             if (SUCCEEDED(hr))
                 break;

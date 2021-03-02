@@ -5,9 +5,18 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
-
+#include"Device.h"
 namespace GraphicsModule
 {
+    enum DRIVER_TYPE
+    {
+        DT_UNKNOWN = 0,
+        DT_HARDWARE = (DT_UNKNOWN + 1),
+        DT_REFERENCE = (DT_HARDWARE + 1),
+        DT_NULL = (DT_REFERENCE + 1),
+        DT_SOFTWARE = (DT_NULL + 1),
+        DT_WARP = (DT_SOFTWARE + 1)
+    };
     struct SimpleVertex
     {
         XMFLOAT3 Pos;
@@ -33,8 +42,9 @@ namespace GraphicsModule
     class test
     {
     public:
-        D3D_DRIVER_TYPE                     g_driverType = D3D_DRIVER_TYPE_NULL;
+        DRIVER_TYPE                     g_driverType = DT_NULL;
         D3D_FEATURE_LEVEL                   g_featureLevel = D3D_FEATURE_LEVEL_11_0;
+        Device dev;
         ID3D11Device* g_pd3dDevice = NULL;
         ID3D11DeviceContext* g_pImmediateContext = NULL;
         IDXGISwapChain* g_pSwapChain = NULL;
