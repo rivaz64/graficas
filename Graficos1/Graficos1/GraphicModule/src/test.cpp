@@ -242,22 +242,7 @@ namespace GraphicsModule
               { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } },
               { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
           });
-      D3D11_BUFFER_DESC bd;
-      ZeroMemory(&bd, sizeof(bd));
-      bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
-      bd.ByteWidth = sizeof(SimpleVertex) * 24;
-      bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::VERTEX_BUFFER;
-      bd.CPUAccessFlags = 0;
-      D3D11_SUBRESOURCE_DATA InitData;
-      ZeroMemory(&InitData, sizeof(InitData));
-      InitData.pSysMem = cubito.getvertex();;
-      //man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &vertexB.buf);
-      hr = man->getDevice()->CreateBuffer(bd, InitData,vertexB);
-      if (FAILED(hr))
-          return hr;
-
-      // Create index buffer
-      // Create vertex buffer
+      
       cubito.setindices(
           {
               3,1,0,
@@ -278,13 +263,15 @@ namespace GraphicsModule
               22,20,21,
               23,20,22
           });
-
+      D3D11_BUFFER_DESC bd;
+      D3D11_SUBRESOURCE_DATA InitData;
+      ZeroMemory(&bd, sizeof(bd));
       bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
       bd.ByteWidth = sizeof(WORD) * 36;
       bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::INDEX_BUFFER;
       bd.CPUAccessFlags = 0;
-      InitData.pSysMem = cubito.getindices();
-      hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &indexB.buf);
+      cubito.InitData.pSysMem = cubito.getindices();
+      hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &cubito.InitData, &indexB.buf);
       if (FAILED(hr))
           return hr;
       cam = new camera;
@@ -490,7 +477,7 @@ namespace GraphicsModule
     // Set the input layout
     man->getConext()->g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
     man->getConext()->g_pImmediateContext->RSSetState(g_Rasterizer);
-    man->getConext()->g_pImmediateContext->IASetVertexBuffers(0, 1, &vertexB.buf, &stride, &offset);
+    man->getConext()->g_pImmediateContext->IASetVertexBuffers(0, 1, &cubito.getvertex()->buf, &stride, &offset);
     man->getConext()->g_pImmediateContext->IASetIndexBuffer(indexB.buf, (DXGI_FORMAT)FORMAT::R16_UINT, 0);
     man->getConext()->g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
