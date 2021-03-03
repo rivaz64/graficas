@@ -263,9 +263,7 @@ namespace GraphicsModule
               22,20,21,
               23,20,22
           });
-      
-      if (FAILED(hr))
-          return hr;
+      cubo.m = &cubito;
       cam = new camera;
       cam->seteye(0.0f, 3.0f, -6.0f);
       cam->setat(0.0f, 1.f, 0);

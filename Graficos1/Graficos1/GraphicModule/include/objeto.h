@@ -1,4 +1,9 @@
 #pragma once
-class objeto {
+#include"mesh.h"
+namespace GraphicsModule {
+	class objeto {
+	public:
+		mesh* m;
 
-};
+	};
+}

@@ -7,6 +7,7 @@
 #include <xnamath.h>
 #include"manager.h"
 #include"camera.h"
+#include"objeto.h"
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -46,6 +47,7 @@ namespace GraphicsModule
       camera* cam;
       //Textura depthstencil;
       mesh cubito;
+      objeto cubo;
       DepthStencil depstencil;
       //ID3D11Texture2D* g_pDepthStencil;
       //ID3D11DepthStencilView* g_pDepthStencilView = NULL;
