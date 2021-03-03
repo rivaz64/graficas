@@ -95,9 +95,9 @@ namespace GraphicsModule {
 		}*/
 	}
 
-	void DeviceContext::PSSetShaderResources(Textura& t)
+	void DeviceContext::PSSetShaderResources(Textura* t)
 	{
-		g_pImmediateContext->PSSetShaderResources(0, 1, &t.srv);
+		g_pImmediateContext->PSSetShaderResources(0, 1, &t->srv);
 	}
 
 }

@@ -297,6 +297,7 @@ namespace GraphicsModule
 
       // Load the Texture
       texturbitco.loadfromfile("bitco.dds");
+      cubo.tx = &texturbitco;
       hr = D3DX11CreateShaderResourceViewFromFile(man->getDevice()->g_pd3dDevice, "seafloor.dds", NULL, NULL, &texturmar, NULL);
 
       if (FAILED(hr))
@@ -477,7 +478,7 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
-    man->getConext()->PSSetShaderResources(texturbitco);
+    //CBChangesEveryFrame cb;
     g_World = XMMatrixTranslation(0, 0, 0);
     cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
