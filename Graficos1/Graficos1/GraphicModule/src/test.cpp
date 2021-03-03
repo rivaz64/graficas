@@ -287,52 +287,11 @@ namespace GraphicsModule
         if (FAILED(hr))
             return hr;
         cam = new camera;
-        cam->seteye(0.0f, 0, -1);
-        cam->setat(0.0f, 0.f, 0);
+        cam->seteye(0.0f, 3.0f, -6.0f);
+        cam->setat(0.0f, 1.f, 0);
         cam->setup(0.0f, 1.0f, 0);
         cam->axis();
-        //cam = &cam1;
-        // Create vertex buffer
-        /*SimpleVertex vertices2[] =
-        {
-             { XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) },
-            { XMFLOAT3(1.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
-            { XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
-            { XMFLOAT3(-1.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
-        };
-
-        D3D11_BUFFER_DESC bd2;
-        ZeroMemory(&bd2, sizeof(bd2));
-        bd2.Usage = D3D11_USAGE_DEFAULT;
-        bd2.ByteWidth = sizeof(SimpleVertex) * 4;
-        bd2.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        bd2.CPUAccessFlags = 0;
-        D3D11_SUBRESOURCE_DATA InitData2;
-        ZeroMemory(&InitData2, sizeof(InitData2));
-        InitData2.pSysMem = vertices2;
-        hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd2, &InitData2, &g_pVertexBuffer2);
-        if (FAILED(hr))
-            return hr;
-
-
-        // Create index buffer
-        // Create vertex buffer
-        WORD indices2[] =
-        {
-            2,0,1,
-            3,0,2
-        };
-
-        bd2.Usage = D3D11_USAGE_DEFAULT;
-        bd2.ByteWidth = sizeof(WORD) * 6;
-        bd2.BindFlags = D3D11_BIND_INDEX_BUFFER;
-        bd2.CPUAccessFlags = 0;
-        InitData2.pSysMem = indices2;
-        hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd2, &InitData2, &g_pIndexBuffer2);
-        if (FAILED(hr))
-            return hr;*/
-
-
+        
 
             // Set primitive topology
         man->getConext()->g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -385,7 +344,8 @@ namespace GraphicsModule
         g_View = XMMatrixLookAtLH(Eye, At, Up);
 
         CBNeverChanges cbNeverChanges;
-        cbNeverChanges.mView = XMMatrixTranspose(g_View);
+        cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
+       
         man->getConext()->g_pImmediateContext->UpdateSubresource(neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
 
         // Initialize the projection matrix
@@ -395,7 +355,7 @@ namespace GraphicsModule
         cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
         man->getConext()->g_pImmediateContext->UpdateSubresource(changesOnReziseB.buf, 0, NULL, &cbChangesOnResize, 0, 0);
 
-
+        
         // create rasterizer state
         D3D11_RASTERIZER_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
@@ -424,7 +384,8 @@ namespace GraphicsModule
         descViewRT.Texture2D.MostDetailedMip = 0;
         descViewRT.Texture2D.MipLevels = 1;
         man->getDevice()->g_pd3dDevice->CreateShaderResourceView(rtv2.textur.get, &descViewRT,& rtv2.srv);
-
+        //CBNeverChanges cbNeverChanges;
+       
         man->CreateRenderTargetView(rtv2);
         return S_OK;
     }
