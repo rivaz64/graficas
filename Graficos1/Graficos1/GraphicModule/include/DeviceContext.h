@@ -28,6 +28,7 @@ namespace GraphicsModule {
 		void resizewindow(camera* cam, HWND& g_hWnd);
 		void render(std::vector<float*>& instanses);
 		void PSSetShaderResources(Textura*t);
+		void draw();
 	};
 }
 

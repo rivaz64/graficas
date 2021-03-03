@@ -471,19 +471,16 @@ namespace GraphicsModule
     // Set the input layout
     man->getConext()->g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
     man->getConext()->g_pImmediateContext->RSSetState(g_Rasterizer);
-    man->draw(cubo);
+    
     man->getConext()->g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
+    man->draw(cubo, changeveryFrameB);
     //CBChangesEveryFrame cb;
-    g_World = XMMatrixTranslation(cubo.posi.x, cubo.posi.y, cubo.posi.z);
-    cb.mWorld = XMMatrixTranspose(g_World);
-    cb.vMeshColor = cubo.color;
-    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
-    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+    
 
 
 

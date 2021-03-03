@@ -48,7 +48,7 @@ namespace GraphicsModule {
         void OMSetRenderTargets(RenderTargetView& rtv, DepthStencil& ds);
         void RSSetViewports(Viewport& vp);
         void CreateRenderTargetView(RenderTargetView& t);
-        void draw(objeto o);
+        void draw(objeto o,  Buffer& changeveryFrameB);
     };
     extern manager* getmanager();
 }

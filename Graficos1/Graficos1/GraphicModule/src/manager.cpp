@@ -1,5 +1,6 @@
 #include "manager.h"
 #include"flags.h"
+#include"test.h"
 namespace GraphicsModule {
 	void manager::create(HWND g_hWnd) {
 		RECT rc;
@@ -71,12 +72,20 @@ namespace GraphicsModule {
 		dev.g_pd3dDevice->CreateRenderTargetView(t.textur.get, NULL, &t.get);
 	}
 
-	void manager::draw(objeto o)
+	void manager::draw(objeto o,Buffer& changeveryFrameB)
 	{
 		devcon.IASetVertexBuffers(o.m->getvertex());
 		devcon.IASetIndexBuffer(o.m->getindices());
 		devcon.PSSetShaderResources(o.tx);
-
+		XMMATRIX g_World;
+		CBChangesEveryFrame cb;
+		
+		g_World = XMMatrixTranslation(o.posi.x, o.posi.y, o.posi.z);
+		cb.mWorld = XMMatrixTranspose(g_World);
+		cb.vMeshColor = o.color;
+		devcon.g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+		
+		devcon.draw();//*/
 	}
 	
 	manager* getmanager()

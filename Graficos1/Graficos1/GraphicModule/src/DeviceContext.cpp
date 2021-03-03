@@ -100,4 +100,9 @@ namespace GraphicsModule {
 		g_pImmediateContext->PSSetShaderResources(0, 1, &t->srv);
 	}
 
+	void DeviceContext::draw()
+	{
+		g_pImmediateContext->DrawIndexed(36, 0, 0);
+	}
+
 }
