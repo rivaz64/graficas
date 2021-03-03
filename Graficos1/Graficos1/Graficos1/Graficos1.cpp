@@ -182,6 +182,7 @@ int main()
     }
     else
     {
+        MiObj.Update();
       MiObj.Render();
     }
   }

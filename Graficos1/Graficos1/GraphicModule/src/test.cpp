@@ -390,31 +390,33 @@ namespace GraphicsModule
       man->CreateRenderTargetView(rtv2);
       return S_OK;
   }
+  void test::Update() {
+      static float t = 0.0f;
+      if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
+      {
+          t += (float)XM_PI * 0.0125f;
+      }
+      else
+      {
+          static DWORD dwTimeStart = 0;
+          DWORD dwTimeCur = GetTickCount();
+          if (dwTimeStart == 0)
+              dwTimeStart = dwTimeCur;
+          t = (dwTimeCur - dwTimeStart) / 1000.0f;
+      }
+      g_World = XMMatrixRotationY(t);
 
+      // Modify the color
+      g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+      g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+      g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+  }
   void test::Render()
   {
     // Update our time
-    static float t = 0.0f;
-    if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
-    {
-      t += (float)XM_PI * 0.0125f;
-    }
-    else
-    {
-      static DWORD dwTimeStart = 0;
-      DWORD dwTimeCur = GetTickCount();
-      if (dwTimeStart == 0)
-        dwTimeStart = dwTimeCur;
-      t = (dwTimeCur - dwTimeStart) / 1000.0f;
-    }
-
+   
     // Rotate cube around the origin
-    g_World = XMMatrixRotationY(t);
-
-    // Modify the color
-    g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-    g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-    g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+  
 
     //
     // Clear the back buffer
