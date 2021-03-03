@@ -469,8 +469,7 @@ namespace GraphicsModule
     // Set the input layout
     man->getConext()->g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
     man->getConext()->g_pImmediateContext->RSSetState(g_Rasterizer);
-    man->getConext()->IASetVertexBuffers(cubito.getvertex());
-    man->getConext()->IASetIndexBuffer(cubito.getindices());
+    man->draw(cubo);
     man->getConext()->g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
