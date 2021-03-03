@@ -17,4 +17,8 @@ namespace GraphicsModule {
         des.CPUAccessFlags = 0;
         des.MiscFlags = 0;
     }
+    void Textura::loadfromfile(LPCSTR f)
+    {
+        D3DX11CreateShaderResourceViewFromFile(getmanager()->getDevice()->g_pd3dDevice, f, NULL, NULL, &srv, NULL);
+    }
 }

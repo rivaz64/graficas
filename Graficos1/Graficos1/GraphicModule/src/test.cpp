@@ -296,8 +296,9 @@ namespace GraphicsModule
           return hr;
 
       // Load the Texture
-      hr = D3DX11CreateShaderResourceViewFromFile(man->getDevice()->g_pd3dDevice, "bitco.dds", NULL, NULL, &texturbitco, NULL);
+      texturbitco.loadfromfile("bitco.dds");
       hr = D3DX11CreateShaderResourceViewFromFile(man->getDevice()->g_pd3dDevice, "seafloor.dds", NULL, NULL, &texturmar, NULL);
+
       if (FAILED(hr))
           return hr;
 
@@ -476,6 +477,16 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
+    man->getConext()->PSSetShaderResources(texturbitco);
+    g_World = XMMatrixTranslation(0, 0, 0);
+    cb.mWorld = XMMatrixTranspose(g_World);
+    cb.vMeshColor = g_vMeshColor;
+    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+
+
+
+    /*
     g_World = XMMatrixTranslation(0, 0, 0);
     cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
@@ -490,7 +501,7 @@ namespace GraphicsModule
     //man->getConext()->g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
    //man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv2.get, depstencil.view);
     //man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
-    man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
+    /*                 man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
 
     man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv2.get, depstencil.view);
     man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &texturbitco);
@@ -517,7 +528,7 @@ namespace GraphicsModule
     //
     // Render the SAQ
     //*/
-    man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv.get, depstencil.view);
+    /*man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv.get, depstencil.view);
     man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &rtv2.srv);
     
     man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
@@ -525,13 +536,13 @@ namespace GraphicsModule
     cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
     man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
-    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);//*/
 
 
 
 
 
-    man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &texturbitco);
+    
 
     
     //g_pImmediateContext->DrawIndexed(6, 0, 0);*/

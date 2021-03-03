@@ -5,6 +5,8 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>}
 #include"flags.h"
+#include<string>
+using std::string;
 namespace GraphicsModule {
 	class Textura
 	{
@@ -12,7 +14,9 @@ namespace GraphicsModule {
 	public:
 		D3D11_TEXTURE2D_DESC des;
 		ID3D11Texture2D* get;
+		ID3D11ShaderResourceView* srv;
 		void describe(FORMAT f, BIND_FLAG bf);
+		void loadfromfile(LPCSTR f);
 	};
 }
 

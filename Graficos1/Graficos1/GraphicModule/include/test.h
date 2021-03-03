@@ -66,7 +66,8 @@ namespace GraphicsModule
       //ID3D11Buffer* g_pCBNeverChanges = NULL;
       //ID3D11Buffer* g_pCBChangeOnResize = NULL;
       //ID3D11Buffer* g_pCBChangesEveryFrame = NULL;
-      ID3D11ShaderResourceView* texturbitco = NULL;
+      Textura texturbitco;
+      //ID3D11ShaderResourceView* texturbitco = NULL;
       ID3D11ShaderResourceView* texturmar = NULL;
       ID3D11SamplerState* g_pSamplerLinear = NULL;
       XMMATRIX                            g_World;

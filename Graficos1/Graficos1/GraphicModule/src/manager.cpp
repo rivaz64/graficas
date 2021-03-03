@@ -75,6 +75,7 @@ namespace GraphicsModule {
 	{
 		devcon.IASetVertexBuffers(o.m->getvertex());
 		devcon.IASetIndexBuffer(o.m->getindices());
+
 	}
 	
 	manager* getmanager()

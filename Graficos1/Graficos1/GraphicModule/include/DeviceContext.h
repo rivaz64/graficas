@@ -6,6 +6,7 @@
 #include"Device.h"
 #include<vector>
 #include"mesh.h"
+#include"Textura.h"
 using std::vector;
 class camera;
 namespace GraphicsModule {
@@ -26,6 +27,7 @@ namespace GraphicsModule {
 		void UpdateView(camera* cam);
 		void resizewindow(camera* cam, HWND& g_hWnd);
 		void render(std::vector<float*>& instanses);
+		void PSSetShaderResources(Textura&t);
 	};
 }
 
