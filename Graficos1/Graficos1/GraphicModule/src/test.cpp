@@ -446,7 +446,20 @@ namespace GraphicsModule
         g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
         g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
         g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
-
+        /*LPPOINT p = new POINT;
+        if ((GetKeyState(VK_LBUTTON) & 0x100) != 0) {
+            GetCursorPos(p);
+            cam->gira(p);
+            //CBNeverChanges mv;
+            v_deviceContext->UpdateSubresource(cam);
+            //mv.mView = XMMatrixTranspose(cam->getview());
+            //v_deviceContext->g_pImmediateContext->UpdateSubresource(v_device->g_pCBNeverChanges, 0, NULL, &mv, 0, 0);
+        }
+        else {
+            cam->click = false;
+        }
+        delete p;
+        */
     }
     void test::Render()
     {

@@ -6,7 +6,7 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #include"manager.h"
-
+#include"camera.h"
 namespace GraphicsModule
 {
     
@@ -44,7 +44,7 @@ namespace GraphicsModule
         IDXGISwapChain* g_pSwapChain = NULL;
         ID3D11RenderTargetView* g_pRenderTargetView = NULL;
         RenderTargetView rtv;
-        
+        camera* cam;
         //Textura depthstencil;
         mesh cubito;
         DepthStencil depstencil;
