@@ -286,7 +286,12 @@ namespace GraphicsModule
         hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &indexB.buf);
         if (FAILED(hr))
             return hr;
-
+        cam = new camera;
+        cam->seteye(0.0f, 0, -1);
+        cam->setat(0.0f, 0.f, 0);
+        cam->setup(0.0f, 1.0f, 0);
+        cam->axis();
+        //cam = &cam1;
         // Create vertex buffer
         /*SimpleVertex vertices2[] =
         {
