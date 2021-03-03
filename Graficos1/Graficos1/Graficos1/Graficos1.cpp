@@ -186,7 +186,7 @@ int main()
     else
     {
 
-        //MiObj->Updeate();
+        MiObj->Update();
         MiObj->Render();
      
     }

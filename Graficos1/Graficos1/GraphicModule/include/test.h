@@ -83,7 +83,7 @@ namespace GraphicsModule
         HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 
         HRESULT InitDevice(HWND _hwnd);
-
+        void Update();
         void Render();
 
         void CleanupDevice();

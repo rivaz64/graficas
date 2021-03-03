@@ -423,7 +423,9 @@ namespace GraphicsModule
         man->CreateRenderTargetView(rtv2);
         return S_OK;
     }
-
+    void test::Update()
+    {
+    }
     void test::Render()
     {
         // Update our time
@@ -544,4 +546,5 @@ namespace GraphicsModule
         if (g_pImmediateContext) g_pImmediateContext->Release();
         if (g_pd3dDevice) g_pd3dDevice->Release();*/
     }
+    
 }
