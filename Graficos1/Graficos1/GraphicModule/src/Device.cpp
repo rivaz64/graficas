@@ -77,18 +77,7 @@ namespace GraphicsModule {
 		return hr;
 	}
 
-	HRESULT Device::CreateBuffers()
-	{
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(GraphicsModule::CBNeverChanges);
-		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		bd.CPUAccessFlags = 0;
-		g_pd3dDevice->CreateBuffer(&bd, NULL, &neverChangesB.buf);
-		bd.ByteWidth = sizeof(GraphicsModule::CBChangeOnResize);
-		g_pd3dDevice->CreateBuffer(&bd, NULL, &changesOnReziseB.buf);
-		bd.ByteWidth = sizeof(GraphicsModule::CBChangesEveryFrame);
-		return g_pd3dDevice->CreateBuffer(&bd, NULL, &changeveryFrameB.buf);
-	}
+	
 
 	void Device::setmesh(mesh* m)
 	{
@@ -128,6 +117,13 @@ namespace GraphicsModule {
 		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 		return g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);;
 	}
+
+	HRESULT Device::CreateBuffer(D3D11_BUFFER_DESC& bd, D3D11_SUBRESOURCE_DATA& InitData, Buffer& b)
+	{
+		return g_pd3dDevice->CreateBuffer(&bd, &InitData, &b.buf);
+	}
+
+	
 
 	Device::~Device()
 	{

@@ -251,8 +251,8 @@ namespace GraphicsModule
       D3D11_SUBRESOURCE_DATA InitData;
       ZeroMemory(&InitData, sizeof(InitData));
       InitData.pSysMem = cubito.getvertex();;
-
-      hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &vertexB.buf);
+      //man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &vertexB.buf);
+      hr = man->getDevice()->CreateBuffer(bd, InitData,vertexB);
       if (FAILED(hr))
           return hr;
 

@@ -40,10 +40,11 @@ namespace GraphicsModule {
 		HRESULT CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader);
 		HRESULT CreateInputLayout();
 		HRESULT CreatePixelShader(ID3DBlob* pPSBlob, ID3D11PixelShader** pPixelShader);
-		HRESULT CreateBuffers();
+		
 		void setmesh(mesh* m);
 		void CreateShaderResourceViewFromFile(LPCSTR file);
 		HRESULT CreateSamplerState();
+		HRESULT CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
 		~Device();
 	};
 }
