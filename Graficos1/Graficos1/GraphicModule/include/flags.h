@@ -23,7 +23,8 @@ namespace GraphicsModule {
         R32G32B32_FLOAT = 6,
         R8G8B8A8_UNORM = 28,
         TYPELESS = 39,
-        FLOAT =40
+        FLOAT =40,
+        R16_UINT = 57,
     };
     enum class USAGE
     {

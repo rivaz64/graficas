@@ -479,7 +479,7 @@ namespace GraphicsModule
          man->getConext()->g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
          man->getConext()->g_pImmediateContext->RSSetState(g_Rasterizer);
          man->getConext()->g_pImmediateContext->IASetVertexBuffers(0, 1, &vertexB.buf, &stride, &offset);
-         man->getConext()->g_pImmediateContext->IASetIndexBuffer(indexB.buf, DXGI_FORMAT_R16_UINT, 0);
+         man->getConext()->g_pImmediateContext->IASetIndexBuffer(indexB.buf, (DXGI_FORMAT)FORMAT::R16_UINT, 0);
          man->getConext()->g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
          man->getConext()->g_pImmediateContext->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
          man->getConext()->g_pImmediateContext->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
