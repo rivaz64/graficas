@@ -458,7 +458,7 @@ namespace GraphicsModule
         //
         // Clear the depth buffer to 1.0 (max depth)
         //
-        man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+        man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
 
         //
         // Update variables that change once per frame
@@ -500,7 +500,7 @@ namespace GraphicsModule
          //
          // Clear the depth buffer to 1.0 (max depth)
          //
-         man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+         man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
         //
         // Render the SAQ
         //

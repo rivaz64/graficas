@@ -98,5 +98,9 @@ namespace GraphicsModule {
    ALWAYS = 8
     };
     
-        
+    enum class  CLEAR_FLAG
+    {
+       DEPTH = 0x1L,
+        STENCIL = 0x2L
+    };
 }
