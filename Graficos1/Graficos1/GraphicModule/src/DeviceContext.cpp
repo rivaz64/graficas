@@ -34,10 +34,9 @@ namespace GraphicsModule {
 	}
 
 
-	void DeviceContext::IASetIndexBuffer()
+	void DeviceContext::IASetIndexBuffer(Buffer* b)
 	{
-		g_pImmediateContext->IASetIndexBuffer(dev->indexB.buf, DXGI_FORMAT_R16_UINT, 0);
-		g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		g_pImmediateContext->IASetIndexBuffer(b->buf, (DXGI_FORMAT)FORMAT::R16_UINT, 0);
 	}
 
 	void DeviceContext::UpdateSubresource(camera* cam)

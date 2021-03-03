@@ -21,7 +21,7 @@ namespace GraphicsModule {
 		void RSSetViewports(UINT width, UINT height);
 		void IASetInputLayout();
 		void IASetVertexBuffers(Buffer* b);
-		void IASetIndexBuffer();
+		void IASetIndexBuffer(Buffer* b);
 		void UpdateSubresource(camera* cam);
 		void UpdateView(camera* cam);
 		void resizewindow(camera* cam, HWND& g_hWnd);
