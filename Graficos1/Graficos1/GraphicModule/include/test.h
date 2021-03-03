@@ -55,8 +55,7 @@ namespace GraphicsModule
       ID3D11VertexShader* g_pVertexShader = NULL;
       ID3D11PixelShader* g_pPixelShader = NULL;
       ID3D11InputLayout* g_pVertexLayout = NULL;
-      Buffer vertexB;
-      Buffer indexB;
+     
       Buffer neverChangesB;
       Buffer changesOnReziseB;
       Buffer changeveryFrameB;

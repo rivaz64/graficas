@@ -263,15 +263,7 @@ namespace GraphicsModule
               22,20,21,
               23,20,22
           });
-      D3D11_BUFFER_DESC bd;
-      D3D11_SUBRESOURCE_DATA InitData;
-      ZeroMemory(&bd, sizeof(bd));
-      bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
-      bd.ByteWidth = sizeof(WORD) * 36;
-      bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::INDEX_BUFFER;
-      bd.CPUAccessFlags = 0;
-      cubito.InitData.pSysMem = cubito.getindices();
-      hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &cubito.InitData, &indexB.buf);
+      
       if (FAILED(hr))
           return hr;
       cam = new camera;
@@ -283,7 +275,9 @@ namespace GraphicsModule
 
       // Set primitive topology
       man->getConext()->g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+      D3D11_BUFFER_DESC bd;
+      D3D11_SUBRESOURCE_DATA InitData;
+      ZeroMemory(&bd, sizeof(bd));
       // Create the constant buffers
       bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;;
       bd.ByteWidth = sizeof(CBNeverChanges);
@@ -478,7 +472,7 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
     man->getConext()->g_pImmediateContext->RSSetState(g_Rasterizer);
     man->getConext()->g_pImmediateContext->IASetVertexBuffers(0, 1, &cubito.getvertex()->buf, &stride, &offset);
-    man->getConext()->g_pImmediateContext->IASetIndexBuffer(indexB.buf, (DXGI_FORMAT)FORMAT::R16_UINT, 0);
+    man->getConext()->g_pImmediateContext->IASetIndexBuffer(cubito.getindices()->buf, (DXGI_FORMAT)FORMAT::R16_UINT, 0);
     man->getConext()->g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
