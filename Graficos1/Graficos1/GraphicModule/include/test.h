@@ -6,6 +6,7 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #include"manager.h"
+#include"camera.h"
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -42,7 +43,7 @@ namespace GraphicsModule
       IDXGISwapChain* g_pSwapChain = NULL;
       ID3D11RenderTargetView* g_pRenderTargetView = NULL;
       RenderTargetView rtv;
-      //camera* cam;
+      camera* cam;
       //Textura depthstencil;
       mesh cubito;
       DepthStencil depstencil;
@@ -64,7 +65,8 @@ namespace GraphicsModule
       //ID3D11Buffer* g_pCBNeverChanges = NULL;
       //ID3D11Buffer* g_pCBChangeOnResize = NULL;
       //ID3D11Buffer* g_pCBChangesEveryFrame = NULL;
-      ID3D11ShaderResourceView* g_pTextureRV = NULL;
+      ID3D11ShaderResourceView* texturbitco = NULL;
+      ID3D11ShaderResourceView* texturmar = NULL;
       ID3D11SamplerState* g_pSamplerLinear = NULL;
       XMMATRIX                            g_World;
       XMMATRIX                            g_View;

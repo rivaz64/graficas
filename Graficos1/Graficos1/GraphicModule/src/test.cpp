@@ -287,11 +287,11 @@ namespace GraphicsModule
       hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, &InitData, &indexB.buf);
       if (FAILED(hr))
           return hr;
-      /*cam = new camera;
+      cam = new camera;
       cam->seteye(0.0f, 3.0f, -6.0f);
       cam->setat(0.0f, 1.f, 0);
       cam->setup(0.0f, 1.0f, 0);
-      cam->axis();*/
+      cam->axis();
 
 
       // Set primitive topology
@@ -317,7 +317,8 @@ namespace GraphicsModule
           return hr;
 
       // Load the Texture
-      hr = D3DX11CreateShaderResourceViewFromFile(man->getDevice()->g_pd3dDevice, "bitco.dds", NULL, NULL, &g_pTextureRV, NULL);
+      hr = D3DX11CreateShaderResourceViewFromFile(man->getDevice()->g_pd3dDevice, "bitco.dds", NULL, NULL, &texturbitco, NULL);
+      hr = D3DX11CreateShaderResourceViewFromFile(man->getDevice()->g_pd3dDevice, "seafloor.dds", NULL, NULL, &texturmar, NULL);
       if (FAILED(hr))
           return hr;
 
@@ -345,7 +346,7 @@ namespace GraphicsModule
       g_View = XMMatrixLookAtLH(Eye, At, Up);
 
       CBNeverChanges cbNeverChanges;
-      cbNeverChanges.mView = XMMatrixTranspose(g_View);
+      cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
 
       man->getConext()->g_pImmediateContext->UpdateSubresource(neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
 
@@ -405,7 +406,20 @@ namespace GraphicsModule
           t = (dwTimeCur - dwTimeStart) / 1000.0f;
       }
       g_World = XMMatrixRotationY(t);
+      LPPOINT p = new POINT;
+      if ((GetKeyState(VK_LBUTTON) & 0x100) != 0) {
+          GetCursorPos(p);
+          cam->gira(p);
+          CBNeverChanges cbNeverChanges;
+          //man->getConext()->UpdateSubresource(cam);
+          cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
 
+          man->getConext()->g_pImmediateContext->UpdateSubresource(neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
+      }
+      else {
+          cam->click = false;
+      }
+      delete p;
       // Modify the color
       g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
       g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
@@ -422,8 +436,8 @@ namespace GraphicsModule
     // Clear the back buffer
     //
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv.get, ClearColor);
     man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv2.get, ClearColor);
-
     //
     // Clear the depth buffer to 1.0 (max depth)
     //
@@ -455,29 +469,65 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
-    man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
-    man->getConext()->g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
-    man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv2.get, depstencil.view);
-    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
     g_World = XMMatrixTranslation(0, 0, 0);
     cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
     man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
     man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+    /*g_World = XMMatrixTranslation(0, 0, 0);
+    cb.mWorld = XMMatrixTranspose(g_World);
+    cb.vMeshColor = g_vMeshColor;
+    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+
+    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);*/
+    //man->getConext()->g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
+   //man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv2.get, depstencil.view);
+    //man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+    man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
+
+    man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv2.get, depstencil.view);
+    man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &texturbitco);
+    g_World = XMMatrixTranslation(0, 0, 0);
+    cb.mWorld = XMMatrixTranspose(g_World);
+    cb.vMeshColor = g_vMeshColor;
+    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+
+    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+    /*man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &texturbitco);
+    g_World = XMMatrixTranslation(3, 0, 0);
+    cb.mWorld = XMMatrixTranspose(g_World);
+    cb.vMeshColor = g_vMeshColor;
+    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+
+    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
     man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv.get, ClearColor);
 
+   
     //
     // Clear the depth buffer to 1.0 (max depth)
     //
     man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
     //
     // Render the SAQ
-    //
+    //*/
     man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv.get, depstencil.view);
     man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &rtv2.srv);
+    
+    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+    g_World = XMMatrixTranslation(3 ,0, 0);
+    cb.mWorld = XMMatrixTranspose(g_World);
+    cb.vMeshColor = g_vMeshColor;
+    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
     man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
 
-    //g_pImmediateContext->DrawIndexed(6, 0, 0);
+
+
+
+
+    man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &texturbitco);
+
+    
+    //g_pImmediateContext->DrawIndexed(6, 0, 0);*/
     //
     // Present our back buffer to our front buffer
     //
