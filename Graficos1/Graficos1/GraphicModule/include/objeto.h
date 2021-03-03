@@ -8,6 +8,6 @@ namespace GraphicsModule {
 		mesh* m;
 		Textura* tx;
 		vector3 posi;
-
+		XMFLOAT4 color;
 	};
 }

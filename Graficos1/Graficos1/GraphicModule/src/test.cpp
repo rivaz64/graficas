@@ -402,9 +402,9 @@ namespace GraphicsModule
       }
       delete p;
       // Modify the color
-      g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-      g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-      g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+      cubo.color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+      cubo.color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+      cubo.color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
       if (GetKeyState('W') & 0x8000)
       {
           cam->movez(-1);
@@ -481,7 +481,7 @@ namespace GraphicsModule
     //CBChangesEveryFrame cb;
     g_World = XMMatrixTranslation(cubo.posi.x, cubo.posi.y, cubo.posi.z);
     cb.mWorld = XMMatrixTranspose(g_World);
-    cb.vMeshColor = g_vMeshColor;
+    cb.vMeshColor = cubo.color;
     man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
     man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
 
