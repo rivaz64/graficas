@@ -424,6 +424,30 @@ namespace GraphicsModule
       g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
       g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
       g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+      if (GetKeyState('W') & 0x8000)
+      {
+          cam->movez(-1);
+      }
+      if (GetKeyState('S') & 0x8000)
+      {
+          cam->movez(1);
+      }
+      if (GetKeyState('Q') & 0x8000)
+      {
+          cam->movey(-1);
+      }
+      if (GetKeyState('A') & 0x8000)
+      {
+          cam->movey(1);
+      }
+      if (GetKeyState('X') & 0x8000)
+      {
+          cam->movex(-1);
+      }
+      if (GetKeyState('Z') & 0x8000)
+      {
+          cam->movex(1);
+      }
   }
   void test::Render()
   {
