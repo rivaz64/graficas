@@ -448,6 +448,11 @@ namespace GraphicsModule
       {
           cam->movex(1);
       }
+      CBNeverChanges cbNeverChanges;
+      //man->getConext()->UpdateSubresource(cam);
+      cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
+
+      man->getConext()->g_pImmediateContext->UpdateSubresource(neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
   }
   void test::Render()
   {
