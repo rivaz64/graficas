@@ -269,8 +269,9 @@ namespace GraphicsModule
       cam->setat(0.0f, 1.f, 0);
       cam->setup(0.0f, 1.0f, 0);
       cam->axis();
-
-
+      texturbitco.loadfromfile("bitco.dds");
+      cubo.tx = &texturbitco;
+      cubo.posi = vector3(0, 0, 0);
       // Set primitive topology
       man->getConext()->g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
       D3D11_BUFFER_DESC bd;
@@ -296,8 +297,7 @@ namespace GraphicsModule
           return hr;
 
       // Load the Texture
-      texturbitco.loadfromfile("bitco.dds");
-      cubo.tx = &texturbitco;
+      
       hr = D3DX11CreateShaderResourceViewFromFile(man->getDevice()->g_pd3dDevice, "seafloor.dds", NULL, NULL, &texturmar, NULL);
 
       if (FAILED(hr))
@@ -479,7 +479,7 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     //CBChangesEveryFrame cb;
-    g_World = XMMatrixTranslation(0, 0, 0);
+    g_World = XMMatrixTranslation(cubo.posi.x, cubo.posi.y, cubo.posi.z);
     cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
     man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
