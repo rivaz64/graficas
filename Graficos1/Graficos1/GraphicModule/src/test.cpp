@@ -425,10 +425,6 @@ namespace GraphicsModule
     }
     void test::Update()
     {
-    }
-    void test::Render()
-    {
-        // Update our time
         static float t = 0.0f;
         if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
         {
@@ -451,6 +447,11 @@ namespace GraphicsModule
         g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
         g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
 
+    }
+    void test::Render()
+    {
+        // Update our time
+        
         //
         // Clear the back buffer
         //
