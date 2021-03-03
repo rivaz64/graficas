@@ -420,20 +420,20 @@ namespace GraphicsModule
     // Clear the back buffer
     //
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
-    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv.get, ClearColor);
+    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv2.get, ClearColor);
 
     //
     // Clear the depth buffer to 1.0 (max depth)
     //
-    man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+    man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
 
     //
     // Update variables that change once per frame
     //
     CBChangesEveryFrame cb;
-    cb.mWorld = XMMatrixTranspose(g_World);
+    /*cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
-    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);*/
 
 
     UINT stride = sizeof(SimpleVertex);
@@ -455,24 +455,38 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
     man->getConext()->g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
-    man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv.get, depstencil.view);
+    man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv2.get, depstencil.view);
     man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+    g_World = XMMatrixTranslation(0, 0, 0);
+    cb.mWorld = XMMatrixTranspose(g_World);
+    cb.vMeshColor = g_vMeshColor;
+    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv.get, ClearColor);
 
+    //
+    // Clear the depth buffer to 1.0 (max depth)
+    //
+    man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
     //
     // Render the SAQ
     //
-    /*man->getConext()->g_pImmediateContext->IASetInputLayout(g_pVertexLayout2);
-    man->getConext()->g_pImmediateContext->RSSetState(g_Rasterizer2);
-    man->getConext()->g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer2, &stride, &offset);
-    man->getConext()->g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer2, DXGI_FORMAT_R16_UINT, 0);
-    man->getConext()->g_pImmediateContext->VSSetShader(g_pVertexShader2, NULL, 0);
-    man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader2, NULL, 0);*/
+    man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv.get, depstencil.view);
+    man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &rtv2.srv);
+    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
+
     //g_pImmediateContext->DrawIndexed(6, 0, 0);
     //
     // Present our back buffer to our front buffer
     //
 
     //UIRender();
+     /*for (float* i : instanses) {
+         cb.mWorld = XMMatrixTranspose(i);
+         g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+         g_pImmediateContext->DrawIndexed(36, 0, 0);
+     }*/
+
     man->getSwapchain()->Present();
   }
 
