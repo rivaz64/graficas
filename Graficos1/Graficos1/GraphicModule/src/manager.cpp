@@ -70,6 +70,11 @@ namespace GraphicsModule {
 	{
 		dev.g_pd3dDevice->CreateRenderTargetView(t.textur.get, NULL, &t.get);
 	}
+
+	void manager::draw(objeto o)
+	{
+
+	}
 	
 	manager* getmanager()
 	{

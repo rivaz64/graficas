@@ -14,6 +14,7 @@
 #include"RenderTargetView.h"
 #include"Viewport.h"
 #include"Buffer.h"
+#include"objeto.h"
 namespace GraphicsModule {
     class manager
     {
@@ -47,6 +48,7 @@ namespace GraphicsModule {
         void OMSetRenderTargets(RenderTargetView& rtv, DepthStencil& ds);
         void RSSetViewports(Viewport& vp);
         void CreateRenderTargetView(RenderTargetView& t);
+        void draw(objeto o);
     };
     extern manager* getmanager();
 }

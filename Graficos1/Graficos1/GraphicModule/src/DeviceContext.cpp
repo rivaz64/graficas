@@ -26,12 +26,13 @@ namespace GraphicsModule {
 		g_pImmediateContext->IASetInputLayout(dev->g_pVertexLayout);
 	}
 
-	void DeviceContext::IASetVertexBuffers()
+	void DeviceContext::IASetVertexBuffers(Buffer* b)
 	{
 		UINT stride = sizeof(mesh::vertex);
 		UINT offset = 0;
-		g_pImmediateContext->IASetVertexBuffers(0, 1, &(dev->vertexB.buf), &stride, &offset);
+		g_pImmediateContext->IASetVertexBuffers(0, 1, &(b->buf), &stride, &offset);
 	}
+
 
 	void DeviceContext::IASetIndexBuffer()
 	{

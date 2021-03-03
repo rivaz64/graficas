@@ -5,6 +5,7 @@
 #include <d3dcompiler.h>
 #include"Device.h"
 #include<vector>
+#include"mesh.h"
 using std::vector;
 class camera;
 namespace GraphicsModule {
@@ -19,7 +20,7 @@ namespace GraphicsModule {
 		void OMSetRenderTargets();
 		void RSSetViewports(UINT width, UINT height);
 		void IASetInputLayout();
-		void IASetVertexBuffers();
+		void IASetVertexBuffers(Buffer* b);
 		void IASetIndexBuffer();
 		void UpdateSubresource(camera* cam);
 		void UpdateView(camera* cam);

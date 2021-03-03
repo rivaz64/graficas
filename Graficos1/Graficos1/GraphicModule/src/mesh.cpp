@@ -35,7 +35,6 @@ namespace GraphicsModule {
         bd.ByteWidth = sizeof(SimpleVertex) * 24;
         bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::VERTEX_BUFFER;
         bd.CPUAccessFlags = 0;
-        
         ZeroMemory(&InitData, sizeof(InitData));
         InitData.pSysMem = points;
         getmanager()->getDevice()->CreateBuffer(bd, InitData, vertexB);
