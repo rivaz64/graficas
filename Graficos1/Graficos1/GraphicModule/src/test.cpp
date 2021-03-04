@@ -100,7 +100,7 @@ namespace GraphicsModule
       //g_pDepthStencilView = depstencil.view;
       //g_pDepthStencil = depstencil.textur.get;
       //Setup the viewport
-      CD3D11_VIEWPORT v;
+      
       Viewport vp;
       vp.Width = (FLOAT)width;
       vp.Height = (FLOAT)height;
@@ -393,7 +393,16 @@ namespace GraphicsModule
       man->CreateRenderTargetView(rtv4);
       cubo1.tx = new Textura;
       cubo2.tx = new Textura;
+      /*rtv.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });
+      rtv2.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });
+      rtv3.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });
+      rtv4.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });//*/
       return S_OK;
+  }
+  void test::rezise(HWND& _hwnd, LPARAM _lParam)
+  {
+      man->getSwapchain()->rezise(_lParam, rtv);
+      man->getConext()->resizewindow(cam, _hwnd, rtv,changesOnReziseB);
   }
   void test::Update() {
       static float t = 0.0f;
@@ -478,10 +487,11 @@ namespace GraphicsModule
     // Clear the back buffer
     //
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
-    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv.get, ClearColor);
-    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv2.get, ClearColor);
-    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv3.get, ClearColor);
-    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv4.get, ClearColor);
+
+    man->getConext()->ClearRenderTargetView(rtv);
+    man->getConext()->ClearRenderTargetView(rtv2);
+    man->getConext()->ClearRenderTargetView(rtv3);
+    man->getConext()->ClearRenderTargetView(rtv4);
     //
     // Clear the depth buffer to 1.0 (max depth)
     //
@@ -532,112 +542,13 @@ namespace GraphicsModule
     man->draw(cubo0, changeveryFrameB);
     man->draw(cubo1, changeveryFrameB);
     man->draw(cubo2, changeveryFrameB);
-    //man->getConext()->ClearDepthStencilView(depstencil);
-    //man->getConext()->OMSetRenderTargets(rtv, depstencil);
-    //man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &rtv2.srv);}
-    //
-    //man->draw(cubo, changeveryFrameB);
-    //cubo0.tx->srv = rtv2.srv;
-    //man->draw(cubo0, changeveryFrameB);//*/
     
-    //CBChangesEveryFrame cb;
-    
-
-
-
-    /*
-    g_World = XMMatrixTranslation(0, 0, 0);
-    cb.mWorld = XMMatrixTranspose(g_World);
-    cb.vMeshColor = g_vMeshColor;
-    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
-    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
-    /*g_World = XMMatrixTranslation(0, 0, 0);
-    cb.mWorld = XMMatrixTranspose(g_World);
-    cb.vMeshColor = g_vMeshColor;
-    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
-
-    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);*/
-    //man->getConext()->g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
-   //man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv2.get, depstencil.view);
-    //man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
-    /*                 man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
-
-    man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv2.get, depstencil.view);
-    man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &texturbitco);
-    g_World = XMMatrixTranslation(0, 0, 0);
-    cb.mWorld = XMMatrixTranspose(g_World);
-    cb.vMeshColor = g_vMeshColor;
-    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
-
-    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
-    /*man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &texturbitco);
-    g_World = XMMatrixTranslation(3, 0, 0);
-    cb.mWorld = XMMatrixTranspose(g_World);
-    cb.vMeshColor = g_vMeshColor;
-    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
-
-    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
-    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv.get, ClearColor);
-
-   
-    //
-    // Clear the depth buffer to 1.0 (max depth)
-    //
-    man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
-    //
-    // Render the SAQ
-    //*/
-    /*man->getConext()->g_pImmediateContext->OMSetRenderTargets(1, &rtv.get, depstencil.view);
-    man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &rtv2.srv);
-    
-    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);
-    g_World = XMMatrixTranslation(3 ,0, 0);
-    cb.mWorld = XMMatrixTranspose(g_World);
-    cb.vMeshColor = g_vMeshColor;
-    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
-    man->getConext()->g_pImmediateContext->DrawIndexed(36, 0, 0);//*/
-
-
-
-
-
-    
-
-    
-    //g_pImmediateContext->DrawIndexed(6, 0, 0);*/
-    //
-    // Present our back buffer to our front buffer
-    //
-
-    //UIRender();
-     /*for (float* i : instanses) {
-         cb.mWorld = XMMatrixTranspose(i);
-         g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
-         g_pImmediateContext->DrawIndexed(36, 0, 0);
-     }*/
     UI();
     man->getSwapchain()->Present();
   }
 
   void test::CleanupDevice()
   {
-    /*if (g_pImmediateContext) g_pImmediateContext->ClearState();
-
-    if (g_pSamplerLinear) g_pSamplerLinear->Release();
-    if (g_pTextureRV) g_pTextureRV->Release();
-    if (g_pCBNeverChanges) g_pCBNeverChanges->Release();
-    if (g_pCBChangeOnResize) g_pCBChangeOnResize->Release();
-    if (g_pCBChangesEveryFrame) g_pCBChangesEveryFrame->Release();
-    if (g_pVertexBuffer) g_pVertexBuffer->Release();
-    if (g_pIndexBuffer) g_pIndexBuffer->Release();
-    if (g_pVertexLayout) g_pVertexLayout->Release();
-    if (g_pVertexShader) g_pVertexShader->Release();
-    if (g_pPixelShader) g_pPixelShader->Release();
-    if (g_pDepthStencil) g_pDepthStencil->Release();
-    if (g_pDepthStencilView) g_pDepthStencilView->Release();
-    if (g_pRenderTargetView) g_pRenderTargetView->Release();
-    if (g_pSwapChain) g_pSwapChain->Release();
-    if (g_pImmediateContext) g_pImmediateContext->Release();
-    if (g_pd3dDevice) g_pd3dDevice->Release();*/
+    
   }
 }

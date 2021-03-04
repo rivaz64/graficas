@@ -205,7 +205,6 @@ void Device::CreateShaderResourceViewFromFile(wchar_t* file)
 
 HRESULT Device::CreateSamplerState()
 {
-	
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(sampDesc));
 	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;

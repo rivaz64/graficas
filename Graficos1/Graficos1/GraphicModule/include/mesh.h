@@ -1,5 +1,5 @@
 #pragma once
-#include <initializer_list>}
+#include <initializer_list>
 #include"Buffer.h"
 namespace GraphicsModule {
 	class mesh

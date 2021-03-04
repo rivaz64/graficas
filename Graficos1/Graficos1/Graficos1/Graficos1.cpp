@@ -40,9 +40,8 @@ LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
   {
   case WM_SIZE:
       if (_wParam != SIZE_MINIMIZED && GraphicsModule::getmanager()->getSwapchain()->g_pSwapChain) {
-          GraphicsModule::getmanager()->getSwapchain()->rezise(_lParam,MiObj.rtv);
-          //GraphicsModule::getmanager()->getConext()->resizewindow(MiObj.cam, _hwnd);
-          
+         
+          MiObj.rezise(_hwnd, _lParam);
       }
     return 0;
     break;

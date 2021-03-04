@@ -27,9 +27,9 @@ namespace GraphicsModule {
 		void IASetIndexBuffer(Buffer* b);
 		void UpdateSubresource(camera* cam);
 		void UpdateView(camera* cam);
-		void resizewindow(camera* cam, HWND& g_hWnd);
+		void resizewindow(camera* cam, HWND& g_hWnd, RenderTargetView &rtv, Buffer& chor);
 		void IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY pt);
-		
+		void ClearRenderTargetView(RenderTargetView& rtv);
 		void PSSetShaderResources(Textura*t);
 		void OMSetRenderTargets(RenderTargetView& r, DepthStencil& d);
 		void ClearDepthStencilView(DepthStencil& d);

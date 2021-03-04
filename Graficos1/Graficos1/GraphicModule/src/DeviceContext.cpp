@@ -50,29 +50,37 @@ namespace GraphicsModule {
 		g_pImmediateContext->UpdateSubresource(dev->g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);*/
 	}
 
-	void DeviceContext::resizewindow(camera* cam, HWND& g_hWnd)
+	void DeviceContext::resizewindow(camera* cam, HWND& g_hWnd,RenderTargetView& rtv,Buffer& chor)
 	{
-		g_pImmediateContext->OMSetRenderTargets(1, &dev->g_pRenderTargetView, NULL);
+		g_pImmediateContext->OMSetRenderTargets(1,&rtv.get, NULL);
 		RECT rc;
 		GetClientRect(g_hWnd, &rc);
 		UINT width = rc.right - rc.left;
 		UINT height = rc.bottom - rc.top;
-		D3D11_VIEWPORT vp;
+		Viewport vp;
 		vp.Width = (FLOAT)width;
 		vp.Height = (FLOAT)height;
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
-		g_pImmediateContext->RSSetViewports(1, &vp);
-		GraphicsModule::CBChangeOnResize cbChangesOnResize;
+
+		getmanager()->RSSetViewports(vp);//*/
+		//XMMATRIX g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
+		CBChangeOnResize cbChangesOnResize;
+		//cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
 		cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f));
-		g_pImmediateContext->UpdateSubresource(dev->changesOnReziseB.buf, 0, NULL, &cbChangesOnResize, 0, 0);
+		g_pImmediateContext->UpdateSubresource(chor.buf, 0, NULL, &cbChangesOnResize, 0, 0);
 	}
 
 	void DeviceContext::IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY pt)
 	{
 		g_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+	}
+
+	void DeviceContext::ClearRenderTargetView(RenderTargetView& rtv)
+	{
+		g_pImmediateContext->ClearRenderTargetView(rtv.get, rtv.ClearColor);
 	}
 
 

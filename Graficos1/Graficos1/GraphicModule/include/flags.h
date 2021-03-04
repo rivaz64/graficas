@@ -20,6 +20,7 @@ namespace GraphicsModule {
         LEVEL_11_0 = 0xb000
     };
     enum class FORMAT {
+        UNKNOWN = 0,
         R32G32B32_FLOAT = 6,
         R8G8B8A8_UNORM = 28,
         TYPELESS = 39,
