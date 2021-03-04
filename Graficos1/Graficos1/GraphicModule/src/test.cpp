@@ -487,7 +487,11 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
-    //man->getConext()->OMSetRenderTargets( rtv2, depstencil);
+    man->getConext()->OMSetRenderTargets( rtv2, depstencil);
+    man->draw(cubo, changeveryFrameB);
+    cubo0.tx->srv = rtv2.srv;
+    man->getConext()->ClearDepthStencilView(depstencil);
+    man->getConext()->OMSetRenderTargets(rtv, depstencil);
     man->draw(cubo, changeveryFrameB);
     man->draw(cubo0, changeveryFrameB);
     //man->getConext()->ClearDepthStencilView(depstencil);
