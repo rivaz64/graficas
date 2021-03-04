@@ -137,7 +137,7 @@ namespace GraphicsModule
       UINT numElements = ARRAYSIZE(layout);
 
       // Create the input layout
-      hr = man->getDevice()->g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
+      hr = man->getDevice()->get()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
           pVSBlob->GetBufferSize(), &g_pVertexLayout);
       pVSBlob->Release();
       if (FAILED(hr))
@@ -170,7 +170,7 @@ namespace GraphicsModule
       UINT numElements2 = ARRAYSIZE(layout2);
 
       // Create the input layout
-      hr = man->getDevice()->g_pd3dDevice->CreateInputLayout(layout2, numElements2, pVSBlob2->GetBufferPointer(),
+      hr = man->getDevice()->get()->CreateInputLayout(layout2, numElements2, pVSBlob2->GetBufferPointer(),
           pVSBlob2->GetBufferSize(), &g_pVertexLayout2);
       pVSBlob2->Release();
       if (FAILED(hr))
@@ -294,17 +294,17 @@ namespace GraphicsModule
       bd.ByteWidth = sizeof(CBNeverChanges);
       bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::CONSTANT_BUFFER;
       bd.CPUAccessFlags = 0;
-      hr = hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, NULL, &neverChangesB.buf);
+        man->getDevice()->CreateBuffer(bd,  neverChangesB);
       if (FAILED(hr))
           return hr;
 
       bd.ByteWidth = sizeof(CBChangeOnResize);
-      hr = hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, NULL, &changesOnReziseB.buf);
+      man->getDevice()->CreateBuffer(bd, changesOnReziseB);
       if (FAILED(hr))
           return hr;
 
       bd.ByteWidth = sizeof(CBChangesEveryFrame);
-      hr = hr = man->getDevice()->g_pd3dDevice->CreateBuffer(&bd, NULL, &changeveryFrameB.buf);
+      man->getDevice()->CreateBuffer(bd, changeveryFrameB);
       if (FAILED(hr))
           return hr;
 
@@ -325,7 +325,7 @@ namespace GraphicsModule
       sampDesc.ComparisonFunc = (D3D11_COMPARISON_FUNC)COMPARISON_FUNC::NEVER;
       sampDesc.MinLOD = 0;
       sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-      hr = hr = man->getDevice()->g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
+      hr = hr = man->getDevice()->get()->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
       if (FAILED(hr))
           return hr;
 
@@ -356,12 +356,12 @@ namespace GraphicsModule
       ZeroMemory(&desc, sizeof(desc));
       desc.CullMode = D3D11_CULL_BACK;
       desc.FillMode = D3D11_FILL_SOLID;
-      hr = hr = man->getDevice()->g_pd3dDevice->CreateRasterizerState(&desc, &g_Rasterizer);
+      hr = hr = man->getDevice()->get()->CreateRasterizerState(&desc, &g_Rasterizer);
       if (FAILED(hr))
           return hr;
 
       desc.CullMode = D3D11_CULL_NONE;
-      hr = hr = man->getDevice()->g_pd3dDevice->CreateRasterizerState(&desc, &g_Rasterizer2);
+      hr = hr = man->getDevice()->get()->CreateRasterizerState(&desc, &g_Rasterizer2);
       if (FAILED(hr))
           return hr;
       //Para ka textura nueva

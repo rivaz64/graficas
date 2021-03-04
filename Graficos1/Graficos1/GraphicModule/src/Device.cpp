@@ -128,6 +128,11 @@ namespace GraphicsModule {
 		return g_pd3dDevice->CreateBuffer(&bd, &InitData, &b.buf);
 	}
 
+	void Device::CreateBuffer(D3D11_BUFFER_DESC& bd, Buffer& b)
+	{
+		g_pd3dDevice->CreateBuffer(&bd, NULL, &b.buf);
+	}
+
 	
 
 	Device::~Device()

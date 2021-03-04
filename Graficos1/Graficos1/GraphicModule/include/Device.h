@@ -12,9 +12,9 @@
 namespace GraphicsModule {
 	class Device
 	{
-		
-	public:
 		ID3D11Device* g_pd3dDevice = NULL;
+	public:
+		
 		D3D11_TEXTURE2D_DESC descDepth;
 		ID3D11Device* get() { return g_pd3dDevice; }
 
@@ -46,7 +46,9 @@ namespace GraphicsModule {
 		void CreateShaderResourceView(RenderTargetView& rtv, D3D11_SHADER_RESOURCE_VIEW_DESC des);
 		HRESULT CreateSamplerState();
 		HRESULT CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
+		void CreateBuffer(D3D11_BUFFER_DESC& bd, Buffer& b);
 		~Device();
+		friend class manager;
 	};
 }
 

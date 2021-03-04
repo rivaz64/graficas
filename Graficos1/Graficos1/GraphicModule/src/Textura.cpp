@@ -19,7 +19,7 @@ namespace GraphicsModule {
     }
     void Textura::loadfromfile(LPCSTR f)
     {
-        D3DX11CreateShaderResourceViewFromFile(getmanager()->getDevice()->g_pd3dDevice, f, NULL, NULL, &srv, NULL);
+        D3DX11CreateShaderResourceViewFromFile(getmanager()->getDevice()->get(), f, NULL, NULL, &srv, NULL);
     }
     
 }
