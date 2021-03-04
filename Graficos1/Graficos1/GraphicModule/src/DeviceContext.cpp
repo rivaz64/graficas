@@ -3,10 +3,7 @@
 #include"test.h"
 #include"Viewport.h"
 namespace GraphicsModule {
-	void DeviceContext::OMSetRenderTargets()
-	{
-		g_pImmediateContext->OMSetRenderTargets(1, &(dev->g_pRenderTargetView), dev->DepthStencilView);
-	}
+	
 
 	void DeviceContext::RSSetViewports(UINT width, UINT height)
 	{
@@ -99,6 +96,18 @@ namespace GraphicsModule {
 	{
 		g_pImmediateContext->PSSetShaderResources(0, 1, &t->srv);
 	}
+
+	void DeviceContext::OMSetRenderTargets(RenderTargetView& r, DepthStencil& d)
+	{
+		g_pImmediateContext->OMSetRenderTargets(1, &r.get, d.view);
+	}
+
+	void DeviceContext::ClearDepthStencilView(DepthStencil& d)
+	{
+		g_pImmediateContext->ClearDepthStencilView(d.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
+	}
+
+	
 
 	void DeviceContext::draw()
 	{

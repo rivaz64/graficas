@@ -7,6 +7,8 @@
 #include<vector>
 #include"mesh.h"
 #include"Textura.h"
+#include"RenderTargetView.h"
+#include"DepthStencil.h"
 using std::vector;
 class camera;
 namespace GraphicsModule {
@@ -18,7 +20,6 @@ namespace GraphicsModule {
 		ID3D11DeviceContext* g_pImmediateContext;
 		float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
 		XMFLOAT4 g_vMeshColor = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
-		void OMSetRenderTargets();
 		void RSSetViewports(UINT width, UINT height);
 		void IASetInputLayout();
 		void IASetVertexBuffers(Buffer* b);
@@ -28,6 +29,8 @@ namespace GraphicsModule {
 		void resizewindow(camera* cam, HWND& g_hWnd);
 		void render(std::vector<float*>& instanses);
 		void PSSetShaderResources(Textura*t);
+		void OMSetRenderTargets(RenderTargetView& r, DepthStencil& d);
+		void ClearDepthStencilView(DepthStencil& d);
 		void draw();
 	};
 }

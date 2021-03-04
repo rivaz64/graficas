@@ -263,15 +263,21 @@ namespace GraphicsModule
               22,20,21,
               23,20,22
           });
-      cubo.m = &cubito;
+     
+
       cam = new camera;
       cam->seteye(0.0f, 3.0f, -6.0f);
       cam->setat(0.0f, 1.f, 0);
       cam->setup(0.0f, 1.0f, 0);
       cam->axis();
       texturbitco.loadfromfile("bitco.dds");
+      texturmar.loadfromfile("seafloor.dds");
+      cubo.m = &cubito;
       cubo.tx = &texturbitco;
       cubo.posi = vector3(0, 0, 0);
+      cubo0.m = &cubito;
+      cubo0.tx = &texturmar;
+      cubo0.posi = vector3(3, 0, 0);
       // Set primitive topology
       man->getConext()->g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
       D3D11_BUFFER_DESC bd;
@@ -298,7 +304,7 @@ namespace GraphicsModule
 
       // Load the Texture
       
-      hr = D3DX11CreateShaderResourceViewFromFile(man->getDevice()->g_pd3dDevice, "seafloor.dds", NULL, NULL, &texturmar, NULL);
+      //hr = D3DX11CreateShaderResourceViewFromFile(man->getDevice()->g_pd3dDevice, "seafloor.dds", NULL, NULL, &texturmar, NULL);
 
       if (FAILED(hr))
           return hr;
@@ -405,6 +411,9 @@ namespace GraphicsModule
       cubo.color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
       cubo.color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
       cubo.color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+      cubo0.color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+      cubo0.color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+      cubo0.color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
       if (GetKeyState('W') & 0x8000)
       {
           cam->movez(-1);
@@ -478,7 +487,17 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
+    //man->getConext()->OMSetRenderTargets( rtv2, depstencil);
     man->draw(cubo, changeveryFrameB);
+    man->draw(cubo0, changeveryFrameB);
+    //man->getConext()->ClearDepthStencilView(depstencil);
+    //man->getConext()->OMSetRenderTargets(rtv, depstencil);
+    //man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &rtv2.srv);}
+    //
+    //man->draw(cubo, changeveryFrameB);
+    //cubo0.tx->srv = rtv2.srv;
+    //man->draw(cubo0, changeveryFrameB);//*/
+    
     //CBChangesEveryFrame cb;
     
 
