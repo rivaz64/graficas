@@ -44,17 +44,20 @@ namespace GraphicsModule
       IDXGISwapChain* g_pSwapChain = NULL;
       ID3D11RenderTargetView* g_pRenderTargetView = NULL;
       RenderTargetView rtv;
+      RenderTargetView rtv2;
+      RenderTargetView rtv3;
       camera* cam;
       //Textura depthstencil;
       mesh cubito;
       objeto cubo;
       objeto cubo0;
+      objeto cubo1;
       DepthStencil depstencil;
       //ID3D11Texture2D* g_pDepthStencil;
       //ID3D11DepthStencilView* g_pDepthStencilView = NULL;
       //ID3D11ShaderResourceView* g_pDepthStencilSRV = NULL;
       ID3D11ShaderResourceView* rsv2 = NULL;
-      RenderTargetView rtv2;
+      
       ID3D11VertexShader* g_pVertexShader = NULL;
       ID3D11PixelShader* g_pPixelShader = NULL;
       ID3D11InputLayout* g_pVertexLayout = NULL;

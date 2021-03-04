@@ -278,6 +278,9 @@ namespace GraphicsModule
       cubo0.m = &cubito;
       cubo0.tx = &texturmar;
       cubo0.posi = vector3(3, 0, 0);
+      cubo1.m = &cubito;
+      //cubo0.tx = &texturmar;
+      cubo1.posi = vector3(-3, 0, 0);
       // Set primitive topology
       man->getConext()->g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
       D3D11_BUFFER_DESC bd;
@@ -361,6 +364,8 @@ namespace GraphicsModule
       //Para ka textura nueva
       rtv2.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
       man->CreateTexture2D(rtv2.textur);
+      rtv3.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
+      man->CreateTexture2D(rtv3.textur);
       if (FAILED(hr))
           return hr;
 
@@ -414,6 +419,9 @@ namespace GraphicsModule
       cubo0.color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
       cubo0.color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
       cubo0.color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+      cubo1.color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+      cubo1.color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+      cubo1.color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
       if (GetKeyState('W') & 0x8000)
       {
           cam->movez(-1);
