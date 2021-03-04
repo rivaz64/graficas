@@ -103,6 +103,11 @@ namespace GraphicsModule {
 
 	}
 
+	void Device::CreateShaderResourceView(RenderTargetView& rtv, D3D11_SHADER_RESOURCE_VIEW_DESC des)
+	{
+		g_pd3dDevice->CreateShaderResourceView(rtv.textur.get, &des, &rtv.srv);
+	}
+
 	HRESULT Device::CreateSamplerState()
 	{
 

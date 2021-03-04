@@ -377,10 +377,14 @@ namespace GraphicsModule
       descViewRT.ViewDimension = (D3D_SRV_DIMENSION)DIMENSION::TEXTURE2DARRAY;
       descViewRT.Texture2D.MostDetailedMip = 0;
       descViewRT.Texture2D.MipLevels = 1;
-      man->getDevice()->g_pd3dDevice->CreateShaderResourceView(rtv2.textur.get, &descViewRT, &rtv2.srv);
+      man->getDevice()->CreateShaderResourceView(rtv2, descViewRT);
+      man->getDevice()->CreateShaderResourceView(rtv3, descViewRT);
+      //man->getDevice()->g_pd3dDevice->CreateShaderResourceView(rtv2.textur.get, &descViewRT, &rtv2.srv);
       //CBNeverChanges cbNeverChanges;
 
       man->CreateRenderTargetView(rtv2);
+      man->CreateRenderTargetView(rtv3);
+      cubo1.tx = new Textura;
       return S_OK;
   }
   void test::Update() {
@@ -465,6 +469,7 @@ namespace GraphicsModule
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
     man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv.get, ClearColor);
     man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv2.get, ClearColor);
+    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv3.get, ClearColor);
     //
     // Clear the depth buffer to 1.0 (max depth)
     //
@@ -499,9 +504,16 @@ namespace GraphicsModule
     man->draw(cubo, changeveryFrameB);
     cubo0.tx->srv = rtv2.srv;
     man->getConext()->ClearDepthStencilView(depstencil);
+    man->getConext()->OMSetRenderTargets(rtv3, depstencil);
+    man->draw(cubo, changeveryFrameB);
+    man->draw(cubo0, changeveryFrameB);
+   
+    cubo1.tx->srv = rtv3.srv;
+    man->getConext()->ClearDepthStencilView(depstencil);
     man->getConext()->OMSetRenderTargets(rtv, depstencil);
     man->draw(cubo, changeveryFrameB);
     man->draw(cubo0, changeveryFrameB);
+    man->draw(cubo1, changeveryFrameB);
     //man->getConext()->ClearDepthStencilView(depstencil);
     //man->getConext()->OMSetRenderTargets(rtv, depstencil);
     //man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &rtv2.srv);}
