@@ -2,6 +2,7 @@
 #include"mesh.h"
 #include"Textura.h"
 #include"vector3.h"
+#include "RenderTargetView.h"
 namespace GraphicsModule {
 	class objeto {
 	public:
@@ -9,5 +10,6 @@ namespace GraphicsModule {
 		Textura* tx;
 		vector3 posi;
 		XMFLOAT4 color;
+		void setTexture(RenderTargetView rtv);
 	};
 }

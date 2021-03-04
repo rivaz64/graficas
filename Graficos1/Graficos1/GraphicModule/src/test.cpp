@@ -281,8 +281,11 @@ namespace GraphicsModule
       cubo1.m = &cubito;
       //cubo0.tx = &texturmar;
       cubo1.posi = vector3(-3, 0, 0);
+      cubo2.m = &cubito;
+      //cubo0.tx = &texturmar;
+      cubo2.posi = vector3(0, 3, 0);
       // Set primitive topology
-      man->getConext()->g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+      man->getConext()->g_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)PRIMITIVE_TOPOLOGY::TRIANGLELIST);
       D3D11_BUFFER_DESC bd;
       D3D11_SUBRESOURCE_DATA InitData;
       ZeroMemory(&bd, sizeof(bd));
@@ -366,6 +369,8 @@ namespace GraphicsModule
       man->CreateTexture2D(rtv2.textur);
       rtv3.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
       man->CreateTexture2D(rtv3.textur);
+      rtv4.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
+      man->CreateTexture2D(rtv4.textur);
       if (FAILED(hr))
           return hr;
 
@@ -379,12 +384,15 @@ namespace GraphicsModule
       descViewRT.Texture2D.MipLevels = 1;
       man->getDevice()->CreateShaderResourceView(rtv2, descViewRT);
       man->getDevice()->CreateShaderResourceView(rtv3, descViewRT);
+      man->getDevice()->CreateShaderResourceView(rtv4, descViewRT);
       //man->getDevice()->g_pd3dDevice->CreateShaderResourceView(rtv2.textur.get, &descViewRT, &rtv2.srv);
       //CBNeverChanges cbNeverChanges;
 
       man->CreateRenderTargetView(rtv2);
       man->CreateRenderTargetView(rtv3);
+      man->CreateRenderTargetView(rtv4);
       cubo1.tx = new Textura;
+      cubo2.tx = new Textura;
       return S_OK;
   }
   void test::Update() {
@@ -417,38 +425,41 @@ namespace GraphicsModule
       }
       delete p;
       // Modify the color
-      cubo.color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-      cubo.color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-      cubo.color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
-      cubo0.color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-      cubo0.color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-      cubo0.color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
-      cubo1.color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-      cubo1.color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-      cubo1.color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+      cubo.color.x = .9;
+      cubo.color.y =.9;
+      cubo.color.z =.9;
+      cubo0.color.x = .9;
+      cubo0.color.y = .9;
+      cubo0.color.z = .9;
+      cubo1.color.x = .9;
+      cubo1.color.y = .9;
+      cubo1.color.z = .9;
+      cubo2.color.x = .9;
+      cubo2.color.y = .9;
+      cubo2.color.z = .9;
       if (GetKeyState('W') & 0x8000)
-      {
-          cam->movez(-1);
-      }
-      if (GetKeyState('S') & 0x8000)
       {
           cam->movez(1);
       }
-      if (GetKeyState('Q') & 0x8000)
+      if (GetKeyState('S') & 0x8000)
       {
-          cam->movey(-1);
+          cam->movez(-1);
       }
-      if (GetKeyState('A') & 0x8000)
+      if (GetKeyState('Q') & 0x8000)
       {
           cam->movey(1);
       }
+      if (GetKeyState('A') & 0x8000)
+      {
+          cam->movey(-1);
+      }
       if (GetKeyState('X') & 0x8000)
       {
-          cam->movex(-1);
+          cam->movex(1);
       }
       if (GetKeyState('Z') & 0x8000)
       {
-          cam->movex(1);
+          cam->movex(-1);
       }
       CBNeverChanges cbNeverChanges;
       //man->getConext()->UpdateSubresource(cam);
@@ -470,6 +481,7 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv.get, ClearColor);
     man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv2.get, ClearColor);
     man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv3.get, ClearColor);
+    man->getConext()->g_pImmediateContext->ClearRenderTargetView(rtv4.get, ClearColor);
     //
     // Clear the depth buffer to 1.0 (max depth)
     //
@@ -502,18 +514,24 @@ namespace GraphicsModule
     man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->OMSetRenderTargets( rtv2, depstencil);
     man->draw(cubo, changeveryFrameB);
-    cubo0.tx->srv = rtv2.srv;
+    cubo0.setTexture(rtv2);
     man->getConext()->ClearDepthStencilView(depstencil);
     man->getConext()->OMSetRenderTargets(rtv3, depstencil);
     man->draw(cubo, changeveryFrameB);
     man->draw(cubo0, changeveryFrameB);
-   
-    cubo1.tx->srv = rtv3.srv;
+    cubo1.setTexture(rtv3);
+    man->getConext()->ClearDepthStencilView(depstencil);
+    man->getConext()->OMSetRenderTargets(rtv4, depstencil);
+    man->draw(cubo, changeveryFrameB);
+    man->draw(cubo0, changeveryFrameB);
+    man->draw(cubo1, changeveryFrameB);
+    cubo2.setTexture(rtv4);
     man->getConext()->ClearDepthStencilView(depstencil);
     man->getConext()->OMSetRenderTargets(rtv, depstencil);
     man->draw(cubo, changeveryFrameB);
     man->draw(cubo0, changeveryFrameB);
     man->draw(cubo1, changeveryFrameB);
+    man->draw(cubo2, changeveryFrameB);
     //man->getConext()->ClearDepthStencilView(depstencil);
     //man->getConext()->OMSetRenderTargets(rtv, depstencil);
     //man->getConext()->g_pImmediateContext->PSSetShaderResources(0, 1, &rtv2.srv);}

@@ -79,7 +79,6 @@ namespace GraphicsModule {
 		devcon.PSSetShaderResources(o.tx);
 		XMMATRIX g_World;
 		CBChangesEveryFrame cb;
-		
 		g_World = XMMatrixTranslation(o.posi.x, o.posi.y, o.posi.z);
 		cb.mWorld = XMMatrixTranspose(g_World);
 		cb.vMeshColor = o.color;

@@ -17,6 +17,7 @@ namespace GraphicsModule {
 		ID3D11ShaderResourceView* srv;
 		void describe(FORMAT f, BIND_FLAG bf);
 		void loadfromfile(LPCSTR f);
+		
 	};
 }
 

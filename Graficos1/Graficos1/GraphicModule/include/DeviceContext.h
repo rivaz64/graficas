@@ -27,6 +27,7 @@ namespace GraphicsModule {
 		void UpdateSubresource(camera* cam);
 		void UpdateView(camera* cam);
 		void resizewindow(camera* cam, HWND& g_hWnd);
+		void IASetPrimitiveTopology();
 		void render(std::vector<float*>& instanses);
 		void PSSetShaderResources(Textura*t);
 		void OMSetRenderTargets(RenderTargetView& r, DepthStencil& d);

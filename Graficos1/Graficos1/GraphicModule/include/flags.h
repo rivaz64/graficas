@@ -104,4 +104,7 @@ namespace GraphicsModule {
        DEPTH = 0x1L,
         STENCIL = 0x2L
     };
+    enum class PRIMITIVE_TOPOLOGY {
+        TRIANGLELIST = 4
+    };
 }

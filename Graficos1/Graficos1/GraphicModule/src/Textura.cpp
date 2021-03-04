@@ -21,4 +21,5 @@ namespace GraphicsModule {
     {
         D3DX11CreateShaderResourceViewFromFile(getmanager()->getDevice()->g_pd3dDevice, f, NULL, NULL, &srv, NULL);
     }
+    
 }

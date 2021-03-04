@@ -46,12 +46,14 @@ namespace GraphicsModule
       RenderTargetView rtv;
       RenderTargetView rtv2;
       RenderTargetView rtv3;
+      RenderTargetView rtv4;
       camera* cam;
       //Textura depthstencil;
       mesh cubito;
       objeto cubo;
       objeto cubo0;
       objeto cubo1;
+      objeto cubo2;
       DepthStencil depstencil;
       //ID3D11Texture2D* g_pDepthStencil;
       //ID3D11DepthStencilView* g_pDepthStencilView = NULL;
