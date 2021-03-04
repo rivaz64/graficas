@@ -341,14 +341,14 @@ namespace GraphicsModule
       CBNeverChanges cbNeverChanges;
       cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
 
-      man->getConext()->g_pImmediateContext->UpdateSubresource(neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
+      man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
 
       // Initialize the projection matrix
       g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
 
       CBChangeOnResize cbChangesOnResize;
       cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
-      man->getConext()->g_pImmediateContext->UpdateSubresource(changesOnReziseB.buf, 0, NULL, &cbChangesOnResize, 0, 0);
+      man->getConext()->UpdateSubresource(changesOnReziseB,&cbChangesOnResize);
 
 
       // create rasterizer state
@@ -427,7 +427,7 @@ namespace GraphicsModule
           //man->getConext()->UpdateSubresource(cam);
           cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
 
-          man->getConext()->g_pImmediateContext->UpdateSubresource(neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
+          man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
       }
       else {
           cam->click = false;
@@ -474,7 +474,7 @@ namespace GraphicsModule
       //man->getConext()->UpdateSubresource(cam);
       cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
 
-      man->getConext()->g_pImmediateContext->UpdateSubresource(neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
+      man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
   }
   void test::Render(void (*UI)())
   {
@@ -495,8 +495,7 @@ namespace GraphicsModule
     //
     // Clear the depth buffer to 1.0 (max depth)
     //
-    man->getConext()->g_pImmediateContext->ClearDepthStencilView(depstencil.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
-
+    man->getConext()->ClearDepthStencilView(depstencil);
     //
     // Update variables that change once per frame
     //
@@ -513,15 +512,15 @@ namespace GraphicsModule
     // Render the cube
     //
     // Set the input layout
-    man->getConext()->g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
-    man->getConext()->g_pImmediateContext->RSSetState(g_Rasterizer);
+    man->getConext()->get()->IASetInputLayout(g_pVertexLayout);
+    man->getConext()->get()->RSSetState(g_Rasterizer);
     
-    man->getConext()->g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
-    man->getConext()->g_pImmediateContext->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
-    man->getConext()->g_pImmediateContext->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
-    man->getConext()->g_pImmediateContext->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
-    man->getConext()->g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
-    man->getConext()->g_pImmediateContext->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
+    man->getConext()->get()->VSSetShader(g_pVertexShader, NULL, 0);
+    man->getConext()->get()->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
+    man->getConext()->get()->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
+    man->getConext()->get()->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
+    man->getConext()->get()->PSSetShader(g_pPixelShader, NULL, 0);
+    man->getConext()->get()->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->OMSetRenderTargets( rtv2, depstencil);
     man->draw(cubo, changeveryFrameB);
     cubo0.setTexture(rtv2);

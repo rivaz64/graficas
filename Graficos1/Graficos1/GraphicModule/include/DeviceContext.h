@@ -15,17 +15,22 @@ class camera;
 namespace GraphicsModule {
 	class DeviceContext
 	{
-	public:
-		Device* dev;
-
+#ifdef directX
 		ID3D11DeviceContext* g_pImmediateContext;
+#endif
+	public:
+#ifdef directX
+		ID3D11DeviceContext* get() {
+			return g_pImmediateContext;
+		}
+#else
+		void get() {}
+#endif
 		float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
 		XMFLOAT4 g_vMeshColor = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
 		void RSSetViewports(UINT width, UINT height);
-		void IASetInputLayout();
 		void IASetVertexBuffers(Buffer* b);
 		void IASetIndexBuffer(Buffer* b);
-		void UpdateSubresource(camera* cam);
 		void UpdateView(camera* cam);
 		void resizewindow(camera* cam, HWND& g_hWnd, RenderTargetView &rtv, Buffer& chor);
 		void IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY pt);
@@ -33,7 +38,9 @@ namespace GraphicsModule {
 		void PSSetShaderResources(Textura*t);
 		void OMSetRenderTargets(RenderTargetView& r, DepthStencil& d);
 		void ClearDepthStencilView(DepthStencil& d);
+		void UpdateSubresource(Buffer& b, const void * c);
 		void draw();
+		friend class manager;
 	};
 }
 

@@ -18,10 +18,7 @@ namespace GraphicsModule {
 		g_pImmediateContext->RSSetViewports(1, (D3D11_VIEWPORT*)(&vp));
 	}
 
-	void DeviceContext::IASetInputLayout()
-	{
-		g_pImmediateContext->IASetInputLayout(dev->g_pVertexLayout);
-	}
+	
 
 	void DeviceContext::IASetVertexBuffers(Buffer* b)
 	{
@@ -36,12 +33,7 @@ namespace GraphicsModule {
 		g_pImmediateContext->IASetIndexBuffer(b->buf, (DXGI_FORMAT)FORMAT::R16_UINT, 0);
 	}
 
-	void DeviceContext::UpdateSubresource(camera* cam)
-	{
-		GraphicsModule::CBNeverChanges cbNeverChanges;
-		cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
-		g_pImmediateContext->UpdateSubresource(dev->neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
-	}
+	
 
 	void DeviceContext::UpdateView(camera* cam)
 	{
@@ -99,7 +91,9 @@ namespace GraphicsModule {
 		g_pImmediateContext->ClearDepthStencilView(d.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
 	}
 
-	
+	void DeviceContext::UpdateSubresource(Buffer& b, const void* c) {
+		g_pImmediateContext->UpdateSubresource(b.buf, 0, NULL, c, 0, 0);
+	}
 
 	void DeviceContext::draw()
 	{
