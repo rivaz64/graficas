@@ -119,7 +119,7 @@ HRESULT InitImgUI()
 
   // Setup Platform/Renderer back ends
   ImGui_ImplWin32_Init(g_hwnd);
-  ImGui_ImplDX11_Init(GraphicsModule::getmanager()->getDevice()->g_pd3dDevice, GraphicsModule::getmanager()->getConext()->g_pImmediateContext);
+  ImGui_ImplDX11_Init(GraphicsModule::getmanager()->getDevice()->get(), GraphicsModule::getmanager()->getConext()->g_pImmediateContext);
 
   return S_OK;
 }

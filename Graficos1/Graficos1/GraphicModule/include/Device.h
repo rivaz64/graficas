@@ -12,11 +12,11 @@
 namespace GraphicsModule {
 	class Device
 	{
+		
 	public:
-		//Textura depstencil;
-		//ID3D11Texture2D** deptstencil;
-		D3D11_TEXTURE2D_DESC descDepth;
 		ID3D11Device* g_pd3dDevice = NULL;
+		D3D11_TEXTURE2D_DESC descDepth;
+		ID3D11Device* get() { return g_pd3dDevice; }
 
 		ID3D11RenderTargetView* g_pRenderTargetView;
 		ID3D11DepthStencilView* DepthStencilView = NULL;
