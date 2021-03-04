@@ -1,4 +1,5 @@
 #include "SwapChain.h"
+#include "manager.h"
 namespace GraphicsModule {
 	HRESULT SwapChain::GetBuffer()
 	{
@@ -25,11 +26,11 @@ namespace GraphicsModule {
 		sd.Windowed = TRUE;
 	}
 
-	void SwapChain::rezise(LPARAM lParam)
+	void SwapChain::rezise(LPARAM lParam,RenderTargetView& rtv)
 	{
-		g_pRenderTargetView->Release();
+		rtv.release();
 		g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-		GetBuffer();
+		getmanager()->createrendertarget(rtv);
 	}
 
 	void SwapChain::Present()

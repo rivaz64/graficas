@@ -39,9 +39,11 @@ LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
   switch (_msg)
   {
   case WM_SIZE:
-    //if (g_pd3dDevice != NULL && _wParam != SIZE_MINIMIZED)
-    {
-    }
+      if (_wParam != SIZE_MINIMIZED && GraphicsModule::getmanager()->getSwapchain()->g_pSwapChain) {
+          GraphicsModule::getmanager()->getSwapchain()->rezise(_lParam,MiObj.rtv);
+          //GraphicsModule::getmanager()->getConext()->resizewindow(MiObj.cam, _hwnd);
+          
+      }
     return 0;
     break;
 
@@ -188,9 +190,9 @@ int main()
   }
 
   // clean resources
-  //ImGui_ImplDX11_Shutdown();
-  //ImGui_ImplWin32_Shutdown();
-  //ImGui::DestroyContext();
+  ImGui_ImplDX11_Shutdown();
+  ImGui_ImplWin32_Shutdown();
+  ImGui::DestroyContext();
   MiObj.CleanupDevice();
   DestroyWindow(g_hwnd);
   return (int)msg.wParam;

@@ -11,7 +11,7 @@ namespace GraphicsModule {
 		DXGI_SWAP_CHAIN_DESC sd;
 		ID3D11RenderTargetView* g_pRenderTargetView;
 		void createdesctriptor();
-		void rezise(LPARAM lparam);
+		void rezise(LPARAM lparam, RenderTargetView& rtv);
 		void Present();
 	};
 }
