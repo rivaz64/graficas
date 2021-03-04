@@ -9,6 +9,7 @@
 #include"Textura.h"
 #include"RenderTargetView.h"
 #include"DepthStencil.h"
+#include"flags.h"
 using std::vector;
 class camera;
 namespace GraphicsModule {
@@ -27,8 +28,8 @@ namespace GraphicsModule {
 		void UpdateSubresource(camera* cam);
 		void UpdateView(camera* cam);
 		void resizewindow(camera* cam, HWND& g_hWnd);
-		void IASetPrimitiveTopology();
-		void render(std::vector<float*>& instanses);
+		void IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY pt);
+		
 		void PSSetShaderResources(Textura*t);
 		void OMSetRenderTargets(RenderTargetView& r, DepthStencil& d);
 		void ClearDepthStencilView(DepthStencil& d);

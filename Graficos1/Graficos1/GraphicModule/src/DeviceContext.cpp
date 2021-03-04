@@ -70,27 +70,11 @@ namespace GraphicsModule {
 		g_pImmediateContext->UpdateSubresource(dev->changesOnReziseB.buf, 0, NULL, &cbChangesOnResize, 0, 0);
 	}
 
-	void DeviceContext::render(std::vector<float*>& instanses)
+	void DeviceContext::IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY pt)
 	{
-
-		/*g_pImmediateContext->VSSetShader(dev->vertexshader, NULL, 0);
-		g_pImmediateContext->VSSetConstantBuffers(0, 1, &dev->neverChangesB.buf);
-		g_pImmediateContext->VSSetConstantBuffers(1, 1, &dev->changesOnReziseB.buf);
-		g_pImmediateContext->VSSetConstantBuffers(2, 1, &dev->changeveryFrameB.buf);
-		g_pImmediateContext->PSSetShader(dev->g_pPixelShader, NULL, 0);
-		g_pImmediateContext->PSSetConstantBuffers(2, 1, &dev->changeveryFrameB.buf);
-		g_pImmediateContext->PSSetShaderResources(0, 1, &dev->g_pTextureRV);
-		g_pImmediateContext->PSSetSamplers(0, 1, &dev->g_pSamplerLinear);
-		GraphicsModule::CBChangesEveryFrame cb;
-		cb.vMeshColor = g_vMeshColor;
-		g_pImmediateContext->ClearRenderTargetView(dev->g_pRenderTargetView, ClearColor);
-		g_pImmediateContext->ClearDepthStencilView(dev->DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-		for (float* i : instanses) {
-			cb.mWorld = XMMatrixTranspose(i);
-			g_pImmediateContext->UpdateSubresource(dev->changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
-			g_pImmediateContext->DrawIndexed(36, 0, 0);
-		}*/
+		g_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 	}
+
 
 	void DeviceContext::PSSetShaderResources(Textura* t)
 	{

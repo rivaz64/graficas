@@ -285,7 +285,7 @@ namespace GraphicsModule
       //cubo0.tx = &texturmar;
       cubo2.posi = vector3(0, 3, 0);
       // Set primitive topology
-      man->getConext()->g_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+      man->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
       D3D11_BUFFER_DESC bd;
       D3D11_SUBRESOURCE_DATA InitData;
       ZeroMemory(&bd, sizeof(bd));
@@ -467,7 +467,7 @@ namespace GraphicsModule
 
       man->getConext()->g_pImmediateContext->UpdateSubresource(neverChangesB.buf, 0, NULL, &cbNeverChanges, 0, 0);
   }
-  void test::Render()
+  void test::Render(void (*UI)())
   {
     // Update our time
    
@@ -615,7 +615,7 @@ namespace GraphicsModule
          g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
          g_pImmediateContext->DrawIndexed(36, 0, 0);
      }*/
-
+    UI();
     man->getSwapchain()->Present();
   }
 

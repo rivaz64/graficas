@@ -107,7 +107,7 @@ HRESULT InitWindow(LONG _width, LONG _height)
  * @bug     No know Bugs.
  * @return  #HRESULT: Status code.
  */
-/*HRESULT InitImgUI()
+HRESULT InitImgUI()
 {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
@@ -118,12 +118,12 @@ HRESULT InitWindow(LONG _width, LONG _height)
 
   // Setup Platform/Renderer back ends
   ImGui_ImplWin32_Init(g_hwnd);
-  ImGui_ImplDX11_Init(g_pd3dDevice, g_pImmediateContext);
+  ImGui_ImplDX11_Init(GraphicsModule::getmanager()->getDevice()->g_pd3dDevice, GraphicsModule::getmanager()->getConext()->g_pImmediateContext);
 
   return S_OK;
-}*/
+}
 
-/*void UIRender()
+void UIRender()
 {
   // Start the Dear ImGui frame
   ImGui_ImplDX11_NewFrame();
@@ -148,28 +148,28 @@ HRESULT InitWindow(LONG _width, LONG _height)
  */
 int main()
 {
-  // create the window and console
-  if (FAILED(InitWindow(1280, 720)))
-  {
-    DestroyWindow(g_hwnd);
-    return 0;
-  }
+    // create the window and console
+    if (FAILED(InitWindow(1280, 720)))
+    {
+        DestroyWindow(g_hwnd);
+        return 0;
+    }
 
-  // create Graphic API interface
-  if (FAILED(MiObj.InitDevice(g_hwnd)))
-  {
-    MiObj.CleanupDevice();
-    return 0;
-  }
+    // create Graphic API interface
+    if (FAILED(MiObj.InitDevice(g_hwnd)))
+    {
+        MiObj.CleanupDevice();
+        return 0;
+    }
 
-  // create UI
-  /*if (FAILED(InitImgUI()))
-  {
-    ImGui_ImplDX11_Shutdown();
-    ImGui_ImplWin32_Shutdown();
-    ImGui::DestroyContext();
-    return 0;
-  }*/
+    // create UI
+    if (FAILED(InitImgUI()))
+    {
+        ImGui_ImplDX11_Shutdown();
+        ImGui_ImplWin32_Shutdown();
+        ImGui::DestroyContext();
+        return 0;
+    }
 
   // main loop
   MSG msg = { 0 };
@@ -183,7 +183,7 @@ int main()
     else
     {
         MiObj.Update();
-      MiObj.Render();
+      MiObj.Render(UIRender);
     }
   }
 

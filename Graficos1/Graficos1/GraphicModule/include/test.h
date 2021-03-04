@@ -93,7 +93,7 @@ namespace GraphicsModule
 
       HRESULT InitDevice(HWND _hwnd);
       void Update();
-      void Render();
+      void Render(void (*UI)());
 
       void CleanupDevice();
 
