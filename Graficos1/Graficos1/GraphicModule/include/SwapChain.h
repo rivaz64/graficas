@@ -3,16 +3,20 @@
 namespace GraphicsModule {
 	class SwapChain
 	{
-	public:
-		Device* dev;
+#ifdef directX
 		IDXGISwapChain* g_pSwapChain = NULL;
-		ID3D11Texture2D* pBackBuffer = NULL;
-		HRESULT GetBuffer();
+#endif
+	public:
+#ifdef directX
+		IDXGISwapChain* get() { return g_pSwapChain; }
+#else
+		void get() {}
+#endif
 		DXGI_SWAP_CHAIN_DESC sd;
 		ID3D11RenderTargetView* g_pRenderTargetView;
-		void createdesctriptor();
 		void rezise(LPARAM lparam, RenderTargetView& rtv);
 		void Present();
+		friend class manager;
 	};
 }
 

@@ -39,7 +39,7 @@ LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
   switch (_msg)
   {
   case WM_SIZE:
-      if (_wParam != SIZE_MINIMIZED && GraphicsModule::getmanager()->getSwapchain()->g_pSwapChain) {
+      if (_wParam != SIZE_MINIMIZED && GraphicsModule::getmanager()->getSwapchain()->get()) {
          
           MiObj.rezise(_hwnd, _lParam);
       }
