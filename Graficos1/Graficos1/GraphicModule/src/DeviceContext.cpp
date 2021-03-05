@@ -23,13 +23,17 @@ namespace GraphicsModule {
 	{
 		UINT stride = sizeof(mesh::vertex);
 		UINT offset = 0;
+#ifdef directX
 		g_pImmediateContext->IASetVertexBuffers(0, 1, &(b->buf), &stride, &offset);
+#endif
 	}
 
 
 	void DeviceContext::IASetIndexBuffer(Buffer* b)
 	{
+#ifdef directX
 		g_pImmediateContext->IASetIndexBuffer(b->buf, (DXGI_FORMAT)FORMAT::R16_UINT, 0);
+#endif
 	}
 
 	
@@ -43,7 +47,9 @@ namespace GraphicsModule {
 
 	void DeviceContext::resizewindow(camera* cam, HWND& g_hWnd,RenderTargetView& rtv,Buffer& chor)
 	{
+#ifdef directX
 		g_pImmediateContext->OMSetRenderTargets(1,&rtv.get, NULL);
+#endif
 		RECT rc;
 		GetClientRect(g_hWnd, &rc);
 		UINT width = rc.right - rc.left;
@@ -61,42 +67,58 @@ namespace GraphicsModule {
 		CBChangeOnResize cbChangesOnResize;
 		//cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
 		cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f));
+#ifdef directX
 		g_pImmediateContext->UpdateSubresource(chor.buf, 0, NULL, &cbChangesOnResize, 0, 0);
+#endif
 	}
 
 	void DeviceContext::IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY pt)
 	{
+#ifdef directX
 		g_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+#endif
 	}
 
 	void DeviceContext::ClearRenderTargetView(RenderTargetView& rtv)
 	{
+#ifdef directX
 		g_pImmediateContext->ClearRenderTargetView(rtv.get, rtv.ClearColor);
+#endif
 	}
 
 
 	void DeviceContext::PSSetShaderResources(Textura* t)
 	{
+#ifdef directX
 		g_pImmediateContext->PSSetShaderResources(0, 1, &t->srv);
+#endif
 	}
 
 	void DeviceContext::OMSetRenderTargets(RenderTargetView& r, DepthStencil& d)
 	{
+#ifdef directX
 		g_pImmediateContext->OMSetRenderTargets(1, &r.get, d.view);
+#endif
 	}
 
 	void DeviceContext::ClearDepthStencilView(DepthStencil& d)
 	{
+#ifdef directX
 		g_pImmediateContext->ClearDepthStencilView(d.view, (D3D11_CLEAR_FLAG)CLEAR_FLAG::DEPTH, 1.0f, 0);
+#endif
 	}
 
 	void DeviceContext::UpdateSubresource(Buffer& b, const void* c) {
+#ifdef directX
 		g_pImmediateContext->UpdateSubresource(b.buf, 0, NULL, c, 0, 0);
+#endif
 	}
 
 	void DeviceContext::draw()
 	{
+#ifdef directX
 		g_pImmediateContext->DrawIndexed(36, 0, 0);
+#endif
 	}
 
 }
