@@ -14,28 +14,34 @@ namespace GraphicsModule {
 	}
 	HRESULT Device::CreateRenderTargetView(RenderTargetView& rtv)
 	{
+#ifdef directX
 		return g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, NULL, &rtv.get);
+#endif
 	}
 
 	void Device::CreateTexture2D(Textura& tx)
 	{
+#ifdef directX
 		g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
+#endif
 	}
 
 	void Device::CreateDepthStencilView(DepthStencil& ds)
 	{
+#ifdef directX
 		g_pd3dDevice->CreateDepthStencilView(ds.textur.get, &ds.des, &ds.view);
+#endif
 	}
 
 	
-
+#ifdef directX
 	HRESULT Device::CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader)
 	{
 		pVSBlob = pPSBlob;
 		return g_pd3dDevice->CreateVertexShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, vertexshader);
 	}
-
-	HRESULT Device::CreateInputLayout()
+#endif
+	/*HRESULT Device::CreateInputLayout()
 	{
 		g_pVertexLayout = NULL;
 		D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -48,16 +54,17 @@ namespace GraphicsModule {
 			pVSBlob->GetBufferSize(), &g_pVertexLayout);
 		pVSBlob->Release();
 		return r;
-	}
-
+	}//*/
+#ifdef directX
 	HRESULT Device::CreatePixelShader(ID3DBlob* pPSBlob, ID3D11PixelShader** pPixelShader)
 	{
 
 		HRESULT hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, pPixelShader);;
 		pPSBlob->Release();
 		return hr;
-	}
 
+	}
+#endif
 	
 
 	

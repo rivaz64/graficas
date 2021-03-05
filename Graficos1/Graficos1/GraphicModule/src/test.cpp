@@ -121,7 +121,9 @@ namespace GraphicsModule
           return hr;
       }
 
+#ifdef directX
       hr = man->getDevice()->CreateVertexShader(pVSBlob, &g_pVertexShader);
+#endif
       if (FAILED(hr))
       {
           pVSBlob->Release();
@@ -137,8 +139,10 @@ namespace GraphicsModule
       UINT numElements = ARRAYSIZE(layout);
 
       // Create the input layout
+#ifdef directX
       hr = man->getDevice()->get()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
           pVSBlob->GetBufferSize(), &g_pVertexLayout);
+#endif
       pVSBlob->Release();
       if (FAILED(hr))
           return hr;
@@ -154,7 +158,9 @@ namespace GraphicsModule
       }
 
       // Create the vertex shader
+#ifdef directX
       hr = man->getDevice()->CreateVertexShader(pVSBlob2, &g_pVertexShader2);
+#endif
       if (FAILED(hr))
       {
           pVSBlob2->Release();
@@ -170,8 +176,11 @@ namespace GraphicsModule
       UINT numElements2 = ARRAYSIZE(layout2);
 
       // Create the input layout
+#ifdef directX
       hr = man->getDevice()->get()->CreateInputLayout(layout2, numElements2, pVSBlob2->GetBufferPointer(),
+
           pVSBlob2->GetBufferSize(), &g_pVertexLayout2);
+#endif
       pVSBlob2->Release();
       if (FAILED(hr))
           return hr;
@@ -187,7 +196,9 @@ namespace GraphicsModule
       }
 
       // Create the pixel shader
+#ifdef directX
       hr = man->getDevice()->CreatePixelShader(pPSBlob, &g_pPixelShader);
+#endif
       pPSBlob->Release();
       if (FAILED(hr))
           return hr;
@@ -203,7 +214,9 @@ namespace GraphicsModule
       }
 
       // Create the pixel shader
+#ifdef directX
       hr = man->getDevice()->CreatePixelShader(pPSBlob2, &g_pPixelShader2);
+#endif
       pPSBlob2->Release();
       if (FAILED(hr))
           return hr;
@@ -316,6 +329,7 @@ namespace GraphicsModule
           return hr;
 
       // Create the sample state
+#ifdef directX
       D3D11_SAMPLER_DESC sampDesc;
       ZeroMemory(&sampDesc, sizeof(sampDesc));
       sampDesc.Filter = (D3D11_FILTER)FILTER::COMPARISON_MIN_MAG_MIP_LINEAR;
@@ -326,6 +340,7 @@ namespace GraphicsModule
       sampDesc.MinLOD = 0;
       sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
       hr = hr = man->getDevice()->get()->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
+#endif
       if (FAILED(hr))
           return hr;
 
@@ -352,6 +367,7 @@ namespace GraphicsModule
 
 
       // create rasterizer state
+#ifdef directX
       D3D11_RASTERIZER_DESC desc;
       ZeroMemory(&desc, sizeof(desc));
       desc.CullMode = D3D11_CULL_BACK;
@@ -364,6 +380,7 @@ namespace GraphicsModule
       hr = hr = man->getDevice()->get()->CreateRasterizerState(&desc, &g_Rasterizer2);
       if (FAILED(hr))
           return hr;
+#endif
       //Para ka textura nueva
       rtv2.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
       man->getDevice()->CreateTexture2D(rtv2.textur);
@@ -511,6 +528,7 @@ namespace GraphicsModule
     // Render the cube
     //
     // Set the input layout
+#ifdef directX
     man->getConext()->get()->IASetInputLayout(g_pVertexLayout);
     man->getConext()->get()->RSSetState(g_Rasterizer);
     
@@ -520,6 +538,7 @@ namespace GraphicsModule
     man->getConext()->get()->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->get()->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
+#endif
     man->getConext()->OMSetRenderTargets( rtv2, depstencil);
     man->draw(cubo, changeveryFrameB);
     cubo0.setTexture(rtv2);

@@ -14,6 +14,10 @@ namespace GraphicsModule {
 	class Device
 	{
 #ifdef directX
+	public:
+		HRESULT CreatePixelShader(ID3DBlob* pPSBlob, ID3D11PixelShader** pPixelShader);
+		HRESULT CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader);
+	private:
 		ID3D11Device* g_pd3dDevice = NULL;
 #endif
 	public:
@@ -44,11 +48,10 @@ namespace GraphicsModule {
 		HRESULT CreateRenderTargetView( RenderTargetView& rtv);
 		void CreateTexture2D(Textura& tx);
 		void CreateDepthStencilView(DepthStencil& ds);
-		HRESULT CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader);
-		HRESULT CreateInputLayout();
-		HRESULT CreatePixelShader(ID3DBlob* pPSBlob, ID3D11PixelShader** pPixelShader);
 		
-		void setmesh(mesh* m);
+		//HRESULT CreateInputLayout();
+		
+		
 		void CreateShaderResourceViewFromFile(LPCSTR file);
 		void CreateShaderResourceView(RenderTargetView& rtv, D3D11_SHADER_RESOURCE_VIEW_DESC des);
 		HRESULT CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
