@@ -387,10 +387,9 @@ namespace GraphicsModule
       man->getDevice()->CreateShaderResourceView(rtv4, descViewRT);
       //man->getDevice()->g_pd3dDevice->CreateShaderResourceView(rtv2.textur.get, &descViewRT, &rtv2.srv);
       //CBNeverChanges cbNeverChanges;
-
-      man->CreateRenderTargetView(rtv2);
-      man->CreateRenderTargetView(rtv3);
-      man->CreateRenderTargetView(rtv4);
+      man->getDevice()->CreateRenderTargetView(rtv2);
+      man->getDevice()->CreateRenderTargetView(rtv3);
+      man->getDevice()->CreateRenderTargetView(rtv4);
       cubo1.tx = new Textura;
       cubo2.tx = new Textura;
       /*rtv.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });

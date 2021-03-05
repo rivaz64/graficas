@@ -39,7 +39,8 @@ namespace GraphicsModule {
 	{
 		Textura pBackBuffer;
 		eswap.GetBuffer(pBackBuffer);
-		dev.CreateRenderTargetView(pBackBuffer, rtv);
+		rtv.textur = pBackBuffer;
+		dev.CreateRenderTargetView(rtv);
 		pBackBuffer.get->Release();
 	}
 
@@ -59,10 +60,7 @@ namespace GraphicsModule {
 		devcon.g_pImmediateContext->RSSetViewports(1, &v);
 	}
 
-	void manager::CreateRenderTargetView(RenderTargetView& t)
-	{
-		dev.g_pd3dDevice->CreateRenderTargetView(t.textur.get, NULL, &t.get);
-	}
+	
 
 	void manager::draw(objeto o,Buffer& changeveryFrameB)
 	{

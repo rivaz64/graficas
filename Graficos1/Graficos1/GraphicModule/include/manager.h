@@ -44,7 +44,6 @@ namespace GraphicsModule {
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);
         void createrendertarget(RenderTargetView& rtv);
         void RSSetViewports(Viewport& vp);
-        void CreateRenderTargetView(RenderTargetView& t);
         void draw(objeto o,  Buffer& changeveryFrameB);
     };
     extern manager* getmanager();

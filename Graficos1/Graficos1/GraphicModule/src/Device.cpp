@@ -12,9 +12,9 @@ namespace GraphicsModule {
 		height = rc.bottom - rc.top;
 		return S_OK;
 	}
-	HRESULT Device::CreateRenderTargetView(Textura& textura,RenderTargetView& rtv)
+	HRESULT Device::CreateRenderTargetView(RenderTargetView& rtv)
 	{
-		return g_pd3dDevice->CreateRenderTargetView(textura.get, NULL, &rtv.get);
+		return g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, NULL, &rtv.get);
 	}
 
 	void Device::CreateTexture2D(Textura& tx)
