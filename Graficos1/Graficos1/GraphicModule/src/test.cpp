@@ -3,6 +3,7 @@
 
 namespace GraphicsModule
 {
+#ifdef directX
   HRESULT test::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
   {
     HRESULT hr = S_OK;
@@ -30,7 +31,7 @@ namespace GraphicsModule
 
     return S_OK;
   }
-
+#endif
   HRESULT test::InitDevice(HWND _hwnd)
   {
       m_hwnd = _hwnd;
@@ -110,7 +111,7 @@ namespace GraphicsModule
       vp.TopLeftY = 0;
       //man->getConext()->RSSetViewports(vp);
       man->RSSetViewports(vp);
-
+#ifdef directX
       // Compile the vertex shader
       ID3DBlob* pVSBlob = NULL;
       hr = CompileShaderFromFile("Tutorial07.fx", "VS", "vs_4_0", &pVSBlob);
@@ -121,9 +122,9 @@ namespace GraphicsModule
           return hr;
       }
 
-#ifdef directX
+
       hr = man->getDevice()->CreateVertexShader(pVSBlob, &g_pVertexShader);
-#endif
+
       if (FAILED(hr))
       {
           pVSBlob->Release();
@@ -139,10 +140,10 @@ namespace GraphicsModule
       UINT numElements = ARRAYSIZE(layout);
 
       // Create the input layout
-#ifdef directX
+
       hr = man->getDevice()->get()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
           pVSBlob->GetBufferSize(), &g_pVertexLayout);
-#endif
+
       pVSBlob->Release();
       if (FAILED(hr))
           return hr;
@@ -158,7 +159,7 @@ namespace GraphicsModule
       }
 
       // Create the vertex shader
-#ifdef directX
+
       hr = man->getDevice()->CreateVertexShader(pVSBlob2, &g_pVertexShader2);
 #endif
       if (FAILED(hr))
@@ -180,7 +181,7 @@ namespace GraphicsModule
       hr = man->getDevice()->get()->CreateInputLayout(layout2, numElements2, pVSBlob2->GetBufferPointer(),
 
           pVSBlob2->GetBufferSize(), &g_pVertexLayout2);
-#endif
+
       pVSBlob2->Release();
       if (FAILED(hr))
           return hr;
@@ -196,9 +197,9 @@ namespace GraphicsModule
       }
 
       // Create the pixel shader
-#ifdef directX
+
       hr = man->getDevice()->CreatePixelShader(pPSBlob, &g_pPixelShader);
-#endif
+
       pPSBlob->Release();
       if (FAILED(hr))
           return hr;
@@ -214,13 +215,13 @@ namespace GraphicsModule
       }
 
       // Create the pixel shader
-#ifdef directX
+
       hr = man->getDevice()->CreatePixelShader(pPSBlob2, &g_pPixelShader2);
-#endif
+
       pPSBlob2->Release();
       if (FAILED(hr))
           return hr;
-
+#endif
       // Create vertex buffer
 
       cubito.setvertex(
@@ -345,7 +346,7 @@ namespace GraphicsModule
           return hr;
 
       // Initialize the world matrices
-      g_World = XMMatrixIdentity();
+      //g_World = XMMatrixIdentity();
 
       // Initialize the view matrix
       XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
