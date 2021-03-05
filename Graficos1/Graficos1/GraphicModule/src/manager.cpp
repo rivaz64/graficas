@@ -57,6 +57,7 @@ namespace GraphicsModule {
 		v.MaxDepth = vp.MaxDepth;
 		v.TopLeftX = vp.TopLeftX;
 		v.TopLeftY = vp.TopLeftY;
+
 		devcon.g_pImmediateContext->RSSetViewports(1, &v);
 	}
 
@@ -72,7 +73,7 @@ namespace GraphicsModule {
 		g_World = XMMatrixTranslation(o.posi.x, o.posi.y, o.posi.z);
 		cb.mWorld = XMMatrixTranspose(g_World);
 		cb.vMeshColor = o.color;
-		devcon.g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);
+		devcon.UpdateSubresource(changeveryFrameB, &cb);
 		
 		devcon.draw();//*/
 	}
