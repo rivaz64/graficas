@@ -28,7 +28,7 @@ namespace GraphicsModule {
 #endif
 		float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
 		XMFLOAT4 g_vMeshColor = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
-		void RSSetViewports(UINT width, UINT height);
+		void RSSetViewports(Viewport& vp);
 		void IASetVertexBuffers(Buffer* b);
 		void IASetIndexBuffer(Buffer* b);
 		void UpdateView(camera* cam);
