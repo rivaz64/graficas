@@ -17,6 +17,16 @@ namespace GraphicsModule {
 		return g_pd3dDevice->CreateRenderTargetView(textura.get, NULL, &rtv.get);
 	}
 
+	void Device::CreateTexture2D(Textura& tx)
+	{
+		g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
+	}
+
+	void Device::CreateDepthStencilView(DepthStencil& ds)
+	{
+		g_pd3dDevice->CreateDepthStencilView(ds.textur.get, &ds.des, &ds.view);
+	}
+
 	
 
 	HRESULT Device::CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader)

@@ -43,15 +43,7 @@ namespace GraphicsModule {
 		pBackBuffer.get->Release();
 	}
 
-	void manager::CreateTexture2D(Textura& tx)
-	{
-		dev.g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
-	}
-
-	void manager::CreateDepthStencilView(DepthStencil& ds)
-	{
-		dev.g_pd3dDevice->CreateDepthStencilView(ds.textur.get, &ds.des, &ds.view);
-	}
+	
 
 	void manager::OMSetRenderTargets(RenderTargetView& rtv, DepthStencil& ds)
 	{

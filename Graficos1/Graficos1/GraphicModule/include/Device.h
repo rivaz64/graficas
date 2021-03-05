@@ -9,6 +9,7 @@
 #include"viewport.h"
 #include"Textura.h"
 #include"RenderTargetView.h"
+#include "DepthStencil.h"
 namespace GraphicsModule {
 	class Device
 	{
@@ -42,7 +43,8 @@ namespace GraphicsModule {
 		HRESULT create(HWND g_hWnd);
 		HRESULT CreateRenderTargetView(Textura& textura, RenderTargetView& rtv);
 		HRESULT CreateTexture2D();
-		HRESULT CreateDepthStencilView();
+		void CreateTexture2D(Textura& tx);
+		void CreateDepthStencilView(DepthStencil& ds);
 		HRESULT CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader);
 		HRESULT CreateInputLayout();
 		HRESULT CreatePixelShader(ID3DBlob* pPSBlob, ID3D11PixelShader** pPixelShader);

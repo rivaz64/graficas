@@ -43,8 +43,6 @@ namespace GraphicsModule {
         void descrivesch();
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);
         void createrendertarget(RenderTargetView& rtv);
-        void CreateTexture2D(Textura& tx);
-        void CreateDepthStencilView(DepthStencil& ds);
         void OMSetRenderTargets(RenderTargetView& rtv, DepthStencil& ds);
         void RSSetViewports(Viewport& vp);
         void CreateRenderTargetView(RenderTargetView& t);

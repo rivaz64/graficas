@@ -87,12 +87,12 @@ namespace GraphicsModule
           return hr;
       // Create depth stencil texture
       depstencil.descrivetextur();
-      man->CreateTexture2D(depstencil.textur);
+      man->getDevice()->CreateTexture2D(depstencil.textur);
 
 
       // Create the depth stencil view
       depstencil.describeview();
-      man->CreateDepthStencilView(depstencil);
+      man->getDevice()->CreateDepthStencilView(depstencil);
 
 
 
@@ -366,11 +366,11 @@ namespace GraphicsModule
           return hr;
       //Para ka textura nueva
       rtv2.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
-      man->CreateTexture2D(rtv2.textur);
+      man->getDevice()->CreateTexture2D(rtv2.textur);
       rtv3.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
-      man->CreateTexture2D(rtv3.textur);
+      man->getDevice()->CreateTexture2D(rtv3.textur);
       rtv4.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
-      man->CreateTexture2D(rtv4.textur);
+      man->getDevice()->CreateTexture2D(rtv4.textur);
       if (FAILED(hr))
           return hr;
 
