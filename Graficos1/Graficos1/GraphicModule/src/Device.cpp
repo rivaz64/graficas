@@ -89,33 +89,27 @@ namespace GraphicsModule {
 		g_pd3dDevice->CreateShaderResourceView(rtv.textur.get, &des, &rtv.srv);
 	}
 
-	HRESULT Device::CreateSamplerState()
-	{
-
-		D3D11_SAMPLER_DESC sampDesc;
-		ZeroMemory(&sampDesc, sizeof(sampDesc));
-		sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-		sampDesc.MinLOD = 0;
-		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-		return g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);;
-	}
+	
 
 	HRESULT Device::CreateBuffer(D3D11_BUFFER_DESC& bd, D3D11_SUBRESOURCE_DATA& InitData, Buffer& b)
 	{
+
+#ifdef directX
 		return g_pd3dDevice->CreateBuffer(&bd, &InitData, &b.buf);
+#endif // directX
+		
 	}
 
 	void Device::CreateBuffer(D3D11_BUFFER_DESC& bd, Buffer& b)
 	{
+#ifdef directX
 		g_pd3dDevice->CreateBuffer(&bd, NULL, &b.buf);
+#endif // directX
+
+		
 	}
 
 	
-
 	Device::~Device()
 	{
 		/*delete g_pd3dDevice;
