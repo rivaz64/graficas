@@ -12,10 +12,10 @@ namespace GraphicsModule {
 		height = rc.bottom - rc.top;
 		return S_OK;
 	}
-	HRESULT Device::CreateRenderTargetView(RenderTargetView& rtv)
+	void Device::CreateRenderTargetView(RenderTargetView& rtv)
 	{
 #ifdef directX
-		return g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, NULL, &rtv.get);
+		 g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, NULL, &rtv.get);
 #endif
 	}
 

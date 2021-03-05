@@ -45,7 +45,7 @@ namespace GraphicsModule {
 		HWND g_hWndM;
 		UINT width, height;
 		HRESULT create(HWND g_hWnd);
-		HRESULT CreateRenderTargetView( RenderTargetView& rtv);
+		void CreateRenderTargetView( RenderTargetView& rtv);
 		void CreateTexture2D(Textura& tx);
 		void CreateDepthStencilView(DepthStencil& ds);
 		
