@@ -85,11 +85,11 @@ namespace GraphicsModule {
 
 	
 
-	HRESULT Device::CreateBuffer(D3D11_BUFFER_DESC& bd, D3D11_SUBRESOURCE_DATA& InitData, Buffer& b)
+	void Device::CreateBuffer(D3D11_BUFFER_DESC& bd, D3D11_SUBRESOURCE_DATA& InitData, Buffer& b)
 	{
 
 #ifdef directX
-		return g_pd3dDevice->CreateBuffer(&bd, &InitData, &b.buf);
+		 g_pd3dDevice->CreateBuffer(&bd, &InitData, &b.buf);
 #endif // directX
 		
 	}
