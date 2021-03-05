@@ -96,7 +96,7 @@ namespace GraphicsModule
 
 
 
-      man->OMSetRenderTargets(rtv, depstencil);
+      man->getConext()->OMSetRenderTargets(rtv, depstencil);
       //g_pDepthStencilView = depstencil.view;
       //g_pDepthStencil = depstencil.textur.get;
       //Setup the viewport

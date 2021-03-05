@@ -45,10 +45,7 @@ namespace GraphicsModule {
 
 	
 
-	void manager::OMSetRenderTargets(RenderTargetView& rtv, DepthStencil& ds)
-	{
-		devcon.g_pImmediateContext->OMSetRenderTargets(1, &rtv.get, ds.view);
-	}
+	
 
 	void manager::RSSetViewports(Viewport& vp)
 	{
