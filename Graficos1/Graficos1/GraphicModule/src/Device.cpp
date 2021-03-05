@@ -12,41 +12,12 @@ namespace GraphicsModule {
 		height = rc.bottom - rc.top;
 		return S_OK;
 	}
-	HRESULT Device::CreateRenderTargetView(ID3D11Texture2D* textura)
+	HRESULT Device::CreateRenderTargetView(Textura& textura,RenderTargetView& rtv)
 	{
-		return g_pd3dDevice->CreateRenderTargetView(textura, NULL, &g_pRenderTargetView);
+		return g_pd3dDevice->CreateRenderTargetView(textura.get, NULL, &rtv.get);
 	}
 
-	HRESULT Device::CreateTexture2D()
-	{
-		return S_OK;
-		/*ZeroMemory(&descDepth, sizeof(descDepth));
-		descDepth.Width = width;
-		descDepth.Height = height;
-		descDepth.MipLevels = 1;
-		descDepth.ArraySize = 1;
-		descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		descDepth.SampleDesc.Count = 1;
-		descDepth.SampleDesc.Quality = 0;
-		descDepth.Usage = D3D11_USAGE_DEFAULT;
-		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-		descDepth.CPUAccessFlags = 0;
-		descDepth.MiscFlags = 0;
-		return g_pd3dDevice->CreateTexture2D(&descDepth, NULL, &depstencil.get);*/
-	}
-
-	HRESULT Device::CreateDepthStencilView()
-	{
-
-		/*D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-		ZeroMemory(&descDSV, sizeof(descDSV));
-		descDSV.Format = descDepth.Format;
-		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-		descDSV.Texture2D.MipSlice = 0;
-		DepthStencilView = NULL;
-		return g_pd3dDevice->CreateDepthStencilView(depstencil.get, &descDSV, &DepthStencilView);*/
-		return S_OK;
-	}
+	
 
 	HRESULT Device::CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader)
 	{

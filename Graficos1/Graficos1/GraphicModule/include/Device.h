@@ -40,7 +40,7 @@ namespace GraphicsModule {
 		HWND g_hWndM;
 		UINT width, height;
 		HRESULT create(HWND g_hWnd);
-		HRESULT CreateRenderTargetView(ID3D11Texture2D* idTextura);
+		HRESULT CreateRenderTargetView(Textura& textura, RenderTargetView& rtv);
 		HRESULT CreateTexture2D();
 		HRESULT CreateDepthStencilView();
 		HRESULT CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader);

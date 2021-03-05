@@ -39,8 +39,7 @@ namespace GraphicsModule {
 	{
 		Textura pBackBuffer;
 		eswap.GetBuffer(pBackBuffer);
-		
-		dev.g_pd3dDevice->CreateRenderTargetView(pBackBuffer.get, NULL, &rtv.get);
+		dev.CreateRenderTargetView(pBackBuffer, rtv);
 		pBackBuffer.get->Release();
 	}
 
