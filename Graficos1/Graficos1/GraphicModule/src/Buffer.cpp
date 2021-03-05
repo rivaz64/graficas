@@ -2,8 +2,12 @@
 namespace GraphicsModule {
 	Buffer::~Buffer()
 	{
-		if(buf)
-		buf->Release();
+#ifdef directX
+		if (buf)
+			buf->Release();
+#endif // directX
+
+		
 	}
 
 }

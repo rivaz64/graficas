@@ -4,6 +4,7 @@
 namespace GraphicsModule {
     void Textura::describe(FORMAT f, BIND_FLAG bf)
     {
+#ifdef directX
         ZeroMemory(&des, sizeof(des));
         des.Width = getmanager()->width;
         des.Height = getmanager()->height;
@@ -16,11 +17,19 @@ namespace GraphicsModule {
         des.BindFlags = (D3D11_BIND_FLAG)bf | (D3D11_BIND_FLAG)BIND_FLAG::SHADER_RESOURCE;
         des.CPUAccessFlags = 0;
         des.MiscFlags = 0;
+#endif
     }
     void Textura::loadfromfile(LPCSTR f)
     {
 #ifdef directX
         D3DX11CreateShaderResourceViewFromFile(getmanager()->getDevice()->get(), f, NULL, NULL, &srv, NULL);
+#endif
+    }
+
+    void Textura::release()
+    {
+#ifdef directX
+        get->Release();
 #endif
     }
     

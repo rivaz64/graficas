@@ -41,7 +41,7 @@ namespace GraphicsModule {
 		eswap.GetBuffer(pBackBuffer);
 		rtv.textur = pBackBuffer;
 		dev.CreateRenderTargetView(rtv);
-		pBackBuffer.get->Release();
+		pBackBuffer.release();
 	}
 
 	

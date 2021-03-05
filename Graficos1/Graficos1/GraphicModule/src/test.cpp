@@ -559,8 +559,9 @@ namespace GraphicsModule
     man->draw(cubo0, changeveryFrameB);
     man->draw(cubo1, changeveryFrameB);
     man->draw(cubo2, changeveryFrameB);
-    
+#ifdef directX
     UI();
+#endif
     man->getSwapchain()->Present();
   }
 

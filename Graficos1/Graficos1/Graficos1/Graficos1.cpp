@@ -142,7 +142,9 @@ void UIRender()
 
   // render UI
   ImGui::Render();
+#ifdef directX
   ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+#endif
 }
 
 /**

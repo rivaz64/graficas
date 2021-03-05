@@ -12,12 +12,14 @@ namespace GraphicsModule {
 	{
 		
 	public:
+#ifdef directX
 		D3D11_TEXTURE2D_DESC des;
 		ID3D11Texture2D* get;
 		ID3D11ShaderResourceView* srv;
+		#endif
 		void describe(FORMAT f, BIND_FLAG bf);
 		void loadfromfile(LPCSTR f);
-		
+		void release();
 	};
 }
 

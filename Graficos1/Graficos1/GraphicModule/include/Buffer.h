@@ -7,8 +7,16 @@ namespace GraphicsModule {
     class Buffer
     {
     public:
+#ifdef directX
         ID3D11Buffer* buf = NULL;
+#endif // directX
+
+    public:
+#ifdef directX
         ID3D11Buffer* get() { return buf; };
+#else
+        void get() {  };
+#endif
         ~Buffer();
     };
 }
