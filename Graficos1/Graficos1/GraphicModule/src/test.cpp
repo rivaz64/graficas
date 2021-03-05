@@ -78,7 +78,7 @@ namespace GraphicsModule
       if (FAILED(hr))
           return hr;
       //RenderTargetView rtv;
-      rtv.get = NULL;
+      
       man->createrendertarget(rtv);
 
 

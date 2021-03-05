@@ -10,9 +10,11 @@ namespace GraphicsModule {
 	class RenderTargetView
 	{
 	public:
+#ifdef directX
 		ID3D11RenderTargetView* get = NULL;
-		Textura textur;
 		ID3D11ShaderResourceView* srv = NULL;
+#endif
+		Textura textur;
 		float ClearColor[4]= { 0.0f, 0.125f, 0.3f, 1.0f };
 		void setClearColor(std::initializer_list<float> c);
 		void release();
