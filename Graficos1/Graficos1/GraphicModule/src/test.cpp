@@ -108,7 +108,7 @@ namespace GraphicsModule
       vp.MaxDepth = 1.0f;
       vp.TopLeftX = 0;
       vp.TopLeftY = 0;
-
+      //man->getConext()->RSSetViewports(vp);
       man->RSSetViewports(vp);
 
       // Compile the vertex shader

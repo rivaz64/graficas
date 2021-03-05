@@ -32,7 +32,7 @@ namespace GraphicsModule {
 		return D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)v_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
 			D3D11_SDK_VERSION, &sd, &eswap.g_pSwapChain, &dev.g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &devcon.g_pImmediateContext);
 #endif // directX
-
+		return S_FALSE;
 		
 	}
 	void manager::createrendertarget(RenderTargetView& rtv)
@@ -50,7 +50,7 @@ namespace GraphicsModule {
 
 	void manager::RSSetViewports(Viewport& vp)
 	{
-		
+#ifdef directX
 		v.Width = vp.Width;
 		v.Height = vp.Height;
 		v.MinDepth = vp.MinDepth;
@@ -59,6 +59,9 @@ namespace GraphicsModule {
 		v.TopLeftY = vp.TopLeftY;
 
 		devcon.g_pImmediateContext->RSSetViewports(1, &v);
+#endif // directX
+
+		
 	}
 
 	

@@ -7,8 +7,14 @@ namespace GraphicsModule {
 
 	void DeviceContext::RSSetViewports(Viewport& vp)
 	{
-		
-		g_pImmediateContext->RSSetViewports(1, (D3D11_VIEWPORT*)(&vp));
+		/*v.Width = vp.Width;
+		v.Height = vp.Height;
+		v.MinDepth = vp.MinDepth;
+		v.MaxDepth = vp.MaxDepth;
+		v.TopLeftX = vp.TopLeftX;
+		v.TopLeftY = vp.TopLeftY;
+
+		devcon.g_pImmediateContext->RSSetViewports(1, &v);*/
 	}
 
 	
