@@ -60,33 +60,20 @@ namespace GraphicsModule {
 
 	
 
-	void Device::setmesh(mesh* m)
-	{
-		ZeroMemory(&bd, sizeof(bd));
-		bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
-		bd.ByteWidth = sizeof(mesh::vertex) * 24;
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-		ZeroMemory(&InitData, sizeof(InitData));
-		InitData.pSysMem = m->getvertex();
-		g_pd3dDevice->CreateBuffer(&bd, &InitData, &vertexB.buf);
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(WORD) * 36;
-		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-		InitData.pSysMem = m->getindices();
-		g_pd3dDevice->CreateBuffer(&bd, &InitData, &indexB.buf);
-	}
+	
 
 	void Device::CreateShaderResourceViewFromFile(LPCSTR file)
 	{
+#ifdef directX
 		D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, file, NULL, NULL, &g_pTextureRV, NULL);
-
+#endif
 	}
 
 	void Device::CreateShaderResourceView(RenderTargetView& rtv, D3D11_SHADER_RESOURCE_VIEW_DESC des)
 	{
+#ifdef directX
 		g_pd3dDevice->CreateShaderResourceView(rtv.textur.get, &des, &rtv.srv);
+#endif
 	}
 
 	

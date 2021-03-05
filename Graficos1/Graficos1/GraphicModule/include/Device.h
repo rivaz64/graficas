@@ -51,7 +51,6 @@ namespace GraphicsModule {
 		void setmesh(mesh* m);
 		void CreateShaderResourceViewFromFile(LPCSTR file);
 		void CreateShaderResourceView(RenderTargetView& rtv, D3D11_SHADER_RESOURCE_VIEW_DESC des);
-		HRESULT CreateSamplerState();
 		HRESULT CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
 		void CreateBuffer(D3D11_BUFFER_DESC& bd, Buffer& b);
 		~Device();
