@@ -39,10 +39,12 @@ LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
   switch (_msg)
   {
   case WM_SIZE:
+#ifdef directX
       if (_wParam != SIZE_MINIMIZED && GraphicsModule::getmanager()->getSwapchain()->get()) {
          
           MiObj.rezise(_hwnd, _lParam);
       }
+#endif
     return 0;
     break;
 
@@ -119,8 +121,9 @@ HRESULT InitImgUI()
 
   // Setup Platform/Renderer back ends
   ImGui_ImplWin32_Init(g_hwnd);
+#ifdef directX
   ImGui_ImplDX11_Init(GraphicsModule::getmanager()->getDevice()->get(), GraphicsModule::getmanager()->getConext()->get());
-
+#endif
   return S_OK;
 }
 

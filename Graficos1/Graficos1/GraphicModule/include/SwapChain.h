@@ -5,6 +5,7 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		IDXGISwapChain* g_pSwapChain = NULL;
+		DXGI_SWAP_CHAIN_DESC sd;
 #endif
 	public:
 #ifdef directX
@@ -12,9 +13,10 @@ namespace GraphicsModule {
 #else
 		void get() {}
 #endif
-		DXGI_SWAP_CHAIN_DESC sd;
+		
 		ID3D11RenderTargetView* g_pRenderTargetView;
 		void rezise(LPARAM lparam, RenderTargetView& rtv);
+		void GetBuffer(Textura&t);
 		void Present();
 		friend class manager;
 	};

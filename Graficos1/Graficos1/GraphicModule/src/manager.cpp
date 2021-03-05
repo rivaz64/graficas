@@ -28,13 +28,17 @@ namespace GraphicsModule {
 
 	HRESULT manager::init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel)
 	{
+#ifdef directX
 		return D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)v_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
 			D3D11_SDK_VERSION, &sd, &eswap.g_pSwapChain, &dev.g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &devcon.g_pImmediateContext);
+#endif // directX
+
+		
 	}
 	void manager::createrendertarget(RenderTargetView& rtv)
 	{
 		Textura pBackBuffer;
-		eswap.g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer.get);
+		eswap.GetBuffer(pBackBuffer);
 		
 		dev.g_pd3dDevice->CreateRenderTargetView(pBackBuffer.get, NULL, &rtv.get);
 		pBackBuffer.get->Release();
