@@ -349,10 +349,10 @@ namespace GraphicsModule
       //g_World = XMMatrixIdentity();
 
       // Initialize the view matrix
-      XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
+      /*XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
       XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
       XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-      g_View = XMMatrixLookAtLH(Eye, At, Up);
+      g_View = XMMatrixLookAtLH(Eye, At, Up);*/
 
       CBNeverChanges cbNeverChanges;
       cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
@@ -360,10 +360,10 @@ namespace GraphicsModule
       man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
 
       // Initialize the projection matrix
-      g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
+      //g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
 
       CBChangeOnResize cbChangesOnResize;
-      cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
+      cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(width, width / (FLOAT)height, 0.01f, 100.0f));
       man->getConext()->UpdateSubresource(changesOnReziseB,&cbChangesOnResize);
 
 
