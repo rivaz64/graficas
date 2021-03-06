@@ -1,5 +1,6 @@
 #pragma once
 #include"Device.h"
+#include"viewport.h"
 namespace GraphicsModule {
 	class SwapChain
 	{
@@ -15,7 +16,7 @@ namespace GraphicsModule {
 #endif
 		
 		ID3D11RenderTargetView* g_pRenderTargetView;
-		void rezise(LPARAM lparam, RenderTargetView& rtv);
+		void rezise(LPARAM lparam, RenderTargetView& rtv,bool main);
 		void GetBuffer(Textura&t);
 		void Present();
 		friend class manager;

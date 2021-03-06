@@ -546,7 +546,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
         case WM_SIZE:
             if (wParam != SIZE_MINIMIZED && v_device) {
                 v_swapChain->rezise(lParam);
-                v_deviceContext->resizewindow(cam, g_hWnd);
+                //v_deviceContext->resizewindow(cam, g_hWnd);
             }
             break;
         case WM_DESTROY:

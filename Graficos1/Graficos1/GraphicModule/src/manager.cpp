@@ -43,7 +43,7 @@ namespace GraphicsModule {
 		dev.CreateRenderTargetView(rtv);
 		pBackBuffer.release();
 	}
-
+	
 	
 
 	
@@ -79,6 +79,27 @@ namespace GraphicsModule {
 		devcon.UpdateSubresource(changeveryFrameB, &cb);
 		
 		devcon.draw();//*/
+	}
+
+	void manager::setrenderfortextur(RenderTargetView& rtv)
+	{
+		if (rtv.get) {
+			rtv.release();
+		}
+		if (rtv.textur.get) {
+			rtv.textur.release();
+		}
+		rtv.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
+		dev.CreateTexture2D(rtv.textur);
+		D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
+		ZeroMemory(&descViewRT, sizeof(descViewRT));
+		descViewRT.Format = (DXGI_FORMAT)FORMAT::R8G8B8A8_UNORM;
+		//si algo sale mal revisar esta flag v
+		descViewRT.ViewDimension = (D3D_SRV_DIMENSION)DIMENSION::TEXTURE2DARRAY;
+		descViewRT.Texture2D.MostDetailedMip = 0;
+		descViewRT.Texture2D.MipLevels = 1;
+		dev.CreateShaderResourceView(rtv, descViewRT);
+		dev.CreateRenderTargetView(rtv);
 	}
 	
 	manager* getmanager()

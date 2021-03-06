@@ -45,6 +45,7 @@ namespace GraphicsModule {
         void createrendertarget(RenderTargetView& rtv);
         void RSSetViewports(Viewport& vp);
         void draw(objeto o,  Buffer& changeveryFrameB);
+        void setrenderfortextur(RenderTargetView& rtv);
     };
     extern manager* getmanager();
 }

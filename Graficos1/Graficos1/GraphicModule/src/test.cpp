@@ -70,9 +70,7 @@ namespace GraphicsModule
       for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
       {
           g_driverType = driverTypes[driverTypeIndex];
-          /*hr = D3D11CreateDeviceAndSwapChain(NULL, (D3D_DRIVER_TYPE)g_driverType, NULL, createDeviceFlags, (D3D_FEATURE_LEVEL*)featureLevels, numFeatureLevels,
-              D3D11_SDK_VERSION, &v_swapchain.sd, &g_pSwapChain, &g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &g_pImmediateContext);
-          if (SUCCEEDED(hr))*/
+          
           hr = man->init(g_driverType, createDeviceFlags, featureLevels, numFeatureLevels, g_featureLevel);
           break;
       }
@@ -161,7 +159,7 @@ namespace GraphicsModule
       // Create the vertex shader
 
       hr = man->getDevice()->CreateVertexShader(pVSBlob2, &g_pVertexShader2);
-#endif
+
       if (FAILED(hr))
       {
           pVSBlob2->Release();
@@ -177,7 +175,7 @@ namespace GraphicsModule
       UINT numElements2 = ARRAYSIZE(layout2);
 
       // Create the input layout
-#ifdef directX
+
       hr = man->getDevice()->get()->CreateInputLayout(layout2, numElements2, pVSBlob2->GetBufferPointer(),
 
           pVSBlob2->GetBufferSize(), &g_pVertexLayout2);
@@ -383,16 +381,15 @@ namespace GraphicsModule
           return hr;
 #endif
       //Para ka textura nueva
-      rtv2.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
+      man->setrenderfortextur(rtv2);
+      man->setrenderfortextur(rtv3);
+      man->setrenderfortextur(rtv4);
+      /*rtv2.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
       man->getDevice()->CreateTexture2D(rtv2.textur);
       rtv3.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
       man->getDevice()->CreateTexture2D(rtv3.textur);
       rtv4.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
       man->getDevice()->CreateTexture2D(rtv4.textur);
-      if (FAILED(hr))
-          return hr;
-
-      // create the rt Shader resource view
       D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
       ZeroMemory(&descViewRT, sizeof(descViewRT));
       descViewRT.Format = (DXGI_FORMAT)FORMAT::R8G8B8A8_UNORM;
@@ -403,11 +400,16 @@ namespace GraphicsModule
       man->getDevice()->CreateShaderResourceView(rtv2, descViewRT);
       man->getDevice()->CreateShaderResourceView(rtv3, descViewRT);
       man->getDevice()->CreateShaderResourceView(rtv4, descViewRT);
-      //man->getDevice()->g_pd3dDevice->CreateShaderResourceView(rtv2.textur.get, &descViewRT, &rtv2.srv);
-      //CBNeverChanges cbNeverChanges;
       man->getDevice()->CreateRenderTargetView(rtv2);
       man->getDevice()->CreateRenderTargetView(rtv3);
-      man->getDevice()->CreateRenderTargetView(rtv4);
+      man->getDevice()->CreateRenderTargetView(rtv4);//*/
+      if (FAILED(hr))
+          return hr;
+
+      // create the rt Shader resource view
+      
+      
+      
       cubo1.tx = new Textura;
       cubo2.tx = new Textura;
       /*rtv.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });
@@ -418,8 +420,10 @@ namespace GraphicsModule
   }
   void test::rezise(HWND& _hwnd, LPARAM _lParam)
   {
-      man->getSwapchain()->rezise(_lParam, rtv);
+      man->getSwapchain()->rezise(_lParam, rtv,true);
+      
       man->getConext()->resizewindow(cam, _hwnd, rtv,changesOnReziseB);
+      man->setrenderfortextur(rtv2);
   }
   void test::Update() {
       static float t = 0.0f;
@@ -435,7 +439,7 @@ namespace GraphicsModule
               dwTimeStart = dwTimeCur;
           t = (dwTimeCur - dwTimeStart) / 1000.0f;
       }
-      g_World = XMMatrixRotationY(t);
+      //g_World = XMMatrixRotationY(t);
       LPPOINT p = new POINT;
       if ((GetKeyState(VK_LBUTTON) & 0x100) != 0) {
           GetCursorPos(p);
@@ -540,6 +544,7 @@ namespace GraphicsModule
     man->getConext()->get()->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
 #endif
+
     man->getConext()->OMSetRenderTargets( rtv2, depstencil);
     man->draw(cubo, changeveryFrameB);
     cubo0.setTexture(rtv2);
@@ -559,7 +564,9 @@ namespace GraphicsModule
     man->draw(cubo, changeveryFrameB);
     man->draw(cubo0, changeveryFrameB);
     man->draw(cubo1, changeveryFrameB);
-    man->draw(cubo2, changeveryFrameB);
+    man->draw(cubo2, changeveryFrameB);//*/
+
+    
 #ifdef directX
     UI();
 #endif

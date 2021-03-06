@@ -5,13 +5,19 @@ namespace GraphicsModule {
 
 	
 
-	void SwapChain::rezise(LPARAM lParam,RenderTargetView& rtv)
+	void SwapChain::rezise(LPARAM lParam,RenderTargetView& rtv, bool main)
 	{
 		rtv.release();
+		if (main) {
 #ifdef directX
 		g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam),(DXGI_FORMAT)FORMAT::UNKNOWN, 0);
 #endif
-		getmanager()->createrendertarget(rtv);
+		
+			getmanager()->createrendertarget(rtv);
+		}
+		else {
+			getmanager()->getDevice()->CreateRenderTargetView(rtv);
+		}
 	}
 
 	void SwapChain::GetBuffer(Textura& t)
