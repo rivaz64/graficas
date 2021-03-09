@@ -121,7 +121,7 @@ namespace GraphicsModule
       }
 
 
-      hr = man->getDevice()->CreateVertexShader(pVSBlob, &g_pVertexShader);
+      hr = man->getDevice()->CreateVertexShader(pVSBlob, &vrtxshdr.g_pVertexShader);
 
       if (FAILED(hr))
       {
@@ -538,7 +538,7 @@ namespace GraphicsModule
     man->getConext()->get()->IASetInputLayout(g_pVertexLayout);
     man->getConext()->get()->RSSetState(g_Rasterizer);
     
-    man->getConext()->get()->VSSetShader(g_pVertexShader, NULL, 0);
+    man->getConext()->get()->VSSetShader(vrtxshdr.g_pVertexShader, NULL, 0);
     man->getConext()->get()->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
     man->getConext()->get()->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
     man->getConext()->get()->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);

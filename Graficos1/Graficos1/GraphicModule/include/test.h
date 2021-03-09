@@ -54,7 +54,7 @@ namespace GraphicsModule
       DepthStencil depstencil;
       VertexShader vrtxshdr;
 #ifdef directX
-      ID3D11VertexShader* g_pVertexShader = NULL;
+      //ID3D11VertexShader* g_pVertexShader = NULL;
       ID3D11PixelShader* g_pPixelShader = NULL;
       ID3D11InputLayout* g_pVertexLayout = NULL;
 #endif

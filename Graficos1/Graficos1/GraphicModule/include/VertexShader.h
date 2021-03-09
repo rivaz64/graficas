@@ -7,17 +7,23 @@
 namespace GraphicsModule {
 	class VertexShader
 	{
+	public:
 #ifdef directX
 		ID3D11VertexShader* g_pVertexShader = NULL;
 #endif
-	public:
+	
 
 #ifdef directX
 		ID3D11VertexShader* get() { return g_pVertexShader; }
 #else
 		void get(){};
 #endif
-
+		~VertexShader() {
+			if (g_pVertexShader) {
+				g_pVertexShader->Release();
+			}
+			
+		}
 	};
 }
 
