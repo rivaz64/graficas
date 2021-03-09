@@ -17,7 +17,6 @@ namespace GraphicsModule {
 #ifdef directX
 	public:
 		HRESULT CreatePixelShader(ID3DBlob* pPSBlob, ID3D11PixelShader** pPixelShader);
-		HRESULT CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader);
 		HRESULT CreateVS(ID3DBlob* Blob, VertexShader& vs);
 	private:
 		ID3D11Device* g_pd3dDevice = NULL;

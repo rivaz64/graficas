@@ -35,11 +35,7 @@ namespace GraphicsModule {
 
 	
 #ifdef directX
-	HRESULT Device::CreateVertexShader(ID3DBlob* pPSBlob, ID3D11VertexShader** vertexshader)
-	{
-		pVSBlob = pPSBlob;
-		return g_pd3dDevice->CreateVertexShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, vertexshader);
-	}
+	
 	HRESULT Device::CreateVS(ID3DBlob* Blob, VertexShader& vs)
 	{
 		return g_pd3dDevice->CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize(), NULL, &vs.g_pVertexShader);

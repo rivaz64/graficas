@@ -39,6 +39,7 @@ namespace GraphicsModule {
 		void OMSetRenderTargets(RenderTargetView& r, DepthStencil& d);
 		void ClearDepthStencilView(DepthStencil& d);
 		void UpdateSubresource(Buffer& b, const void * c);
+		void VSSetShader(VertexShader& vs);
 		void draw();
 		friend class manager;
 		~DeviceContext();

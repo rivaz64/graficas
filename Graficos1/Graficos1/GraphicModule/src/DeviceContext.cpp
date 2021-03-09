@@ -114,6 +114,13 @@ namespace GraphicsModule {
 #endif
 	}
 
+	void DeviceContext::VSSetShader(VertexShader& vs)
+	{
+#ifdef directX
+		g_pImmediateContext->VSSetShader(vs.g_pVertexShader, NULL, 0);
+#endif
+	}
+
 	void DeviceContext::draw()
 	{
 #ifdef directX
