@@ -467,29 +467,30 @@ namespace GraphicsModule
       cubo2.color.x = .9;
       cubo2.color.y = .9;
       cubo2.color.z = .9;
+      float v = 6;
       if (GetKeyState('W') & 0x8000)
       {
-          cam->movez(1);
+          cam->movez(v);
       }
       if (GetKeyState('S') & 0x8000)
       {
-          cam->movez(-1);
+          cam->movez(-v);
       }
       if (GetKeyState('Q') & 0x8000)
       {
-          cam->movey(1);
+          cam->movey(v);
       }
       if (GetKeyState('A') & 0x8000)
       {
-          cam->movey(-1);
+          cam->movey(-v);
       }
       if (GetKeyState('X') & 0x8000)
       {
-          cam->movex(1);
+          cam->movex(v);
       }
       if (GetKeyState('Z') & 0x8000)
       {
-          cam->movex(-1);
+          cam->movex(-v);
       }
       CBNeverChanges cbNeverChanges;
       //man->getConext()->UpdateSubresource(cam);
