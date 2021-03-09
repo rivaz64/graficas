@@ -19,10 +19,11 @@ namespace GraphicsModule {
 		void get(){};
 #endif
 		~VertexShader() {
+#ifdef directX
 			if (g_pVertexShader) {
 				g_pVertexShader->Release();
 			}
-			
+#endif
 		}
 	};
 }
