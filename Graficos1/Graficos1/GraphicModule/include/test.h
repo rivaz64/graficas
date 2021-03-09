@@ -9,6 +9,7 @@
 #include"camera.h"
 #include"objeto.h"
 #include"VertexShader.h"
+#include"InputLayout.h"
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -53,6 +54,7 @@ namespace GraphicsModule
       objeto cubo2;
       DepthStencil depstencil;
       VertexShader vrtxshdr;
+      
 #ifdef directX
       //ID3D11VertexShader* g_pVertexShader = NULL;
       ID3D11PixelShader* g_pPixelShader = NULL;

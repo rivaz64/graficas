@@ -333,25 +333,6 @@ namespace GraphicsModule
       man->setrenderfortextur(rtv2);
       man->setrenderfortextur(rtv3);
       man->setrenderfortextur(rtv4);
-      /*rtv2.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
-      man->getDevice()->CreateTexture2D(rtv2.textur);
-      rtv3.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
-      man->getDevice()->CreateTexture2D(rtv3.textur);
-      rtv4.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
-      man->getDevice()->CreateTexture2D(rtv4.textur);
-      D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
-      ZeroMemory(&descViewRT, sizeof(descViewRT));
-      descViewRT.Format = (DXGI_FORMAT)FORMAT::R8G8B8A8_UNORM;
-      //si algo sale mal revisar esta flag v
-      descViewRT.ViewDimension = (D3D_SRV_DIMENSION)DIMENSION::TEXTURE2DARRAY;
-      descViewRT.Texture2D.MostDetailedMip = 0;
-      descViewRT.Texture2D.MipLevels = 1;
-      man->getDevice()->CreateShaderResourceView(rtv2, descViewRT);
-      man->getDevice()->CreateShaderResourceView(rtv3, descViewRT);
-      man->getDevice()->CreateShaderResourceView(rtv4, descViewRT);
-      man->getDevice()->CreateRenderTargetView(rtv2);
-      man->getDevice()->CreateRenderTargetView(rtv3);
-      man->getDevice()->CreateRenderTargetView(rtv4);//*/
       if (FAILED(hr))
           return hr;
 
