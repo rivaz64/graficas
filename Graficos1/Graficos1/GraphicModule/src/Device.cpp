@@ -106,10 +106,7 @@ namespace GraphicsModule {
 	
 	Device::~Device()
 	{
-		/*delete g_pd3dDevice;
-		delete g_pRenderTargetView;
-		delete (*deptstencil);
-		delete deptstencil;*/
+		g_pd3dDevice->Release();
 	}
 
 }

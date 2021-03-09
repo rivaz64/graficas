@@ -121,4 +121,9 @@ namespace GraphicsModule {
 #endif
 	}
 
+	DeviceContext::~DeviceContext()
+	{
+		g_pImmediateContext->Release();
+	}
+
 }

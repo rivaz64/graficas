@@ -34,5 +34,10 @@ namespace GraphicsModule {
 #endif
 	}
 
+	SwapChain::~SwapChain()
+	{
+		g_pSwapChain->Release();
+	}
+
 }
 

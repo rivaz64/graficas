@@ -41,6 +41,7 @@ namespace GraphicsModule {
 		void UpdateSubresource(Buffer& b, const void * c);
 		void draw();
 		friend class manager;
+		~DeviceContext();
 	};
 }
 

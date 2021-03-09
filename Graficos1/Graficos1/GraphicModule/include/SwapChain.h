@@ -19,6 +19,8 @@ namespace GraphicsModule {
 		void rezise(LPARAM lparam, RenderTargetView& rtv,bool main);
 		void GetBuffer(Textura&t);
 		void Present();
+		~SwapChain();
+			
 		friend class manager;
 	};
 }

@@ -17,6 +17,7 @@ namespace GraphicsModule {
 #else
 		void get(){};
 #endif
+
 	};
 }
 
