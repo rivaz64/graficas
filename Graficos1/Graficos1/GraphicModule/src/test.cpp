@@ -328,10 +328,6 @@ namespace GraphicsModule
       if (FAILED(hr))
           return hr;
 
-      desc.CullMode = D3D11_CULL_NONE;
-      hr = hr = man->getDevice()->get()->CreateRasterizerState(&desc, &g_Rasterizer2);
-      if (FAILED(hr))
-          return hr;
 #endif
       //Para ka textura nueva
       man->setrenderfortextur(rtv2);

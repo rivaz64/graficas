@@ -69,13 +69,8 @@ namespace GraphicsModule
       XMMATRIX                            g_View;
       XMMATRIX                            g_Projection;
       XMFLOAT4                            g_vMeshColor;
-      ID3D11Buffer* g_pVertexBuffer2 = NULL;
-      ID3D11Buffer* g_pIndexBuffer2 = NULL;
-      ID3D11VertexShader* g_pVertexShader2 = NULL;
-      ID3D11PixelShader* g_pPixelShader2 = NULL;
+      
       ID3D11RasterizerState* g_Rasterizer = NULL;
-      ID3D11RasterizerState* g_Rasterizer2 = NULL;
-      ID3D11InputLayout* g_pVertexLayout2 = NULL;
 #endif
   public:
 #ifdef directX
