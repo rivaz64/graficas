@@ -11,6 +11,7 @@
 #include"RenderTargetView.h"
 #include "DepthStencil.h"
 #include "VertexShader.h"
+#include"InputLayout.h"
 namespace GraphicsModule {
 	class Device
 	{
@@ -57,6 +58,7 @@ namespace GraphicsModule {
 		void CreateShaderResourceView(RenderTargetView& rtv, D3D11_SHADER_RESOURCE_VIEW_DESC des);
 		void CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
 		void CreateBuffer(D3D11_BUFFER_DESC& bd, Buffer& b);
+		void CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT n, ID3DBlob* blob, InputLayout& il);
 		~Device();
 		friend class manager;
 	};

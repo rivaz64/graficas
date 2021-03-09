@@ -138,9 +138,8 @@ namespace GraphicsModule
       UINT numElements = ARRAYSIZE(layout);
 
       // Create the input layout
-
-      hr = man->getDevice()->get()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
-          pVSBlob->GetBufferSize(), &intplyut.g_pVertexLayout);
+      man->getDevice()->CreateInputLayout(layout, numElements, pVSBlob, intplyut);
+      //hr = man->getDevice()->get()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),pVSBlob->GetBufferSize(), &intplyut.g_pVertexLayout);
 
       pVSBlob->Release();
       if (FAILED(hr))
