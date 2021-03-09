@@ -9,6 +9,7 @@
 #include"Textura.h"
 #include"RenderTargetView.h"
 #include"DepthStencil.h"
+#include"InputLayout.h"
 #include"flags.h"
 using std::vector;
 class camera;
@@ -40,6 +41,7 @@ namespace GraphicsModule {
 		void ClearDepthStencilView(DepthStencil& d);
 		void UpdateSubresource(Buffer& b, const void * c);
 		void VSSetShader(VertexShader& vs);
+		void IASetInputLayout(InputLayout& il);
 		void draw();
 		friend class manager;
 		~DeviceContext();

@@ -465,7 +465,7 @@ namespace GraphicsModule
     //
     // Set the input layout
 #ifdef directX
-    man->getConext()->get()->IASetInputLayout(intplyut.g_pVertexLayout);
+    man->getConext()->IASetInputLayout(intplyut);
     man->getConext()->get()->RSSetState(g_Rasterizer);
     
 #endif

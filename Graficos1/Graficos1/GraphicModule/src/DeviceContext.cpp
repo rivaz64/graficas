@@ -121,6 +121,13 @@ namespace GraphicsModule {
 #endif
 	}
 
+	void DeviceContext::IASetInputLayout(InputLayout& il)
+	{
+#ifdef directX
+		g_pImmediateContext->IASetInputLayout(il.g_pVertexLayout);
+#endif
+	}
+
 	void DeviceContext::draw()
 	{
 #ifdef directX
