@@ -121,7 +121,7 @@ namespace GraphicsModule
       }
 
 
-      hr = man->getDevice()->CreateVertexShader(pVSBlob, &vrtxshdr.g_pVertexShader);
+      //hr = man->getDevice()->CreateVertexShader(pVSBlob, &vrtxshdr.g_pVertexShader);
       man->getDevice()->CreateVS(pVSBlob, vrtxshdr);
       if (FAILED(hr))
       {
