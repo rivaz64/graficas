@@ -140,7 +140,7 @@ namespace GraphicsModule
       // Create the input layout
 
       hr = man->getDevice()->get()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
-          pVSBlob->GetBufferSize(), &g_pVertexLayout);
+          pVSBlob->GetBufferSize(), &intplyut.g_pVertexLayout);
 
       pVSBlob->Release();
       if (FAILED(hr))
@@ -465,7 +465,7 @@ namespace GraphicsModule
     //
     // Set the input layout
 #ifdef directX
-    man->getConext()->get()->IASetInputLayout(g_pVertexLayout);
+    man->getConext()->get()->IASetInputLayout(intplyut.g_pVertexLayout);
     man->getConext()->get()->RSSetState(g_Rasterizer);
     
 #endif

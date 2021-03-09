@@ -54,11 +54,11 @@ namespace GraphicsModule
       objeto cubo2;
       DepthStencil depstencil;
       VertexShader vrtxshdr;
-      InputLayout intolyut;
+      InputLayout intplyut;
 #ifdef directX
       //ID3D11VertexShader* g_pVertexShader = NULL;
       ID3D11PixelShader* g_pPixelShader = NULL;
-      ID3D11InputLayout* g_pVertexLayout = NULL;
+      //ID3D11InputLayout* g_pVertexLayout = NULL;
 #endif
       Buffer neverChangesB;
       Buffer changesOnReziseB;
