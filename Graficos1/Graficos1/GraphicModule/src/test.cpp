@@ -147,43 +147,9 @@ namespace GraphicsModule
           return hr;
 
       // Compile the vertex shader
-      ID3DBlob* pVSBlob2 = NULL;
-      hr = CompileShaderFromFile("Limpio.fx", "VS", "vs_4_0", &pVSBlob2);
-      if (FAILED(hr))
-      {
-          MessageBox(NULL,
-              "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
-          return hr;
-      }
-
-      // Create the vertex shader
-
-      hr = man->getDevice()->CreateVertexShader(pVSBlob2, &g_pVertexShader2);
-
-      if (FAILED(hr))
-      {
-          pVSBlob2->Release();
-          return hr;
-      }
-
+    
       // Define the input layout
-      D3D11_INPUT_ELEMENT_DESC layout2[] =
-      {
-          { "POSITION", 0, (DXGI_FORMAT)FORMAT::R32G32B32_FLOAT, 0, 0, (D3D11_INPUT_CLASSIFICATION)INPUT_C::VERTEX_DATA, 0 },
-          { "TEXCOORD", 0, (DXGI_FORMAT)FORMAT::R32G32B32_FLOAT, 0, 12, (D3D11_INPUT_CLASSIFICATION)INPUT_C::VERTEX_DATA, 0 }
-      };
-      UINT numElements2 = ARRAYSIZE(layout2);
-
-      // Create the input layout
-
-      hr = man->getDevice()->get()->CreateInputLayout(layout2, numElements2, pVSBlob2->GetBufferPointer(),
-
-          pVSBlob2->GetBufferSize(), &g_pVertexLayout2);
-
-      pVSBlob2->Release();
-      if (FAILED(hr))
-          return hr;
-
+      
       // Compile the pixel shader
       ID3DBlob* pPSBlob = NULL;
       hr = CompileShaderFromFile("Tutorial07.fx", "PS", "ps_4_0", &pPSBlob);
@@ -203,22 +169,9 @@ namespace GraphicsModule
           return hr;
 
       // Compile the pixel shader
-      ID3DBlob* pPSBlob2 = NULL;
-      hr = CompileShaderFromFile("Limpio.fx", "PS", "ps_4_0", &pPSBlob2);
-      if (FAILED(hr))
-      {
-          MessageBox(NULL,
-              "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
-          return hr;
-      }
-
+     
       // Create the pixel shader
 
-      hr = man->getDevice()->CreatePixelShader(pPSBlob2, &g_pPixelShader2);
-
-      pPSBlob2->Release();
-      if (FAILED(hr))
-          return hr;
 #endif
       // Create vertex buffer
 
