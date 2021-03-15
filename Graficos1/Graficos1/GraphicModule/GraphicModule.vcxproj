@@ -286,6 +286,7 @@
     <ClInclude Include="include\manager.h" />
     <ClInclude Include="include\mesh.h" />
     <ClInclude Include="include\objeto.h" />
+    <ClInclude Include="include\PixelShader.h" />
     <ClInclude Include="include\RenderTargetView.h" />
     <ClInclude Include="include\SwapChain.h" />
     <ClInclude Include="include\test.h" />
@@ -304,6 +305,7 @@
     <ClCompile Include="src\manager.cpp" />
     <ClCompile Include="src\mesh.cpp" />
     <ClCompile Include="src\objeto.cpp" />
+    <ClCompile Include="src\PixelShader.cpp" />
     <ClCompile Include="src\RenderTargetView.cpp" />
     <ClCompile Include="src\SwapChain.cpp" />
     <ClCompile Include="src\test.cpp" />

@@ -190,7 +190,8 @@ int main()
     else
     {
         MiObj.Update();
-      MiObj.Render(UIRender);
+        MiObj.clear();
+        MiObj.Render(UIRender);
     }
   }
 

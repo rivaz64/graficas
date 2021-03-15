@@ -10,6 +10,7 @@
 #include"objeto.h"
 #include"VertexShader.h"
 #include"InputLayout.h"
+#include"PixelShader.h"
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -64,7 +65,8 @@ namespace GraphicsModule
       InputLayout intplyut0;
 #ifdef directX
       //ID3D11VertexShader* g_pVertexShader = NULL;
-      ID3D11PixelShader* g_pPixelShader = NULL;
+      //ID3D11PixelShader* g_pPixelShader = NULL;
+      PixelShader pixshad;
       //ID3D11InputLayout* g_pVertexLayout = NULL;
 #endif
       Buffer neverChangesB;
@@ -89,6 +91,7 @@ namespace GraphicsModule
       HRESULT InitDevice(HWND _hwnd);
       void rezise(HWND& _hwnd, LPARAM _lParam);
       void Update();
+      void clear();
       void Render(void (*UI)());
 
       void CleanupDevice();

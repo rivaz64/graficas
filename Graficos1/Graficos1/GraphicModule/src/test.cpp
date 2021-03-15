@@ -160,9 +160,9 @@ namespace GraphicsModule
       }
 
       // Create the pixel shader
-
+      ID3D11PixelShader* g_pPixelShader;
       hr = man->getDevice()->CreatePixelShader(pPSBlob, &g_pPixelShader);
-
+      pixshad.g_pPixelShader = g_pPixelShader;
       pPSBlob->Release();
       if (FAILED(hr))
           return hr;
@@ -451,17 +451,9 @@ namespace GraphicsModule
       XMFLOAT4 f(dirly[0], dirly[1], dirly[2], 0);
       man->getConext()->UpdateSubresource(Dirlight, &f);
   }
-  void test::Render(void (*UI)())
+  void test::clear()
   {
-    // Update our time
-   
-    // Rotate cube around the origin
-  
-
-    //
-    // Clear the back buffer
-    //
-    float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+      float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
 
     man->getConext()->ClearRenderTargetView(rtv);
     man->getConext()->ClearRenderTargetView(rtv2);
@@ -500,9 +492,21 @@ namespace GraphicsModule
     man->getConext()->get()->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
     //aki akaba lode abstraer luego
-    man->getConext()->get()->PSSetShader(g_pPixelShader, NULL, 0);
+    man->getConext()->get()->PSSetShader(pixshad.get(), NULL, 0);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
 #endif
+  }
+  void test::Render(void (*UI)())
+  {
+    // Update our time
+   
+    // Rotate cube around the origin
+  
+
+    //
+    // Clear the back buffer
+    //
+    
     man->draw(cubo, changeveryFrameB);
     /*man->getConext()->OMSetRenderTargets( rtv2, depstencil);
     man->draw(cubo, changeveryFrameB);
