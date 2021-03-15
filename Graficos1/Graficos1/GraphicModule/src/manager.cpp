@@ -2,6 +2,35 @@
 #include"flags.h"
 #include"test.h"
 namespace GraphicsModule {
+	HRESULT manager::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+	{
+#ifdef directX
+		HRESULT hr = S_OK;
+
+		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )
+		// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
+		// Setting this flag improves the shader debugging experience, but still allows
+		// the shaders to be optimized and to run exactly the way they will run in
+		// the release configuration of this program.
+		dwShaderFlags |= D3DCOMPILE_DEBUG;
+#endif
+
+		ID3DBlob* pErrorBlob;
+		hr = D3DX11CompileFromFileA(szFileName, NULL, NULL, szEntryPoint, szShaderModel,
+			dwShaderFlags, 0, NULL, ppBlobOut, &pErrorBlob, NULL);
+		if (FAILED(hr))
+		{
+			if (pErrorBlob != NULL)
+				OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+			if (pErrorBlob) pErrorBlob->Release();
+			return hr;
+		}
+		if (pErrorBlob) pErrorBlob->Release();
+
+		return S_OK;
+#endif
+	}
 	void manager::create(HWND g_hWnd) {
 		RECT rc;
 		g_hWndM = g_hWnd;
@@ -100,6 +129,39 @@ namespace GraphicsModule {
 		descViewRT.Texture2D.MipLevels = 1;
 		dev.CreateShaderResourceView(rtv, descViewRT);
 		dev.CreateRenderTargetView(rtv);
+	}
+
+	HRESULT manager::compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,  VertexShader& vs,InputLayout& il)
+	{
+		ID3DBlob* pVSBlob = NULL;
+		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pVSBlob);
+		if (FAILED(hr))
+		{
+			MessageBox(NULL,
+				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
+			return hr;
+		}
+		dev.createVSwithInput(vs, il, pVSBlob);
+		pVSBlob->Release();
+		return hr;
+	}
+
+	HRESULT manager::compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px)
+	{
+		ID3DBlob* pPSBlob = NULL;
+		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pPSBlob);
+		if (FAILED(hr))
+		{
+			MessageBox(NULL,
+				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
+			return hr;
+		}
+
+		// Create the pixel shader
+		ID3D11PixelShader* g_pPixelShader;
+		hr = dev.CreatePixelShader(pPSBlob, &g_pPixelShader);
+		px.g_pPixelShader = g_pPixelShader;
+		pPSBlob->Release();
 	}
 	
 	manager* getmanager()

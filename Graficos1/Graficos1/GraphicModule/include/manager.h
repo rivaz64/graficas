@@ -15,6 +15,7 @@
 #include"Viewport.h"
 #include"Buffer.h"
 #include"objeto.h"
+#include"PixelShader.h"
 namespace GraphicsModule {
     class manager
     {
@@ -26,6 +27,7 @@ namespace GraphicsModule {
         //IDXGISwapChain* g_pSwapChain = NULL;
         HWND g_hWndM;
         DXGI_SWAP_CHAIN_DESC sd;
+
     public:
         CD3D11_VIEWPORT v;
         UINT width;
@@ -39,6 +41,7 @@ namespace GraphicsModule {
         SwapChain* getSwapchain() {
             return &eswap;
         }
+        HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
         void create(HWND g_hWnd);
         void descrivesch();
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);
@@ -46,9 +49,10 @@ namespace GraphicsModule {
         void RSSetViewports(Viewport& vp);
         void draw(objeto o,  Buffer& changeveryFrameB);
         void setrenderfortextur(RenderTargetView& rtv);
+        HRESULT compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,VertexShader& vs ,InputLayout& il);
+        HRESULT compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px);
     };
     extern manager* getmanager();
 }
-
 
 

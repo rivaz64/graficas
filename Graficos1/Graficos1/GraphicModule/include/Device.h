@@ -47,7 +47,7 @@ namespace GraphicsModule {
 		HWND g_hWndM;
 		UINT width, height;
 		HRESULT create(HWND g_hWnd);
-		void createVSwithInput( VertexShader& vs, InputLayout& il, ID3DBlob* Blob);
+		void createVSwithInput(VertexShader& vs, InputLayout& il, ID3DBlob* Blob);
 		void CreateRenderTargetView( RenderTargetView& rtv);
 		void CreateTexture2D(Textura& tx);
 		void CreateDepthStencilView(DepthStencil& ds);
@@ -60,6 +60,7 @@ namespace GraphicsModule {
 		void CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
 		void CreateBuffer(D3D11_BUFFER_DESC& bd, Buffer& b);
 		void CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT n, ID3DBlob* blob, InputLayout& il);
+		
 		~Device();
 		friend class manager;
 	};
