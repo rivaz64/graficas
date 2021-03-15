@@ -47,7 +47,7 @@ namespace GraphicsModule {
 		HWND g_hWndM;
 		UINT width, height;
 		HRESULT create(HWND g_hWnd);
-		void createVSwithInput( VertexShader& vs, InputLayout& il);
+		void createVSwithInput( VertexShader& vs, InputLayout& il, ID3DBlob* Blob);
 		void CreateRenderTargetView( RenderTargetView& rtv);
 		void CreateTexture2D(Textura& tx);
 		void CreateDepthStencilView(DepthStencil& ds);

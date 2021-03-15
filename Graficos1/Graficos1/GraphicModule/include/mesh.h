@@ -4,10 +4,12 @@
 namespace GraphicsModule {
 	class mesh
 	{
+		int indexnum;
 	public:
 		struct vertex {
 			float posi[3];
 			float uv[2];
+			float normal[3];
 		};
 		vertex* points;
 		short* indices;
@@ -17,7 +19,7 @@ namespace GraphicsModule {
 		void setindices(std::initializer_list<short> i);
 		Buffer* getvertex();
 		void setvertex(std::initializer_list<vertex> i);
-
+		void init(int nv, int ni);
 	};
 }
 

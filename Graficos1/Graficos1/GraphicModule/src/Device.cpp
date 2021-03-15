@@ -12,10 +12,10 @@ namespace GraphicsModule {
 		height = rc.bottom - rc.top;
 		return S_OK;
 	}
-	void Device::createVSwithInput(VertexShader& vs, InputLayout& il)
+	void Device::createVSwithInput(VertexShader& vs, InputLayout& il, ID3DBlob* Blob)
 	{
 #ifdef directX
-		ID3DBlob* Blob = NULL;
+		
 		g_pd3dDevice->CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize(), NULL, &vs.g_pVertexShader);
 		ID3D11ShaderReflection* reflection = NULL;
 		if (FAILED(D3DReflect(Blob->GetBufferPointer(), Blob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection)))
@@ -73,6 +73,7 @@ namespace GraphicsModule {
 
 		//Free allocation shader reflection memory
 		reflection->Release();
+		Blob->Release();
 		//return hr;
 #endif
 	}

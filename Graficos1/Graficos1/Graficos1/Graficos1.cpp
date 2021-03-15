@@ -137,6 +137,7 @@ void UIRender()
   // example window
   if (ImGui::Begin("Another Window", nullptr))
   {
+      ImGui::DragFloat3("size",MiObj.dirly,.001f,-1.f,1.f);
   }
   ImGui::End();
 

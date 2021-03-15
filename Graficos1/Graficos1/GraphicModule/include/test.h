@@ -16,6 +16,7 @@ namespace GraphicsModule
   {
     XMFLOAT3 Pos;
     XMFLOAT2 Tex;
+    XMFLOAT3 Nor;
   };
 
   struct CBNeverChanges
@@ -39,6 +40,10 @@ namespace GraphicsModule
       manager* man;
   public:
       
+      float dirly[3];
+
+
+
       DRIVER_TYPE                     g_driverType = DRIVER_TYPE::DT_NULL;
       FEATURE_LEVEL                   g_featureLevel = FEATURE_LEVEL::LEVEL_11_0;
       
@@ -55,6 +60,8 @@ namespace GraphicsModule
       DepthStencil depstencil;
       VertexShader vrtxshdr;
       InputLayout intplyut;
+      VertexShader vrtxshdr0;
+      InputLayout intplyut0;
 #ifdef directX
       //ID3D11VertexShader* g_pVertexShader = NULL;
       ID3D11PixelShader* g_pPixelShader = NULL;
@@ -65,6 +72,7 @@ namespace GraphicsModule
       Buffer changeveryFrameB;
       Textura texturbitco;
       Textura texturmar;
+      Buffer Dirlight;
 #ifdef directX
       ID3D11SamplerState* g_pSamplerLinear = NULL;
       XMMATRIX                            g_World;

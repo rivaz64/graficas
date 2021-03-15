@@ -120,9 +120,9 @@ namespace GraphicsModule
           return hr;
       }
 
-
+      man->getDevice()->createVSwithInput(vrtxshdr, intplyut, pVSBlob);
       //hr = man->getDevice()->CreateVertexShader(pVSBlob, &vrtxshdr.g_pVertexShader);
-      man->getDevice()->CreateVS(pVSBlob, vrtxshdr);
+      /*man->getDevice()->CreateVS(pVSBlob, vrtxshdr);
       if (FAILED(hr))
       {
           pVSBlob->Release();
@@ -138,7 +138,7 @@ namespace GraphicsModule
       UINT numElements = ARRAYSIZE(layout);
 
       // Create the input layout
-      man->getDevice()->CreateInputLayout(layout, numElements, pVSBlob, intplyut);
+      man->getDevice()->CreateInputLayout(layout, numElements, pVSBlob, intplyut);//*/
       //hr = man->getDevice()->get()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),pVSBlob->GetBufferSize(), &intplyut.g_pVertexLayout);
 
       pVSBlob->Release();
@@ -176,39 +176,61 @@ namespace GraphicsModule
 
       cubito.setvertex(
           {
-              { {-1.0f, 1.0f, -1.0f}, {0,0} },
-              { { 1.0f, 1.0f, -1.0f }, { 1.0f, 0.0f } },
-              { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } },
-              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
+              { {-1.0f, 1.0f, 1.0f}, {0,0},{-1.0f, 1.0f, 1.0f} },
+              { {1.0f, 1.0f, 1.0f}, {0,0},{1.0f, 1.0f, 1.0f} },
+              { {-1.0f, 1.0f, -1.0f}, {0,0},{-1.0f, 1.0f, -1.0f} },
+              { {1.0f, 1.0f, -1.0f}, {0,0},{1.0f, 1.0f, -1.0f}},
+              { {-1.0f, -1.0f, 1.0f}, {0,0},{-1.0f, -1.0f, 1.0f} },
+              { {1.0f, -1.0f, 1.0f}, {0,0},{1.0f, -1.0f, 1.0f}},
+              { {-1.0f, -1.0f, -1.0f}, {0,0},{-1.0f, -1.0f, -1.0f}},
+              { {1.0f, -1.0f, -1.0f}, {0,0},{1.0f, -1.0f, -1.0f} },
+              /*
+              { {-1.0f, 1.0f, -1.0f}, {0,0},{0.f,1.f,0.f} },
+              { { 1.0f, 1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,1.f,0.f} },
+              { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } ,{0.f,1.f,0.f}},
+              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{0.f,1.f,0.f}},
 
-              { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } },
-              { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
-              { { 1.0f, -1.0f, 1.0f }, { 1.0f, 1.0f } },
-              { { -1.0f, -1.0f, 1.0f }, { 0.0f, 1.0f } },
+              { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } ,{0.f,-1.f,0.f}},
+              { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,-1.f,0.f} },
+              { { 1.0f, -1.0f, 1.0f }, { 1.0f, 1.0f },{0.f,-1.f,0.f} },
+              { { -1.0f, -1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,-1.f,0.f} },
 
-              { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } },
-              { { -1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
-              { { -1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f } },
-              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
+              { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f },{-1.f,0.f,0.f}},
+              { { -1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } ,{-1.f,0.f,0.f}},
+              { { -1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{-1.f,0.f,0.f}},
+              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{-1.f,0.f,0.f}},
 
-              { { 1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } },
-              { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
-              { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f } },
-              { { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
+              { { 1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f },{1.f,0.f,0.f} },
+              { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } ,{1.f,0.f,0.f}},
+              { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{1.f,0.f,0.f} },
+              { { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{1.f,0.f,0.f}},
 
-              { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } },
-              { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } },
-              { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f } },
-              { { -1.0f, 1.0f, -1.0f }, { 0.0f, 1.0f } },
+              { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f },{0.f,0.f,-1.f}},
+              { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,0.f,-1.f}},
+              { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{0.f,0.f,-1.f}},
+              { { -1.0f, 1.0f, -1.0f }, { 0.0f, 1.0f } ,{0.f,0.f,-1.f}},
 
-              { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } },
-              { { 1.0f, -1.0f, 1.0f }, { 1.0f, 0.0f } },
-              { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } },
-              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
+              { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } ,{0.f,0.f,1.f}},
+              { { 1.0f, -1.0f, 1.0f }, { 1.0f, 0.0f } ,{0.f,0.f,1.f}},
+              { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } ,{0.f,0.f,1.f}},
+              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,0.f,1.f} },//*/
           });
       
       cubito.setindices(
           {
+              0,1,2,
+              1,3,2,
+              0,4,1,
+              1,4,5,
+              2,4,0,
+              2,6,4,
+              1,7,3,
+              1,5,7,
+              4,6,7,
+              7,5,4,
+              2,7,6,
+              7,2,3,
+              /*
               3,1,0,
               2,1,3,
 
@@ -225,7 +247,7 @@ namespace GraphicsModule
               18,17,19,
 
               22,20,21,
-              23,20,22
+              23,20,22//*/
           });
      
 
@@ -269,6 +291,10 @@ namespace GraphicsModule
 
       bd.ByteWidth = sizeof(CBChangesEveryFrame);
       man->getDevice()->CreateBuffer(bd, changeveryFrameB);
+
+      bd.ByteWidth = sizeof(float[4]);
+      man->getDevice()->CreateBuffer(bd, Dirlight);
+
       if (FAILED(hr))
           return hr;
 
@@ -341,10 +367,6 @@ namespace GraphicsModule
       
       cubo1.tx = new Textura;
       cubo2.tx = new Textura;
-      /*rtv.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });
-      rtv2.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });
-      rtv3.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });
-      rtv4.setClearColor({ 0.0f, 0.125f, 0.3f, 1.0f });//*/
       return S_OK;
   }
   void test::rezise(HWND& _hwnd, LPARAM _lParam)
@@ -370,7 +392,7 @@ namespace GraphicsModule
       }
       //g_World = XMMatrixRotationY(t);
       LPPOINT p = new POINT;
-      if ((GetKeyState(VK_LBUTTON) & 0x100) != 0) {
+      if ((GetKeyState(VK_RBUTTON) & 0x100) != 0) {
           GetCursorPos(p);
           cam->gira(p);
           CBNeverChanges cbNeverChanges;
@@ -426,6 +448,8 @@ namespace GraphicsModule
       cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
 
       man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
+      XMFLOAT4 f(dirly[0], dirly[1], dirly[2], 0);
+      man->getConext()->UpdateSubresource(Dirlight, &f);
   }
   void test::Render(void (*UI)())
   {
@@ -470,14 +494,17 @@ namespace GraphicsModule
 #endif
     man->getConext()->VSSetShader(vrtxshdr);
 #ifdef directX
+//luego abstraer sto
     man->getConext()->get()->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
     man->getConext()->get()->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
     man->getConext()->get()->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
+    man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
+    //aki akaba lode abstraer luego
     man->getConext()->get()->PSSetShader(g_pPixelShader, NULL, 0);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
 #endif
-
-    man->getConext()->OMSetRenderTargets( rtv2, depstencil);
+    man->draw(cubo, changeveryFrameB);
+    /*man->getConext()->OMSetRenderTargets( rtv2, depstencil);
     man->draw(cubo, changeveryFrameB);
     cubo0.setTexture(rtv2);
     man->getConext()->ClearDepthStencilView(depstencil);

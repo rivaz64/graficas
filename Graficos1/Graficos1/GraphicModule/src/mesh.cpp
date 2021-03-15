@@ -39,5 +39,26 @@ namespace GraphicsModule {
         InitData.pSysMem = points;
         getmanager()->getDevice()->CreateBuffer(bd, InitData, vertexB);
     }
-
+    void mesh::init(int nv, int ni)
+    {
+        indexnum = ni;
+        D3D11_BUFFER_DESC bd;
+        D3D11_SUBRESOURCE_DATA InitData;
+        ZeroMemory(&bd, sizeof(bd));
+        bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
+        bd.ByteWidth = sizeof(SimpleVertex) * nv;
+        bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::VERTEX_BUFFER;
+        bd.CPUAccessFlags = 0;
+        ZeroMemory(&InitData, sizeof(InitData));
+        InitData.pSysMem = points;
+        getmanager()->getDevice()->CreateBuffer(bd, InitData, vertexB);
+        ZeroMemory(&bd, sizeof(bd));
+        bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
+        bd.ByteWidth = sizeof(WORD) * ni;
+        ZeroMemory(&InitData, sizeof(InitData));
+        bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::INDEX_BUFFER;
+        bd.CPUAccessFlags = 0;
+        InitData.pSysMem = indices;
+        getmanager()->getDevice()->CreateBuffer(bd, InitData, indexB);
+    }
 }
