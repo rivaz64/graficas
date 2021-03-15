@@ -63,12 +63,8 @@ namespace GraphicsModule
       InputLayout intplyut;
       VertexShader vrtxshdr0;
       InputLayout intplyut0;
-#ifdef directX
-      //ID3D11VertexShader* g_pVertexShader = NULL;
-      //ID3D11PixelShader* g_pPixelShader = NULL;
       PixelShader pixshad;
-      //ID3D11InputLayout* g_pVertexLayout = NULL;
-#endif
+
       Buffer neverChangesB;
       Buffer changesOnReziseB;
       Buffer changeveryFrameB;

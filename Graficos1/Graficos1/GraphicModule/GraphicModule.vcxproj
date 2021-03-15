@@ -288,6 +288,7 @@
     <ClInclude Include="include\objeto.h" />
     <ClInclude Include="include\PixelShader.h" />
     <ClInclude Include="include\RenderTargetView.h" />
+    <ClInclude Include="include\SamplerState.h" />
     <ClInclude Include="include\SwapChain.h" />
     <ClInclude Include="include\test.h" />
     <ClInclude Include="include\Textura.h" />
@@ -307,6 +308,7 @@
     <ClCompile Include="src\objeto.cpp" />
     <ClCompile Include="src\PixelShader.cpp" />
     <ClCompile Include="src\RenderTargetView.cpp" />
+    <ClCompile Include="src\SamplerState.cpp" />
     <ClCompile Include="src\SwapChain.cpp" />
     <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\Textura.cpp" />
