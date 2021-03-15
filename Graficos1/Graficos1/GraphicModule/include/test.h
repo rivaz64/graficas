@@ -92,8 +92,8 @@ namespace GraphicsModule
       void rezise(HWND& _hwnd, LPARAM _lParam);
       void Update();
       void clear();
-      void Render(void (*UI)());
-
+      void draw(objeto& o);
+      void Render();
       void CleanupDevice();
 
       HWND m_hwnd;

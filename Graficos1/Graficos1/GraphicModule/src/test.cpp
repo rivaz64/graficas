@@ -460,43 +460,12 @@ namespace GraphicsModule
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
 #endif
   }
-  void test::Render(void (*UI)())
+  void test::draw(objeto& o)
   {
-    // Update our time
-   
-    // Rotate cube around the origin
-  
-
-    //
-    // Clear the back buffer
-    //
-    
-    man->draw(cubo, changeveryFrameB);
-    /*man->getConext()->OMSetRenderTargets( rtv2, depstencil);
-    man->draw(cubo, changeveryFrameB);
-    cubo0.setTexture(rtv2);
-    man->getConext()->ClearDepthStencilView(depstencil);
-    man->getConext()->OMSetRenderTargets(rtv3, depstencil);
-    man->draw(cubo, changeveryFrameB);
-    man->draw(cubo0, changeveryFrameB);
-    cubo1.setTexture(rtv3);
-    man->getConext()->ClearDepthStencilView(depstencil);
-    man->getConext()->OMSetRenderTargets(rtv4, depstencil);
-    man->draw(cubo, changeveryFrameB);
-    man->draw(cubo0, changeveryFrameB);
-    man->draw(cubo1, changeveryFrameB);
-    cubo2.setTexture(rtv4);
-    man->getConext()->ClearDepthStencilView(depstencil);
-    man->getConext()->OMSetRenderTargets(rtv, depstencil);
-    man->draw(cubo, changeveryFrameB);
-    man->draw(cubo0, changeveryFrameB);
-    man->draw(cubo1, changeveryFrameB);
-    man->draw(cubo2, changeveryFrameB);//*/
-
-    
-#ifdef directX
-    UI();
-#endif
+      man->draw(o, changeveryFrameB);
+  }
+  void test::Render()
+  {
     man->getSwapchain()->Present();
   }
 

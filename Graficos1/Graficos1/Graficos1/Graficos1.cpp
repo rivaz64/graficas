@@ -191,7 +191,9 @@ int main()
     {
         MiObj.Update();
         MiObj.clear();
-        MiObj.Render(UIRender);
+        MiObj.draw(MiObj.cubo);
+        UIRender();
+        MiObj.Render();
     }
   }
 
