@@ -121,6 +121,11 @@ namespace GraphicsModule {
 #endif
 	}
 
+	void DeviceContext::PSSetShader(PixelShader& ps)
+	{
+		g_pImmediateContext->PSSetShader(ps.get(), NULL, 0);
+	}
+
 	void DeviceContext::IASetInputLayout(InputLayout& il)
 	{
 #ifdef directX

@@ -11,6 +11,7 @@
 #include"DepthStencil.h"
 #include"InputLayout.h"
 #include"flags.h"
+#include"PixelShader.h"
 using std::vector;
 class camera;
 namespace GraphicsModule {
@@ -41,7 +42,9 @@ namespace GraphicsModule {
 		void ClearDepthStencilView(DepthStencil& d);
 		void UpdateSubresource(Buffer& b, const void * c);
 		void VSSetShader(VertexShader& vs);
+		void PSSetShader(PixelShader& ps);
 		void IASetInputLayout(InputLayout& il);
+
 		void draw();
 		friend class manager;
 		~DeviceContext();

@@ -127,20 +127,7 @@ namespace GraphicsModule
           return hr;
 
       man->compilePX("Tutorial07.fx", "PS", "ps_4_0", pixshad);
-      /*ID3DBlob* pPSBlob = NULL;
-      hr = CompileShaderFromFile("Tutorial07.fx", "PS", "ps_4_0", &pPSBlob);
-      if (FAILED(hr))
-      {
-          MessageBox(NULL,
-              "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
-          return hr;
-      }
-
-      // Create the pixel shader
-      ID3D11PixelShader* g_pPixelShader;
-      hr = man->getDevice()->CreatePixelShader(pPSBlob, &g_pPixelShader);
-      pixshad.g_pPixelShader = g_pPixelShader;
-      pPSBlob->Release();*/
+      
       if (FAILED(hr))
           return hr;
 
