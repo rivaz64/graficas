@@ -175,6 +175,11 @@ namespace GraphicsModule {
 			blob->GetBufferSize(), &il.g_pVertexLayout);
 	}
 
+	void Device::CreateSamplerState(SamplerState ss)
+	{
+		g_pd3dDevice->CreateSamplerState(&ss.desc, &ss.g_pSamplerLinear);
+	}
+
 	
 	Device::~Device()
 	{

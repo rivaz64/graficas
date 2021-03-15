@@ -11,6 +11,7 @@
 #include"VertexShader.h"
 #include"InputLayout.h"
 #include"PixelShader.h"
+#include"SamplerState.h"
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -71,8 +72,9 @@ namespace GraphicsModule
       Textura texturbitco;
       Textura texturmar;
       Buffer Dirlight;
+      SamplerState samsta;
 #ifdef directX
-      ID3D11SamplerState* g_pSamplerLinear = NULL;
+      //ID3D11SamplerState* g_pSamplerLinear = NULL;
       XMMATRIX                            g_World;
       XMMATRIX                            g_View;
       XMMATRIX                            g_Projection;

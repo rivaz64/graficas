@@ -7,8 +7,10 @@
 namespace GraphicsModule {
 	class SamplerState
 	{
+	public:
 #ifdef directX
 		ID3D11SamplerState* g_pSamplerLinear = NULL;
+		D3D11_SAMPLER_DESC desc;
 #endif
 	public:
 #ifdef directX

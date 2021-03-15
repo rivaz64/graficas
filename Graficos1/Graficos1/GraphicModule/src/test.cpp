@@ -272,15 +272,15 @@ namespace GraphicsModule
       // Create the sample state
 #ifdef directX
       D3D11_SAMPLER_DESC sampDesc;
-      ZeroMemory(&sampDesc, sizeof(sampDesc));
-      sampDesc.Filter = (D3D11_FILTER)FILTER::COMPARISON_MIN_MAG_MIP_LINEAR;
-      sampDesc.AddressU = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
-      sampDesc.AddressV = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
-      sampDesc.AddressW = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
-      sampDesc.ComparisonFunc = (D3D11_COMPARISON_FUNC)COMPARISON_FUNC::NEVER;
-      sampDesc.MinLOD = 0;
-      sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-      hr = hr = man->getDevice()->get()->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
+      ZeroMemory(&samsta.desc, sizeof(samsta.desc));
+      samsta.desc.Filter = (D3D11_FILTER)FILTER::COMPARISON_MIN_MAG_MIP_LINEAR;
+      samsta.desc.AddressU = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+      samsta.desc.AddressV = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+      samsta.desc.AddressW = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+      samsta.desc.ComparisonFunc = (D3D11_COMPARISON_FUNC)COMPARISON_FUNC::NEVER;
+      samsta.desc.MinLOD = 0;
+      samsta.desc.MaxLOD = D3D11_FLOAT32_MAX;
+      man->getDevice()->CreateSamplerState(samsta);
 #endif
       if (FAILED(hr))
           return hr;
