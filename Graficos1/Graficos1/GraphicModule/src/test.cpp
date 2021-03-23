@@ -222,16 +222,16 @@ namespace GraphicsModule
       cam->axis();
       texturbitco.loadfromfile("bitco.dds");
       texturmar.loadfromfile("seafloor.dds");
-      cubo.m = &cubito;
+      //cubo.m = &cubito;
       cubo.tx = &texturbitco;
       cubo.posi = vector3(0, 0, 0);
-      cubo0.m = &cubito;
+      //cubo0.m = &cubito;
       cubo0.tx = &texturmar;
       cubo0.posi = vector3(3, 0, 0);
-      cubo1.m = &cubito;
+      //cubo1.m = &cubito;
       //cubo0.tx = &texturmar;
       cubo1.posi = vector3(-3, 0, 0);
-      cubo2.m = &cubito;
+      //cubo2.m = &cubito;
       //cubo0.tx = &texturmar;
       cubo2.posi = vector3(0, 3, 0);
       // Set primitive topology
@@ -303,12 +303,12 @@ namespace GraphicsModule
       //g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
 
       CBChangeOnResize cbChangesOnResize;
-      cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(width, width / (FLOAT)height, 0.01f, 100.0f));
+      cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f));
       man->getConext()->UpdateSubresource(changesOnReziseB,&cbChangesOnResize);
 
 
       // create rasterizer state
-#ifdef directX
+/*#ifdef directX
       D3D11_RASTERIZER_DESC desc;
       ZeroMemory(&desc, sizeof(desc));
       desc.CullMode = D3D11_CULL_BACK;
@@ -317,7 +317,7 @@ namespace GraphicsModule
       if (FAILED(hr))
           return hr;
 
-#endif
+#endif//*/
       //Para ka textura nueva
       man->setrenderfortextur(rtv2);
       man->setrenderfortextur(rtv3);
@@ -382,7 +382,7 @@ namespace GraphicsModule
       cubo2.color.x = .9;
       cubo2.color.y = .9;
       cubo2.color.z = .9;
-      float v = 6;
+      float v = 36;
       if (GetKeyState('W') & 0x8000)
       {
           cam->movez(v);
@@ -443,11 +443,12 @@ namespace GraphicsModule
     // Render the cube
     //
     // Set the input layout
-#ifdef directX
     man->getConext()->IASetInputLayout(intplyut);
+/*#ifdef directX
+    
     man->getConext()->get()->RSSetState(g_Rasterizer);
     
-#endif
+#endif*/
     man->getConext()->VSSetShader(vrtxshdr);
 #ifdef directX
 //luego abstraer sto

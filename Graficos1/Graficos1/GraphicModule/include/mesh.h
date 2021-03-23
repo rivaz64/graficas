@@ -4,15 +4,16 @@
 namespace GraphicsModule {
 	class mesh
 	{
-		int indexnum;
+		
 	public:
 		struct vertex {
 			float posi[3];
 			float uv[2];
 			float normal[3];
 		};
+		int indexnum;
 		vertex* points;
-		short* indices;
+		int* indices;
 		Buffer vertexB;
 		Buffer indexB;
 		Buffer* getindices();

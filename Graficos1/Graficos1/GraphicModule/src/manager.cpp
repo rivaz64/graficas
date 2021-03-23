@@ -62,7 +62,7 @@ namespace GraphicsModule {
 			D3D11_SDK_VERSION, &sd, &eswap.g_pSwapChain, &dev.g_pd3dDevice, (D3D_FEATURE_LEVEL*)(&g_featureLevel), &devcon.g_pImmediateContext);
 #endif // directX
 		return S_FALSE;
-		
+
 	}
 	void manager::createrendertarget(RenderTargetView& rtv)
 	{
@@ -72,10 +72,10 @@ namespace GraphicsModule {
 		dev.CreateRenderTargetView(rtv);
 		pBackBuffer.release();
 	}
-	
-	
 
-	
+
+
+
 
 	void manager::RSSetViewports(Viewport& vp)
 	{
@@ -90,24 +90,30 @@ namespace GraphicsModule {
 		devcon.g_pImmediateContext->RSSetViewports(1, &v);
 #endif // directX
 
-		
+
 	}
 
-	
 
-	void manager::draw(objeto o,Buffer& changeveryFrameB)
+
+	void manager::draw(objeto &o, Buffer& changeveryFrameB)
 	{
-		devcon.IASetVertexBuffers(o.m->getvertex());
-		devcon.IASetIndexBuffer(o.m->getindices());
-		devcon.PSSetShaderResources(o.tx);
-		XMMATRIX g_World;
-		CBChangesEveryFrame cb;
-		g_World = XMMatrixTranslation(o.posi.x, o.posi.y, o.posi.z);
-		cb.mWorld = XMMatrixTranspose(g_World);
-		cb.vMeshColor = o.color;
-		devcon.UpdateSubresource(changeveryFrameB, &cb);
+		for (mesh* mo : (o.mod->modelo)) {
+			devcon.IASetVertexBuffers(mo->getvertex());
+			devcon.IASetIndexBuffer(mo->getindices());
+			if (o.tx != NULL)
+				devcon.PSSetShaderResources(o.tx);
+			XMMATRIX g_World;
+			CBChangesEveryFrame cb;
+			g_World = XMMatrixTranslation(o.posi.x, o.posi.y, o.posi.z);
+
+			cb.mWorld = XMMatrixTranspose(g_World);
+
+			cb.vMeshColor = o.color;
+			devcon.UpdateSubresource(changeveryFrameB, &cb);
+
+			devcon.draw(mo->indexnum);//*/
+		}
 		
-		devcon.draw();//*/
 	}
 
 	void manager::setrenderfortextur(RenderTargetView& rtv)

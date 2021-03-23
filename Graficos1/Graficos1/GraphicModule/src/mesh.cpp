@@ -8,7 +8,7 @@ namespace GraphicsModule {
 
     void mesh::setindices(std::initializer_list<short> i)
     {
-        indices = (short*)i.begin();
+        indices = (int*)i.begin();
         D3D11_BUFFER_DESC bd;
         D3D11_SUBRESOURCE_DATA InitData;
         ZeroMemory(&bd, sizeof(bd));
@@ -54,7 +54,7 @@ namespace GraphicsModule {
         getmanager()->getDevice()->CreateBuffer(bd, InitData, vertexB);
         ZeroMemory(&bd, sizeof(bd));
         bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
-        bd.ByteWidth = sizeof(WORD) * ni;
+        bd.ByteWidth = sizeof(int) * ni;
         ZeroMemory(&InitData, sizeof(InitData));
         bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::INDEX_BUFFER;
         bd.CPUAccessFlags = 0;

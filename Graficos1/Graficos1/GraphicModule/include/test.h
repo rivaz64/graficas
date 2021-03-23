@@ -80,7 +80,7 @@ namespace GraphicsModule
       XMMATRIX                            g_Projection;
       XMFLOAT4                            g_vMeshColor;
       
-      ID3D11RasterizerState* g_Rasterizer = NULL;
+      //ID3D11RasterizerState* g_Rasterizer = NULL;
 #endif
   public:
 #ifdef directX

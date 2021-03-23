@@ -32,7 +32,7 @@ namespace GraphicsModule {
 	void DeviceContext::IASetIndexBuffer(Buffer* b)
 	{
 #ifdef directX
-		g_pImmediateContext->IASetIndexBuffer(b->buf, (DXGI_FORMAT)FORMAT::R16_UINT, 0);
+		g_pImmediateContext->IASetIndexBuffer(b->buf, (DXGI_FORMAT)FORMAT::R32_UINT, 0);
 #endif
 	}
 
@@ -133,10 +133,10 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void DeviceContext::draw()
+	void DeviceContext::draw(int n)
 	{
 #ifdef directX
-		g_pImmediateContext->DrawIndexed(36, 0, 0);
+		g_pImmediateContext->DrawIndexed(n, 0, 0);
 #endif
 	}
 

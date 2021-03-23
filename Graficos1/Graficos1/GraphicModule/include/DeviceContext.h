@@ -45,7 +45,7 @@ namespace GraphicsModule {
 		void PSSetShader(PixelShader& ps);
 		void IASetInputLayout(InputLayout& il);
 
-		void draw();
+		void draw(int n);
 		friend class manager;
 		~DeviceContext();
 	};
