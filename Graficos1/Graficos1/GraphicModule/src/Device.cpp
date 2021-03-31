@@ -160,15 +160,6 @@ namespace GraphicsModule {
 		
 	}
 
-	void Device::CreateBuffer(D3D11_BUFFER_DESC& bd, Buffer& b)
-	{
-#ifdef directX
-		g_pd3dDevice->CreateBuffer(&bd, NULL, &b.buf);
-#endif // directX
-
-		
-	}
-
 	void Device::CreateBuffer(Buffer& b)
 	{
 #ifdef directX

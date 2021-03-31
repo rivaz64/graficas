@@ -61,7 +61,6 @@ namespace GraphicsModule {
 		void CreateShaderResourceViewFromFile(LPCSTR file);
 		void CreateShaderResourceView(RenderTargetView& rtv, D3D11_SHADER_RESOURCE_VIEW_DESC des);
 		void CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
-		void CreateBuffer(D3D11_BUFFER_DESC& bd, Buffer& b);
 		void CreateBuffer(Buffer& b);
 		void CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT n, ID3DBlob* blob, InputLayout& il);
 		void CreateSamplerState(SamplerState ss);
