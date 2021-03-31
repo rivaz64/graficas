@@ -292,7 +292,7 @@ namespace GraphicsModule
       g_View = XMMatrixLookAtLH(Eye, At, Up);*/
 
       CBNeverChanges cbNeverChanges;
-      cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
+      cbNeverChanges.mView = cam->getView();
 
       man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
 
@@ -358,7 +358,7 @@ namespace GraphicsModule
           cam->gira(p);
           CBNeverChanges cbNeverChanges;
           //man->getConext()->UpdateSubresource(cam);
-          cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
+          cbNeverChanges.mView = cam->getView();
 
           man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
       }

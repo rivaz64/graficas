@@ -99,6 +99,28 @@ float* camera::getview() {
 	return viewmatrix;
 }
 
+float* camera::getView()
+{
+	axis();
+	viewmatrix[0] = xaxis.x;
+	viewmatrix[4] = yaxis.x;
+	viewmatrix[8] = zaxis.x;
+	viewmatrix[12] = 0;
+	viewmatrix[1] = xaxis.y;
+	viewmatrix[5] = yaxis.y;
+	viewmatrix[9] = zaxis.y;
+	viewmatrix[13] = 0;
+	viewmatrix[2] = xaxis.z;
+	viewmatrix[6] = yaxis.z;
+	viewmatrix[10] = zaxis.z;
+	viewmatrix[14] = 0;
+	viewmatrix[3] = -xaxis.dot(eye);
+	viewmatrix[7] = -yaxis.dot(eye);
+	viewmatrix[11] = -zaxis.dot(eye);
+	viewmatrix[15] = 1;
+	return viewmatrix;
+}
+
 float* camera::getproyectionmatrixPerspective(float angle, float ratio, float nearp, float farp)
 {
 	float co = cos(angle * .5f), s = sin(angle * .5f);
