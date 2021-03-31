@@ -239,21 +239,26 @@ namespace GraphicsModule
       // Set primitive topology
       man->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
       D3D11_BUFFER_DESC bd;
-      //D3D11_SUBRESOURCE_DATA InitData;
       ZeroMemory(&bd, sizeof(bd));
       // Create the constant buffers
-      bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;;
+      bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
       bd.ByteWidth = sizeof(CBNeverChanges);
       bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::CONSTANT_BUFFER;
       bd.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(bd,  neverChangesB);
-      if (FAILED(hr))
-          return hr;
 
+      neverChangesB.Usage = USAGE::DEFAULT;
+      neverChangesB.ByteWidth = sizeof(CBNeverChanges);
+      neverChangesB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+      neverChangesB.CPUAccessFlags = 0;
+      man->getDevice()->CreateBuffer(neverChangesB);
+      
+      changesOnReziseB.Usage = USAGE::DEFAULT;
+      changesOnReziseB.ByteWidth = sizeof(CBChangeOnResize);
+      changesOnReziseB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+      changesOnReziseB.CPUAccessFlags = 0;
       bd.ByteWidth = sizeof(CBChangeOnResize);
-      man->getDevice()->CreateBuffer(bd, changesOnReziseB);
-      if (FAILED(hr))
-          return hr;
+      man->getDevice()->CreateBuffer(changesOnReziseB);
+      
 
       bd.ByteWidth = sizeof(CBChangesEveryFrame);
       man->getDevice()->CreateBuffer(bd, changeveryFrameB);
