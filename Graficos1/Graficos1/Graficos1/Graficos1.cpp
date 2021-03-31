@@ -2,12 +2,17 @@
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
+#ifdef directX
 #include "imgui_impl_dx11.h"
+#endif
 #include "GraphicModule.h"
 #include <string.h>
 #include <iostream>
 #include"assimp\Importer.hpp"
 #include"assimp\scene.h"
+/*#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"*/
+//#include <GLFW/glfw3.h>
 #pragma comment(lib, "ComDlg32.lib")
 // -----------------Global var-----------------------------------------------------------------
 HWND g_hwnd;
@@ -157,7 +162,9 @@ HRESULT InitImgUI()
 void UIRender()
 {
   // Start the Dear ImGui frame
+#ifdef directX
   ImGui_ImplDX11_NewFrame();
+#endif
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
 
@@ -165,7 +172,7 @@ void UIRender()
   if (ImGui::Begin("Another Window", nullptr))
   {
       ImGui::DragFloat3("size",MiObj.dirly,.001f,-1.f,1.f);
-      ImGui::Image(pitola.tx->srv, ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+      //ImGui::Image(pitola.tx->srv, ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
   }
   ImGui::End();
 
@@ -183,8 +190,9 @@ void UIRender()
  */
 int main()
 {
+    /*if (!glfwInit())
+        return 1;*/
     
-   
     // create the window and console
     if (FAILED(InitWindow(1280, 720)))
     {
@@ -202,7 +210,9 @@ int main()
     // create UI
     if (FAILED(InitImgUI()))
     {
+#ifdef directX
         ImGui_ImplDX11_Shutdown();
+#endif
         ImGui_ImplWin32_Shutdown();
         ImGui::DestroyContext();
         return 0;
@@ -263,7 +273,7 @@ int main()
     pitola0.mod = &mes;
     pitola0.tx = &tx;
     pitola.posi.x = 3;
-     /*scene = importer.ReadFile(openfilename(), NULL);
+     scene = importer.ReadFile(openfilename(), NULL);
      numvertices = 0;
      numfaces = 0;
     for (int i = 0; i < scene->mNumMeshes; i++) {
@@ -275,7 +285,7 @@ int main()
     //GraphicsModule::Textura tx;
     //tx.loadfromfile("pitola.dds");
 
-    /*GraphicsModule::mesh meshh;
+    GraphicsModule::mesh meshh;
 
     meshh.points = new GraphicsModule::mesh::vertex[numvertices];
     meshh.indices = new int[numfaces * 3];
@@ -313,7 +323,7 @@ int main()
     rana.mod = &mes;
     rana.posi.x= 10;
     rana.posi.y = 10;
-    rana.posi.z = 10;*/
+    rana.posi.z = 10;
   // main loop
   MSG msg = { 0 };
   while (WM_QUIT != msg.message)
@@ -337,7 +347,9 @@ int main()
   }
 
   // clean resources
+#ifdef directX
   ImGui_ImplDX11_Shutdown();
+#endif
   ImGui_ImplWin32_Shutdown();
   ImGui::DestroyContext();
   MiObj.CleanupDevice();

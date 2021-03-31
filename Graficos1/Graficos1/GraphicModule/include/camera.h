@@ -1,10 +1,12 @@
 #pragma once
 #include"vector3.h"
 #include <windows.h>
+#ifdef directX
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
+#endif
 #include <array>
 class camera
 {

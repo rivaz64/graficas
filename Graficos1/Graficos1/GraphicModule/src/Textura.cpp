@@ -21,6 +21,7 @@ namespace GraphicsModule {
     }
     void Textura::loadfromfile(LPCSTR f)
     {
+
 #ifdef directX
         D3DX11CreateShaderResourceViewFromFile(getmanager()->getDevice()->get(), f, NULL, NULL, &srv, NULL);
 #endif
@@ -29,10 +30,11 @@ namespace GraphicsModule {
     void Textura::release()
     {
 #ifdef directX
+        if(get!=NULL)
         get->Release();
 #endif
     }
 
-    
+
     
 }

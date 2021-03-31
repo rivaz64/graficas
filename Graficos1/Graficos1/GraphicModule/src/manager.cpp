@@ -2,9 +2,10 @@
 #include"flags.h"
 #include"test.h"
 namespace GraphicsModule {
+#ifdef directX
 	HRESULT manager::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 	{
-#ifdef directX
+
 		HRESULT hr = S_OK;
 
 		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
@@ -29,8 +30,9 @@ namespace GraphicsModule {
 		if (pErrorBlob) pErrorBlob->Release();
 
 		return S_OK;
-#endif
+
 	}
+#endif
 	void manager::create(HWND g_hWnd) {
 		RECT rc;
 		g_hWndM = g_hWnd;
@@ -111,19 +113,16 @@ namespace GraphicsModule {
 			cb.vMeshColor = o.color;
 			devcon.UpdateSubresource(changeveryFrameB, &cb);
 
-			devcon.draw(mo->indexnum);//*/
+			devcon.draw(mo->indexnum);
 		}
 		
 	}
 
 	void manager::setrenderfortextur(RenderTargetView& rtv)
 	{
-		if (rtv.get) {
-			rtv.release();
-		}
-		if (rtv.textur.get) {
-			rtv.textur.release();
-		}
+		rtv.release();
+		rtv.textur.release();
+		
 		rtv.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
 		dev.CreateTexture2D(rtv.textur);
 		D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
@@ -139,6 +138,7 @@ namespace GraphicsModule {
 
 	HRESULT manager::compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,  VertexShader& vs,InputLayout& il)
 	{
+#ifdef directX
 		ID3DBlob* pVSBlob = NULL;
 		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pVSBlob);
 		if (FAILED(hr))
@@ -150,10 +150,13 @@ namespace GraphicsModule {
 		dev.createVSwithInput(vs, il, pVSBlob);
 		pVSBlob->Release();
 		return hr;
+#endif
+		return S_OK;
 	}
 
 	HRESULT manager::compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px)
 	{
+#ifdef directX
 		ID3DBlob* pPSBlob = NULL;
 		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pPSBlob);
 		if (FAILED(hr))
@@ -168,6 +171,8 @@ namespace GraphicsModule {
 		hr = dev.CreatePixelShader(pPSBlob, &g_pPixelShader);
 		px.g_pPixelShader = g_pPixelShader;
 		pPSBlob->Release();
+#endif
+		return S_OK;
 	}
 	
 	manager* getmanager()

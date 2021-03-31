@@ -9,5 +9,3 @@ namespace GraphicsModule {
 		vector<mesh*> modelo;
 	};
 }
-
-

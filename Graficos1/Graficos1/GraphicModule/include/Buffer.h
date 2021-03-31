@@ -1,8 +1,11 @@
 #pragma once
 #include <windows.h>
+#ifdef directX
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
+#endif
+#include "flags.h"
 namespace GraphicsModule {
     class Buffer
     {
@@ -12,6 +15,10 @@ namespace GraphicsModule {
 #endif // directX
 
     public:
+        USAGE Usage;
+        UINT ByteWidth;
+        BIND_FLAG BindFlags;
+        UINT CPUAccessFlags;
 #ifdef directX
         ID3D11Buffer* get() { return buf; };
 #else

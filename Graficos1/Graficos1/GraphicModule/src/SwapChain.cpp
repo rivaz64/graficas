@@ -36,7 +36,9 @@ namespace GraphicsModule {
 
 	SwapChain::~SwapChain()
 	{
+#ifdef directX
 		g_pSwapChain->Release();
+#endif
 	}
 
 }

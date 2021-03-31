@@ -1,10 +1,13 @@
 #pragma once
 #include <windows.h>
+#ifdef directX
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
+#include <xnamath.h>
+#endif
 #include"Device.h"
-#include<vector>
+
 #include"mesh.h"
 #include"Textura.h"
 #include"RenderTargetView.h"
@@ -12,7 +15,6 @@
 #include"InputLayout.h"
 #include"flags.h"
 #include"PixelShader.h"
-using std::vector;
 class camera;
 namespace GraphicsModule {
 	class DeviceContext

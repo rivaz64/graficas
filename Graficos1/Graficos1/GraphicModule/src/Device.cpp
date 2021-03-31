@@ -163,6 +163,13 @@ namespace GraphicsModule {
 	void Device::CreateBuffer(D3D11_BUFFER_DESC& bd, Buffer& b)
 	{
 #ifdef directX
+		/*D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		// Create the constant buffers
+		bd.Usage = (D3D11_USAGE)b.Usage;
+		bd.ByteWidth = b.ByteWidth;
+		bd.BindFlags = (D3D11_BIND_FLAG)b.BindFlags;
+		bd.CPUAccessFlags = 0;*/
 		g_pd3dDevice->CreateBuffer(&bd, NULL, &b.buf);
 #endif // directX
 
@@ -171,19 +178,25 @@ namespace GraphicsModule {
 
 	void Device::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT n, ID3DBlob* blob, InputLayout& il)
 	{
+#ifdef directX
 		g_pd3dDevice->CreateInputLayout(desc, n, blob->GetBufferPointer(),
 			blob->GetBufferSize(), &il.g_pVertexLayout);
+#endif
 	}
 
 	void Device::CreateSamplerState(SamplerState ss)
 	{
+#ifdef directX
 		g_pd3dDevice->CreateSamplerState(&ss.desc, &ss.g_pSamplerLinear);
+#endif
 	}
 
 	
 	Device::~Device()
 	{
+#ifdef directX
 		g_pd3dDevice->Release();
+#endif
 	}
 
 }

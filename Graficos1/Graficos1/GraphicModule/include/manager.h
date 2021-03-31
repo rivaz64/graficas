@@ -1,9 +1,11 @@
 #pragma once
 #include <windows.h>
+#ifdef directX
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <xnamath.h>
+#endif
 #include "Device.h"
 #include"DeviceContext.h"
 #include"SwapChain.h"
@@ -41,7 +43,9 @@ namespace GraphicsModule {
         SwapChain* getSwapchain() {
             return &eswap;
         }
+#ifdef directX
         HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
+#endif
         void create(HWND g_hWnd);
         void descrivesch();
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);

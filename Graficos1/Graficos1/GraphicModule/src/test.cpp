@@ -3,7 +3,7 @@
 
 namespace GraphicsModule
 {
-    HRESULT test::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+    /*HRESULT test::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
     {
 #ifdef directX
         HRESULT hr = S_OK;
@@ -31,7 +31,7 @@ namespace GraphicsModule
 
         return S_OK;
 #endif
-    }
+    }*/
   HRESULT test::InitDevice(HWND _hwnd)
   {
       m_hwnd = _hwnd;
@@ -46,7 +46,9 @@ namespace GraphicsModule
 
       UINT createDeviceFlags = 0;
 #ifdef _DEBUG
+#ifdef directX
       createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
 #endif
 
       DRIVER_TYPE driverTypes[] =
@@ -237,7 +239,7 @@ namespace GraphicsModule
       // Set primitive topology
       man->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
       D3D11_BUFFER_DESC bd;
-      D3D11_SUBRESOURCE_DATA InitData;
+      //D3D11_SUBRESOURCE_DATA InitData;
       ZeroMemory(&bd, sizeof(bd));
       // Create the constant buffers
       bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;;
