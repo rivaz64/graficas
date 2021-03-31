@@ -273,7 +273,7 @@ int main()
     pitola0.mod = &mes;
     pitola0.tx = &tx;
     pitola.posi.x = 3;
-     scene = importer.ReadFile(openfilename(), NULL);
+     /*scene = importer.ReadFile(openfilename(), NULL);
      numvertices = 0;
      numfaces = 0;
     for (int i = 0; i < scene->mNumMeshes; i++) {
@@ -323,7 +323,7 @@ int main()
     rana.mod = &mes;
     rana.posi.x= 10;
     rana.posi.y = 10;
-    rana.posi.z = 10;
+    rana.posi.z = 10;*/
   // main loop
   MSG msg = { 0 };
   while (WM_QUIT != msg.message)

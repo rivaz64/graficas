@@ -300,7 +300,7 @@ namespace GraphicsModule
       //g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
 
       CBChangeOnResize cbChangesOnResize;
-      cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f));
+      cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f);
       man->getConext()->UpdateSubresource(changesOnReziseB,&cbChangesOnResize);
 
 
@@ -406,7 +406,7 @@ namespace GraphicsModule
       }
       CBNeverChanges cbNeverChanges;
       //man->getConext()->UpdateSubresource(cam);
-      cbNeverChanges.mView = XMMatrixTranspose(cam->getview());
+      cbNeverChanges.mView = cam->getView();
 
       man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
       XMFLOAT4 f(dirly[0], dirly[1], dirly[2], 0);

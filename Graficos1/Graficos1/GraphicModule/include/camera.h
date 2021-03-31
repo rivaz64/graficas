@@ -31,9 +31,9 @@ public:
 	void movey(float x);
 	void movez(float x);
 
-	float* getview();
 	float* getView();
-	float* getproyectionmatrixPerspective(float with, float ratio, float nearp, float farp);
+	
+	float* getProyectionMatrixPerspective(float with, float ratio, float nearp, float farp);
 	float* getproyectionmatrixOrtograpyc(float with, float height, float nearp, float farp);
 };
 

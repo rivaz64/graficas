@@ -66,7 +66,7 @@ namespace GraphicsModule {
 		//XMMATRIX g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
 		CBChangeOnResize cbChangesOnResize;
 		//cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
-		cbChangesOnResize.mProjection = XMMatrixTranspose(cam->getproyectionmatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f));
+		cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f);
 #ifdef directX
 		g_pImmediateContext->UpdateSubresource(chor.buf, 0, NULL, &cbChangesOnResize, 0, 0);
 #endif

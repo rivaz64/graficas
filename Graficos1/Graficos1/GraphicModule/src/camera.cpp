@@ -78,26 +78,7 @@ void camera::axis()
 
 
 
-float* camera::getview() {
-    axis();
-	viewmatrix[0] = xaxis.x;
-	viewmatrix[1] = yaxis.x;
-	viewmatrix[2] = zaxis.x;
-	viewmatrix[3] = 0;
-	viewmatrix[4] = xaxis.y;
-	viewmatrix[5] = yaxis.y;
-	viewmatrix[6] = zaxis.y;
-	viewmatrix[7] = 0;
-	viewmatrix[8] = xaxis.z;
-	viewmatrix[9] = yaxis.z;
-	viewmatrix[10] = zaxis.z;
-	viewmatrix[11] = 0;
-	viewmatrix[12] = -xaxis.dot(eye);
-	viewmatrix[13] = -yaxis.dot(eye);
-	viewmatrix[14] = -zaxis.dot(eye);
-	viewmatrix[15] = 1;
-	return viewmatrix;
-}
+
 
 float* camera::getView()
 {
@@ -121,25 +102,27 @@ float* camera::getView()
 	return viewmatrix;
 }
 
-float* camera::getproyectionmatrixPerspective(float angle, float ratio, float nearp, float farp)
+
+
+float* camera::getProyectionMatrixPerspective(float angle, float ratio, float nearp, float farp)
 {
 	float co = cos(angle * .5f), s = sin(angle * .5f);
 
 	proyectionmatrix[0] = (co / s) / ratio;
-	proyectionmatrix[1] = 0;
-	proyectionmatrix[2] = 0;
-	proyectionmatrix[3] = 0;
 	proyectionmatrix[4] = 0;
-	proyectionmatrix[5] = co / s;
-	proyectionmatrix[6] = 0;
-	proyectionmatrix[7] = 0;
 	proyectionmatrix[8] = 0;
-	proyectionmatrix[9] = 0;
-	proyectionmatrix[10] = farp / (farp - nearp);
-	proyectionmatrix[11] = 1;
 	proyectionmatrix[12] = 0;
+	proyectionmatrix[1] = 0;
+	proyectionmatrix[5] = co / s;
+	proyectionmatrix[9] = 0;
 	proyectionmatrix[13] = 0;
-	proyectionmatrix[14] = -farp * nearp / (farp - nearp);
+	proyectionmatrix[2] = 0;
+	proyectionmatrix[6] = 0;
+	proyectionmatrix[10] = farp / (farp - nearp);
+	proyectionmatrix[14] = 1;
+	proyectionmatrix[3] = 0;
+	proyectionmatrix[7] = 0;
+	proyectionmatrix[11] = -farp * nearp / (farp - nearp);
 	proyectionmatrix[15] = 0;
 	return proyectionmatrix;
 }
