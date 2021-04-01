@@ -101,7 +101,9 @@ namespace GraphicsModule {
 
 	void manager::draw(objeto &o, Buffer& changeveryFrameB)
 	{
+#ifdef directX
 		for (mesh* mo : (o.mod->modelo)) {
+
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
 			if (o.tx != NULL)
@@ -117,25 +119,26 @@ namespace GraphicsModule {
 
 			devcon.draw(mo->indexnum);
 		}
-		
+#endif
 	}
 
 	void manager::setrenderfortextur(RenderTargetView& rtv)
 	{
+#ifdef  directX
+
 		rtv.release();
 		rtv.textur.release();
 		
 		rtv.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
 		dev.CreateTexture2D(rtv.textur);
-		D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
-		ZeroMemory(&descViewRT, sizeof(descViewRT));
-		descViewRT.Format = (DXGI_FORMAT)FORMAT::R8G8B8A8_UNORM;
-		//si algo sale mal revisar esta flag v
-		descViewRT.ViewDimension = (D3D_SRV_DIMENSION)DIMENSION::TEXTURE2DARRAY;
-		descViewRT.Texture2D.MostDetailedMip = 0;
-		descViewRT.Texture2D.MipLevels = 1;
-		dev.CreateShaderResourceView(rtv, descViewRT);
+		
+		rtv.Format = FORMAT::R8G8B8A8_UNORM;
+		rtv.ViewDimension = DIMENSION::TEXTURE2DARRAY;
+		rtv.MostDetailedMip = 0;
+		rtv.MipLevels = 1;
+		dev.CreateShaderResourceView(rtv);
 		dev.CreateRenderTargetView(rtv);
+#endif
 	}
 
 	HRESULT manager::compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,  VertexShader& vs,InputLayout& il)

@@ -12,9 +12,10 @@ namespace GraphicsModule {
 		height = rc.bottom - rc.top;
 		return S_OK;
 	}
+#ifdef directX
 	void Device::createVSwithInput(VertexShader& vs, InputLayout& il, ID3DBlob* Blob)
 	{
-#ifdef directX
+
 		
 		g_pd3dDevice->CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize(), NULL, &vs.g_pVertexShader);
 		ID3D11ShaderReflection* reflection = NULL;
@@ -75,8 +76,9 @@ namespace GraphicsModule {
 		reflection->Release();
 		Blob->Release();
 		//return hr;
-#endif
+
 	}
+#endif
 	void Device::CreateRenderTargetView(RenderTargetView& rtv)
 	{
 #ifdef directX
@@ -142,24 +144,26 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void Device::CreateShaderResourceView(RenderTargetView& rtv, D3D11_SHADER_RESOURCE_VIEW_DESC des)
+	void Device::CreateShaderResourceView(RenderTargetView& rtv)
 	{
 #ifdef directX
-		g_pd3dDevice->CreateShaderResourceView(rtv.textur.get, &des, &rtv.srv);
+		D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
+		ZeroMemory(&descViewRT, sizeof(descViewRT));
+		descViewRT.Format = (DXGI_FORMAT)rtv.Format;
+		descViewRT.ViewDimension = (D3D_SRV_DIMENSION)rtv.ViewDimension;
+		descViewRT.Texture2D.MostDetailedMip = rtv.MostDetailedMip;
+		descViewRT.Texture2D.MipLevels = rtv.MipLevels;
+		g_pd3dDevice->CreateShaderResourceView(rtv.textur.get, &descViewRT, &rtv.srv);
 #endif
 	}
 
 	
-
+#ifdef directX
 	void Device::CreateBuffer(D3D11_BUFFER_DESC& bd, D3D11_SUBRESOURCE_DATA& InitData, Buffer& b)
 	{
-
-#ifdef directX
 		 g_pd3dDevice->CreateBuffer(&bd, &InitData, &b.buf);
-#endif // directX
-		
 	}
-
+#endif // directX
 	void Device::CreateBuffer(Buffer& b)
 	{
 #ifdef directX

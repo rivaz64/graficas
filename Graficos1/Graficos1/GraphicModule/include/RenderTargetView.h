@@ -8,6 +8,7 @@
 #endif
 #include "Textura.h"
 #include <initializer_list>
+#include "flags.h"
 namespace GraphicsModule {
 	class RenderTargetView
 	{
@@ -16,6 +17,10 @@ namespace GraphicsModule {
 		ID3D11RenderTargetView* get = NULL;
 		ID3D11ShaderResourceView* srv = NULL;
 #endif
+		FORMAT Format;
+		DIMENSION ViewDimension;
+		UINT MostDetailedMip;
+		UINT MipLevels;
 		Textura textur;
 		float ClearColor[4]= { 0.0f, 0.125f, 0.3f, 1.0f };
 		void setClearColor(std::initializer_list<float> c);

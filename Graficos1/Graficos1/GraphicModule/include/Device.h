@@ -32,7 +32,7 @@ namespace GraphicsModule {
 		void get() {  }
 #endif
 		D3D11_TEXTURE2D_DESC descDepth;
-		
+
 
 		ID3D11RenderTargetView* g_pRenderTargetView;
 		ID3D11DepthStencilView* DepthStencilView = NULL;
@@ -50,17 +50,21 @@ namespace GraphicsModule {
 		HWND g_hWndM;
 		UINT width, height;
 		HRESULT create(HWND g_hWnd);
+#ifdef directX
 		void createVSwithInput(VertexShader& vs, InputLayout& il, ID3DBlob* Blob);
-		void CreateRenderTargetView( RenderTargetView& rtv);
+#endif
+		void CreateRenderTargetView(RenderTargetView& rtv);
 		void CreateTexture2D(Textura& tx);
 		void CreateDepthStencilView(DepthStencil& ds);
-		
+
 		//HRESULT CreateInputLayout();
-		
-		
+
+
 		void CreateShaderResourceViewFromFile(LPCSTR file);
-		void CreateShaderResourceView(RenderTargetView& rtv, D3D11_SHADER_RESOURCE_VIEW_DESC des);
+		void CreateShaderResourceView(RenderTargetView& rtv);
+#ifdef directX
 		void CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
+#endif
 		void CreateBuffer(Buffer& b);
 		void CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT n, ID3DBlob* blob, InputLayout& il);
 		void CreateSamplerState(SamplerState ss);
