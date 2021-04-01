@@ -9,6 +9,7 @@ namespace GraphicsModule {
     void mesh::setindices(std::initializer_list<short> i)
     {
         indices = (int*)i.begin();
+#ifdef directX
         D3D11_BUFFER_DESC bd;
         D3D11_SUBRESOURCE_DATA InitData;
         ZeroMemory(&bd, sizeof(bd));
@@ -18,6 +19,7 @@ namespace GraphicsModule {
         bd.CPUAccessFlags = 0;
         InitData.pSysMem = indices;
         getmanager()->getDevice()->CreateBuffer(bd, InitData, indexB);
+#endif
     }
 
     Buffer* mesh::getvertex()
@@ -28,6 +30,7 @@ namespace GraphicsModule {
     void mesh::setvertex(std::initializer_list<vertex> i)
     {
         points = (vertex*)i.begin();
+#ifdef directX
         D3D11_BUFFER_DESC bd;
         D3D11_SUBRESOURCE_DATA InitData;
         ZeroMemory(&bd, sizeof(bd));
@@ -38,10 +41,12 @@ namespace GraphicsModule {
         ZeroMemory(&InitData, sizeof(InitData));
         InitData.pSysMem = points;
         getmanager()->getDevice()->CreateBuffer(bd, InitData, vertexB);
+#endif
     }
     void mesh::init(int nv, int ni)
     {
         indexnum = ni;
+#ifdef directX
         D3D11_BUFFER_DESC bd;
         D3D11_SUBRESOURCE_DATA InitData;
         ZeroMemory(&bd, sizeof(bd));
@@ -60,5 +65,6 @@ namespace GraphicsModule {
         bd.CPUAccessFlags = 0;
         InitData.pSysMem = indices;
         getmanager()->getDevice()->CreateBuffer(bd, InitData, indexB);
+#endif
     }
 }

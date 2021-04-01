@@ -80,52 +80,52 @@ void camera::axis()
 
 
 
-float* camera::getView()
+
+void camera::getView(float* matrix)
 {
-	axis();
-	viewmatrix[0] = xaxis.x;
-	viewmatrix[4] = yaxis.x;
-	viewmatrix[8] = zaxis.x;
-	viewmatrix[12] = 0;
-	viewmatrix[1] = xaxis.y;
-	viewmatrix[5] = yaxis.y;
-	viewmatrix[9] = zaxis.y;
-	viewmatrix[13] = 0;
-	viewmatrix[2] = xaxis.z;
-	viewmatrix[6] = yaxis.z;
-	viewmatrix[10] = zaxis.z;
-	viewmatrix[14] = 0;
-	viewmatrix[3] = -xaxis.dot(eye);
-	viewmatrix[7] = -yaxis.dot(eye);
-	viewmatrix[11] = -zaxis.dot(eye);
-	viewmatrix[15] = 1;
-	return viewmatrix;
+	matrix[0] = xaxis.x;
+	matrix[4] = yaxis.x;
+	matrix[8] = zaxis.x;
+	matrix[12] = 0;
+	matrix[1] = xaxis.y;
+	matrix[5] = yaxis.y;
+	matrix[9] = zaxis.y;
+	matrix[13] = 0;
+	matrix[2] = xaxis.z;
+	matrix[6] = yaxis.z;
+	matrix[10] = zaxis.z;
+	matrix[14] = 0;
+	matrix[3] = -xaxis.dot(eye);
+	matrix[7] = -yaxis.dot(eye);
+	matrix[11] = -zaxis.dot(eye);
+	matrix[15] = 1;
 }
 
-
-
-float* camera::getProyectionMatrixPerspective(float angle, float ratio, float nearp, float farp)
+void camera::getProyectionMatrixPerspective(float* matrix)
 {
 	float co = cos(angle * .5f), s = sin(angle * .5f);
 
-	proyectionmatrix[0] = (co / s) / ratio;
-	proyectionmatrix[4] = 0;
-	proyectionmatrix[8] = 0;
-	proyectionmatrix[12] = 0;
-	proyectionmatrix[1] = 0;
-	proyectionmatrix[5] = co / s;
-	proyectionmatrix[9] = 0;
-	proyectionmatrix[13] = 0;
-	proyectionmatrix[2] = 0;
-	proyectionmatrix[6] = 0;
-	proyectionmatrix[10] = farp / (farp - nearp);
-	proyectionmatrix[14] = 1;
-	proyectionmatrix[3] = 0;
-	proyectionmatrix[7] = 0;
-	proyectionmatrix[11] = -farp * nearp / (farp - nearp);
-	proyectionmatrix[15] = 0;
-	return proyectionmatrix;
+	matrix[0] = (co / s) / ratio;
+	matrix[4] = 0;
+	matrix[8] = 0;
+	matrix[12] = 0;
+	matrix[1] = 0;
+	matrix[5] = co / s;
+	matrix[9] = 0;
+	matrix[13] = 0;
+	matrix[2] = 0;
+	matrix[6] = 0;
+	matrix[10] = farp / (farp - nearp);
+	matrix[14] = 1;
+	matrix[3] = 0;
+	matrix[7] = 0;
+	matrix[11] = -farp * nearp / (farp - nearp);
+	matrix[15] = 0;
 }
+
+
+
+
 
 float* camera::getproyectionmatrixOrtograpyc(float with, float height, float nearp, float farp)
 {

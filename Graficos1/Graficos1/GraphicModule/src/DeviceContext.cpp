@@ -61,12 +61,16 @@ namespace GraphicsModule {
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
-
+		cam->angle = 0.785398163f;
+		cam->ratio = width / (FLOAT)height;
+		cam->nearp = 0.01f;
+		cam->farp = 600.0f;
 		getmanager()->RSSetViewports(vp);//*/
 		//XMMATRIX g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
 		CBChangeOnResize cbChangesOnResize;
 		//cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
-		cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f);
+		cam->getProyectionMatrixPerspective(cbChangesOnResize.mProjection);
+		//cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f);
 #ifdef directX
 		g_pImmediateContext->UpdateSubresource(chor.buf, 0, NULL, &cbChangesOnResize, 0, 0);
 #endif

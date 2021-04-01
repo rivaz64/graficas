@@ -12,6 +12,7 @@ class camera
 {
 
 public:
+	float angle, ratio, nearp, farp;
 	vector3 eye, at, up;
 	vector3 zaxis, yaxis, xaxis;
 	LPPOINT p = new POINT;
@@ -31,9 +32,8 @@ public:
 	void movey(float x);
 	void movez(float x);
 
-	float* getView();
-	
-	float* getProyectionMatrixPerspective(float with, float ratio, float nearp, float farp);
+	void getView(float* matrix);
+	void getProyectionMatrixPerspective(float* matrix);
 	float* getproyectionmatrixOrtograpyc(float with, float height, float nearp, float farp);
 };
 

@@ -292,15 +292,19 @@ namespace GraphicsModule
       g_View = XMMatrixLookAtLH(Eye, At, Up);*/
 
       CBNeverChanges cbNeverChanges;
-      cbNeverChanges.mView = cam->getView();
+      cam->getView(cbNeverChanges.mView);
 
       man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
 
       // Initialize the projection matrix
       //g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
-
+      cam->angle = 0.785398163f;
+      cam->ratio = width / (FLOAT)height;
+      cam->nearp = 0.01f;
+      cam->farp = 600.0f;
       CBChangeOnResize cbChangesOnResize;
-      cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f);
+      cam->getProyectionMatrixPerspective(cbChangesOnResize.mProjection);
+      //cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f);
       man->getConext()->UpdateSubresource(changesOnReziseB,&cbChangesOnResize);
 
 
@@ -339,7 +343,7 @@ namespace GraphicsModule
   }
   void test::Update() {
       static float t = 0.0f;
-      if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
+      /*if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
       {
           t += (float)XM_PI * 0.0125f;
       }
@@ -350,7 +354,7 @@ namespace GraphicsModule
           if (dwTimeStart == 0)
               dwTimeStart = dwTimeCur;
           t = (dwTimeCur - dwTimeStart) / 1000.0f;
-      }
+      }*/
       //g_World = XMMatrixRotationY(t);
       LPPOINT p = new POINT;
       if ((GetKeyState(VK_RBUTTON) & 0x100) != 0) {
@@ -358,7 +362,7 @@ namespace GraphicsModule
           cam->gira(p);
           CBNeverChanges cbNeverChanges;
           //man->getConext()->UpdateSubresource(cam);
-          cbNeverChanges.mView = cam->getView();
+          cam->getView(cbNeverChanges.mView);
 
           man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
       }
@@ -367,9 +371,9 @@ namespace GraphicsModule
       }
       delete p;
       // Modify the color
-      cubo.color.x = .9;
-      cubo.color.y =.9;
-      cubo.color.z =.9;
+      /*cubo.color.x = .9;
+      cubo.color.y = .9;
+      cubo.color.z = .9;
       cubo0.color.x = .9;
       cubo0.color.y = .9;
       cubo0.color.z = .9;
@@ -378,7 +382,7 @@ namespace GraphicsModule
       cubo1.color.z = .9;
       cubo2.color.x = .9;
       cubo2.color.y = .9;
-      cubo2.color.z = .9;
+      cubo2.color.z = .9;*/
       float v = 36;
       if (GetKeyState('W') & 0x8000)
       {
@@ -406,11 +410,14 @@ namespace GraphicsModule
       }
       CBNeverChanges cbNeverChanges;
       //man->getConext()->UpdateSubresource(cam);
-      cbNeverChanges.mView = cam->getView();
+      cam->getView(cbNeverChanges.mView);
 
       man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
-      XMFLOAT4 f(dirly[0], dirly[1], dirly[2], 0);
-      man->getConext()->UpdateSubresource(Dirlight, &f);
+      f[0] = dirly[0];
+      f[1] = dirly[1];
+      f[2] = dirly[2];
+      f[3] = 0;
+      man->getConext()->UpdateSubresource(Dirlight, f);
   }
   void test::clear()
   {

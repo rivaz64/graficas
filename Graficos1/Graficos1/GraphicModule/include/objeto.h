@@ -11,7 +11,7 @@ namespace GraphicsModule {
 		model* mod;
 		Textura* tx=NULL;
 		vector3 posi;
-		XMFLOAT4 color;
+		//float color[4];
 		void setTexture(RenderTargetView rtv);
 	};
 }

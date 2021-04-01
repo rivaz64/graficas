@@ -43,6 +43,7 @@ namespace GraphicsModule {
 
 	void manager::descrivesch()
 	{
+#ifdef directX
 		ZeroMemory(&sd, sizeof(sd));
 		sd.BufferCount = 1;
 		sd.BufferDesc.Width = width;
@@ -55,6 +56,7 @@ namespace GraphicsModule {
 		sd.SampleDesc.Count = 1;
 		sd.SampleDesc.Quality = 0;
 		sd.Windowed = TRUE;
+#endif
 	}
 
 	HRESULT manager::init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel)
@@ -110,7 +112,7 @@ namespace GraphicsModule {
 
 			cb.mWorld = XMMatrixTranspose(g_World);
 
-			cb.vMeshColor = o.color;
+			//cb.vMeshColor = o.color;
 			devcon.UpdateSubresource(changeveryFrameB, &cb);
 
 			devcon.draw(mo->indexnum);

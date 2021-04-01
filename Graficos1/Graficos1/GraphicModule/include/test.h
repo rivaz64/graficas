@@ -25,12 +25,12 @@ namespace GraphicsModule
 
   struct CBNeverChanges
   {
-    XMMATRIX mView;
+    float mView[16];
   };
 
   struct CBChangeOnResize
   {
-    XMMATRIX mProjection;
+      float mProjection[16];
   };
 
   struct CBChangesEveryFrame
@@ -95,7 +95,7 @@ namespace GraphicsModule
       void draw(objeto& o);
       void Render();
       void CleanupDevice();
-
+      float f[4];
       HWND m_hwnd;
   };
 
