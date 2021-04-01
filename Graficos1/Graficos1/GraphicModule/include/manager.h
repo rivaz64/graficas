@@ -21,6 +21,7 @@
 namespace GraphicsModule {
     class manager
     {
+        float world[16];
         Device dev;
         DeviceContext devcon;
         SwapChain eswap;
@@ -28,8 +29,9 @@ namespace GraphicsModule {
         //ID3D11DeviceContext* g_pImmediateContext = NULL;
         //IDXGISwapChain* g_pSwapChain = NULL;
         HWND g_hWndM;
+#ifdef directX
         DXGI_SWAP_CHAIN_DESC sd;
-
+#endif
     public:
         CD3D11_VIEWPORT v;
         UINT width;

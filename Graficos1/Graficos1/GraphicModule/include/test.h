@@ -18,9 +18,11 @@ namespace GraphicsModule
 {
   struct SimpleVertex
   {
+#ifdef directX
     XMFLOAT3 Pos;
     XMFLOAT2 Tex;
     XMFLOAT3 Nor;
+#endif
   };
 
   struct CBNeverChanges
@@ -35,8 +37,13 @@ namespace GraphicsModule
 
   struct CBChangesEveryFrame
   {
+#ifdef directX
     XMMATRIX mWorld;
-    XMFLOAT4 vMeshColor;
+#else
+      float mWorld[16];
+#endif
+
+    float vMeshColor[4];
   };
 
   class test

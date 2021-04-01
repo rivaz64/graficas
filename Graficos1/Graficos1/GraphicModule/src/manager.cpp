@@ -112,9 +112,15 @@ namespace GraphicsModule {
 			CBChangesEveryFrame cb;
 			g_World = XMMatrixTranslation(o.posi.x, o.posi.y, o.posi.z);
 
-			cb.mWorld = XMMatrixTranspose(g_World);
-
-			//cb.vMeshColor = o.color;
+			cb.mWorld= XMMatrixTranspose(g_World);
+			
+			/*cb.mWorld[0] = 1;
+			cb.mWorld[5] = 1;
+			cb.mWorld[10] = 1;
+			cb.mWorld[15] = 1;
+			cb.mWorld[12] = o.posi.x;
+			cb.mWorld[13] = o.posi.y;
+			cb.mWorld[14] = o.posi.z;*/
 			devcon.UpdateSubresource(changeveryFrameB, &cb);
 
 			devcon.draw(mo->indexnum);

@@ -177,13 +177,13 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void Device::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT n, ID3DBlob* blob, InputLayout& il)
+	/*void Device::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT n, ID3DBlob* blob, InputLayout& il)
 	{
 #ifdef directX
 		g_pd3dDevice->CreateInputLayout(desc, n, blob->GetBufferPointer(),
 			blob->GetBufferSize(), &il.g_pVertexLayout);
 #endif
-	}
+	}*/
 
 	void Device::CreateSamplerState(SamplerState ss)
 	{

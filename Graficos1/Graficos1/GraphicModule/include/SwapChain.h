@@ -14,8 +14,6 @@ namespace GraphicsModule {
 #else
 		void get() {}
 #endif
-		
-		ID3D11RenderTargetView* g_pRenderTargetView;
 		void rezise(LPARAM lparam, RenderTargetView& rtv,bool main);
 		void GetBuffer(Textura&t);
 		void Present();
