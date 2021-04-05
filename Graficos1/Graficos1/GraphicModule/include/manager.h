@@ -33,7 +33,9 @@ namespace GraphicsModule {
         DXGI_SWAP_CHAIN_DESC sd;
 #endif
     public:
+#ifdef directX
         CD3D11_VIEWPORT v;
+#endif
         UINT width;
         UINT height;
         Device* getDevice() {

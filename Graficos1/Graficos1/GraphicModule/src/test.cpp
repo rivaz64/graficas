@@ -1,8 +1,9 @@
 #include "test.h"
-
+#include <windows.h>
 
 namespace GraphicsModule
 {
+   
     /*HRESULT test::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
     {
 #ifdef directX
@@ -34,7 +35,12 @@ namespace GraphicsModule
     }*/
   HRESULT test::InitDevice(HWND _hwnd)
   {
-      m_hwnd = _hwnd;
+
+
+
+
+
+
       man = getmanager();
       man->create(_hwnd);
       HRESULT hr = S_OK;
@@ -74,6 +80,7 @@ namespace GraphicsModule
           g_driverType = driverTypes[driverTypeIndex];
           
           hr = man->init(g_driverType, createDeviceFlags, featureLevels, numFeatureLevels, g_featureLevel);
+          if(!FAILED(hr))
           break;
       }
       if (FAILED(hr))

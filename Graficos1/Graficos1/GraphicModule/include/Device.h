@@ -31,22 +31,23 @@ namespace GraphicsModule {
 #else
 		void get() {  }
 #endif
+
+#ifdef directX
 		D3D11_TEXTURE2D_DESC descDepth;
-
-
 		ID3D11RenderTargetView* g_pRenderTargetView;
 		ID3D11DepthStencilView* DepthStencilView = NULL;
 		ID3DBlob* pVSBlob;
 		ID3D11InputLayout* g_pVertexLayout;
+		ID3D11ShaderResourceView* g_pTextureRV = NULL;
+		ID3D11SamplerState* g_pSamplerLinear = NULL;
+		D3D11_BUFFER_DESC bd;
+		D3D11_SUBRESOURCE_DATA InitData;
+#endif
 		Buffer vertexB;
 		Buffer indexB;
 		Buffer neverChangesB;
 		Buffer changesOnReziseB;
 		Buffer changeveryFrameB;
-		ID3D11ShaderResourceView* g_pTextureRV = NULL;
-		ID3D11SamplerState* g_pSamplerLinear = NULL;
-		D3D11_BUFFER_DESC bd;
-		D3D11_SUBRESOURCE_DATA InitData;
 		HWND g_hWndM;
 		UINT width, height;
 		HRESULT create(HWND g_hWnd);
