@@ -1,48 +1,95 @@
 #include "test.h"
 #include <windows.h>
 
+
 namespace GraphicsModule
 {
-   
-    /*HRESULT test::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+    test* test::esta = NULL;
+    LRESULT CALLBACK test::WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
     {
-#ifdef directX
-        HRESULT hr = S_OK;
-
-        DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#if defined( DEBUG ) || defined( _DEBUG )
-        // Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
-        // Setting this flag improves the shader debugging experience, but still allows
-        // the shaders to be optimized and to run exactly the way they will run in
-        // the release configuration of this program.
-        dwShaderFlags |= D3DCOMPILE_DEBUG;
-#endif
-
-        ID3DBlob* pErrorBlob;
-        hr = D3DX11CompileFromFileA(szFileName, NULL, NULL, szEntryPoint, szShaderModel,
-            dwShaderFlags, 0, NULL, ppBlobOut, &pErrorBlob, NULL);
-        if (FAILED(hr))
+        switch (_msg)
         {
-            if (pErrorBlob != NULL)
-                OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
-            if (pErrorBlob) pErrorBlob->Release();
-            return hr;
-        }
-        if (pErrorBlob) pErrorBlob->Release();
+        case WM_SIZE:
+#ifdef directX
+            if (_wParam != SIZE_MINIMIZED && GraphicsModule::getmanager()->getSwapchain()->get()) {
 
-        return S_OK;
+                esta->rezise(_hwnd, _lParam);
+            }
 #endif
-    }*/
+            return 0;
+            break;
+
+        case WM_SYSCOMMAND:
+            if ((_wParam & 0xfff0) == SC_KEYMENU)
+            {
+                return 0;
+            }
+            break;
+
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
+        }
+        return ::DefWindowProc(_hwnd, _msg, _wParam, _lParam);
+    }
+
+    
+    HRESULT test::InitWindow(LONG _width, LONG _height)
+    {
+        if (esta == NULL) {
+            esta = this;
+        }
+#ifdef openGL
+        window = glfwCreateWindow(_width, _height, "TutorialWindowClass", glfwGetPrimaryMonitor(), NULL);
+        glfwMakeContextCurrent(window);
+        //window->monitor;
+#endif
+        // Register class
+#ifdef directX
+        
+        WNDCLASSEX wcex;
+        wcex.cbSize = sizeof(WNDCLASSEX);
+        wcex.style = CS_HREDRAW | CS_VREDRAW;
+        wcex.lpfnWndProc = WndProc;
+        wcex.cbClsExtra = 0;
+        wcex.cbWndExtra = 0;
+        wcex.hInstance = nullptr;
+        wcex.hIcon = nullptr;
+        wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+        wcex.lpszMenuName = NULL;
+        wcex.lpszClassName = "TutorialWindowClass";
+        wcex.hIconSm = nullptr;
+        if (!RegisterClassEx(&wcex))
+        {
+            return E_FAIL;
+        }
+
+        // Create window
+        RECT rc = { 0, 0, _width, _height };
+        AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+        g_hwnd = CreateWindow("TutorialWindowClass", "Graficos 1", WS_OVERLAPPEDWINDOW,
+            CW_USEDEFAULT, CW_USEDEFAULT, _width, _height, NULL, NULL, NULL, NULL);
+        if (!g_hwnd)
+        {
+            return E_FAIL;
+        }
+        ShowWindow(g_hwnd, SW_SHOWNORMAL);
+#endif
+        return S_OK;
+    }
+    
   HRESULT test::InitDevice(HWND _hwnd)
   {
-
-
-
+      
+      if (g_hwnd == NULL) {
+          return S_FALSE;
+      }
 
 
 
       man = getmanager();
-      man->create(_hwnd);
+      man->create(g_hwnd);
       HRESULT hr = S_OK;
 
       RECT rc;
@@ -349,6 +396,11 @@ namespace GraphicsModule
       man->setrenderfortextur(rtv2);
   }
   void test::Update() {
+#ifdef openGL
+      if (glfwWindowShouldClose(window)) {
+          glfwDestroyWindow(window);
+      }
+#endif
       static float t = 0.0f;
       /*if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
       {
@@ -374,6 +426,7 @@ namespace GraphicsModule
           man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
       }
       else {
+          if(cam!= NULL)
           cam->click = false;
       }
       delete p;
@@ -417,14 +470,17 @@ namespace GraphicsModule
       }
       CBNeverChanges cbNeverChanges;
       //man->getConext()->UpdateSubresource(cam);
-      cam->getView(cbNeverChanges.mView);
+      if (cam) {
 
-      man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
-      f[0] = dirly[0];
-      f[1] = dirly[1];
-      f[2] = dirly[2];
-      f[3] = 0;
-      man->getConext()->UpdateSubresource(Dirlight, f);
+          cam->getView(cbNeverChanges.mView);
+
+          man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
+          f[0] = dirly[0];
+          f[1] = dirly[1];
+          f[2] = dirly[2];
+          f[3] = 0;
+          man->getConext()->UpdateSubresource(Dirlight, f);
+      }
   }
   void test::clear()
   {

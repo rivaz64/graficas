@@ -60,7 +60,7 @@ namespace GraphicsModule
       float dirly[3];
 
       HWND g_hwnd;
-
+      GLFWwindow* window;
       DRIVER_TYPE                     g_driverType = DRIVER_TYPE::DT_NULL;
       FEATURE_LEVEL                   g_featureLevel = FEATURE_LEVEL::LEVEL_11_0;
 
@@ -88,6 +88,7 @@ namespace GraphicsModule
       Textura texturmar;
       Buffer Dirlight;
       SamplerState samsta;
+      static test* esta;
 #ifdef directX
       //ID3D11SamplerState* g_pSamplerLinear = NULL;
       XMMATRIX                            g_World;
@@ -101,6 +102,7 @@ namespace GraphicsModule
 #ifdef directX
       HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 #endif
+      static LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam);
       HRESULT InitWindow(LONG _width, LONG _height);
       HRESULT InitDevice(HWND _hwnd);
       void rezise(HWND& _hwnd, LPARAM _lParam);

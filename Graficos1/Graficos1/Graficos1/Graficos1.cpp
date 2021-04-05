@@ -16,7 +16,7 @@
 #include "imgui_impl_opengl3.h"*/
 //#include <GLFW/glfw3.h>
 #pragma comment(lib, "ComDlg32.lib")
-HWND g_hwnd;
+HWND g_hwnd=nullptr;
 GraphicsModule::test MiObj;
 GraphicsModule::Textura tx;
 GraphicsModule::objeto pitola, pitola0, rana;
@@ -76,7 +76,11 @@ LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
 
 HRESULT InitWindow(LONG _width, LONG _height)
 {
+#ifdef openGL
+    GLFWwindow* window = glfwCreateWindow(_width, _height, "TutorialWindowClass",NULL,NULL);
+#endif
     // Register class
+#ifdef directX
     WNDCLASSEX wcex;
     wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -105,7 +109,7 @@ HRESULT InitWindow(LONG _width, LONG _height)
         return E_FAIL;
     }
     ShowWindow(g_hwnd, SW_SHOWNORMAL);
-
+#endif
     return S_OK;
 }
 HRESULT InitImgUI()
@@ -153,23 +157,28 @@ void UIRender()
 
 int main()
 {
-    /*if (!glfwInit())
-        return 1;*/
-
+#ifdef openGL
+    if (!glfwInit())
+        return 1; 
+#endif
         // create the window and console
-    if (FAILED(InitWindow(1280, 720)))
+    
+    if (FAILED(MiObj.InitWindow(1280, 720)))
     {
         DestroyWindow(g_hwnd);
         return 0;
     }
-   
+
+#ifdef directX
+    
     // create Graphic API interface
-    if (FAILED(MiObj.InitDevice(g_hwnd)))
+    HRESULT hr=MiObj.InitDevice(g_hwnd);
+    if (FAILED(hr) || hr== S_FALSE)
     {
         MiObj.CleanupDevice();
         return 0;
     }
-    
+#endif
     // create UI
     if (FAILED(InitImgUI()))
     {
@@ -300,13 +309,14 @@ int main()
     else
     {
         MiObj.Update();
+#ifdef directX
+
+       
         MiObj.clear();
         MiObj.draw(pitola);
-        //MiObj.draw(pitola0);
-        //MiObj.draw(rana);
-        //MiObj.draw(MiObj.cubo);
         UIRender();
         MiObj.Render();
+#endif
     }
   }
 
