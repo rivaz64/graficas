@@ -137,7 +137,7 @@ void UIRender()
     // example window
     if (ImGui::Begin("Another Window", nullptr))
     {
-        ImGui::DragFloat3("size", MiObj.dirly, .001f, -1.f, 1.f);
+        ImGui::DragFloat3("light", MiObj.dirly, .001f, -1.f, 1.f);
         //ImGui::Image(pitola.tx->srv, ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
     }
     ImGui::End();
@@ -181,7 +181,7 @@ int main()
         return 0;
     }
     
-    /*Assimp::Importer importer;
+    Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(openfilename(), NULL);
     int numvertices = 0;
     int numfaces = 0;
@@ -192,13 +192,13 @@ int main()
     }
     aiMesh* mesh;// = scene->mMeshes[0];
     GraphicsModule::Textura tx;
-    tx.loadfromfile("pitola.dds");*/
+    tx.loadfromfile("pitola.dds");
 
     GraphicsModule::model mes;
 
     //mes.points = new GraphicsModule::mesh::vertex[numvertices];
     //mes.indices = new int[numfaces * 3];
-    /*numvertices = 0;
+    numvertices = 0;
     numfaces = 0;
     for (int o = 0; o < scene->mNumMeshes; o++) {
         mesh = scene->mMeshes[o];
@@ -228,7 +228,7 @@ int main()
         }
         mes.modelo[mes.modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
     }
-    */
+    
 
 
 
@@ -301,7 +301,7 @@ int main()
     {
         MiObj.Update();
         MiObj.clear();
-        //MiObj.draw(pitola);
+        MiObj.draw(pitola);
         //MiObj.draw(pitola0);
         //MiObj.draw(rana);
         //MiObj.draw(MiObj.cubo);
