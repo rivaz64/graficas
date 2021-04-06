@@ -8,8 +8,9 @@
 #include <xnamath.h>
 #endif
 #ifdef openGL
-#define GLFW_INCLUDE_NONE
+
 #include<glad\glad.h>
+#define GLFW_INCLUDE_NONE
 #include<glfw\glfw3.h>
 #include<glfw\glfw3native.h>
 #endif
@@ -20,6 +21,7 @@
 #include"InputLayout.h"
 #include"PixelShader.h"
 #include"SamplerState.h"
+
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -58,9 +60,11 @@ namespace GraphicsModule
   public:
 
       float dirly[3];
-
+      bool cerrar = true;
       HWND g_hwnd;
+#ifdef openGL
       GLFWwindow* window;
+#endif
       DRIVER_TYPE                     g_driverType = DRIVER_TYPE::DT_NULL;
       FEATURE_LEVEL                   g_featureLevel = FEATURE_LEVEL::LEVEL_11_0;
 

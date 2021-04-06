@@ -32,6 +32,7 @@ namespace GraphicsModule {
 #ifdef directX
 		g_pSwapChain->Present(0, 0);
 #endif
+
 	}
 
 	SwapChain::~SwapChain()

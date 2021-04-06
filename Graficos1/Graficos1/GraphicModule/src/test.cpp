@@ -1,6 +1,7 @@
 #include "test.h"
-#include <windows.h>
 
+#include <windows.h>
+#include <iostream>
 
 namespace GraphicsModule
 {
@@ -40,8 +41,16 @@ namespace GraphicsModule
             esta = this;
         }
 #ifdef openGL
-        window = glfwCreateWindow(_width, _height, "TutorialWindowClass", glfwGetPrimaryMonitor(), NULL);
+        window = glfwCreateWindow(_width, _height, "TutorialWindowClass", NULL, NULL);
         glfwMakeContextCurrent(window);
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+            std::cout << "Failed to initialize OpenGL context" << std::endl;
+            return -1;
+        }
+        glfwSwapInterval(1);
+        glClearColor(.0f, .0f, 1.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        //
         //window->monitor;
 #endif
         // Register class
@@ -397,8 +406,9 @@ namespace GraphicsModule
   }
   void test::Update() {
 #ifdef openGL
+      glfwMakeContextCurrent(window);
       if (glfwWindowShouldClose(window)) {
-          glfwDestroyWindow(window);
+          cerrar = false;
       }
 #endif
       static float t = 0.0f;
@@ -484,8 +494,10 @@ namespace GraphicsModule
   }
   void test::clear()
   {
-      float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
-
+      //float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+#ifdef openGL
+      glClear(GL_COLOR_BUFFER_BIT);
+#endif
     man->getConext()->ClearRenderTargetView(rtv);
     man->getConext()->ClearRenderTargetView(rtv2);
     man->getConext()->ClearRenderTargetView(rtv3);
@@ -534,11 +546,20 @@ namespace GraphicsModule
   }
   void test::Render()
   {
+
     man->getSwapchain()->Present();
+#ifdef openGL
+    glfwSwapBuffers(window);
+#endif
   }
 
   void test::CleanupDevice()
   {
-    
+#ifdef directX
+      DestroyWindow(g_hwnd);
+#endif
+#ifdef openGL
+      glfwDestroyWindow(window);
+#endif
   }
 }

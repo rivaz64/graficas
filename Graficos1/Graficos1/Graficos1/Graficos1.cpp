@@ -160,6 +160,8 @@ int main()
 #ifdef openGL
     if (!glfwInit())
         return 1; 
+    
+    
 #endif
         // create the window and console
     
@@ -299,7 +301,7 @@ int main()
     rana.posi.z = 10;*/
   // main loop
   MSG msg = { 0 };
-  while (WM_QUIT != msg.message)
+  while (WM_QUIT != msg.message && MiObj.cerrar )
   {
     if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
@@ -309,13 +311,14 @@ int main()
     else
     {
         MiObj.Update();
+        MiObj.Render();
 #ifdef directX
 
        
         MiObj.clear();
         MiObj.draw(pitola);
         UIRender();
-        MiObj.Render();
+        
 #endif
     }
   }
@@ -327,7 +330,7 @@ int main()
   ImGui_ImplWin32_Shutdown();
   ImGui::DestroyContext();
   MiObj.CleanupDevice();
-  DestroyWindow(g_hwnd);
+  
   return (int)msg.wParam;
 }
 /*

@@ -337,7 +337,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\GraphicModule\$(Configuration)\$(PlatformTarget)\;$(DEVLIBS)glfw\lib-vc2010-64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;GraphicModule_d.lib;assimp-vc142-mtd.lib;Shell32.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;Opengl32.lib;GraphicModule_d.lib;assimp-vc142-mtd.lib;Shell32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='opengl rilis|x64'">
@@ -377,6 +377,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\externals\glad\src\glad.c" />
     <ClCompile Include="..\..\Externals\imgui-1.8\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="..\..\Externals\imgui-1.8\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="..\..\Externals\imgui-1.8\imgui.cpp" />
