@@ -13,12 +13,12 @@ namespace GraphicsModule {
 #ifdef directX
 		ID3D11VertexShader* g_pVertexShader = NULL;
 #endif
-	
+		unsigned int shader;
 
 #ifdef directX
 		ID3D11VertexShader* get() { return g_pVertexShader; }
 #else
-		void get(){};
+		unsigned int get() { return shader; }
 #endif
 		~VertexShader() {
 #ifdef directX

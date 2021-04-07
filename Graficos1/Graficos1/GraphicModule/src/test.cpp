@@ -2,9 +2,110 @@
 
 #include <windows.h>
 #include <iostream>
-
+#include <fstream>
+#include <sstream>
 namespace GraphicsModule
 {
+#ifdef openGL
+    GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path)
+    {
+        // Crear los shaders
+        GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+        GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+
+        // Leer el Vertex Shader desde archivo
+        std::string VertexShaderCode;
+        std::ifstream VertexShaderStream(vertex_file_path, std::ios::in);
+        if (VertexShaderStream.is_open()) {
+            std::stringstream sstr;
+            sstr << VertexShaderStream.rdbuf();
+            VertexShaderCode = sstr.str();
+            VertexShaderStream.close();
+        }
+        else {
+            printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_file_path);
+            getchar();
+            return 0;
+        }
+
+        // Leer el Fragment Shader desde archivo
+        std::string FragmentShaderCode;
+        std::ifstream FragmentShaderStream(fragment_file_path, std::ios::in);
+        if (FragmentShaderStream.is_open()) {
+            std::stringstream sstr;
+            sstr << FragmentShaderStream.rdbuf();
+            FragmentShaderCode = sstr.str();
+            FragmentShaderStream.close();
+        }
+
+        GLint Result = GL_FALSE;
+        GLint InfoLogLength;
+
+
+        // Compilar Vertex Shader
+        printf("Compiling shader : %s\n", vertex_file_path);
+        char const* VertexSourcePointer = VertexShaderCode.c_str();
+        glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
+        glCompileShader(VertexShaderID);
+
+        // Revisar Vertex Shader
+        glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
+        glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+        if (InfoLogLength > 0) {
+            std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
+            glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+            printf("%s\n", &VertexShaderErrorMessage[0]);
+        }
+
+        // Compilar Fragment Shader
+        printf("Compiling shader : %s\n", fragment_file_path);
+        char const* FragmentSourcePointer = FragmentShaderCode.c_str();
+        glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
+        glCompileShader(FragmentShaderID);
+
+        // Revisar Fragment Shader
+        glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
+        glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+        if (InfoLogLength > 0) {
+            std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
+            glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
+            printf("%s\n", &FragmentShaderErrorMessage[0]);
+        }
+
+
+
+        // Vincular el programa por medio del ID
+        printf("Linking program\n");
+        GLuint ProgramID = glCreateProgram();
+        glAttachShader(ProgramID, VertexShaderID);
+        glAttachShader(ProgramID, FragmentShaderID);
+        glLinkProgram(ProgramID);
+
+        // Revisar el programa
+        glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
+        glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+        if (InfoLogLength > 0) {
+            std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
+            glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
+            printf("%s\n", &ProgramErrorMessage[0]);
+        }
+
+
+        glDetachShader(ProgramID, VertexShaderID);
+        glDetachShader(ProgramID, FragmentShaderID);
+
+        glDeleteShader(VertexShaderID);
+        glDeleteShader(FragmentShaderID);
+
+        return ProgramID;
+    }
+#endif
+#ifdef openGL
+    void test::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+        std::cout << "aka" << std::endl;
+        glViewport(0, 0, width, height);
+    }
+#endif
     test* test::esta = NULL;
     LRESULT CALLBACK test::WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
     {
@@ -47,9 +148,11 @@ namespace GraphicsModule
             std::cout << "Failed to initialize OpenGL context" << std::endl;
             return -1;
         }
-        glfwSwapInterval(1);
+        glViewport(0, 0, _width, _height);
+        //glfwSwapInterval(1);
         glClearColor(.0f, .0f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
+        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
         //
         //window->monitor;
 #endif
@@ -174,20 +277,13 @@ namespace GraphicsModule
       vp.TopLeftY = 0;
       //man->getConext()->RSSetViewports(vp);
       man->RSSetViewports(vp);
-#ifdef directX
-      // Compile the vertex shader
-      /*ID3DBlob* pVSBlob = NULL;
-      hr = CompileShaderFromFile("Tutorial07.fx", "VS", "vs_4_0", &pVSBlob);
-      if (FAILED(hr))
-      {
-          MessageBox(NULL,
-              "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
-          return hr;
-      }
-
-      man->getDevice()->createVSwithInput(vrtxshdr, intplyut, pVSBlob);*/
       
-      hr=man->compileVS("Tutorial07.fx", "VS", "vs_4_0", vrtxshdr, intplyut);
+#ifdef openGL
+      LoadShaders("Tutorial07.fx", "Tutorial07.fx");
+#endif
+
+#ifdef directX
+      hr = man->compileVS("Tutorial07.fx", "VS", "vs_4_0", vrtxshdr, intplyut);
       if (FAILED(hr))
           return hr;
 
@@ -195,10 +291,6 @@ namespace GraphicsModule
       
       if (FAILED(hr))
           return hr;
-
-      // Compile the pixel shader
-     
-      // Create the pixel shader
 
 #endif
       // Create vertex buffer
@@ -407,6 +499,7 @@ namespace GraphicsModule
   void test::Update() {
 #ifdef openGL
       glfwMakeContextCurrent(window);
+      glfwPollEvents();
       if (glfwWindowShouldClose(window)) {
           cerrar = false;
       }
@@ -496,7 +589,9 @@ namespace GraphicsModule
   {
       //float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
 #ifdef openGL
-      glClear(GL_COLOR_BUFFER_BIT);
+      glClearColor(.0f, .0f, 1.f, 1.f);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      
 #endif
     man->getConext()->ClearRenderTargetView(rtv);
     man->getConext()->ClearRenderTargetView(rtv2);
@@ -540,6 +635,7 @@ namespace GraphicsModule
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
 #endif
   }
+  
   void test::draw(objeto& o)
   {
       man->draw(o, changeveryFrameB);

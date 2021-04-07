@@ -40,8 +40,6 @@ namespace GraphicsModule {
 		ID3D11InputLayout* g_pVertexLayout;
 		ID3D11ShaderResourceView* g_pTextureRV = NULL;
 		ID3D11SamplerState* g_pSamplerLinear = NULL;
-		D3D11_BUFFER_DESC bd;
-		D3D11_SUBRESOURCE_DATA InitData;
 #endif
 		Buffer vertexB;
 		Buffer indexB;

@@ -120,6 +120,9 @@ namespace GraphicsModule {
 
 	void DeviceContext::VSSetShader(VertexShader& vs)
 	{
+#ifdef openGL
+		vs.shader = glCreateShader(GL_VERTEX_SHADER);
+#endif
 #ifdef directX
 		g_pImmediateContext->VSSetShader(vs.g_pVertexShader, NULL, 0);
 #endif

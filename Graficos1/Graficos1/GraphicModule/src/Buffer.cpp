@@ -1,5 +1,9 @@
 #include "Buffer.h"
 namespace GraphicsModule {
+	void Buffer::describe()
+	{
+
+	}
 	Buffer::~Buffer()
 	{
 #ifdef directX

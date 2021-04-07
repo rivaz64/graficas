@@ -13,17 +13,22 @@ namespace GraphicsModule {
 #ifdef directX
         ID3D11Buffer* buf = NULL;
 #endif // directX
-
+#ifdef openGL
+        unsigned int buf = 0;
+#endif
     public:
         USAGE Usage;
         UINT ByteWidth;
         BIND_FLAG BindFlags;
         UINT CPUAccessFlags;
+        void* Mem=NULL;
+
 #ifdef directX
         ID3D11Buffer* get() { return buf; };
 #else
         void get() {  };
 #endif
+        void describe();
         ~Buffer();
     };
 }

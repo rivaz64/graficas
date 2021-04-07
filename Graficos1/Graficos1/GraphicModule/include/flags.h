@@ -30,21 +30,43 @@ namespace GraphicsModule {
     };
     enum class USAGE
     {
-        DEFAULT = 0,
+        DEFAULT 
+#ifdef openGL
+         =0x88E4
+#endif
+#ifdef directX
+         =0
+#endif
+        ,
         IMMUTABLE = 1,
         DYNAMIC = 2,
         STAGING = 3
     };
     enum class BIND_FLAG
     {
-        VERTEX_BUFFER = 0x1L,
-        INDEX_BUFFER = 0x2L,
+        VERTEX_BUFFER 
+#ifdef openGL
+         =0x8892
+#endif
+#ifdef directX
+         =0x1L
+#endif
+        ,
+        INDEX_BUFFER
+#ifdef openGL
+        = 0x8892
+#endif
+#ifdef directX
+        = 0x2L
+#endif
+        ,
         CONSTANT_BUFFER = 0x4L,
         SHADER_RESOURCE = 0x8L,
         STREAM_OUTPUT = 0x10L,
         RENDER_TARGET = 0x20L,
         DEPTH_STENCIL = 0x40L,
         UNORDERED_ACCESS = 0x80L
+
     };
     enum class DIMENSION
     {

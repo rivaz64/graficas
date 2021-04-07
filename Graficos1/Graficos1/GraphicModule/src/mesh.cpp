@@ -46,25 +46,19 @@ namespace GraphicsModule {
     void mesh::init(int nv, int ni)
     {
         indexnum = ni;
-#ifdef directX
-        D3D11_BUFFER_DESC bd;
-        D3D11_SUBRESOURCE_DATA InitData;
-        ZeroMemory(&bd, sizeof(bd));
-        bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
-        bd.ByteWidth = sizeof(SimpleVertex) * nv;
-        bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::VERTEX_BUFFER;
-        bd.CPUAccessFlags = 0;
-        ZeroMemory(&InitData, sizeof(InitData));
-        InitData.pSysMem = points;
-        getmanager()->getDevice()->CreateBuffer(bd, InitData, vertexB);
-        ZeroMemory(&bd, sizeof(bd));
-        bd.Usage = (D3D11_USAGE)USAGE::DEFAULT;
-        bd.ByteWidth = sizeof(int) * ni;
-        ZeroMemory(&InitData, sizeof(InitData));
-        bd.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::INDEX_BUFFER;
-        bd.CPUAccessFlags = 0;
-        InitData.pSysMem = indices;
-        getmanager()->getDevice()->CreateBuffer(bd, InitData, indexB);
-#endif
+        vertexB.Usage = USAGE::DEFAULT;
+        vertexB.ByteWidth = sizeof(SimpleVertex) * nv;
+        vertexB.BindFlags = BIND_FLAG::VERTEX_BUFFER;
+        vertexB.CPUAccessFlags = 0;
+        vertexB.Mem = points;
+        indexB.Usage = USAGE::DEFAULT;
+        indexB.ByteWidth = sizeof(int) * ni;
+        indexB.BindFlags = BIND_FLAG::INDEX_BUFFER;
+        indexB.CPUAccessFlags = 0;
+        indexB.Mem = indices;
+        getmanager()->getDevice()->CreateBuffer(vertexB);
+        getmanager()->getDevice()->CreateBuffer(indexB);
+
+
     }
 }

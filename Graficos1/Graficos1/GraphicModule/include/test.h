@@ -107,6 +107,9 @@ namespace GraphicsModule
       HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 #endif
       static LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam);
+#ifdef openGL
+      static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+#endif
       HRESULT InitWindow(LONG _width, LONG _height);
       HRESULT InitDevice(HWND _hwnd);
       void rezise(HWND& _hwnd, LPARAM _lParam);
