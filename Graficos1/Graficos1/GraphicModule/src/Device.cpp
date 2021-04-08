@@ -167,9 +167,11 @@ namespace GraphicsModule {
 	void Device::CreateBuffer(Buffer& b)
 	{
 #ifdef openGL
+		
 		glGenBuffers(1, &b.buf);
-		glBindBuffer((GLenum)b.BindFlags, vertexB.buf);
+		glBindBuffer((GLenum)b.BindFlags, b.buf);
 		glBufferData((GLenum)b.BindFlags, b.ByteWidth, b.Mem, (GLenum)b.Usage);
+		
 #endif
 #ifdef directX
 		D3D11_BUFFER_DESC bd;

@@ -13,6 +13,7 @@
 #define GLFW_INCLUDE_NONE
 #include<glfw\glfw3.h>
 #include<glfw\glfw3native.h>
+#include <glm/gtc/matrix_transform.hpp>
 #endif
 #include"manager.h"
 #include"camera.h"
@@ -32,7 +33,7 @@ namespace GraphicsModule
     XMFLOAT3 Nor;
 #endif
   };
-
+  
   struct CBNeverChanges
   {
     float mView[16];
@@ -40,6 +41,9 @@ namespace GraphicsModule
 
   struct CBChangeOnResize
   {
+#ifdef openGL
+      glm::mat4 Projection;
+#endif
       float mProjection[16];
   };
 
@@ -57,6 +61,7 @@ namespace GraphicsModule
   class test
   {
       manager* man;
+      
   public:
 
       float dirly[3];
@@ -67,7 +72,8 @@ namespace GraphicsModule
 #endif
       DRIVER_TYPE                     g_driverType = DRIVER_TYPE::DT_NULL;
       FEATURE_LEVEL                   g_featureLevel = FEATURE_LEVEL::LEVEL_11_0;
-
+      UINT width;
+      UINT heigh;
       RenderTargetView rtv;
       RenderTargetView rtv2;
       RenderTargetView rtv3;
@@ -85,14 +91,16 @@ namespace GraphicsModule
       InputLayout intplyut0;
       PixelShader pixshad;
 
-      Buffer neverChangesB;
-      Buffer changesOnReziseB;
+      Buffer view;
+      Buffer proyection;
       Buffer changeveryFrameB;
       Textura texturbitco;
       Textura texturmar;
       Buffer Dirlight;
       SamplerState samsta;
       static test* esta;
+      unsigned int shader;
+      //glm::mat4 matrix;
 #ifdef directX
       //ID3D11SamplerState* g_pSamplerLinear = NULL;
       XMMATRIX                            g_World;
@@ -111,11 +119,13 @@ namespace GraphicsModule
       static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 #endif
       HRESULT InitWindow(LONG _width, LONG _height);
-      HRESULT InitDevice(HWND _hwnd);
+      HRESULT InitDevice();
       void rezise(HWND& _hwnd, LPARAM _lParam);
       void Update();
       void clear();
       void draw(objeto& o);
+      void draw(Buffer& o);
+      void draw(mesh& o);
       void Render();
       void CleanupDevice();
       float f[4];

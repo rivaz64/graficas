@@ -141,7 +141,10 @@ namespace GraphicsModule
         if (esta == NULL) {
             esta = this;
         }
+        width = _width;
+        heigh =_height;
 #ifdef openGL
+
         window = glfwCreateWindow(_width, _height, "TutorialWindowClass", NULL, NULL);
         glfwMakeContextCurrent(window);
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -191,23 +194,19 @@ namespace GraphicsModule
         return S_OK;
     }
     
-  HRESULT test::InitDevice(HWND _hwnd)
+  HRESULT test::InitDevice()
   {
       
-      if (g_hwnd == NULL) {
-          return S_FALSE;
-      }
+      
 
 
 
       man = getmanager();
+
       man->create(g_hwnd);
       HRESULT hr = S_OK;
 
-      RECT rc;
-      GetClientRect(m_hwnd, &rc);
-      UINT width = rc.right - rc.left;
-      UINT height = rc.bottom - rc.top;
+      
 
       UINT createDeviceFlags = 0;
 #ifdef _DEBUG
@@ -270,7 +269,7 @@ namespace GraphicsModule
       
       Viewport vp;
       vp.Width = (FLOAT)width;
-      vp.Height = (FLOAT)height;
+      vp.Height = (FLOAT)heigh;
       vp.MinDepth = 0.0f;
       vp.MaxDepth = 1.0f;
       vp.TopLeftX = 0;
@@ -279,7 +278,7 @@ namespace GraphicsModule
       man->RSSetViewports(vp);
       
 #ifdef openGL
-      LoadShaders("Tutorial07.fx", "Tutorial07.fx");
+      shader=LoadShaders("vertexchader.txt", "pixelchader.txt");
 #endif
 
 #ifdef directX
@@ -294,7 +293,7 @@ namespace GraphicsModule
 
 #endif
       // Create vertex buffer
-
+/*
       cubito.setvertex(
           {
               { {-1.0f, 1.0f, 1.0f}, {0,0},{-1.0f, 1.0f, 1.0f} },
@@ -334,7 +333,7 @@ namespace GraphicsModule
               { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } ,{0.f,0.f,1.f}},
               { { 1.0f, -1.0f, 1.0f }, { 1.0f, 0.0f } ,{0.f,0.f,1.f}},
               { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } ,{0.f,0.f,1.f}},
-              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,0.f,1.f} },//*/
+              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,0.f,1.f} },//
           });
       
       cubito.setindices(
@@ -368,8 +367,8 @@ namespace GraphicsModule
               18,17,19,
 
               22,20,21,
-              23,20,22//*/
-          });
+              23,20,22//
+          });//*/
      
 
       cam = new camera;
@@ -395,17 +394,17 @@ namespace GraphicsModule
       man->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
      
 
-      neverChangesB.Usage = USAGE::DEFAULT;
-      neverChangesB.ByteWidth = sizeof(CBNeverChanges);
-      neverChangesB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
-      neverChangesB.CPUAccessFlags = 0;
-      man->getDevice()->CreateBuffer(neverChangesB);
+      view.Usage = USAGE::DEFAULT;
+      view.ByteWidth = sizeof(CBNeverChanges);
+      view.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+      view.CPUAccessFlags = 0;
+      man->getDevice()->CreateBuffer(view);
       
-      changesOnReziseB.Usage = USAGE::DEFAULT;
-      changesOnReziseB.ByteWidth = sizeof(CBChangeOnResize);
-      changesOnReziseB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
-      changesOnReziseB.CPUAccessFlags = 0;
-      man->getDevice()->CreateBuffer(changesOnReziseB);
+      proyection.Usage = USAGE::DEFAULT;
+      proyection.ByteWidth = sizeof(CBChangeOnResize);
+      proyection.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+      proyection.CPUAccessFlags = 0;
+      man->getDevice()->CreateBuffer(proyection);
       
       changeveryFrameB.Usage = USAGE::DEFAULT;
       changeveryFrameB.ByteWidth = sizeof(CBChangesEveryFrame);
@@ -446,21 +445,22 @@ namespace GraphicsModule
       XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
       g_View = XMMatrixLookAtLH(Eye, At, Up);*/
 
-      CBNeverChanges cbNeverChanges;
-      cam->getView(cbNeverChanges.mView);
+      matrix cbNeverChanges;
+      cam->getView(cbNeverChanges);
 
-      man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
+      man->getConext()->UpdateSubresource(view, &cbNeverChanges);
 
       // Initialize the projection matrix
       //g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
       cam->angle = 0.785398163f;
-      cam->ratio = width / (FLOAT)height;
+      cam->ratio = width / (FLOAT)heigh;
       cam->nearp = 0.01f;
       cam->farp = 600.0f;
-      CBChangeOnResize cbChangesOnResize;
-      cam->getProyectionMatrixPerspective(cbChangesOnResize.mProjection);
+      matrix cbChangesOnResize;
+      cam->getProyectionMatrixPerspective(cbChangesOnResize);
+      
       //cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f);
-      man->getConext()->UpdateSubresource(changesOnReziseB,&cbChangesOnResize);
+      man->getConext()->UpdateSubresource(proyection,&cbChangesOnResize);
 
 
       // create rasterizer state
@@ -493,7 +493,7 @@ namespace GraphicsModule
   {
       man->getSwapchain()->rezise(_lParam, rtv,true);
       
-      man->getConext()->resizewindow(cam, _hwnd, rtv,changesOnReziseB);
+      man->getConext()->resizewindow(cam, _hwnd, rtv,proyection);
       man->setrenderfortextur(rtv2);
   }
   void test::Update() {
@@ -522,11 +522,11 @@ namespace GraphicsModule
       if ((GetKeyState(VK_RBUTTON) & 0x100) != 0) {
           GetCursorPos(p);
           cam->gira(p);
-          CBNeverChanges cbNeverChanges;
+          matrix cbNeverChanges;
           //man->getConext()->UpdateSubresource(cam);
-          cam->getView(cbNeverChanges.mView);
+          cam->getView(cbNeverChanges);
 
-          man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
+          man->getConext()->UpdateSubresource(view, &cbNeverChanges);
       }
       else {
           if(cam!= NULL)
@@ -571,13 +571,13 @@ namespace GraphicsModule
       {
           cam->movex(-v);
       }
-      CBNeverChanges cbNeverChanges;
+      matrix cbNeverChanges;
       //man->getConext()->UpdateSubresource(cam);
       if (cam) {
 
-          cam->getView(cbNeverChanges.mView);
+          cam->getView(cbNeverChanges);
 
-          man->getConext()->UpdateSubresource(neverChangesB, &cbNeverChanges);
+          man->getConext()->UpdateSubresource(view, &cbNeverChanges);
           f[0] = dirly[0];
           f[1] = dirly[1];
           f[2] = dirly[2];
@@ -591,6 +591,7 @@ namespace GraphicsModule
 #ifdef openGL
       glClearColor(.0f, .0f, 1.f, 1.f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      glUseProgram(shader);
       
 #endif
     man->getConext()->ClearRenderTargetView(rtv);
@@ -626,8 +627,8 @@ namespace GraphicsModule
     man->getConext()->VSSetShader(vrtxshdr);
 #ifdef directX
 //luego abstraer sto
-    man->getConext()->get()->VSSetConstantBuffers(0, 1, &neverChangesB.buf);
-    man->getConext()->get()->VSSetConstantBuffers(1, 1, &changesOnReziseB.buf);
+    man->getConext()->get()->VSSetConstantBuffers(0, 1, &view.buf);
+    man->getConext()->get()->VSSetConstantBuffers(1, 1, &proyection.buf);
     man->getConext()->get()->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
     man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
     //aki akaba lode abstraer luego
@@ -639,6 +640,26 @@ namespace GraphicsModule
   void test::draw(objeto& o)
   {
       man->draw(o, changeveryFrameB);
+  }
+  
+  void test::draw(mesh& o)
+  {
+#ifdef openGL
+      glEnableVertexAttribArray(0);
+
+      glBindBuffer(GL_ARRAY_BUFFER, o.getvertex()->buf);
+      glVertexAttribPointer(
+          0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+          o.n,                  // size
+          GL_FLOAT,           // type
+          GL_FALSE,           // normalized?
+          0,                  // stride
+          (void*)0            // array buffer offset
+      );
+      // Draw the triangle !
+      glDrawArrays(GL_TRIANGLES, 0, o.n); // Starting from vertex 0; 3 vertices total -> 1 triangle
+      glDisableVertexAttribArray(0);
+#endif
   }
   void test::Render()
   {

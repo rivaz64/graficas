@@ -67,9 +67,9 @@ namespace GraphicsModule {
 		cam->farp = 600.0f;
 		getmanager()->RSSetViewports(vp);//*/
 		//XMMATRIX g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
-		CBChangeOnResize cbChangesOnResize;
+		matrix cbChangesOnResize;
 		//cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
-		cam->getProyectionMatrixPerspective(cbChangesOnResize.mProjection);
+		cam->getProyectionMatrixPerspective(cbChangesOnResize);
 		//cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(0.785398163f, width / (FLOAT)height, 0.01f, 100.0f);
 #ifdef directX
 		g_pImmediateContext->UpdateSubresource(chor.buf, 0, NULL, &cbChangesOnResize, 0, 0);
@@ -112,7 +112,14 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void DeviceContext::UpdateSubresource(Buffer& b, const void* c) {
+	void DeviceContext::UpdateSubresource(Buffer& b, 
+#ifdef directX
+		const
+#endif
+		void* c) {
+#ifdef openGL
+		b.Mem = c;
+#endif
 #ifdef directX
 		g_pImmediateContext->UpdateSubresource(b.buf, 0, NULL, c, 0, 0);
 #endif

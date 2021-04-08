@@ -42,7 +42,11 @@ namespace GraphicsModule {
 		void PSSetShaderResources(Textura*t);
 		void OMSetRenderTargets(RenderTargetView& r, DepthStencil& d);
 		void ClearDepthStencilView(DepthStencil& d);
-		void UpdateSubresource(Buffer& b, const void * c);
+		void UpdateSubresource(Buffer& b, 
+#ifdef directX
+			const
+#endif
+			void * c);
 		void VSSetShader(VertexShader& vs);
 		void PSSetShader(PixelShader& ps);
 		void IASetInputLayout(InputLayout& il);

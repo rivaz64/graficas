@@ -34,11 +34,13 @@ namespace GraphicsModule {
 	}
 #endif
 	void manager::create(HWND g_hWnd) {
+#ifdef directX
 		RECT rc;
 		g_hWndM = g_hWnd;
 		GetClientRect(g_hWnd, &rc);
 		width = rc.right - rc.left;
 		height = rc.bottom - rc.top;
+#endif
 	}
 
 	void manager::descrivesch()
@@ -101,6 +103,11 @@ namespace GraphicsModule {
 
 	void manager::draw(objeto &o, Buffer& changeveryFrameB)
 	{
+#ifdef openGL
+		for (mesh* mo : (o.mod->modelo)) {
+			glBindVertexArray(mo->vao);
+		}
+#endif
 #ifdef directX
 		for (mesh* mo : (o.mod->modelo)) {
 

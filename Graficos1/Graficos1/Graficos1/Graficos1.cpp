@@ -5,6 +5,13 @@
 #ifdef directX
 #include "imgui_impl_dx11.h"
 #endif
+#ifdef openGL
+
+#include<glad\glad.h>
+#define GLFW_INCLUDE_NONE
+#include<glfw\glfw3.h>
+#include<glfw\glfw3native.h>
+#endif
 #include "GraphicModule.h"
 #include <string>
 #include <iostream>
@@ -20,6 +27,8 @@ HWND g_hwnd=nullptr;
 GraphicsModule::test MiObj;
 GraphicsModule::Textura tx;
 GraphicsModule::objeto pitola, pitola0, rana;
+GraphicsModule::mesh mesho;
+
 string openfilename(const char* filter = "All Files (*.*)\0*.*\0", HWND owner = NULL) {
     OPENFILENAME ofn;
     char fileName[MAX_PATH] = "";
@@ -74,44 +83,7 @@ LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
     return ::DefWindowProc(_hwnd, _msg, _wParam, _lParam);
 }
 
-HRESULT InitWindow(LONG _width, LONG _height)
-{
-#ifdef openGL
-    GLFWwindow* window = glfwCreateWindow(_width, _height, "TutorialWindowClass",NULL,NULL);
-#endif
-    // Register class
-#ifdef directX
-    WNDCLASSEX wcex;
-    wcex.cbSize = sizeof(WNDCLASSEX);
-    wcex.style = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc = WndProc;
-    wcex.cbClsExtra = 0;
-    wcex.cbWndExtra = 0;
-    wcex.hInstance = nullptr;
-    wcex.hIcon = nullptr;
-    wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wcex.lpszMenuName = NULL;
-    wcex.lpszClassName = "TutorialWindowClass";
-    wcex.hIconSm = nullptr;
-    if (!RegisterClassEx(&wcex))
-    {
-        return E_FAIL;
-    }
 
-    // Create window
-    RECT rc = { 0, 0, _width, _height };
-    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-    g_hwnd = CreateWindow("TutorialWindowClass", "Graficos 1", WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, _width, _height, NULL, NULL, NULL, NULL);
-    if (!g_hwnd)
-    {
-        return E_FAIL;
-    }
-    ShowWindow(g_hwnd, SW_SHOWNORMAL);
-#endif
-    return S_OK;
-}
 HRESULT InitImgUI()
 {
     // Setup Dear ImGui context
@@ -171,16 +143,15 @@ int main()
         return 0;
     }
 
-#ifdef directX
-    
+
     // create Graphic API interface
-    HRESULT hr=MiObj.InitDevice(g_hwnd);
+    HRESULT hr=MiObj.InitDevice();
     if (FAILED(hr) || hr== S_FALSE)
     {
         MiObj.CleanupDevice();
         return 0;
     }
-#endif
+
     // create UI
     if (FAILED(InitImgUI()))
     {
@@ -191,7 +162,7 @@ int main()
         ImGui::DestroyContext();
         return 0;
     }
-    
+#ifdef directX
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(openfilename(), NULL);
     int numvertices = 0;
@@ -239,15 +210,29 @@ int main()
         }
         mes.modelo[mes.modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
     }
-    
-
-
-
-    pitola.mod= &mes;
+    pitola.mod = &mes;
     pitola.tx = &tx;
     pitola0.mod = &mes;
     pitola0.tx = &tx;
     pitola.posi.x = 3;
+#endif
+
+
+
+   
+    GraphicsModule::mesh triangle;
+    triangle.setvertex({
+   -1.0f, -1.0f, 0.0f,
+   1.0f, -1.0f, 0.0f,
+   0.0f,  1.0f, 0.0f,
+        },3);
+//    glGenBuffers(1, &vertexB.buf);
+// The following commands will talk about our 'vertexbuffer' buffer
+    //glBindBuffer(GL_ARRAY_BUFFER, vertexB.buf);
+// Give our vertices to OpenGL.
+    //glBufferData((GLenum)vertexB.BindFlags, vertexB.ByteWidth, vertexB.Mem, (GLenum)vertexB.Usage);
+    
+    //triangulo.mod->modelo.push_back(&mesho);
      /*scene = importer.ReadFile(openfilename(), NULL);
      numvertices = 0;
      numfaces = 0;
@@ -311,15 +296,16 @@ int main()
     else
     {
         MiObj.Update();
-        MiObj.Render();
-#ifdef directX
-
-       
         MiObj.clear();
+#ifdef directX
         MiObj.draw(pitola);
-        UIRender();
-        
 #endif
+#ifdef openGL
+        MiObj.draw(triangle);
+#endif
+        MiObj.Render();
+        
+
     }
   }
 

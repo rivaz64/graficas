@@ -9,6 +9,12 @@ namespace GraphicsModule {
     void mesh::setindices(std::initializer_list<short> i)
     {
         indices = (int*)i.begin();
+        vertexB.Usage = USAGE::DEFAULT;
+        vertexB.ByteWidth = sizeof(SimpleVertex) * 3;
+        vertexB.BindFlags = BIND_FLAG::VERTEX_BUFFER;
+        vertexB.CPUAccessFlags = 0;
+        vertexB.Mem = points;
+        getmanager()->getDevice()->CreateBuffer(vertexB);
 #ifdef directX
         D3D11_BUFFER_DESC bd;
         D3D11_SUBRESOURCE_DATA InitData;
@@ -26,11 +32,24 @@ namespace GraphicsModule {
     {
         return &vertexB;
     }
-
+    void mesh::setvertex(std::initializer_list<float> i,int num) {
+#ifdef openGL
+        n = num;
+        points = (float*)i.begin();
+        GLuint vertexbuffer;
+        // Generate 1 buffer, put the resulting identifier in vertexbuffer
+        vertexB.BindFlags = GraphicsModule::BIND_FLAG::VERTEX_BUFFER;
+        vertexB.Usage = GraphicsModule::USAGE::DEFAULT;
+        vertexB.ByteWidth = sizeof(float)*n*3;
+        vertexB.Mem = points;
+        GraphicsModule::getmanager()->getDevice()->CreateBuffer(vertexB);
+#endif
+    }
     void mesh::setvertex(std::initializer_list<vertex> i)
     {
-        points = (vertex*)i.begin();
+        
 #ifdef directX
+        points = (vertex*)i.begin();
         D3D11_BUFFER_DESC bd;
         D3D11_SUBRESOURCE_DATA InitData;
         ZeroMemory(&bd, sizeof(bd));
@@ -56,9 +75,11 @@ namespace GraphicsModule {
         indexB.BindFlags = BIND_FLAG::INDEX_BUFFER;
         indexB.CPUAccessFlags = 0;
         indexB.Mem = indices;
+        //glGenVertexArrays(1, &vao);
+        //glBindVertexArray(vao);
         getmanager()->getDevice()->CreateBuffer(vertexB);
         getmanager()->getDevice()->CreateBuffer(indexB);
-
-
+        //glEnableVertexAttribArray(0);
+        
     }
 }

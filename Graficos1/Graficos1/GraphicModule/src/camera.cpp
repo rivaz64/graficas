@@ -81,46 +81,58 @@ void camera::axis()
 
 
 
-void camera::getView(float* matrix)
+void camera::getView(matrix& matrix)
 {
-	matrix[0] = xaxis.x;
-	matrix[4] = yaxis.x;
-	matrix[8] = zaxis.x;
-	matrix[12] = 0;
-	matrix[1] = xaxis.y;
-	matrix[5] = yaxis.y;
-	matrix[9] = zaxis.y;
-	matrix[13] = 0;
-	matrix[2] = xaxis.z;
-	matrix[6] = yaxis.z;
-	matrix[10] = zaxis.z;
-	matrix[14] = 0;
-	matrix[3] = -xaxis.dot(eye);
-	matrix[7] = -yaxis.dot(eye);
-	matrix[11] = -zaxis.dot(eye);
-	matrix[15] = 1;
+#ifdef openGL
+	matrix.m= glm::lookAt(
+		glm::vec3(eye.x,eye.y,eye.z), // Camera is at (4,3,3), in World Space
+		glm::vec3(at.x, at.y, at.z), // and looks at the origin
+		glm::vec3(up.x, up.y, up.z)  // Head is up (set to 0,-1,0 to look upside-down)
+	);
+#else
+	matrix.m[0] = xaxis.x;
+	matrix.m[4] = yaxis.x;
+	matrix.m[8] = zaxis.x;
+	matrix.m[12] = 0;
+	matrix.m[1] = xaxis.y;
+	matrix.m[5] = yaxis.y;
+	matrix.m[9] = zaxis.y;
+	matrix.m[13] = 0;
+	matrix.m[2] = xaxis.z;
+	matrix.m[6] = yaxis.z;
+	matrix.m[10] = zaxis.z;
+	matrix.m[14] = 0;
+	matrix.m[3] = -xaxis.dot(eye);
+	matrix.m[7] = -yaxis.dot(eye);
+	matrix.m[11] = -zaxis.dot(eye);
+	matrix.m[15] = 1;
+#endif
 }
 
-void camera::getProyectionMatrixPerspective(float* matrix)
+void camera::getProyectionMatrixPerspective(matrix& matrix)
 {
+	
+#ifdef openGL
+	matrix.m =glm::perspective(angle, ratio, nearp, farp);
+#else
 	float co = cos(angle * .5f), s = sin(angle * .5f);
-
-	matrix[0] = (co / s) / ratio;
-	matrix[4] = 0;
-	matrix[8] = 0;
-	matrix[12] = 0;
-	matrix[1] = 0;
-	matrix[5] = co / s;
-	matrix[9] = 0;
-	matrix[13] = 0;
-	matrix[2] = 0;
-	matrix[6] = 0;
-	matrix[10] = farp / (farp - nearp);
-	matrix[14] = 1;
-	matrix[3] = 0;
-	matrix[7] = 0;
-	matrix[11] = -farp * nearp / (farp - nearp);
-	matrix[15] = 0;
+	matrix.m[0] = (co / s) / ratio;
+	matrix.m[4] = 0;
+	matrix.m[8] = 0;
+	matrix.m[12] = 0;
+	matrix.m[1] = 0;
+	matrix.m[5] = co / s;
+	matrix.m[9] = 0;
+	matrix.m[13] = 0;
+	matrix.m[2] = 0;
+	matrix.m[6] = 0;
+	matrix.m[10] = farp / (farp - nearp);
+	matrix.m[14] = 1;
+	matrix.m[3] = 0;
+	matrix.m[7] = 0;
+	matrix.m[11] = -farp * nearp / (farp - nearp);
+	matrix.m[15] = 0;
+#endif
 }
 
 

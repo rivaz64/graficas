@@ -7,7 +7,18 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #endif
+#ifdef openGL
+#include <glm/gtc/matrix_transform.hpp>
+#endif
 #include <array>
+struct matrix
+{
+#ifdef openGL
+	glm::mat4 m;
+#else
+	float m[16];
+#endif
+};
 class camera
 {
 
@@ -32,8 +43,8 @@ public:
 	void movey(float x);
 	void movez(float x);
 
-	void getView(float* matrix);
-	void getProyectionMatrixPerspective(float* matrix);
+	void getView(matrix& matrix);
+	void getProyectionMatrixPerspective(matrix& matrix);
 	float* getproyectionmatrixOrtograpyc(float with, float height, float nearp, float farp);
 };
 
