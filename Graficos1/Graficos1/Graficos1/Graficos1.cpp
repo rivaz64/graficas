@@ -11,6 +11,7 @@
 #define GLFW_INCLUDE_NONE
 #include<glfw\glfw3.h>
 #include<glfw\glfw3native.h>
+
 #endif
 #include "GraphicModule.h"
 #include <string>
@@ -18,7 +19,10 @@
 
 #include"assimp\Importer.hpp"
 #include"assimp\scene.h"
-
+#ifdef openGL
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#endif
 /*#include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"*/
 //#include <GLFW/glfw3.h>
@@ -98,6 +102,10 @@ HRESULT InitImgUI()
 #ifdef directX
     ImGui_ImplDX11_Init(GraphicsModule::getmanager()->getDevice()->get(), GraphicsModule::getmanager()->getConext()->get());
 #endif
+#ifdef openGL
+    ImGui_ImplSDL2_InitForOpenGL(MiObj.window);
+    ImGui_ImplOpenGL3_Init();
+#endif
     return S_OK;
 }
 
@@ -123,6 +131,7 @@ void UIRender()
 #ifdef directX
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 #endif
+    
 }
 
 
@@ -135,16 +144,13 @@ int main()
     
     
 #endif
-        // create the window and console
-    
     if (FAILED(MiObj.InitWindow(1280, 720)))
     {
         DestroyWindow(g_hwnd);
         return 0;
     }
+    g_hwnd=MiObj.g_hwnd;
 
-
-    // create Graphic API interface
     HRESULT hr=MiObj.InitDevice();
     if (FAILED(hr) || hr== S_FALSE)
     {
@@ -216,16 +222,141 @@ int main()
     pitola0.tx = &tx;
     pitola.posi.x = 3;
 #endif
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(openfilename(), NULL);
+    int numvertices = 0;
+    int numfaces = 0;
+    for (int i = 0; i < scene->mNumMeshes; i++) {
+        numvertices += scene->mMeshes[i]->mNumVertices;
+        numfaces += scene->mMeshes[i]->mNumFaces;
+        //cout << numvertices << endl;
+    }
+    aiMesh* mesh;// = scene->mMeshes[0];
+    GraphicsModule::Textura tx;
+    tx.loadfromfile("pitola.dds");
 
+    GraphicsModule::model mes;
 
+    //mes.points = new GraphicsModule::mesh::vertex[numvertices];
+    //mes.indices = new int[numfaces * 3];
+    numvertices = 0;
+    numfaces = 0;
+    for (int o = 0; o < scene->mNumMeshes; o++) {
+        mesh = scene->mMeshes[o];
+        mes.modelo.push_back(new GraphicsModule::mesh);
+        mes.modelo[mes.modelo.size() - 1]->points = new float[mesh->mNumVertices*5];
+        mes.modelo[mes.modelo.size() - 1]->indices = new unsigned int[mesh->mNumFaces * 3];
+        for (int i = 0; i < mesh->mNumVertices; i++)
+        {
+            aiVector3D pos = mesh->mVertices[i];
+            mes.modelo[mes.modelo.size() - 1]->points[i*5] = pos.x;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 5+1] = pos.y;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 5+2] = pos.z;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 5 + 3]= mesh->mTextureCoords[0][i].x;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 5 + 4] = mesh->mTextureCoords[0][i].y;
+        }
+        for (int i = 0; i < mesh->mNumFaces; i++) {
+            const aiFace& Face = mesh->mFaces[i];
+            if (Face.mNumIndices == 3) {
+                mes.modelo[mes.modelo.size() - 1]->indices[i * 3] = i * 3;
+                mes.modelo[mes.modelo.size() - 1]->indices[i * 3 + 1] = i * 3 + 1;
+                mes.modelo[mes.modelo.size() - 1]->indices[i * 3 + 2] = i * 3 + 2;
+            }
+        }
+        mes.modelo[mes.modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
+    }
+    pitola.mod = &mes;
+    pitola.tx = &tx;
+    pitola0.mod = &mes;
+    pitola0.tx = &tx;
+    pitola.posi.x = 3;
+    //*/
 
-   
+    /*unsigned int text=0;
+    GraphicsModule::Textura bitco;
+    bitco.loadfromfile("bitco.jpg");
+    
     GraphicsModule::mesh triangle;
-    triangle.setvertex({
-   -1.0f, -1.0f, 0.0f,
-   1.0f, -1.0f, 0.0f,
-   0.0f,  1.0f, 0.0f,
-        },3);
+    triangle.setvertex({ 
+   -1.0f, 1.0f, -1.0f, 0,0,
+    1.0f, 1.0f, -1.0f,1.0f, 0.0f,
+    1.0f, 1.0f, 1.0f,1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f,0.0f, 1.0f,
+    -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
+    1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
+    1.0f, -1.0f, 1.0f,1.0f, 1.0f,
+    -1.0f, -1.0f, 1.0f,1.0f, 1.0f,
+    -1.0f, -1.0f, 1.0f,0.0f, 0.0f,
+    -1.0f, -1.0f, -1.0f,1.0f, 0.0f,
+    -1.0f, 1.0f, -1.0f,1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f,1.0f, 1.0f,
+    1.0f, -1.0f, 1.0f,0.0f, 0.0f,
+    1.0f, -1.0f, -1.0f,1.0f, 0.0f,
+    1.0f, 1.0f, -1.0f,1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,1.0f, 1.0f,
+    -1.0f, -1.0f, -1.0f,0.0f, 0.0f,
+    1.0f, -1.0f, -1.0f,1.0f, 0.0f,
+    1.0f, 1.0f, -1.0f,1.0f, 1.0f,
+    -1.0f, 1.0f, -1.0f,1.0f, 1.0f,
+    -1.0f, -1.0f, 1.0f,0.0f, 0.0f,
+    1.0f, -1.0f, 1.0f,1.0f, 0.0f,
+    1.0f, 1.0f, 1.0f,1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f,1.0f, 1.0f,
+        },24);
+    triangle.setcolor({
+     0.583f,  0.771f,  0.014f,
+     0.609f,  0.115f,  0.436f,
+     0.327f,  0.483f,  0.844f,
+     0.822f,  0.569f,  0.201f,
+     0.435f,  0.602f,  0.223f,
+     0.310f,  0.747f,  0.185f,
+     0.597f,  0.770f,  0.761f,
+     0.559f,  0.436f,  0.730f,
+     0.359f,  0.583f,  0.152f,
+     0.483f,  0.596f,  0.789f,
+     0.559f,  0.861f,  0.639f,
+     0.195f,  0.548f,  0.859f,
+     0.014f,  0.184f,  0.576f,
+     0.771f,  0.328f,  0.970f,
+     0.406f,  0.615f,  0.116f,
+     0.676f,  0.977f,  0.133f,
+     0.971f,  0.572f,  0.833f,
+     0.140f,  0.616f,  0.489f,
+     0.997f,  0.513f,  0.064f,
+     0.945f,  0.719f,  0.592f,
+     0.543f,  0.021f,  0.978f,
+     0.279f,  0.317f,  0.505f,
+     0.167f,  0.620f,  0.077f,
+     0.347f,  0.857f,  0.137f,
+        });
+    triangle.setindices({
+         3,1,0,
+                2,1,3,
+
+                6,4,5,
+                7,4,6,
+
+                11,9,8,
+                10,9,11,
+
+                14,12,13,
+                15,12,14,
+
+                19,17,16,
+                18,17,19,
+
+                22,20,21,
+                23,20,22 },36);
+
+    GraphicsModule::model tris;
+    //GraphicsModule::model cubo;
+    tris.modelo.push_back(&triangle);
+    //cubo.modelo.push_back(&cube);
+    GraphicsModule::objeto t;
+    t.mod = &tris;
+    t.tx = &bitco;
+    //GraphicsModule::objeto c;
+    //c.mod = &cubo;
 //    glGenBuffers(1, &vertexB.buf);
 // The following commands will talk about our 'vertexbuffer' buffer
     //glBindBuffer(GL_ARRAY_BUFFER, vertexB.buf);
@@ -299,10 +430,13 @@ int main()
         MiObj.clear();
 #ifdef directX
         MiObj.draw(pitola);
+        UIRender();
 #endif
 #ifdef openGL
-        MiObj.draw(triangle);
+        MiObj.draw(pitola);
+        //MiObj.draw(t);
 #endif
+        
         MiObj.Render();
         
 

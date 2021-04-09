@@ -18,6 +18,7 @@
 #include"Buffer.h"
 #include"objeto.h"
 #include"PixelShader.h"
+#include "camera.h"
 namespace GraphicsModule {
     class manager
     {
@@ -29,6 +30,8 @@ namespace GraphicsModule {
         //ID3D11DeviceContext* g_pImmediateContext = NULL;
         //IDXGISwapChain* g_pSwapChain = NULL;
         HWND g_hWndM;
+        
+
 #ifdef directX
         DXGI_SWAP_CHAIN_DESC sd;
 #endif
@@ -38,6 +41,7 @@ namespace GraphicsModule {
 #endif
         UINT width;
         UINT height;
+        unsigned int shader;
         Device* getDevice() {
             return &dev;
         }
@@ -59,6 +63,7 @@ namespace GraphicsModule {
         void setrenderfortextur(RenderTargetView& rtv);
         HRESULT compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,VertexShader& vs ,InputLayout& il);
         HRESULT compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px);
+        matrix Projection, View;
     };
     extern manager* getmanager();
 }

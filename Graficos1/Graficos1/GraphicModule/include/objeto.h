@@ -14,5 +14,6 @@ namespace GraphicsModule {
 		vector3 posi;
 		//float color[4];
 		void setTexture(RenderTargetView rtv);
+		void setTexture(unsigned int t);
 	};
 }

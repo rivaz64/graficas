@@ -18,7 +18,10 @@ namespace GraphicsModule {
 		D3D11_TEXTURE2D_DESC des;
 		ID3D11Texture2D* get;
 		ID3D11ShaderResourceView* srv;
+#else 
+		unsigned int get;
 		#endif
+		
 		void describe(FORMAT f, BIND_FLAG bf);
 		void loadfromfile(LPCSTR f);
 		void release();

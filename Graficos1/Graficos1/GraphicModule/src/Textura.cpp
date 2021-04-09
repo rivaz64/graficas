@@ -1,6 +1,8 @@
 #include "Textura.h"
 #include "manager.h"
-
+#ifdef openGL
+#include"TextureManager.h"
+#endif
 namespace GraphicsModule {
     void Textura::describe(FORMAT f, BIND_FLAG bf)
     {
@@ -21,7 +23,14 @@ namespace GraphicsModule {
     }
     void Textura::loadfromfile(LPCSTR f)
     {
-
+#ifdef openGL
+        TextureManager::Inst()->LoadTexture(f, get);
+        get = TextureManager::Inst()->m_texID[get];
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+#endif
 #ifdef directX
         D3DX11CreateShaderResourceViewFromFile(getmanager()->getDevice()->get(), f, NULL, NULL, &srv, NULL);
 #endif

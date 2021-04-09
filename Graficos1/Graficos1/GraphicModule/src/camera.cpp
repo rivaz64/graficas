@@ -1,5 +1,5 @@
 #include "camera.h"
-
+#include<iostream>
 camera::camera()
 {
 	viewmatrix = new float[16];
@@ -18,8 +18,12 @@ void camera::gira(LPPOINT punto)
         y = punto->y;
 	}
 	else {
-
+#ifdef directX
 		at = zaxis + xaxis * (punto->x - x) * .003 - yaxis * (punto->y - y) * .003;
+#endif
+#ifdef openGL
+		at = zaxis + xaxis * (-punto->x + x) * .003 - yaxis * (punto->y - y) * .003;
+#endif
 		at = at.normalize();
         x = punto->x;
         y = punto->y;
@@ -51,8 +55,14 @@ void camera::setup(float x, float y, float z)
 
 void camera::movex(float x)
 {
+#ifdef directX
 	eye = eye + xaxis * vel * x;
 	at = at + xaxis * vel * x;
+#endif
+#ifdef openGL
+	eye = eye - xaxis * vel * x;
+	at = at - xaxis * vel * x;
+#endif
 }
 
 void camera::movey(float x)
@@ -114,6 +124,7 @@ void camera::getProyectionMatrixPerspective(matrix& matrix)
 	
 #ifdef openGL
 	matrix.m =glm::perspective(angle, ratio, nearp, farp);
+	
 #else
 	float co = cos(angle * .5f), s = sin(angle * .5f);
 	matrix.m[0] = (co / s) / ratio;

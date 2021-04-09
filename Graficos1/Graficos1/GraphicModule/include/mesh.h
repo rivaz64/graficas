@@ -18,21 +18,24 @@ namespace GraphicsModule {
 		int indexnum;
 #ifdef openGL
 		float* points;
+		//float* colors;
 #endif
 #ifdef directX
 		vertex* points;
 #endif
-		int* indices;
+		unsigned int* indices;
 		Buffer vertexB;
 		Buffer indexB;
+		Buffer colorB;
 		unsigned int vao;
 		Buffer* getindices();
-		
+		float* colors;
 		int n = 0;
-		void setindices(std::initializer_list<short> i);
+		void setindices(std::initializer_list<unsigned int> i,int in);
 		Buffer* getvertex();
 		void setvertex(std::initializer_list<vertex> i);
 		void setvertex(std::initializer_list<float> i,int num);
+		void setcolor(std::initializer_list<float> i);
 		void init(int nv, int ni);
 	};
 }

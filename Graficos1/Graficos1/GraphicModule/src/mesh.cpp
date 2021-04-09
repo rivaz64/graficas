@@ -6,15 +6,19 @@ namespace GraphicsModule {
         return &indexB;
     }
 
-    void mesh::setindices(std::initializer_list<short> i)
+    void mesh::setindices(std::initializer_list<unsigned int> i,int ni)
     {
-        indices = (int*)i.begin();
-        vertexB.Usage = USAGE::DEFAULT;
-        vertexB.ByteWidth = sizeof(SimpleVertex) * 3;
-        vertexB.BindFlags = BIND_FLAG::VERTEX_BUFFER;
-        vertexB.CPUAccessFlags = 0;
-        vertexB.Mem = points;
-        getmanager()->getDevice()->CreateBuffer(vertexB);
+        indexnum = ni;
+        indices = (unsigned int*)i.begin();
+        indexB.Usage = USAGE::DEFAULT;
+        indexB.ByteWidth = sizeof(unsigned int)*ni;
+        indexB.BindFlags = BIND_FLAG::INDEX_BUFFER;
+        indexB.CPUAccessFlags = 0;
+        indexB.Mem = indices;
+        getmanager()->getDevice()->CreateBuffer(indexB);
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
 #ifdef directX
         D3D11_BUFFER_DESC bd;
         D3D11_SUBRESOURCE_DATA InitData;
@@ -36,14 +40,32 @@ namespace GraphicsModule {
 #ifdef openGL
         n = num;
         points = (float*)i.begin();
-        GLuint vertexbuffer;
-        // Generate 1 buffer, put the resulting identifier in vertexbuffer
         vertexB.BindFlags = GraphicsModule::BIND_FLAG::VERTEX_BUFFER;
         vertexB.Usage = GraphicsModule::USAGE::DEFAULT;
-        vertexB.ByteWidth = sizeof(float)*n*3;
+        vertexB.ByteWidth = sizeof(float)*n*5;
         vertexB.Mem = points;
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
         GraphicsModule::getmanager()->getDevice()->CreateBuffer(vertexB);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+        
+        
+
 #endif
+    }
+    void mesh::setcolor(std::initializer_list<float> i)
+    {
+        colors = (float*)i.begin();
+        GLuint vertexbuffer;
+        // Generate 1 buffer, put the resulting identifier in vertexbuffer
+        colorB.BindFlags = GraphicsModule::BIND_FLAG::VERTEX_BUFFER;
+        colorB.Usage = GraphicsModule::USAGE::DEFAULT;
+        colorB.ByteWidth = sizeof(float) * n * 3;
+        colorB.Mem = points;
+        GraphicsModule::getmanager()->getDevice()->CreateBuffer(colorB);
     }
     void mesh::setvertex(std::initializer_list<vertex> i)
     {
@@ -64,22 +86,26 @@ namespace GraphicsModule {
     }
     void mesh::init(int nv, int ni)
     {
-        indexnum = ni;
-        vertexB.Usage = USAGE::DEFAULT;
-        vertexB.ByteWidth = sizeof(SimpleVertex) * nv;
-        vertexB.BindFlags = BIND_FLAG::VERTEX_BUFFER;
-        vertexB.CPUAccessFlags = 0;
+        n = nv;
+        vertexB.BindFlags = GraphicsModule::BIND_FLAG::VERTEX_BUFFER;
+        vertexB.Usage = GraphicsModule::USAGE::DEFAULT;
+        vertexB.ByteWidth = sizeof(float) * n * 5;
         vertexB.Mem = points;
+        indexnum = ni;
         indexB.Usage = USAGE::DEFAULT;
-        indexB.ByteWidth = sizeof(int) * ni;
+        indexB.ByteWidth = sizeof(unsigned int) * ni;
         indexB.BindFlags = BIND_FLAG::INDEX_BUFFER;
         indexB.CPUAccessFlags = 0;
         indexB.Mem = indices;
-        //glGenVertexArrays(1, &vao);
-        //glBindVertexArray(vao);
+        
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
         getmanager()->getDevice()->CreateBuffer(vertexB);
         getmanager()->getDevice()->CreateBuffer(indexB);
-        //glEnableVertexAttribArray(0);
-        
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+
     }
 }

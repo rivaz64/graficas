@@ -164,12 +164,12 @@ namespace GraphicsModule {
 		 g_pd3dDevice->CreateBuffer(&bd, &InitData, &b.buf);
 	}
 #endif // directX
-	void Device::CreateBuffer(Buffer& b)
+	void Device::CreateBuffer (Buffer& b)
 	{
 #ifdef openGL
 		
 		glGenBuffers(1, &b.buf);
-		glBindBuffer((GLenum)b.BindFlags, b.buf);
+ 		glBindBuffer((GLenum)b.BindFlags, b.buf);
 		glBufferData((GLenum)b.BindFlags, b.ByteWidth, b.Mem, (GLenum)b.Usage);
 		
 #endif

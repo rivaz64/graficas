@@ -118,7 +118,8 @@ namespace GraphicsModule {
 #endif
 		void* c) {
 #ifdef openGL
-		b.Mem = c;
+		//b.Mem = &((matrix*)c)->m;
+		
 #endif
 #ifdef directX
 		g_pImmediateContext->UpdateSubresource(b.buf, 0, NULL, c, 0, 0);

@@ -55,7 +55,7 @@ namespace GraphicsModule
       float mWorld[16];
 #endif
 
-    float vMeshColor[4];
+    //float vMeshColor[4];
   };
 
   class test
@@ -64,7 +64,7 @@ namespace GraphicsModule
       
   public:
 
-      float dirly[3];
+      float dirly[3] = { 0,-1,0 };
       bool cerrar = true;
       HWND g_hwnd;
 #ifdef openGL
@@ -93,7 +93,7 @@ namespace GraphicsModule
 
       Buffer view;
       Buffer proyection;
-      Buffer changeveryFrameB;
+      Buffer translation;
       Textura texturbitco;
       Textura texturmar;
       Buffer Dirlight;
@@ -124,8 +124,6 @@ namespace GraphicsModule
       void Update();
       void clear();
       void draw(objeto& o);
-      void draw(Buffer& o);
-      void draw(mesh& o);
       void Render();
       void CleanupDevice();
       float f[4];

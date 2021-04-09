@@ -1,6 +1,8 @@
 #include "manager.h"
 #include"flags.h"
 #include"test.h"
+#include<glm\gtc\type_ptr.hpp>
+#include<iostream>
 namespace GraphicsModule {
 #ifdef directX
 	HRESULT manager::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
@@ -101,16 +103,26 @@ namespace GraphicsModule {
 
 
 
-	void manager::draw(objeto &o, Buffer& changeveryFrameB)
+	void manager::draw(objeto& o, Buffer& changeveryFrameB)
 	{
 #ifdef openGL
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, o.tx->get);
+#endif
 		for (mesh* mo : (o.mod->modelo)) {
+#ifdef openGL
+			glm::mat4 Model = glm::mat4(1.0f);
+			Model = glm::translate(Model, glm::vec3(o.posi.x, o.posi.y, o.posi.z));
+			glm::mat4 mvp = Projection.m * View.m*Model;
+
+			GLuint MatrixID = glGetUniformLocation(shader, "MVP");
+			glUniformMatrix4fv(MatrixID, 1, GL_FALSE,glm::value_ptr(mvp) );
+			
+			
 			glBindVertexArray(mo->vao);
-		}
+			glDrawElements(GL_TRIANGLES, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
 #ifdef directX
-		for (mesh* mo : (o.mod->modelo)) {
-
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
 			if (o.tx != NULL)
@@ -131,20 +143,18 @@ namespace GraphicsModule {
 			devcon.UpdateSubresource(changeveryFrameB, &cb);
 
 			devcon.draw(mo->indexnum);
-		}
 #endif
+		}
+
 	}
 
 	void manager::setrenderfortextur(RenderTargetView& rtv)
 	{
 #ifdef  directX
-
 		rtv.release();
 		rtv.textur.release();
-		
 		rtv.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
 		dev.CreateTexture2D(rtv.textur);
-		
 		rtv.Format = FORMAT::R8G8B8A8_UNORM;
 		rtv.ViewDimension = DIMENSION::TEXTURE2DARRAY;
 		rtv.MostDetailedMip = 0;

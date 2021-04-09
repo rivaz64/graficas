@@ -54,7 +54,7 @@ namespace GraphicsModule {
         ,
         INDEX_BUFFER
 #ifdef openGL
-        = 0x8892
+        = 0x8893
 #endif
 #ifdef directX
         = 0x2L

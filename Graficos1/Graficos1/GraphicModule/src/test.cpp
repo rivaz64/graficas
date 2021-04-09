@@ -104,6 +104,13 @@ namespace GraphicsModule
     void test::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
         std::cout << "aka" << std::endl;
         glViewport(0, 0, width, height);
+        if (esta != NULL) {
+            matrix cbNeverChanges;
+            esta->cam->ratio = width / (FLOAT)height;
+            esta->cam->getView(cbNeverChanges);
+            esta->man->View = cbNeverChanges;
+        }
+        
     }
 #endif
     test* test::esta = NULL;
@@ -135,14 +142,12 @@ namespace GraphicsModule
         return ::DefWindowProc(_hwnd, _msg, _wParam, _lParam);
     }
 
-    
+
     HRESULT test::InitWindow(LONG _width, LONG _height)
     {
-        if (esta == NULL) {
-            esta = this;
-        }
+
         width = _width;
-        heigh =_height;
+        heigh = _height;
 #ifdef openGL
 
         window = glfwCreateWindow(_width, _height, "TutorialWindowClass", NULL, NULL);
@@ -161,7 +166,7 @@ namespace GraphicsModule
 #endif
         // Register class
 #ifdef directX
-        
+
         WNDCLASSEX wcex;
         wcex.cbSize = sizeof(WNDCLASSEX);
         wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -193,405 +198,421 @@ namespace GraphicsModule
 #endif
         return S_OK;
     }
-    
-  HRESULT test::InitDevice()
-  {
-      
-      
+
+    HRESULT test::InitDevice()
+    {
 
 
 
-      man = getmanager();
 
-      man->create(g_hwnd);
-      HRESULT hr = S_OK;
 
-      
+        man = getmanager();
 
-      UINT createDeviceFlags = 0;
+        man->create(g_hwnd);
+        HRESULT hr = S_OK;
+
+
+
+        UINT createDeviceFlags = 0;
 #ifdef _DEBUG
 #ifdef directX
-      createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+        createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 #endif
 
-      DRIVER_TYPE driverTypes[] =
-      {
-          DRIVER_TYPE::DT_HARDWARE,
-           DRIVER_TYPE::DT_WARP,
-           DRIVER_TYPE::DT_REFERENCE,
-      };
-      UINT numDriverTypes = ARRAYSIZE(driverTypes);
+        DRIVER_TYPE driverTypes[] =
+        {
+            DRIVER_TYPE::DT_HARDWARE,
+             DRIVER_TYPE::DT_WARP,
+             DRIVER_TYPE::DT_REFERENCE,
+        };
+        UINT numDriverTypes = ARRAYSIZE(driverTypes);
 
-      FEATURE_LEVEL featureLevels[] =
-      {
-          FEATURE_LEVEL::LEVEL_11_0,
-          FEATURE_LEVEL::LEVEL_10_1,
-          FEATURE_LEVEL::LEVEL_10_0,
-      };
-      UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-      man->descrivesch();
-
-
-      for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-      {
-          g_driverType = driverTypes[driverTypeIndex];
-          
-          hr = man->init(g_driverType, createDeviceFlags, featureLevels, numFeatureLevels, g_featureLevel);
-          if(!FAILED(hr))
-          break;
-      }
-      if (FAILED(hr))
-          return hr;
-      //RenderTargetView rtv;
-      
-      man->createrendertarget(rtv);
+        FEATURE_LEVEL featureLevels[] =
+        {
+            FEATURE_LEVEL::LEVEL_11_0,
+            FEATURE_LEVEL::LEVEL_10_1,
+            FEATURE_LEVEL::LEVEL_10_0,
+        };
+        UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+        man->descrivesch();
 
 
+        for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
+        {
+            g_driverType = driverTypes[driverTypeIndex];
 
-      if (FAILED(hr))
-          return hr;
-      // Create depth stencil texture
-      depstencil.descrivetextur();
-      man->getDevice()->CreateTexture2D(depstencil.textur);
+            hr = man->init(g_driverType, createDeviceFlags, featureLevels, numFeatureLevels, g_featureLevel);
+            if (!FAILED(hr))
+                break;
+        }
+        if (FAILED(hr))
+            return hr;
+        //RenderTargetView rtv;
 
-
-      // Create the depth stencil view
-      depstencil.describeview();
-      man->getDevice()->CreateDepthStencilView(depstencil);
+        man->createrendertarget(rtv);
 
 
 
-      man->getConext()->OMSetRenderTargets(rtv, depstencil);
-      //g_pDepthStencilView = depstencil.view;
-      //g_pDepthStencil = depstencil.textur.get;
-      //Setup the viewport
-      
-      Viewport vp;
-      vp.Width = (FLOAT)width;
-      vp.Height = (FLOAT)heigh;
-      vp.MinDepth = 0.0f;
-      vp.MaxDepth = 1.0f;
-      vp.TopLeftX = 0;
-      vp.TopLeftY = 0;
-      //man->getConext()->RSSetViewports(vp);
-      man->RSSetViewports(vp);
-      
+        if (FAILED(hr))
+            return hr;
+        // Create depth stencil texture
+        depstencil.descrivetextur();
+        man->getDevice()->CreateTexture2D(depstencil.textur);
+
+
+        // Create the depth stencil view
+        depstencil.describeview();
+        man->getDevice()->CreateDepthStencilView(depstencil);
+
+
+
+        man->getConext()->OMSetRenderTargets(rtv, depstencil);
+        //g_pDepthStencilView = depstencil.view;
+        //g_pDepthStencil = depstencil.textur.get;
+        //Setup the viewport
+
+        Viewport vp;
+        vp.Width = (FLOAT)width;
+        vp.Height = (FLOAT)heigh;
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        //man->getConext()->RSSetViewports(vp);
+        man->RSSetViewports(vp);
+
 #ifdef openGL
-      shader=LoadShaders("vertexchader.txt", "pixelchader.txt");
+        shader = LoadShaders("vertexchader.txt", "pixelchader.txt");
 #endif
 
 #ifdef directX
-      hr = man->compileVS("Tutorial07.fx", "VS", "vs_4_0", vrtxshdr, intplyut);
-      if (FAILED(hr))
-          return hr;
+        hr = man->compileVS("Tutorial07.fx", "VS", "vs_4_0", vrtxshdr, intplyut);
+        if (FAILED(hr))
+            return hr;
 
-      man->compilePX("Tutorial07.fx", "PS", "ps_4_0", pixshad);
-      
-      if (FAILED(hr))
-          return hr;
+        man->compilePX("Tutorial07.fx", "PS", "ps_4_0", pixshad);
+
+        if (FAILED(hr))
+            return hr;
 
 #endif
-      // Create vertex buffer
-/*
-      cubito.setvertex(
-          {
-              { {-1.0f, 1.0f, 1.0f}, {0,0},{-1.0f, 1.0f, 1.0f} },
-              { {1.0f, 1.0f, 1.0f}, {0,0},{1.0f, 1.0f, 1.0f} },
-              { {-1.0f, 1.0f, -1.0f}, {0,0},{-1.0f, 1.0f, -1.0f} },
-              { {1.0f, 1.0f, -1.0f}, {0,0},{1.0f, 1.0f, -1.0f}},
-              { {-1.0f, -1.0f, 1.0f}, {0,0},{-1.0f, -1.0f, 1.0f} },
-              { {1.0f, -1.0f, 1.0f}, {0,0},{1.0f, -1.0f, 1.0f}},
-              { {-1.0f, -1.0f, -1.0f}, {0,0},{-1.0f, -1.0f, -1.0f}},
-              { {1.0f, -1.0f, -1.0f}, {0,0},{1.0f, -1.0f, -1.0f} },
-              /*
-              { {-1.0f, 1.0f, -1.0f}, {0,0},{0.f,1.f,0.f} },
-              { { 1.0f, 1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,1.f,0.f} },
-              { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } ,{0.f,1.f,0.f}},
-              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{0.f,1.f,0.f}},
+        // Create vertex buffer
+  /*
+        cubito.setvertex(
+            {
+                { {-1.0f, 1.0f, 1.0f}, {0,0},{-1.0f, 1.0f, 1.0f} },
+                { {1.0f, 1.0f, 1.0f}, {0,0},{1.0f, 1.0f, 1.0f} },
+                { {-1.0f, 1.0f, -1.0f}, {0,0},{-1.0f, 1.0f, -1.0f} },
+                { {1.0f, 1.0f, -1.0f}, {0,0},{1.0f, 1.0f, -1.0f}},
+                { {-1.0f, -1.0f, 1.0f}, {0,0},{-1.0f, -1.0f, 1.0f} },
+                { {1.0f, -1.0f, 1.0f}, {0,0},{1.0f, -1.0f, 1.0f}},
+                { {-1.0f, -1.0f, -1.0f}, {0,0},{-1.0f, -1.0f, -1.0f}},
+                { {1.0f, -1.0f, -1.0f}, {0,0},{1.0f, -1.0f, -1.0f} },
+                /*
+                { {-1.0f, 1.0f, -1.0f}, {0,0},{0.f,1.f,0.f} },
+                { { 1.0f, 1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,1.f,0.f} },
+                { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } ,{0.f,1.f,0.f}},
+                { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{0.f,1.f,0.f}},
 
-              { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } ,{0.f,-1.f,0.f}},
-              { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,-1.f,0.f} },
-              { { 1.0f, -1.0f, 1.0f }, { 1.0f, 1.0f },{0.f,-1.f,0.f} },
-              { { -1.0f, -1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,-1.f,0.f} },
+                { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } ,{0.f,-1.f,0.f}},
+                { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,-1.f,0.f} },
+                { { 1.0f, -1.0f, 1.0f }, { 1.0f, 1.0f },{0.f,-1.f,0.f} },
+                { { -1.0f, -1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,-1.f,0.f} },
 
-              { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f },{-1.f,0.f,0.f}},
-              { { -1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } ,{-1.f,0.f,0.f}},
-              { { -1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{-1.f,0.f,0.f}},
-              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{-1.f,0.f,0.f}},
+                { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f },{-1.f,0.f,0.f}},
+                { { -1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } ,{-1.f,0.f,0.f}},
+                { { -1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{-1.f,0.f,0.f}},
+                { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{-1.f,0.f,0.f}},
 
-              { { 1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f },{1.f,0.f,0.f} },
-              { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } ,{1.f,0.f,0.f}},
-              { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{1.f,0.f,0.f} },
-              { { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{1.f,0.f,0.f}},
+                { { 1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f },{1.f,0.f,0.f} },
+                { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } ,{1.f,0.f,0.f}},
+                { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{1.f,0.f,0.f} },
+                { { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{1.f,0.f,0.f}},
 
-              { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f },{0.f,0.f,-1.f}},
-              { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,0.f,-1.f}},
-              { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{0.f,0.f,-1.f}},
-              { { -1.0f, 1.0f, -1.0f }, { 0.0f, 1.0f } ,{0.f,0.f,-1.f}},
+                { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f },{0.f,0.f,-1.f}},
+                { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,0.f,-1.f}},
+                { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{0.f,0.f,-1.f}},
+                { { -1.0f, 1.0f, -1.0f }, { 0.0f, 1.0f } ,{0.f,0.f,-1.f}},
 
-              { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } ,{0.f,0.f,1.f}},
-              { { 1.0f, -1.0f, 1.0f }, { 1.0f, 0.0f } ,{0.f,0.f,1.f}},
-              { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } ,{0.f,0.f,1.f}},
-              { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,0.f,1.f} },//
-          });
-      
-      cubito.setindices(
-          {
-              0,1,2,
-              1,3,2,
-              0,4,1,
-              1,4,5,
-              2,4,0,
-              2,6,4,
-              1,7,3,
-              1,5,7,
-              4,6,7,
-              7,5,4,
-              2,7,6,
-              7,2,3,
-              /*
-              3,1,0,
-              2,1,3,
+                { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } ,{0.f,0.f,1.f}},
+                { { 1.0f, -1.0f, 1.0f }, { 1.0f, 0.0f } ,{0.f,0.f,1.f}},
+                { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } ,{0.f,0.f,1.f}},
+                { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,0.f,1.f} },//
+            });
 
-              6,4,5,
-              7,4,6,
+        cubito.setindices(
+            {
+                0,1,2,
+                1,3,2,
+                0,4,1,
+                1,4,5,
+                2,4,0,
+                2,6,4,
+                1,7,3,
+                1,5,7,
+                4,6,7,
+                7,5,4,
+                2,7,6,
+                7,2,3,
+                /*
+                3,1,0,
+                2,1,3,
 
-              11,9,8,
-              10,9,11,
+                6,4,5,
+                7,4,6,
 
-              14,12,13,
-              15,12,14,
+                11,9,8,
+                10,9,11,
 
-              19,17,16,
-              18,17,19,
+                14,12,13,
+                15,12,14,
 
-              22,20,21,
-              23,20,22//
-          });//*/
-     
+                19,17,16,
+                18,17,19,
 
-      cam = new camera;
-      cam->seteye(0.0f, 3.0f, -6.0f);
-      cam->setat(0.0f, 1.f, 0);
-      cam->setup(0.0f, 1.0f, 0);
-      cam->axis();
-      texturbitco.loadfromfile("bitco.dds");
-      texturmar.loadfromfile("seafloor.dds");
-      //cubo.m = &cubito;
-      cubo.tx = &texturbitco;
-      cubo.posi = vector3(0, 0, 0);
-      //cubo0.m = &cubito;
-      cubo0.tx = &texturmar;
-      cubo0.posi = vector3(3, 0, 0);
-      //cubo1.m = &cubito;
-      //cubo0.tx = &texturmar;
-      cubo1.posi = vector3(-3, 0, 0);
-      //cubo2.m = &cubito;
-      //cubo0.tx = &texturmar;
-      cubo2.posi = vector3(0, 3, 0);
-      // Set primitive topology
-      man->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-     
+                22,20,21,
+                23,20,22//
+            });//*/
 
-      view.Usage = USAGE::DEFAULT;
-      view.ByteWidth = sizeof(CBNeverChanges);
-      view.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
-      view.CPUAccessFlags = 0;
-      man->getDevice()->CreateBuffer(view);
-      
-      proyection.Usage = USAGE::DEFAULT;
-      proyection.ByteWidth = sizeof(CBChangeOnResize);
-      proyection.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
-      proyection.CPUAccessFlags = 0;
-      man->getDevice()->CreateBuffer(proyection);
-      
-      changeveryFrameB.Usage = USAGE::DEFAULT;
-      changeveryFrameB.ByteWidth = sizeof(CBChangesEveryFrame);
-      changeveryFrameB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
-      changeveryFrameB.CPUAccessFlags = 0;
-      man->getDevice()->CreateBuffer(changeveryFrameB);
 
-      Dirlight.Usage = USAGE::DEFAULT;
-      Dirlight.ByteWidth = sizeof(float[4]);
-      Dirlight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
-      Dirlight.CPUAccessFlags = 0;
-      man->getDevice()->CreateBuffer(Dirlight);
-
-     
-
-      // Create the sample state
+        cam = new camera;
+#ifdef openGL
+        cam->seteye(4.0f, 3.0f, 3.0f);
+        cam->setat(0.0f, 0.f, 0);
+        cam->setup(0.0f, 1.0f, 0);
+#endif
 #ifdef directX
-      D3D11_SAMPLER_DESC sampDesc;
-      ZeroMemory(&samsta.desc, sizeof(samsta.desc));
-      samsta.desc.Filter = (D3D11_FILTER)FILTER::COMPARISON_MIN_MAG_MIP_LINEAR;
-      samsta.desc.AddressU = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
-      samsta.desc.AddressV = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
-      samsta.desc.AddressW = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
-      samsta.desc.ComparisonFunc = (D3D11_COMPARISON_FUNC)COMPARISON_FUNC::NEVER;
-      samsta.desc.MinLOD = 0;
-      samsta.desc.MaxLOD = D3D11_FLOAT32_MAX;
-      man->getDevice()->CreateSamplerState(samsta);
+        cam->seteye(0.0f, 3.0f, -6.0f);
+        cam->setat(0.0f, 1.f, 0);
+        cam->setup(0.0f, 1.0f, 0);
 #endif
-      if (FAILED(hr))
-          return hr;
-
-      // Initialize the world matrices
-      //g_World = XMMatrixIdentity();
-
-      // Initialize the view matrix
-      /*XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
-      XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-      XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-      g_View = XMMatrixLookAtLH(Eye, At, Up);*/
-
-      matrix cbNeverChanges;
-      cam->getView(cbNeverChanges);
-
-      man->getConext()->UpdateSubresource(view, &cbNeverChanges);
-
-      // Initialize the projection matrix
-      //g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
-      cam->angle = 0.785398163f;
-      cam->ratio = width / (FLOAT)heigh;
-      cam->nearp = 0.01f;
-      cam->farp = 600.0f;
-      matrix cbChangesOnResize;
-      cam->getProyectionMatrixPerspective(cbChangesOnResize);
-      
-      //cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f);
-      man->getConext()->UpdateSubresource(proyection,&cbChangesOnResize);
+        cam->axis();
+        //texturbitco.loadfromfile("bitco.dds");
+        //texturmar.loadfromfile("seafloor.dds");
+        //cubo.m = &cubito;
+        cubo.tx = &texturbitco;
+        cubo.posi = vector3(0, 0, 0);
+        //cubo0.m = &cubito;
+        cubo0.tx = &texturmar;
+        cubo0.posi = vector3(3, 0, 0);
+        //cubo1.m = &cubito;
+        //cubo0.tx = &texturmar;
+        cubo1.posi = vector3(-3, 0, 0);
+        //cubo2.m = &cubito;
+        //cubo0.tx = &texturmar;
+        cubo2.posi = vector3(0, 3, 0);
+        // Set primitive topology
+        man->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
 
-      // create rasterizer state
-/*#ifdef directX
-      D3D11_RASTERIZER_DESC desc;
-      ZeroMemory(&desc, sizeof(desc));
-      desc.CullMode = D3D11_CULL_BACK;
-      desc.FillMode = D3D11_FILL_SOLID;
-      hr = hr = man->getDevice()->get()->CreateRasterizerState(&desc, &g_Rasterizer);
-      if (FAILED(hr))
-          return hr;
+        view.Usage = USAGE::DEFAULT;
+        view.ByteWidth = sizeof(CBNeverChanges);
+        view.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        view.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(view);
 
-#endif//*/
-      //Para ka textura nueva
-      man->setrenderfortextur(rtv2);
-      man->setrenderfortextur(rtv3);
-      man->setrenderfortextur(rtv4);
-      if (FAILED(hr))
-          return hr;
+        proyection.Usage = USAGE::DEFAULT;
+        proyection.ByteWidth = sizeof(CBChangeOnResize);
+        proyection.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        proyection.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(proyection);
 
-      // create the rt Shader resource view
-      
-      
-      
-      cubo1.tx = new Textura;
-      cubo2.tx = new Textura;
-      return S_OK;
-  }
-  void test::rezise(HWND& _hwnd, LPARAM _lParam)
-  {
-      man->getSwapchain()->rezise(_lParam, rtv,true);
-      
-      man->getConext()->resizewindow(cam, _hwnd, rtv,proyection);
-      man->setrenderfortextur(rtv2);
-  }
-  void test::Update() {
-#ifdef openGL
-      glfwMakeContextCurrent(window);
-      glfwPollEvents();
-      if (glfwWindowShouldClose(window)) {
-          cerrar = false;
-      }
+        translation.Usage = USAGE::DEFAULT;
+        translation.ByteWidth = sizeof(CBChangesEveryFrame);
+        translation.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        translation.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(translation);
+
+        Dirlight.Usage = USAGE::DEFAULT;
+        Dirlight.ByteWidth = sizeof(float[4]);
+        Dirlight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        Dirlight.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(Dirlight);
+
+
+
+        // Create the sample state
+#ifdef directX
+        D3D11_SAMPLER_DESC sampDesc;
+        ZeroMemory(&samsta.desc, sizeof(samsta.desc));
+        samsta.desc.Filter = (D3D11_FILTER)FILTER::COMPARISON_MIN_MAG_MIP_LINEAR;
+        samsta.desc.AddressU = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+        samsta.desc.AddressV = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+        samsta.desc.AddressW = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+        samsta.desc.ComparisonFunc = (D3D11_COMPARISON_FUNC)COMPARISON_FUNC::NEVER;
+        samsta.desc.MinLOD = 0;
+        samsta.desc.MaxLOD = D3D11_FLOAT32_MAX;
+        man->getDevice()->CreateSamplerState(samsta);
 #endif
-      static float t = 0.0f;
-      /*if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
-      {
-          t += (float)XM_PI * 0.0125f;
-      }
-      else
-      {
-          static DWORD dwTimeStart = 0;
-          DWORD dwTimeCur = GetTickCount();
-          if (dwTimeStart == 0)
-              dwTimeStart = dwTimeCur;
-          t = (dwTimeCur - dwTimeStart) / 1000.0f;
-      }*/
-      //g_World = XMMatrixRotationY(t);
-      LPPOINT p = new POINT;
-      if ((GetKeyState(VK_RBUTTON) & 0x100) != 0) {
-          GetCursorPos(p);
-          cam->gira(p);
-          matrix cbNeverChanges;
-          //man->getConext()->UpdateSubresource(cam);
-          cam->getView(cbNeverChanges);
+        if (FAILED(hr))
+            return hr;
 
-          man->getConext()->UpdateSubresource(view, &cbNeverChanges);
-      }
-      else {
-          if(cam!= NULL)
-          cam->click = false;
-      }
-      delete p;
-      // Modify the color
-      /*cubo.color.x = .9;
-      cubo.color.y = .9;
-      cubo.color.z = .9;
-      cubo0.color.x = .9;
-      cubo0.color.y = .9;
-      cubo0.color.z = .9;
-      cubo1.color.x = .9;
-      cubo1.color.y = .9;
-      cubo1.color.z = .9;
-      cubo2.color.x = .9;
-      cubo2.color.y = .9;
-      cubo2.color.z = .9;*/
-      float v = 36;
-      if (GetKeyState('W') & 0x8000)
-      {
-          cam->movez(v);
-      }
-      if (GetKeyState('S') & 0x8000)
-      {
-          cam->movez(-v);
-      }
-      if (GetKeyState('Q') & 0x8000)
-      {
-          cam->movey(v);
-      }
-      if (GetKeyState('A') & 0x8000)
-      {
-          cam->movey(-v);
-      }
-      if (GetKeyState('X') & 0x8000)
-      {
-          cam->movex(v);
-      }
-      if (GetKeyState('Z') & 0x8000)
-      {
-          cam->movex(-v);
-      }
-      matrix cbNeverChanges;
-      //man->getConext()->UpdateSubresource(cam);
-      if (cam) {
+        // Initialize the world matrices
+        //g_World = XMMatrixIdentity();
 
-          cam->getView(cbNeverChanges);
+        // Initialize the view matrix
+        /*XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
+        XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+        XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+        g_View = XMMatrixLookAtLH(Eye, At, Up);*/
+        man->shader = shader;
+        matrix cbNeverChanges;
+        cam->getView(cbNeverChanges);
+        man->View = cbNeverChanges;
+        man->getConext()->UpdateSubresource(view, &cbNeverChanges);
 
-          man->getConext()->UpdateSubresource(view, &cbNeverChanges);
-          f[0] = dirly[0];
-          f[1] = dirly[1];
-          f[2] = dirly[2];
-          f[3] = 0;
-          man->getConext()->UpdateSubresource(Dirlight, f);
-      }
-  }
-  void test::clear()
-  {
-      //float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+        // Initialize the projection matrix
+        //g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
+        cam->angle = 0.785398163f;
+        cam->ratio = width / (FLOAT)heigh;
+        cam->nearp = 0.01f;
+        cam->farp = 600.0f;
+        matrix cbChangesOnResize;
+        cam->getProyectionMatrixPerspective(cbChangesOnResize);
+        man->Projection = cbChangesOnResize;
+        //cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f);
+        man->getConext()->UpdateSubresource(proyection, &cbChangesOnResize);
+
+
+        // create rasterizer state
+  /*#ifdef directX
+        D3D11_RASTERIZER_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.CullMode = D3D11_CULL_BACK;
+        desc.FillMode = D3D11_FILL_SOLID;
+        hr = hr = man->getDevice()->get()->CreateRasterizerState(&desc, &g_Rasterizer);
+        if (FAILED(hr))
+            return hr;
+
+  #endif//*/
+  //Para ka textura nueva
+        man->setrenderfortextur(rtv2);
+        man->setrenderfortextur(rtv3);
+        man->setrenderfortextur(rtv4);
+        if (FAILED(hr))
+            return hr;
+
+        // create the rt Shader resource view
+
+
+
+        cubo1.tx = new Textura;
+        cubo2.tx = new Textura;
+        // Enable depth test
+        glEnable(GL_DEPTH_TEST);
+        // Accept fragment if it closer to the camera than the former one
+        glDepthFunc(GL_LESS);
+        return S_OK;
+    }
+    void test::rezise(HWND& _hwnd, LPARAM _lParam)
+    {
+        man->getSwapchain()->rezise(_lParam, rtv, true);
+
+        man->getConext()->resizewindow(cam, _hwnd, rtv, proyection);
+        man->setrenderfortextur(rtv2);
+    }
+    void test::Update() {
 #ifdef openGL
-      glClearColor(.0f, .0f, 1.f, 1.f);
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      glUseProgram(shader);
+        glfwMakeContextCurrent(window);
+        glfwPollEvents();
+        if (glfwWindowShouldClose(window)) {
+            cerrar = false;
+        }
+#endif
+        static float t = 0.0f;
+        /*if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
+        {
+            t += (float)XM_PI * 0.0125f;
+        }
+        else
+        {
+            static DWORD dwTimeStart = 0;
+            DWORD dwTimeCur = GetTickCount();
+            if (dwTimeStart == 0)
+                dwTimeStart = dwTimeCur;
+            t = (dwTimeCur - dwTimeStart) / 1000.0f;
+        }*/
+        //g_World = XMMatrixRotationY(t);
+        LPPOINT p = new POINT;
+        if ((GetKeyState(VK_RBUTTON) & 0x100) != 0) {
+            GetCursorPos(p);
+            cam->gira(p);
+            matrix cbNeverChanges;
+            //man->getConext()->UpdateSubresource(cam);
+            cam->getView(cbNeverChanges);
+
+            man->getConext()->UpdateSubresource(view, &cbNeverChanges);
+            man->View = cbNeverChanges;
+        }
+        else {
+            if (cam != NULL)
+                cam->click = false;
+        }
+        delete p;
+        // Modify the color
+        /*cubo.color.x = .9;
+        cubo.color.y = .9;
+        cubo.color.z = .9;
+        cubo0.color.x = .9;
+        cubo0.color.y = .9;
+        cubo0.color.z = .9;
+        cubo1.color.x = .9;
+        cubo1.color.y = .9;
+        cubo1.color.z = .9;
+        cubo2.color.x = .9;
+        cubo2.color.y = .9;
+        cubo2.color.z = .9;*/
+        float v = 36;
+        if (GetKeyState('W') & 0x8000)
+        {
+            cam->movez(v);
+        }
+        if (GetKeyState('S') & 0x8000)
+        {
+            cam->movez(-v);
+        }
+        if (GetKeyState('Q') & 0x8000)
+        {
+            cam->movey(v);
+        }
+        if (GetKeyState('A') & 0x8000)
+        {
+            cam->movey(-v);
+        }
+        if (GetKeyState('X') & 0x8000)
+        {
+            cam->movex(v);
+        }
+        if (GetKeyState('Z') & 0x8000)
+        {
+            cam->movex(-v);
+        }
+        matrix cbNeverChanges;
+        //man->getConext()->UpdateSubresource(cam);
+        if (cam) {
+
+            cam->getView(cbNeverChanges);
+            man->View = cbNeverChanges;
+            man->getConext()->UpdateSubresource(view, &cbNeverChanges);
+            f[0] = dirly[0];
+            f[1] = dirly[1];
+            f[2] = dirly[2];
+            f[3] = 0;
+            man->getConext()->UpdateSubresource(Dirlight, f);
+        }
+    }
+    void test::clear()
+    {
+        //float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+#ifdef openGL
+        glClearColor(.0f, .0f, 1.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glUseProgram(shader);
+        glUniform1i(glGetUniformLocation(shader, "texture1"), 0);
+        //man->Projection = (matrix*)proyection.Mem;
+        
+        //man->View = (matrix*)view.Mem;
       
 #endif
     man->getConext()->ClearRenderTargetView(rtv);
@@ -608,7 +629,7 @@ namespace GraphicsModule
     CBChangesEveryFrame cb;
     /*cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
-    man->getConext()->g_pImmediateContext->UpdateSubresource(changeveryFrameB.buf, 0, NULL, &cb, 0, 0);*/
+    man->getConext()->g_pImmediateContext->UpdateSubresource(translation.buf, 0, NULL, &cb, 0, 0);*/
 
 
     UINT stride = sizeof(SimpleVertex);
@@ -629,38 +650,20 @@ namespace GraphicsModule
 //luego abstraer sto
     man->getConext()->get()->VSSetConstantBuffers(0, 1, &view.buf);
     man->getConext()->get()->VSSetConstantBuffers(1, 1, &proyection.buf);
-    man->getConext()->get()->VSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
+    man->getConext()->get()->VSSetConstantBuffers(2, 1, &translation.buf);
     man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
     //aki akaba lode abstraer luego
     man->getConext()->get()->PSSetShader(pixshad.get(), NULL, 0);
-    man->getConext()->get()->PSSetConstantBuffers(2, 1, &changeveryFrameB.buf);
+    man->getConext()->get()->PSSetConstantBuffers(2, 1, &translation.buf);
 #endif
   }
   
   void test::draw(objeto& o)
   {
-      man->draw(o, changeveryFrameB);
+      man->draw(o, translation);
+
   }
   
-  void test::draw(mesh& o)
-  {
-#ifdef openGL
-      glEnableVertexAttribArray(0);
-
-      glBindBuffer(GL_ARRAY_BUFFER, o.getvertex()->buf);
-      glVertexAttribPointer(
-          0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-          o.n,                  // size
-          GL_FLOAT,           // type
-          GL_FALSE,           // normalized?
-          0,                  // stride
-          (void*)0            // array buffer offset
-      );
-      // Draw the triangle !
-      glDrawArrays(GL_TRIANGLES, 0, o.n); // Starting from vertex 0; 3 vertices total -> 1 triangle
-      glDisableVertexAttribArray(0);
-#endif
-  }
   void test::Render()
   {
 
