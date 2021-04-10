@@ -377,7 +377,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\externals\glad\src\glad.c" />
+    <ClCompile Include="..\..\..\..\..\downloads\imgui-master\imgui-master\backends\imgui_impl_glfw.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='directX debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\downloads\imgui-master\imgui-master\backends\imgui_impl_opengl3.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='directX debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\externals\glad\src\glad.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='directX debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\Externals\imgui-1.8\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="..\..\Externals\imgui-1.8\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="..\..\Externals\imgui-1.8\imgui.cpp" />

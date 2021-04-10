@@ -9,7 +9,9 @@ namespace GraphicsModule {
     }
     void objeto::setTexture(unsigned int t)
     {
+#ifdef openGL
         tx = new Textura;
         tx->get = t;
+#endif
     }
 }

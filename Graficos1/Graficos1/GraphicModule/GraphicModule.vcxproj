@@ -462,7 +462,9 @@
     <ClInclude Include="include\SwapChain.h" />
     <ClInclude Include="include\test.h" />
     <ClInclude Include="include\Textura.h" />
-    <ClInclude Include="include\TextureManager.h" />
+    <ClInclude Include="include\TextureManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='directX debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\vector3.h" />
     <ClInclude Include="include\VertexShader.h" />
     <ClInclude Include="include\viewport.h" />
@@ -485,7 +487,9 @@
     <ClCompile Include="src\SwapChain.cpp" />
     <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\Textura.cpp" />
-    <ClCompile Include="src\TextureManager.cpp" />
+    <ClCompile Include="src\TextureManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='directX debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\vector3.cpp" />
     <ClCompile Include="src\VertexShader.cpp" />
   </ItemGroup>

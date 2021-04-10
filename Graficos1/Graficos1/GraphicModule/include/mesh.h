@@ -22,8 +22,11 @@ namespace GraphicsModule {
 #endif
 #ifdef directX
 		vertex* points;
+		int* indices;
 #endif
+#ifdef openGL
 		unsigned int* indices;
+#endif
 		Buffer vertexB;
 		Buffer indexB;
 		Buffer colorB;

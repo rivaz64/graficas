@@ -4,6 +4,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#ifdef openGL
+#include<glm\gtc\type_ptr.hpp>
+#endif
 namespace GraphicsModule
 {
 #ifdef openGL
@@ -161,7 +164,8 @@ namespace GraphicsModule
         glClearColor(.0f, .0f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-        //
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
         //window->monitor;
 #endif
         // Register class
@@ -474,18 +478,7 @@ namespace GraphicsModule
         //cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f);
         man->getConext()->UpdateSubresource(proyection, &cbChangesOnResize);
 
-
-        // create rasterizer state
-  /*#ifdef directX
-        D3D11_RASTERIZER_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.CullMode = D3D11_CULL_BACK;
-        desc.FillMode = D3D11_FILL_SOLID;
-        hr = hr = man->getDevice()->get()->CreateRasterizerState(&desc, &g_Rasterizer);
-        if (FAILED(hr))
-            return hr;
-
-  #endif//*/
+ 
   //Para ka textura nueva
         man->setrenderfortextur(rtv2);
         man->setrenderfortextur(rtv3);
@@ -499,10 +492,7 @@ namespace GraphicsModule
 
         cubo1.tx = new Textura;
         cubo2.tx = new Textura;
-        // Enable depth test
-        glEnable(GL_DEPTH_TEST);
-        // Accept fragment if it closer to the camera than the former one
-        glDepthFunc(GL_LESS);
+       
         return S_OK;
     }
     void test::rezise(HWND& _hwnd, LPARAM _lParam)
@@ -610,6 +600,12 @@ namespace GraphicsModule
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(shader);
         glUniform1i(glGetUniformLocation(shader, "texture1"), 0);
+#ifdef openGL
+        GLuint viewID = glGetUniformLocation(shader, "view");
+        GLuint proyectionID = glGetUniformLocation(shader, "proyection");
+        glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
+        glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));
+#endif
         //man->Projection = (matrix*)proyection.Mem;
         
         //man->View = (matrix*)view.Mem;

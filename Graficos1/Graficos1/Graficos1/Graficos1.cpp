@@ -1,9 +1,10 @@
 #include <windows.h>
 
 #include "imgui.h"
-#include "imgui_impl_win32.h"
+
 #ifdef directX
 #include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
 #endif
 #ifdef openGL
 
@@ -12,6 +13,8 @@
 #include<glfw\glfw3.h>
 #include<glfw\glfw3native.h>
 
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 #endif
 #include "GraphicModule.h"
 #include <string>
@@ -19,13 +22,7 @@
 
 #include"assimp\Importer.hpp"
 #include"assimp\scene.h"
-#ifdef openGL
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#endif
-/*#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"*/
-//#include <GLFW/glfw3.h>
+
 #pragma comment(lib, "ComDlg32.lib")
 HWND g_hwnd=nullptr;
 GraphicsModule::test MiObj;
@@ -97,14 +94,13 @@ HRESULT InitImgUI()
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
-    // Setup Platform/Renderer back ends
-    ImGui_ImplWin32_Init(g_hwnd);
 #ifdef directX
+    ImGui_ImplWin32_Init(g_hwnd);
     ImGui_ImplDX11_Init(GraphicsModule::getmanager()->getDevice()->get(), GraphicsModule::getmanager()->getConext()->get());
 #endif
 #ifdef openGL
-    ImGui_ImplSDL2_InitForOpenGL(MiObj.window);
-    ImGui_ImplOpenGL3_Init();
+    ImGui_ImplGlfw_InitForOpenGL(MiObj.window, true);
+    ImGui_ImplOpenGL3_Init("#version 130");
 #endif
     return S_OK;
 }
@@ -114,15 +110,24 @@ void UIRender()
     // Start the Dear ImGui frame
 #ifdef directX
     ImGui_ImplDX11_NewFrame();
-#endif
     ImGui_ImplWin32_NewFrame();
+#endif
+#ifdef openGL
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+#endif
     ImGui::NewFrame();
 
     // example window
     if (ImGui::Begin("Another Window", nullptr))
     {
         ImGui::DragFloat3("light", MiObj.dirly, .001f, -1.f, 1.f);
-        //ImGui::Image(pitola.tx->srv, ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+#ifdef directX
+        ImGui::Image(pitola.tx->srv, ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+#endif
+#ifdef openGL
+        ImGui::Image((ImTextureID)pitola.tx->get, ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+#endif
     }
     ImGui::End();
 
@@ -131,7 +136,9 @@ void UIRender()
 #ifdef directX
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 #endif
-    
+#ifdef openGL
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif
 }
 
 
@@ -163,8 +170,9 @@ int main()
     {
 #ifdef directX
         ImGui_ImplDX11_Shutdown();
-#endif
         ImGui_ImplWin32_Shutdown();
+#endif
+        
         ImGui::DestroyContext();
         return 0;
     }
@@ -222,6 +230,7 @@ int main()
     pitola0.tx = &tx;
     pitola.posi.x = 3;
 #endif
+#ifdef openGL
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(openfilename(), NULL);
     int numvertices = 0;
@@ -244,16 +253,19 @@ int main()
     for (int o = 0; o < scene->mNumMeshes; o++) {
         mesh = scene->mMeshes[o];
         mes.modelo.push_back(new GraphicsModule::mesh);
-        mes.modelo[mes.modelo.size() - 1]->points = new float[mesh->mNumVertices*5];
+        mes.modelo[mes.modelo.size() - 1]->points = new float[mesh->mNumVertices*8];
         mes.modelo[mes.modelo.size() - 1]->indices = new unsigned int[mesh->mNumFaces * 3];
         for (int i = 0; i < mesh->mNumVertices; i++)
         {
             aiVector3D pos = mesh->mVertices[i];
-            mes.modelo[mes.modelo.size() - 1]->points[i*5] = pos.x;
-            mes.modelo[mes.modelo.size() - 1]->points[i * 5+1] = pos.y;
-            mes.modelo[mes.modelo.size() - 1]->points[i * 5+2] = pos.z;
-            mes.modelo[mes.modelo.size() - 1]->points[i * 5 + 3]= mesh->mTextureCoords[0][i].x;
-            mes.modelo[mes.modelo.size() - 1]->points[i * 5 + 4] = mesh->mTextureCoords[0][i].y;
+            mes.modelo[mes.modelo.size() - 1]->points[i*8] = pos.x;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 8+1] = pos.y;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 8+2] = pos.z;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 8 + 3]= mesh->mTextureCoords[0][i].x;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 8 + 4] = mesh->mTextureCoords[0][i].y;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 8 + 5] = mesh->mNormals[i].x;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 8 + 6] = mesh->mNormals[i].y;
+            mes.modelo[mes.modelo.size() - 1]->points[i * 8 + 7] = mesh->mNormals[i].z;
         }
         for (int i = 0; i < mesh->mNumFaces; i++) {
             const aiFace& Face = mesh->mFaces[i];
@@ -270,6 +282,7 @@ int main()
     pitola0.mod = &mes;
     pitola0.tx = &tx;
     pitola.posi.x = 3;
+#endif
     //*/
 
     /*unsigned int text=0;
@@ -436,7 +449,7 @@ int main()
         MiObj.draw(pitola);
         //MiObj.draw(t);
 #endif
-        
+        UIRender();
         MiObj.Render();
         
 
@@ -446,8 +459,12 @@ int main()
   // clean resources
 #ifdef directX
   ImGui_ImplDX11_Shutdown();
-#endif
   ImGui_ImplWin32_Shutdown();
+#endif
+#ifdef openGL
+  ImGui_ImplGlfw_Shutdown();
+  ImGui_ImplOpenGL3_Shutdown();
+#endif
   ImGui::DestroyContext();
   MiObj.CleanupDevice();
   

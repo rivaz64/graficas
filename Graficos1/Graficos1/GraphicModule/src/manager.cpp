@@ -1,7 +1,9 @@
 #include "manager.h"
 #include"flags.h"
 #include"test.h"
+#ifdef openGL
 #include<glm\gtc\type_ptr.hpp>
+#endif
 #include<iostream>
 namespace GraphicsModule {
 #ifdef directX
@@ -108,17 +110,15 @@ namespace GraphicsModule {
 #ifdef openGL
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, o.tx->get);
+		glm::mat4 Model = glm::mat4(1.0f);
+		Model = glm::translate(Model, glm::vec3(o.posi.x, o.posi.y, o.posi.z));
+		GLuint worldID = glGetUniformLocation(shader, "world");
+		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
+
+		
 #endif
 		for (mesh* mo : (o.mod->modelo)) {
 #ifdef openGL
-			glm::mat4 Model = glm::mat4(1.0f);
-			Model = glm::translate(Model, glm::vec3(o.posi.x, o.posi.y, o.posi.z));
-			glm::mat4 mvp = Projection.m * View.m*Model;
-
-			GLuint MatrixID = glGetUniformLocation(shader, "MVP");
-			glUniformMatrix4fv(MatrixID, 1, GL_FALSE,glm::value_ptr(mvp) );
-			
-			
 			glBindVertexArray(mo->vao);
 			glDrawElements(GL_TRIANGLES, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
