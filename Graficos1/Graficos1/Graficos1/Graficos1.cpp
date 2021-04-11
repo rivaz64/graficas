@@ -29,7 +29,9 @@ GraphicsModule::test MiObj;
 GraphicsModule::Textura tx;
 GraphicsModule::objeto pitola, pitola0, rana;
 GraphicsModule::mesh mesho;
-
+#ifdef directX
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#endif
 string openfilename(const char* filter = "All Files (*.*)\0*.*\0", HWND owner = NULL) {
     OPENFILENAME ofn;
     char fileName[MAX_PATH] = "";
@@ -53,9 +55,10 @@ string openfilename(const char* filter = "All Files (*.*)\0*.*\0", HWND owner = 
 LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
 {
     // Handle UI inputs
-    /*if (ImGui_ImplWin32_WndProcHandler(_hwnd, _msg, _wParam, _lParam))
-        return 1;*/
-
+#ifdef directX
+    if (ImGui_ImplWin32_WndProcHandler(_hwnd, _msg, _wParam, _lParam))
+        return 1;
+#endif
     // Handle Window inputs
     switch (_msg)
     {
@@ -95,8 +98,9 @@ HRESULT InitImgUI()
     ImGui::StyleColorsDark();
 
 #ifdef directX
-    ImGui_ImplWin32_Init(g_hwnd);
+    
     ImGui_ImplDX11_Init(GraphicsModule::getmanager()->getDevice()->get(), GraphicsModule::getmanager()->getConext()->get());
+    ImGui_ImplWin32_Init(g_hwnd);
 #endif
 #ifdef openGL
     ImGui_ImplGlfw_InitForOpenGL(MiObj.window, true);
@@ -151,7 +155,7 @@ int main()
     
     
 #endif
-    if (FAILED(MiObj.InitWindow(1280, 720)))
+    if (FAILED(MiObj.InitWindow(1280, 720, WndProc)))
     {
         DestroyWindow(g_hwnd);
         return 0;

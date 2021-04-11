@@ -7,6 +7,7 @@
 #ifdef openGL
 #include<glm\gtc\type_ptr.hpp>
 #endif
+
 namespace GraphicsModule
 {
 #ifdef openGL
@@ -113,11 +114,11 @@ namespace GraphicsModule
             esta->cam->getView(cbNeverChanges);
             esta->man->View = cbNeverChanges;
         }
-        
+
     }
 #endif
     test* test::esta = NULL;
-    LRESULT CALLBACK test::WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
+    /*LRESULT CALLBACK test::WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
     {
         switch (_msg)
         {
@@ -144,9 +145,9 @@ namespace GraphicsModule
         }
         return ::DefWindowProc(_hwnd, _msg, _wParam, _lParam);
     }
+    */
 
-
-    HRESULT test::InitWindow(LONG _width, LONG _height)
+    HRESULT test::InitWindow(LONG _width, LONG _height, LRESULT prochan(HWND, UINT, WPARAM, LPARAM) )
     {
 
         width = _width;
@@ -174,7 +175,7 @@ namespace GraphicsModule
         WNDCLASSEX wcex;
         wcex.cbSize = sizeof(WNDCLASSEX);
         wcex.style = CS_HREDRAW | CS_VREDRAW;
-        wcex.lpfnWndProc = WndProc;
+        wcex.lpfnWndProc = prochan;
         wcex.cbClsExtra = 0;
         wcex.cbWndExtra = 0;
         wcex.hInstance = nullptr;
@@ -585,12 +586,16 @@ namespace GraphicsModule
             cam->getView(cbNeverChanges);
             man->View = cbNeverChanges;
             man->getConext()->UpdateSubresource(view, &cbNeverChanges);
-            f[0] = dirly[0];
-            f[1] = dirly[1];
-            f[2] = dirly[2];
-            f[3] = 0;
-            man->getConext()->UpdateSubresource(Dirlight, f);
         }
+        f[0] = dirly[0];
+        f[1] = dirly[1];
+        f[2] = dirly[2];
+        f[3] = 0;
+        man->getConext()->UpdateSubresource(Dirlight, f);
+#ifdef openGL
+        GLuint dirlID = glGetUniformLocation(shader, "dirlight");
+        glUniform4f(dirlID, dirly[0], dirly[1], dirly[2], 0);
+#endif
     }
     void test::clear()
     {
@@ -600,12 +605,12 @@ namespace GraphicsModule
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(shader);
         glUniform1i(glGetUniformLocation(shader, "texture1"), 0);
-#ifdef openGL
+
         GLuint viewID = glGetUniformLocation(shader, "view");
         GLuint proyectionID = glGetUniformLocation(shader, "proyection");
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
         glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));
-#endif
+
         //man->Projection = (matrix*)proyection.Mem;
         
         //man->View = (matrix*)view.Mem;

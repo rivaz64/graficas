@@ -118,7 +118,7 @@ namespace GraphicsModule
 #ifdef openGL
       static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 #endif
-      HRESULT InitWindow(LONG _width, LONG _height);
+      HRESULT InitWindow(LONG _width, LONG _height, LRESULT prochan  (HWND , UINT , WPARAM , LPARAM ) );
       HRESULT InitDevice();
       void rezise(HWND& _hwnd, LPARAM _lParam);
       void Update();

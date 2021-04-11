@@ -18,12 +18,13 @@ void camera::gira(LPPOINT punto)
         y = punto->y;
 	}
 	else {
-#ifdef directX
-		at = zaxis + xaxis * (punto->x - x) * .003 - yaxis * (punto->y - y) * .003;
-#endif
+
+		at = zaxis + xaxis *
 #ifdef openGL
-		at = zaxis + xaxis * (-punto->x + x) * .003 - yaxis * (punto->y - y) * .003;
+			-
 #endif
+			(punto->x - x) * .003 - yaxis * (punto->y - y) * .003;
+
 		at = at.normalize();
         x = punto->x;
         y = punto->y;
