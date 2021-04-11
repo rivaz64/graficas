@@ -35,6 +35,7 @@ namespace GraphicsModule {
         return &vertexB;
     }
     void mesh::setvertex(std::initializer_list<float> i,int num) {
+        /*
 #ifdef openGL
         n = num;
         points = (float*)i.begin();
@@ -53,6 +54,7 @@ namespace GraphicsModule {
         
 
 #endif
+*/
     }
     void mesh::setcolor(std::initializer_list<float> i)
     {
@@ -88,12 +90,7 @@ namespace GraphicsModule {
         n = nv;
         vertexB.BindFlags = GraphicsModule::BIND_FLAG::VERTEX_BUFFER;
         vertexB.Usage = GraphicsModule::USAGE::DEFAULT;
-#ifdef openGL
-        vertexB.ByteWidth = sizeof(float) * n * 8;
-#endif
-#ifdef directX
         vertexB.ByteWidth = sizeof(vertex) * n;
-#endif
         vertexB.Mem = points;
         indexnum = ni;
         indexB.Usage = USAGE::DEFAULT;

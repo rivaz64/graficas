@@ -7,26 +7,16 @@ namespace GraphicsModule {
 		
 	public:
 		struct vertex {
-
 			float posi[3];
-#ifdef directX
 			float uv[2];
 			float normal[3];
-#endif
 		};
 		mesh() {}
 		int indexnum;
-#ifdef openGL
-		float* points;
-		//float* colors;
-#endif
-#ifdef directX
 		vertex* points;
-		int* indices;
-#endif
-#ifdef openGL
+
+
 		unsigned int* indices;
-#endif
 		Buffer vertexB;
 		Buffer indexB;
 		Buffer colorB;

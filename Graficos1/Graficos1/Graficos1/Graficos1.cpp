@@ -120,16 +120,12 @@ void loadModel() {
     int numfaces = 0;
 
     aiMesh* mesh;// = scene->mMeshes[0];
-#ifdef directX
-
-    
-    
 
     for (int o = 0; o < scene->mNumMeshes; o++) {
         mesh = scene->mMeshes[o];
         mes->modelo.push_back(new GraphicsModule::mesh);
         mes->modelo[mes->modelo.size() - 1]->points = new GraphicsModule::mesh::vertex[mesh->mNumVertices];
-        mes->modelo[mes->modelo.size() - 1]->indices = new int[mesh->mNumFaces * 3];
+        mes->modelo[mes->modelo.size() - 1]->indices = new unsigned int[mesh->mNumFaces * 3];
         for (int i = 0; i < mesh->mNumVertices; i++)
         {
             aiVector3D pos = mesh->mVertices[i];
@@ -154,37 +150,6 @@ void loadModel() {
         mes->modelo[mes->modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
     }
 
-#endif
-#ifdef openGL
-    
-    for (int o = 0; o < scene->mNumMeshes; o++) {
-        mesh = scene->mMeshes[o];
-        mes->modelo.push_back(new GraphicsModule::mesh);
-        mes->modelo[mes->modelo.size() - 1]->points = new float[mesh->mNumVertices * 8];
-        mes->modelo[mes->modelo.size() - 1]->indices = new unsigned int[mesh->mNumFaces * 3];
-        for (int i = 0; i < mesh->mNumVertices; i++)
-        {
-            aiVector3D pos = mesh->mVertices[i];
-            mes->modelo[mes->modelo.size() - 1]->points[i * 8] = pos.x;
-            mes->modelo[mes->modelo.size() - 1]->points[i * 8 + 1] = pos.y;
-            mes->modelo[mes->modelo.size() - 1]->points[i * 8 + 2] = pos.z;
-            mes->modelo[mes->modelo.size() - 1]->points[i * 8 + 3] = mesh->mTextureCoords[0][i].x;
-            mes->modelo[mes->modelo.size() - 1]->points[i * 8 + 4] = mesh->mTextureCoords[0][i].y;
-            mes->modelo[mes->modelo.size() - 1]->points[i * 8 + 5] = mesh->mNormals[i].x;
-            mes->modelo[mes->modelo.size() - 1]->points[i * 8 + 6] = mesh->mNormals[i].y;
-            mes->modelo[mes->modelo.size() - 1]->points[i * 8 + 7] = mesh->mNormals[i].z;
-        }
-        for (int i = 0; i < mesh->mNumFaces; i++) {
-            const aiFace& Face = mesh->mFaces[i];
-            if (Face.mNumIndices == 3) {
-                mes->modelo[mes->modelo.size() - 1]->indices[i * 3] = i * 3;
-                mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 1] = i * 3 + 1;
-                mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 2] = i * 3 + 2;
-            }
-        }
-        mes->modelo[mes->modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
-    }
-#endif
     objects.push_back(GraphicsModule::objeto());
     objects[objects.size() - 1].mod = mes;
     objects[objects.size() - 1].tx = tx;
