@@ -12,7 +12,7 @@ using std::string;
 namespace GraphicsModule {
 	class Textura
 	{
-		
+
 	public:
 #ifdef directX
 		D3D11_TEXTURE2D_DESC des;
@@ -20,11 +20,18 @@ namespace GraphicsModule {
 		ID3D11ShaderResourceView* srv;
 #else 
 		unsigned int get;
-		#endif
-		
+#endif
+
 		void describe(FORMAT f, BIND_FLAG bf);
 		void loadfromfile(LPCSTR f);
 		void release();
+#ifdef openGL
+		unsigned int
+#endif
+#ifdef directX
+			ID3D11ShaderResourceView*
+#endif
+			geter();
 	};
 }
 
