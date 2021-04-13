@@ -31,6 +31,7 @@ GraphicsModule::Textura tx;
 GraphicsModule::objeto pitola, pitola0, rana;
 vector<GraphicsModule::objeto> objects;
 GraphicsModule::mesh mesho;
+int cual=0;
 #ifdef directX
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
@@ -174,13 +175,21 @@ void UIRender()
     ImGui_ImplGlfw_NewFrame();
 #endif
     ImGui::NewFrame();
-
+    std::string name ="pitola";
     // example window
     if (ImGui::Begin("Another Window", nullptr))
     {
         ImGui::DragFloat3("light", MiObj.dirly, .001f, -1.f, 1.f);
-        for(GraphicsModule::objeto &o: objects)
-        ImGui::DragFloat3("location", o.posi, .001f);
+        for (int i = 0; i < objects.size(); i++) {
+            if (ImGui::Button((name + std::to_string(i)).c_str()))
+                cual = i;
+        }
+        if (cual >= 0 && cual < objects.size()) {
+            ImGui::DragFloat3("location", objects[cual].posi, .001f);
+            ImGui::DragFloat3("size", objects[cual].size, .001f);
+            ImGui::DragFloat3("rotation", objects[cual].rot, .001f);
+        }
+        
         if (ImGui::Button("load moddel", ImVec2(100, 50))) {
             loadModel();
         }

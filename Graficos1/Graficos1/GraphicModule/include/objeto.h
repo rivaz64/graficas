@@ -12,6 +12,8 @@ namespace GraphicsModule {
 		model* mod;
 		Textura* tx=NULL;
 		float posi[3] = { 0,0,0 };
+		float size[3] = { 1,1,1 };
+		float rot[3] = { 0,0,0 };
 		//float color[4];
 		void setTexture(RenderTargetView rtv);
 		void setTexture(unsigned int t);
