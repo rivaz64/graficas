@@ -137,7 +137,12 @@ void loadModel() {
             mes->modelo[mes->modelo.size() - 1]->points[i].normal[2] = mesh->mNormals[i].z;
 
             mes->modelo[mes->modelo.size() - 1]->points[i].uv[0] = mesh->mTextureCoords[0][i].x;
+#ifdef directX
             mes->modelo[mes->modelo.size() - 1]->points[i].uv[1] = 1 - mesh->mTextureCoords[0][i].y;
+#endif
+#ifdef openGL
+            mes->modelo[mes->modelo.size() - 1]->points[i].uv[1] = mesh->mTextureCoords[0][i].y;
+#endif
         }
         for (int i = 0; i < mesh->mNumFaces; i++) {
             const aiFace& Face = mesh->mFaces[i];
@@ -153,7 +158,9 @@ void loadModel() {
     objects.push_back(GraphicsModule::objeto());
     objects[objects.size() - 1].mod = mes;
     objects[objects.size() - 1].tx = tx;
-    objects[objects.size() - 1].posi.x = 3;
+    objects[objects.size() - 1].posi[0] = 3;
+    objects[objects.size() - 1].posi[1] = 3;
+    objects[objects.size() - 1].posi[2] = 3;
 }
 void UIRender()
 {
@@ -172,6 +179,8 @@ void UIRender()
     if (ImGui::Begin("Another Window", nullptr))
     {
         ImGui::DragFloat3("light", MiObj.dirly, .001f, -1.f, 1.f);
+        for(GraphicsModule::objeto &o: objects)
+        ImGui::DragFloat3("location", o.posi, .001f);
         if (ImGui::Button("load moddel", ImVec2(100, 50))) {
             loadModel();
         }

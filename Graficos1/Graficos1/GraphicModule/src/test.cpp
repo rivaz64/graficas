@@ -393,21 +393,6 @@ namespace GraphicsModule
         cam->setup(0.0f, 1.0f, 0);
 #endif
         cam->axis();
-        //texturbitco.loadfromfile("bitco.dds");
-        //texturmar.loadfromfile("seafloor.dds");
-        //cubo.m = &cubito;
-        cubo.tx = &texturbitco;
-        cubo.posi = vector3(0, 0, 0);
-        //cubo0.m = &cubito;
-        cubo0.tx = &texturmar;
-        cubo0.posi = vector3(3, 0, 0);
-        //cubo1.m = &cubito;
-        //cubo0.tx = &texturmar;
-        cubo1.posi = vector3(-3, 0, 0);
-        //cubo2.m = &cubito;
-        //cubo0.tx = &texturmar;
-        cubo2.posi = vector3(0, 3, 0);
-        // Set primitive topology
         man->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
 
@@ -599,7 +584,6 @@ namespace GraphicsModule
     }
     void test::clear()
     {
-        //float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
 #ifdef openGL
         glClearColor(.0f, .0f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -611,9 +595,6 @@ namespace GraphicsModule
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
         glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));
 
-        //man->Projection = (matrix*)proyection.Mem;
-        
-        //man->View = (matrix*)view.Mem;
       
 #endif
     man->getConext()->ClearRenderTargetView(rtv);

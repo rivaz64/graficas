@@ -111,7 +111,7 @@ namespace GraphicsModule {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, o.tx->get);
 		glm::mat4 Model = glm::mat4(1.0f);
-		Model = glm::translate(Model, glm::vec3(o.posi.x, o.posi.y, o.posi.z));
+		Model = glm::translate(Model, glm::vec3(o.posi[0], o.posi[1], o.posi[2]));
 		GLuint worldID = glGetUniformLocation(shader, "world");
 		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
 
@@ -129,7 +129,7 @@ namespace GraphicsModule {
 				devcon.PSSetShaderResources(o.tx);
 			XMMATRIX g_World;
 			CBChangesEveryFrame cb;
-			g_World = XMMatrixTranslation(o.posi.x, o.posi.y, o.posi.z);
+			g_World = XMMatrixTranslation(o.posi[0], o.posi[1], o.posi[2]);
 
 			cb.mWorld= XMMatrixTranspose(g_World);
 			

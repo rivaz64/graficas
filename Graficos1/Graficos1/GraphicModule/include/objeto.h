@@ -11,7 +11,7 @@ namespace GraphicsModule {
 		//mesh* m;
 		model* mod;
 		Textura* tx=NULL;
-		vector3 posi;
+		float posi[3] = { 0,0,0 };
 		//float color[4];
 		void setTexture(RenderTargetView rtv);
 		void setTexture(unsigned int t);
