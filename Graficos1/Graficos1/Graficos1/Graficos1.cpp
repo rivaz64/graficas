@@ -31,7 +31,12 @@ GraphicsModule::Textura tx;
 GraphicsModule::objeto pitola, pitola0, rana;
 vector<GraphicsModule::objeto> objects;
 GraphicsModule::mesh mesho;
+char* nombre = new char[64];
 int cual=0;
+vector<char*> filenames;
+int inverted=0;
+bool b[4] = { true,false,false,false };
+string flagas[4] = { "normal","inverted","special","surprice" };
 #ifdef directX
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
@@ -113,18 +118,29 @@ HRESULT InitImgUI()
 }
 void loadModel() {
     GraphicsModule::Textura* tx = new GraphicsModule::Textura;
-    tx->loadfromfile("pitola.dds");
+    
     GraphicsModule::model* mes = new GraphicsModule::model;
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(openfilename(), NULL);
+
+    
+    objects.push_back(GraphicsModule::objeto());
+    std::string estefile = openfilename();
+    char drive[_MAX_DRIVE];
+    char dir[_MAX_DIR];
+    char ext[_MAX_EXT];
+    filenames.push_back(new char[_MAX_FNAME]);
+    _splitpath_s(estefile.c_str(), drive, _MAX_DRIVE,dir, _MAX_DIR, filenames[filenames.size()-1], _MAX_FNAME, ext, _MAX_EXT);
+    //std::cout << filename << std::endl;
+    const aiScene* scene = importer.ReadFile(estefile, NULL);
     int numvertices = 0;
     int numfaces = 0;
-
+    std::string Filename = "";
     aiMesh* mesh;// = scene->mMeshes[0];
-
+    aiString Path;
     for (int o = 0; o < scene->mNumMeshes; o++) {
         mesh = scene->mMeshes[o];
         mes->modelo.push_back(new GraphicsModule::mesh);
+        
         mes->modelo[mes->modelo.size() - 1]->points = new GraphicsModule::mesh::vertex[mesh->mNumVertices];
         mes->modelo[mes->modelo.size() - 1]->indices = new unsigned int[mesh->mNumFaces * 3];
         for (int i = 0; i < mesh->mNumVertices; i++)
@@ -138,12 +154,9 @@ void loadModel() {
             mes->modelo[mes->modelo.size() - 1]->points[i].normal[2] = mesh->mNormals[i].z;
 
             mes->modelo[mes->modelo.size() - 1]->points[i].uv[0] = mesh->mTextureCoords[0][i].x;
-#ifdef directX
-            mes->modelo[mes->modelo.size() - 1]->points[i].uv[1] = 1 - mesh->mTextureCoords[0][i].y;
-#endif
-#ifdef openGL
+
             mes->modelo[mes->modelo.size() - 1]->points[i].uv[1] = mesh->mTextureCoords[0][i].y;
-#endif
+
         }
         for (int i = 0; i < mesh->mNumFaces; i++) {
             const aiFace& Face = mesh->mFaces[i];
@@ -154,11 +167,33 @@ void loadModel() {
             }
         }
         mes->modelo[mes->modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
-    }
+        aiMaterial* siaimatirial = scene->mMaterials[scene->mMeshes[o]->mMaterialIndex];
+        std::cout<<'a' << AI_SUCCESS << std::endl;
+        for (int i = 1; i < aiTextureType_UNKNOWN; i++) {
+            if (siaimatirial->GetTextureCount((aiTextureType)i) > 0) {
+                std::cout << (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) << std::endl;
+                if (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+                    char drive[_MAX_DRIVE];
+                    char dir[_MAX_DIR];
+                    char fname[_MAX_FNAME];
+                    char ext[_MAX_EXT];
 
-    objects.push_back(GraphicsModule::objeto());
+
+
+                    _splitpath_s(Path.data, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
+
+                    Filename = fname;
+                    Filename += ext;
+                    break;
+                }
+            }
+        }
+        tx->loadfromfile(Filename.c_str(), inverted);
+        mes->modelo[mes->modelo.size() - 1]->tx = tx;
+    }
+    
+    
     objects[objects.size() - 1].mod = mes;
-    objects[objects.size() - 1].tx = tx;
     objects[objects.size() - 1].posi[0] = 3;
     objects[objects.size() - 1].posi[1] = 3;
     objects[objects.size() - 1].posi[2] = 3;
@@ -180,22 +215,43 @@ void UIRender()
     if (ImGui::Begin("Another Window", nullptr))
     {
         ImGui::DragFloat3("light", MiObj.dirly, .001f, -1.f, 1.f);
-        for (int i = 0; i < objects.size(); i++) {
-            if (ImGui::Button((name + std::to_string(i)).c_str()))
+        for (int i = 0; i < filenames.size(); i++) {
+            if (ImGui::Button(filenames[i]))
                 cual = i;
         }
+
         if (cual >= 0 && cual < objects.size()) {
             ImGui::DragFloat3("location", objects[cual].posi, .001f);
             ImGui::DragFloat3("size", objects[cual].size, .001f);
             ImGui::DragFloat3("rotation", objects[cual].rot, .001f);
         }
-        
+
+
+        for (int i = 0; i < 4; i++) {
+            ImGui::Selectable(flagas[i].c_str(), &b[i]);
+            if (b[i]) {
+                inverted = i;
+                for (int o = 0; o < 4; o++) {
+                    if (i != o) {
+                        b[o] = false;
+                    }
+                }
+            }
+        }
         if (ImGui::Button("load moddel", ImVec2(100, 50))) {
             loadModel();
         }
-        for (GraphicsModule::objeto& i : objects) 
+        
+        
+        //ImGui::DragInt("inverted", &inverted);
+        if (cual >= 0 && cual < objects.size()) {
+            for (GraphicsModule::mesh* i : objects[cual].mod->modelo) {
+                ImGui::Image((ImTextureID)i->tx->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+            }
+        }
+        /*for (GraphicsModule::objeto& i : objects) 
             ImGui::Image((ImTextureID)i.tx->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
-    }
+    */}
     ImGui::End();
 
     // render UI

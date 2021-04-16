@@ -359,7 +359,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(DXSDK_DIR)Include\;$(SolutionDir)GraphicModule\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXSDK_DIR)Include\;$(SolutionDir)GraphicModule\include\;$(DEVLIBS);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -463,7 +463,7 @@
     <ClInclude Include="include\test.h" />
     <ClInclude Include="include\Textura.h" />
     <ClInclude Include="include\TextureManager.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='directX debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='directX debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\vector3.h" />
     <ClInclude Include="include\VertexShader.h" />
@@ -488,7 +488,7 @@
     <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\Textura.cpp" />
     <ClCompile Include="src\TextureManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='directX debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='directX debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\vector3.cpp" />
     <ClCompile Include="src\VertexShader.cpp" />

@@ -95,11 +95,22 @@ void camera::axis()
 void camera::getView(matrix& matrix)
 {
 #ifdef openGL
-	matrix.m= glm::lookAt(
-		glm::vec3(eye.x,eye.y,eye.z), // Camera is at (4,3,3), in World Space
-		glm::vec3(at.x, at.y, at.z), // and looks at the origin
-		glm::vec3(up.x, up.y, up.z)  // Head is up (set to 0,-1,0 to look upside-down)
-	);
+	matrix.m[0][0] = xaxis.x;
+	matrix.m[0][1] = yaxis.x;
+	matrix.m[0][2] = zaxis.x;
+	matrix.m[0][3] = 0;
+	matrix.m[1][0] = xaxis.y;
+	matrix.m[1][1] = yaxis.y;
+	matrix.m[1][2] = zaxis.y;
+	matrix.m[1][3] = 0;
+	matrix.m[2][0] = xaxis.z;
+	matrix.m[2][1] = yaxis.z;
+	matrix.m[2][2] = zaxis.z;
+	matrix.m[2][3] = 0;
+	matrix.m[3][0] = -xaxis.dot(eye);
+	matrix.m[3][1] = -yaxis.dot(eye);
+	matrix.m[3][2] = -zaxis.dot(eye);
+	matrix.m[3][3] = 1;
 #else
 	matrix.m[0] = xaxis.x;
 	matrix.m[4] = yaxis.x;
@@ -122,12 +133,26 @@ void camera::getView(matrix& matrix)
 
 void camera::getProyectionMatrixPerspective(matrix& matrix)
 {
-	
-#ifdef openGL
-	matrix.m =glm::perspective(angle, ratio, nearp, farp);
-	
-#else
 	float co = cos(angle * .5f), s = sin(angle * .5f);
+#ifdef openGL
+	matrix.m[0][0] = (co / s) / ratio;
+	matrix.m[0][1] = 0;
+	matrix.m[0][2] = 0;
+	matrix.m[0][3] = 0;
+	matrix.m[1][0] = 0;
+	matrix.m[1][1] = co / s;
+	matrix.m[1][2] = 0;
+	matrix.m[1][3] = 0;
+	matrix.m[2][0] = 0;
+	matrix.m[2][1] = 0;
+	matrix.m[2][2] = farp / (farp - nearp);
+	matrix.m[2][3] = 1;
+	matrix.m[3][0] = 0;
+	matrix.m[3][1] = 0;
+	matrix.m[3][2] = -farp * nearp / (farp - nearp);
+	matrix.m[3][3] = 0;
+#else
+	
 	matrix.m[0] = (co / s) / ratio;
 	matrix.m[4] = 0;
 	matrix.m[8] = 0;

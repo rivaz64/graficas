@@ -16,14 +16,14 @@ namespace GraphicsModule {
 	public:
 #ifdef directX
 		D3D11_TEXTURE2D_DESC des;
-		ID3D11Texture2D* get;
-		ID3D11ShaderResourceView* srv;
+		ID3D11Texture2D* get=NULL;
+		ID3D11ShaderResourceView* srv = NULL;
 #else 
 		unsigned int get;
 #endif
 
 		void describe(FORMAT f, BIND_FLAG bf);
-		void loadfromfile(LPCSTR f);
+		void loadfromfile(LPCSTR f,int inverted);
 		void release();
 #ifdef openGL
 		unsigned int

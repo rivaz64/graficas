@@ -4,6 +4,7 @@
 #ifdef openGL
 #include<glm\gtc\type_ptr.hpp>
 #endif
+#define PI 3.1415926535
 #include<iostream>
 namespace GraphicsModule {
 #ifdef directX
@@ -109,39 +110,42 @@ namespace GraphicsModule {
 	{
 #ifdef openGL
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, o.tx->get);
+		
 		glm::mat4 Model = glm::mat4(1.0f);
 		float rotate = o.rot[0]+ o.rot[1]+ o.rot[2];
 		Model = glm::translate(Model, glm::vec3(o.posi[0], o.posi[1], o.posi[2]));
 		Model = glm::scale(Model, glm::vec3(o.size[0], o.size[1], o.size[2]));
 		if(o.rot[0]!=0)
-			Model = glm::rotate(Model, o.rot[0], glm::vec3(1, 0,0));
+			Model = glm::rotate(Model, float(o.rot[0] / 180.f * PI), glm::vec3(1, 0,0));
 		if (o.rot[1] != 0)
-			Model = glm::rotate(Model, o.rot[1], glm::vec3(0,1, 0));
+			Model = glm::rotate(Model, float(o.rot[1] / 180.f * PI), glm::vec3(0,1, 0));
 		if (o.rot[2] != 0)
-			Model = glm::rotate(Model, o.rot[2], glm::vec3(0,0,1));
+			Model = glm::rotate(Model, float(o.rot[2] / 180.f * PI), glm::vec3(0,0,1));
 		
 		
 		GLuint worldID = glGetUniformLocation(shader, "world");
 		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
 #endif
 #ifdef directX
-		if (o.tx != NULL)
-			devcon.PSSetShaderResources(o.tx);
+		getmanager()->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 		XMMATRIX g_World;
 		CBChangesEveryFrame cb;
+		
 		g_World = XMMatrixMultiply(XMMatrixScaling(o.size[0], o.size[1], o.size[2]), XMMatrixTranslation(o.posi[0], o.posi[1], o.posi[2]));
-		g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o.rot[0], o.rot[1], o.rot[2]), g_World);
+		g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o.rot[0]/180.f*PI, o.rot[1] / 180.f * PI, o.rot[2] / 180.f * PI), g_World);
 		cb.mWorld = XMMatrixTranspose(g_World);
 
 		devcon.UpdateSubresource(changeveryFrameB, &cb);
 #endif
 		for (mesh* mo : (o.mod->modelo)) {
 #ifdef openGL
+			glBindTexture(GL_TEXTURE_2D, mo->tx->get);
 			glBindVertexArray(mo->vao);
-			glDrawElements(GL_TRIANGLES, mo->indexnum, GL_UNSIGNED_INT, 0);
+			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
 #ifdef directX
+			if (mo->tx != NULL)
+				devcon.PSSetShaderResources(mo->tx);
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
 			devcon.draw(mo->indexnum);

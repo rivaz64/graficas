@@ -1,6 +1,7 @@
 #pragma once
 #include <initializer_list>
 #include"Buffer.h"
+#include"Textura.h"
 namespace GraphicsModule {
 	class mesh
 	{
@@ -22,7 +23,7 @@ namespace GraphicsModule {
 		Buffer colorB;
 		unsigned int vao;
 		Buffer* getindices();
-		float* colors;
+		Textura* tx = NULL;
 		int n = 0;
 		void setindices(std::initializer_list<unsigned int> i,int in);
 		Buffer* getvertex();

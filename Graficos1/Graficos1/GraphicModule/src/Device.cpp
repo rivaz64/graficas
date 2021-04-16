@@ -89,7 +89,7 @@ namespace GraphicsModule {
 	void Device::CreateTexture2D(Textura& tx)
 	{
 #ifdef directX
-		g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
+		HRESULT hr = g_pd3dDevice->CreateTexture2D(&tx.des,NULL, &tx.get);
 #endif
 	}
 

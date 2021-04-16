@@ -382,19 +382,19 @@ namespace GraphicsModule
 
 
         cam = new camera;
-#ifdef openGL
+/*#ifdef openGL
         cam->seteye(4.0f, 3.0f, 3.0f);
         cam->setat(0.0f, 0.f, 0);
         cam->setup(0.0f, 1.0f, 0);
 #endif
-#ifdef directX
+#ifdef directX*/
         cam->seteye(0.0f, 3.0f, -6.0f);
         cam->setat(0.0f, 1.f, 0);
         cam->setup(0.0f, 1.0f, 0);
-#endif
+//#endif
         cam->axis();
-        man->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-
+        
+        
 
         view.Usage = USAGE::DEFAULT;
         view.ByteWidth = sizeof(CBNeverChanges);
@@ -476,8 +476,6 @@ namespace GraphicsModule
 
 
 
-        cubo1.tx = new Textura;
-        cubo2.tx = new Textura;
        
         return S_OK;
     }
