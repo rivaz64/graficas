@@ -292,11 +292,11 @@ namespace GraphicsModule
 #endif
 
 #ifdef directX
-        hr = man->compileVS("Tutorial07.fx", "VS", "vs_4_0", vrtxshdr, intplyut);
+        hr = man->compileVS("point.fx", "VS", "vs_4_0", vrtxshdr, intplyut);
         if (FAILED(hr))
             return hr;
 
-        man->compilePX("Tutorial07.fx", "PS", "ps_4_0", pixshad);
+        man->compilePX("point.fx", "PS", "ps_4_0", pixshad);
 
         if (FAILED(hr))
             return hr;
