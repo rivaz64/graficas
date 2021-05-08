@@ -221,8 +221,8 @@ void UIRender()
     // example window
     if (ImGui::Begin("Another Window", nullptr))
     {
-        //ImGui::DragFloat3("light", MiObj.dirly, .001f, -1.f, 1.f);
-        ImGui::DragFloat3("light", MiObj.dirly, .01f);
+        ImGui::DragFloat3("dirlight", MiObj.dirly, .001f, -1.f, 1.f);
+        ImGui::DragFloat3("poslight", MiObj.posly, .01f);
         for (int i = 0; i < filenames.size(); i++) {
             if (ImGui::Button(filenames[i].c_str()))
                 cual = i;

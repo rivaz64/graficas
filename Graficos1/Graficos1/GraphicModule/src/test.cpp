@@ -292,11 +292,11 @@ namespace GraphicsModule
 #endif
 
 #ifdef directX
-        hr = man->compileVS("point.fx", "VS", "vs_4_0", vrtxshdr, intplyut);
+        hr = man->compileVS("spot.fx", "VS", "vs_4_0", vrtxshdr, intplyut);
         if (FAILED(hr))
             return hr;
 
-        man->compilePX("point.fx", "PS", "ps_4_0", pixshad);
+        man->compilePX("spot.fx", "PS", "ps_4_0", pixshad);
 
         if (FAILED(hr))
             return hr;
@@ -420,7 +420,11 @@ namespace GraphicsModule
         Dirlight.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(Dirlight);
 
-
+        Poslight.Usage = USAGE::DEFAULT;
+        Poslight.ByteWidth = sizeof(float[4]);
+        Poslight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        Poslight.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(Poslight);
 
         // Create the sample state
 #ifdef directX
@@ -570,11 +574,27 @@ namespace GraphicsModule
             man->View = cbNeverChanges;
             man->getConext()->UpdateSubresource(view, &cbNeverChanges);
         }
+        /*f[0] = cam->at.x;
+        f[1] = cam->at.y;
+        f[2] = cam->at.z;
+        f[3] = 0;
+        man->getConext()->UpdateSubresource(Dirlight, f);
+        f[0] = cam->eye.x;
+        f[1] = cam->eye.y;
+        f[2] = cam->eye.z;
+        f[3] = 0;
+        man->getConext()->UpdateSubresource(Poslight, f);*/
         f[0] = dirly[0];
         f[1] = dirly[1];
         f[2] = dirly[2];
         f[3] = 0;
         man->getConext()->UpdateSubresource(Dirlight, f);
+        f[0] = posly[0];
+        f[1] = posly[1];
+        f[2] = posly[2];
+        f[3] = 0;
+        man->getConext()->UpdateSubresource(Poslight, f);//*/
+
 #ifdef openGL
         GLuint dirlID = glGetUniformLocation(shader, "dirlight");
         glUniform4f(dirlID, dirly[0], dirly[1], dirly[2], 0);
@@ -632,6 +652,7 @@ namespace GraphicsModule
     man->getConext()->get()->VSSetConstantBuffers(1, 1, &proyection.buf);
     man->getConext()->get()->VSSetConstantBuffers(2, 1, &translation.buf);
     man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
+    man->getConext()->get()->VSSetConstantBuffers(4, 1, &Poslight.buf);
     //aki akaba lode abstraer luego
     man->getConext()->get()->PSSetShader(pixshad.get(), NULL, 0);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &translation.buf);

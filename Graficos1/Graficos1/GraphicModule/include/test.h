@@ -65,6 +65,7 @@ namespace GraphicsModule
   public:
 
       float dirly[3] = { 0,-1,0 };
+      float posly[3] = { 7,7,7 };
       bool cerrar = true;
       HWND g_hwnd;
 #ifdef openGL
@@ -97,6 +98,7 @@ namespace GraphicsModule
       Textura texturbitco;
       Textura texturmar;
       Buffer Dirlight;
+      Buffer Poslight;
       SamplerState samsta;
       static test* esta;
       unsigned int shader;
