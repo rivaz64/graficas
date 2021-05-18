@@ -233,7 +233,7 @@ void UIRender()
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("Spot Light")) {
-            ImGui::DragFloat3("direction", MiObj.sl.Dir, .001f);
+            ImGui::DragFloat3("direction", MiObj.sl.Dir, .001f, -1.f, 1.f);
             ImGui::DragFloat3("position", MiObj.sl.Pos, .001f);
             ImGui::DragFloat("attenuation", &MiObj.sl.Att, .001f);
             ImGui::DragFloat("radious", &MiObj.sl.Rad, .001f);

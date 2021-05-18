@@ -121,7 +121,7 @@ namespace GraphicsModule
       Buffer Spotlight;
       SamplerState samsta;
       static test* esta;
-      unsigned int shader;
+      //unsigned int shader;
       //glm::mat4 matrix;
 #ifdef directX
       //ID3D11SamplerState* g_pSamplerLinear = NULL;

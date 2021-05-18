@@ -10,100 +10,7 @@
 
 namespace GraphicsModule
 {
-#ifdef openGL
-    GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path)
-    {
-        // Crear los shaders
-        GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-        GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-        // Leer el Vertex Shader desde archivo
-        std::string VertexShaderCode;
-        std::ifstream VertexShaderStream(vertex_file_path, std::ios::in);
-        if (VertexShaderStream.is_open()) {
-            std::stringstream sstr;
-            sstr << VertexShaderStream.rdbuf();
-            VertexShaderCode = sstr.str();
-            VertexShaderStream.close();
-        }
-        else {
-            printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_file_path);
-            getchar();
-            return 0;
-        }
-
-        // Leer el Fragment Shader desde archivo
-        std::string FragmentShaderCode;
-        std::ifstream FragmentShaderStream(fragment_file_path, std::ios::in);
-        if (FragmentShaderStream.is_open()) {
-            std::stringstream sstr;
-            sstr << FragmentShaderStream.rdbuf();
-            FragmentShaderCode = sstr.str();
-            FragmentShaderStream.close();
-        }
-
-        GLint Result = GL_FALSE;
-        GLint InfoLogLength;
-
-
-        // Compilar Vertex Shader
-        printf("Compiling shader : %s\n", vertex_file_path);
-        char const* VertexSourcePointer = VertexShaderCode.c_str();
-        glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
-        glCompileShader(VertexShaderID);
-
-        // Revisar Vertex Shader
-        glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
-        glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if (InfoLogLength > 0) {
-            std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
-            glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-            printf("%s\n", &VertexShaderErrorMessage[0]);
-        }
-
-        // Compilar Fragment Shader
-        printf("Compiling shader : %s\n", fragment_file_path);
-        char const* FragmentSourcePointer = FragmentShaderCode.c_str();
-        glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
-        glCompileShader(FragmentShaderID);
-
-        // Revisar Fragment Shader
-        glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
-        glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if (InfoLogLength > 0) {
-            std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
-            glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-            printf("%s\n", &FragmentShaderErrorMessage[0]);
-        }
-
-
-
-        // Vincular el programa por medio del ID
-        printf("Linking program\n");
-        GLuint ProgramID = glCreateProgram();
-        glAttachShader(ProgramID, VertexShaderID);
-        glAttachShader(ProgramID, FragmentShaderID);
-        glLinkProgram(ProgramID);
-
-        // Revisar el programa
-        glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
-        glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if (InfoLogLength > 0) {
-            std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
-            glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-            printf("%s\n", &ProgramErrorMessage[0]);
-        }
-
-
-        glDetachShader(ProgramID, VertexShaderID);
-        glDetachShader(ProgramID, FragmentShaderID);
-
-        glDeleteShader(VertexShaderID);
-        glDeleteShader(FragmentShaderID);
-
-        return ProgramID;
-    }
-#endif
 #ifdef openGL
     void test::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
         std::cout << "aka" << std::endl;
@@ -118,34 +25,7 @@ namespace GraphicsModule
     }
 #endif
     test* test::esta = NULL;
-    /*LRESULT CALLBACK test::WndProc(HWND _hwnd, UINT _msg, WPARAM _wParam, LPARAM _lParam)
-    {
-        switch (_msg)
-        {
-        case WM_SIZE:
-#ifdef directX
-            if (_wParam != SIZE_MINIMIZED && GraphicsModule::getmanager()->getSwapchain()->get()) {
-
-                esta->rezise(_hwnd, _lParam);
-            }
-#endif
-            return 0;
-            break;
-
-        case WM_SYSCOMMAND:
-            if ((_wParam & 0xfff0) == SC_KEYMENU)
-            {
-                return 0;
-            }
-            break;
-
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            break;
-        }
-        return ::DefWindowProc(_hwnd, _msg, _wParam, _lParam);
-    }
-    */
+    
 
     HRESULT test::InitWindow(LONG _width, LONG _height, LRESULT prochan(HWND, UINT, WPARAM, LPARAM) )
     {
@@ -290,83 +170,7 @@ namespace GraphicsModule
         man->compileshaders("chad");
 
 
-        // Create vertex buffer
-  /*
-        cubito.setvertex(
-            {
-                { {-1.0f, 1.0f, 1.0f}, {0,0},{-1.0f, 1.0f, 1.0f} },
-                { {1.0f, 1.0f, 1.0f}, {0,0},{1.0f, 1.0f, 1.0f} },
-                { {-1.0f, 1.0f, -1.0f}, {0,0},{-1.0f, 1.0f, -1.0f} },
-                { {1.0f, 1.0f, -1.0f}, {0,0},{1.0f, 1.0f, -1.0f}},
-                { {-1.0f, -1.0f, 1.0f}, {0,0},{-1.0f, -1.0f, 1.0f} },
-                { {1.0f, -1.0f, 1.0f}, {0,0},{1.0f, -1.0f, 1.0f}},
-                { {-1.0f, -1.0f, -1.0f}, {0,0},{-1.0f, -1.0f, -1.0f}},
-                { {1.0f, -1.0f, -1.0f}, {0,0},{1.0f, -1.0f, -1.0f} },
-                /*
-                { {-1.0f, 1.0f, -1.0f}, {0,0},{0.f,1.f,0.f} },
-                { { 1.0f, 1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,1.f,0.f} },
-                { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } ,{0.f,1.f,0.f}},
-                { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{0.f,1.f,0.f}},
-
-                { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f } ,{0.f,-1.f,0.f}},
-                { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,-1.f,0.f} },
-                { { 1.0f, -1.0f, 1.0f }, { 1.0f, 1.0f },{0.f,-1.f,0.f} },
-                { { -1.0f, -1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,-1.f,0.f} },
-
-                { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f },{-1.f,0.f,0.f}},
-                { { -1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } ,{-1.f,0.f,0.f}},
-                { { -1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{-1.f,0.f,0.f}},
-                { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{-1.f,0.f,0.f}},
-
-                { { 1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f },{1.f,0.f,0.f} },
-                { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f } ,{1.f,0.f,0.f}},
-                { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{1.f,0.f,0.f} },
-                { { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } ,{1.f,0.f,0.f}},
-
-                { { -1.0f, -1.0f, -1.0f }, { 0.0f, 0.0f },{0.f,0.f,-1.f}},
-                { { 1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f },{0.f,0.f,-1.f}},
-                { { 1.0f, 1.0f, -1.0f }, { 1.0f, 1.0f },{0.f,0.f,-1.f}},
-                { { -1.0f, 1.0f, -1.0f }, { 0.0f, 1.0f } ,{0.f,0.f,-1.f}},
-
-                { { -1.0f, -1.0f, 1.0f }, { 0.0f, 0.0f } ,{0.f,0.f,1.f}},
-                { { 1.0f, -1.0f, 1.0f }, { 1.0f, 0.0f } ,{0.f,0.f,1.f}},
-                { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f } ,{0.f,0.f,1.f}},
-                { { -1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f },{0.f,0.f,1.f} },//
-            });
-
-        cubito.setindices(
-            {
-                0,1,2,
-                1,3,2,
-                0,4,1,
-                1,4,5,
-                2,4,0,
-                2,6,4,
-                1,7,3,
-                1,5,7,
-                4,6,7,
-                7,5,4,
-                2,7,6,
-                7,2,3,
-                /*
-                3,1,0,
-                2,1,3,
-
-                6,4,5,
-                7,4,6,
-
-                11,9,8,
-                10,9,11,
-
-                14,12,13,
-                15,12,14,
-
-                19,17,16,
-                18,17,19,
-
-                22,20,21,
-                23,20,22//
-            });//*/
+        
 
 
         cam = new camera;
@@ -436,15 +240,7 @@ namespace GraphicsModule
         if (FAILED(hr))
             return hr;
 
-        // Initialize the world matrices
-        //g_World = XMMatrixIdentity();
-
-        // Initialize the view matrix
-        /*XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
-        XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-        XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-        g_View = XMMatrixLookAtLH(Eye, At, Up);*/
-        man->shader = shader;
+       
         matrix cbNeverChanges;
         cam->getView(cbNeverChanges);
         man->View = cbNeverChanges;
@@ -493,19 +289,7 @@ namespace GraphicsModule
         }
 #endif
         static float t = 0.0f;
-        /*if (g_driverType == DRIVER_TYPE::DT_REFERENCE)
-        {
-            t += (float)XM_PI * 0.0125f;
-        }
-        else
-        {
-            static DWORD dwTimeStart = 0;
-            DWORD dwTimeCur = GetTickCount();
-            if (dwTimeStart == 0)
-                dwTimeStart = dwTimeCur;
-            t = (dwTimeCur - dwTimeStart) / 1000.0f;
-        }*/
-        //g_World = XMMatrixRotationY(t);
+       
         LPPOINT p = new POINT;
         if ((GetKeyState(VK_RBUTTON) & 0x100) != 0) {
             GetCursorPos(p);
@@ -522,19 +306,7 @@ namespace GraphicsModule
                 cam->click = false;
         }
         delete p;
-        // Modify the color
-        /*cubo.color.x = .9;
-        cubo.color.y = .9;
-        cubo.color.z = .9;
-        cubo0.color.x = .9;
-        cubo0.color.y = .9;
-        cubo0.color.z = .9;
-        cubo1.color.x = .9;
-        cubo1.color.y = .9;
-        cubo1.color.z = .9;
-        cubo2.color.x = .9;
-        cubo2.color.y = .9;
-        cubo2.color.z = .9;*/
+        
         float v = 36;
         if (GetKeyState('W') & 0x8000)
         {
@@ -568,16 +340,7 @@ namespace GraphicsModule
             man->View = cbNeverChanges;
             man->getConext()->UpdateSubresource(view, &cbNeverChanges);
         }
-        /*f[0] = cam->at.x;
-        f[1] = cam->at.y;
-        f[2] = cam->at.z;
-        f[3] = 0;
-        man->getConext()->UpdateSubresource(Dirlight, f);
-        f[0] = cam->eye.x;
-        f[1] = cam->eye.y;
-        f[2] = cam->eye.z;
-        f[3] = 0;
-        man->getConext()->UpdateSubresource(Poslight, f);*/
+        
        
         
         man->getConext()->UpdateSubresource(Dirlight, &dl);
@@ -585,8 +348,8 @@ namespace GraphicsModule
         man->getConext()->UpdateSubresource(Spotlight, &sl);
 
 #ifdef openGL
-        GLuint dirlID = glGetUniformLocation(shader, "dirlight");
-        glUniform4f(dirlID, dirly[0], dirly[1], dirly[2], 0);
+        //GLuint dirlID = glGetUniformLocation(shader, "dirlight");
+        //glUniform4f(dirlID, dirly[0], dirly[1], dirly[2], 0);
 #endif
     }
     void test::clear()
@@ -594,11 +357,11 @@ namespace GraphicsModule
 #ifdef openGL
         glClearColor(.0f, .0f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram(shader);
-        glUniform1i(glGetUniformLocation(shader, "texture1"), 0);
+        glUseProgram(man->shader);
+        glUniform1i(glGetUniformLocation(man->shader, "texture1"), 0);
 
-        GLuint viewID = glGetUniformLocation(shader, "view");
-        GLuint proyectionID = glGetUniformLocation(shader, "proyection");
+        GLuint viewID = glGetUniformLocation(man->shader, "view");
+        GLuint proyectionID = glGetUniformLocation(man->shader, "proyection");
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
         glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));
 
