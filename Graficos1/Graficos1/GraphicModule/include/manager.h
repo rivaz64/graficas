@@ -54,6 +54,9 @@ namespace GraphicsModule {
 #ifdef directX
         HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 #endif
+        VertexShader vrtxshdr;
+        InputLayout intplyut;
+        PixelShader pixshad;
         void create(HWND g_hWnd);
         void descrivesch();
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);
@@ -61,6 +64,7 @@ namespace GraphicsModule {
         void RSSetViewports(Viewport& vp);
         void draw(objeto &o,  Buffer& changeveryFrameB);
         void setrenderfortextur(RenderTargetView& rtv);
+        void compileshaders(std::string file);
         HRESULT compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,VertexShader& vs ,InputLayout& il);
         HRESULT compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px);
         matrix Projection, View;

@@ -221,8 +221,17 @@ void UIRender()
     // example window
     if (ImGui::Begin("Another Window", nullptr))
     {
-        ImGui::DragFloat3("dirlight", MiObj.dirly, .001f, -1.f, 1.f);
-        ImGui::DragFloat3("poslight", MiObj.posly, .01f);
+        if (ImGui::TreeNode("Directional Light")) {
+            ImGui::DragFloat3("direction", MiObj.dl.dir, .001f, -1.f, 1.f);
+            ImGui::ColorPicker4("color", MiObj.dl.color);
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Point Light")) {
+            ImGui::DragFloat3("direction", MiObj.pl.pos, .001f, -1.f, 1.f);
+            ImGui::DragFloat("attenuation", &MiObj.pl.att);
+            ImGui::ColorPicker4("color", MiObj.pl.color);
+            ImGui::TreePop();
+        }
         for (int i = 0; i < filenames.size(); i++) {
             if (ImGui::Button(filenames[i].c_str()))
                 cual = i;

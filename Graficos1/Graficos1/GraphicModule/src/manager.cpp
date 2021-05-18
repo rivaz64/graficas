@@ -170,6 +170,20 @@ namespace GraphicsModule {
 #endif
 	}
 
+	void manager::compileshaders(std::string file)
+	{
+#ifdef openGL
+		shader = LoadShaders("vertexchader.txt", "pixelchader.txt");
+#endif
+
+#ifdef directX
+		compileVS((file+".fx").c_str(), "VS", "vs_4_0", vrtxshdr, intplyut);
+		
+
+		compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad);
+#endif
+	}
+
 	HRESULT manager::compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,  VertexShader& vs,InputLayout& il)
 	{
 #ifdef directX

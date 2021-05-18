@@ -287,21 +287,9 @@ namespace GraphicsModule
         //man->getConext()->RSSetViewports(vp);
         man->RSSetViewports(vp);
 
-#ifdef openGL
-        shader = LoadShaders("vertexchader.txt", "pixelchader.txt");
-#endif
+        man->compileshaders("chad");
 
-#ifdef directX
-        hr = man->compileVS("spot.fx", "VS", "vs_4_0", vrtxshdr, intplyut);
-        if (FAILED(hr))
-            return hr;
 
-        man->compilePX("spot.fx", "PS", "ps_4_0", pixshad);
-
-        if (FAILED(hr))
-            return hr;
-
-#endif
         // Create vertex buffer
   /*
         cubito.setvertex(
@@ -415,7 +403,7 @@ namespace GraphicsModule
         man->getDevice()->CreateBuffer(translation);
 
         Dirlight.Usage = USAGE::DEFAULT;
-        Dirlight.ByteWidth = sizeof(float[4]);
+        Dirlight.ByteWidth = sizeof(float[8]);
         Dirlight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         Dirlight.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(Dirlight);
@@ -584,11 +572,9 @@ namespace GraphicsModule
         f[2] = cam->eye.z;
         f[3] = 0;
         man->getConext()->UpdateSubresource(Poslight, f);*/
-        f[0] = dirly[0];
-        f[1] = dirly[1];
-        f[2] = dirly[2];
-        f[3] = 0;
-        man->getConext()->UpdateSubresource(Dirlight, f);
+       
+        
+        man->getConext()->UpdateSubresource(Dirlight, &dl);
         f[0] = posly[0];
         f[1] = posly[1];
         f[2] = posly[2];
@@ -639,13 +625,13 @@ namespace GraphicsModule
     // Render the cube
     //
     // Set the input layout
-    man->getConext()->IASetInputLayout(intplyut);
+    man->getConext()->IASetInputLayout(man->intplyut);
 /*#ifdef directX
     
     man->getConext()->get()->RSSetState(g_Rasterizer);
     
 #endif*/
-    man->getConext()->VSSetShader(vrtxshdr);
+    man->getConext()->VSSetShader(man->vrtxshdr);
 #ifdef directX
 //luego abstraer sto
     man->getConext()->get()->VSSetConstantBuffers(0, 1, &view.buf);
@@ -654,7 +640,7 @@ namespace GraphicsModule
     man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
     man->getConext()->get()->VSSetConstantBuffers(4, 1, &Poslight.buf);
     //aki akaba lode abstraer luego
-    man->getConext()->get()->PSSetShader(pixshad.get(), NULL, 0);
+    man->getConext()->get()->PSSetShader(man->pixshad.get(), NULL, 0);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &translation.buf);
 #endif
   }
@@ -683,4 +669,5 @@ namespace GraphicsModule
       glfwDestroyWindow(window);
 #endif
   }
+ 
 }

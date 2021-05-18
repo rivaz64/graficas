@@ -22,7 +22,7 @@
 #include"InputLayout.h"
 #include"PixelShader.h"
 #include"SamplerState.h"
-
+#include<string>
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -38,7 +38,17 @@ namespace GraphicsModule
   {
     float mView[16];
   };
-
+  struct dirlight
+  {
+      float color[4];
+      float dir[4];
+  };
+  struct pointlight
+  {
+      float color[4];
+      float pos[3];
+      float att;
+  };
   struct CBChangeOnResize
   {
 #ifdef openGL
@@ -64,7 +74,8 @@ namespace GraphicsModule
       
   public:
 
-      float dirly[3] = { 0,-1,0 };
+      dirlight dl;
+      pointlight pl;
       float posly[3] = { 7,7,7 };
       bool cerrar = true;
       HWND g_hwnd;
@@ -86,11 +97,7 @@ namespace GraphicsModule
       objeto cubo1;
       objeto cubo2;
       DepthStencil depstencil;
-      VertexShader vrtxshdr;
-      InputLayout intplyut;
-      VertexShader vrtxshdr0;
-      InputLayout intplyut0;
-      PixelShader pixshad;
+      
 
       Buffer view;
       Buffer proyection;
@@ -122,13 +129,14 @@ namespace GraphicsModule
 #endif
       HRESULT InitWindow(LONG _width, LONG _height, LRESULT prochan  (HWND , UINT , WPARAM , LPARAM ) );
       HRESULT InitDevice();
+      
       void rezise(HWND& _hwnd, LPARAM _lParam);
       void Update();
       void clear();
       void draw(objeto& o);
       void Render();
       void CleanupDevice();
-      float f[4];
+      float f[16];
       HWND m_hwnd;
   };
 
