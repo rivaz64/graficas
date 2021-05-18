@@ -19,11 +19,7 @@ void camera::gira(LPPOINT punto)
 	}
 	else {
 
-		at = zaxis + xaxis *
-#ifdef openGL
-			-
-#endif
-			(punto->x - x) * .003 - yaxis * (punto->y - y) * .003;
+		at = zaxis + xaxis *(punto->x - x) * .003 - yaxis * (punto->y - y) * .003;
 
 		at = at.normalize();
         x = punto->x;
@@ -56,6 +52,7 @@ void camera::setup(float x, float y, float z)
 
 void camera::movex(float x)
 {
+	
 #ifdef directX
 	eye = eye + xaxis * vel * x;
 	at = at + xaxis * vel * x;
@@ -63,7 +60,7 @@ void camera::movex(float x)
 #ifdef openGL
 	eye = eye - xaxis * vel * x;
 	at = at - xaxis * vel * x;
-#endif
+#endif//*/
 }
 
 void camera::movey(float x)
