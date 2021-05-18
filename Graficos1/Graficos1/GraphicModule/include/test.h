@@ -49,6 +49,17 @@ namespace GraphicsModule
       float pos[3];
       float att;
   };
+  
+  struct spotlight
+  {
+      float Color[4];
+      float Dir[4];
+      float Pos[4];
+      float Att;
+      float Rad;
+      float dif;
+  };
+
   struct CBChangeOnResize
   {
 #ifdef openGL
@@ -76,6 +87,7 @@ namespace GraphicsModule
 
       dirlight dl;
       pointlight pl;
+      spotlight sl;
       float posly[3] = { 7,7,7 };
       bool cerrar = true;
       HWND g_hwnd;
@@ -106,6 +118,7 @@ namespace GraphicsModule
       Textura texturmar;
       Buffer Dirlight;
       Buffer Poslight;
+      Buffer Spotlight;
       SamplerState samsta;
       static test* esta;
       unsigned int shader;

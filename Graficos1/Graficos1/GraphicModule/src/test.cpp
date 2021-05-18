@@ -409,10 +409,16 @@ namespace GraphicsModule
         man->getDevice()->CreateBuffer(Dirlight);
 
         Poslight.Usage = USAGE::DEFAULT;
-        Poslight.ByteWidth = sizeof(float[4]);
+        Poslight.ByteWidth = sizeof(float[8]);
         Poslight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         Poslight.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(Poslight);
+
+        Spotlight.Usage = USAGE::DEFAULT;
+        Spotlight.ByteWidth = sizeof(float[16]);
+        Spotlight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        Spotlight.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(Spotlight);
 
         // Create the sample state
 #ifdef directX
@@ -575,11 +581,8 @@ namespace GraphicsModule
        
         
         man->getConext()->UpdateSubresource(Dirlight, &dl);
-        f[0] = posly[0];
-        f[1] = posly[1];
-        f[2] = posly[2];
-        f[3] = 0;
-        man->getConext()->UpdateSubresource(Poslight, f);//*/
+        man->getConext()->UpdateSubresource(Poslight, &pl);//*/
+        man->getConext()->UpdateSubresource(Spotlight, &sl);
 
 #ifdef openGL
         GLuint dirlID = glGetUniformLocation(shader, "dirlight");
@@ -639,6 +642,7 @@ namespace GraphicsModule
     man->getConext()->get()->VSSetConstantBuffers(2, 1, &translation.buf);
     man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
     man->getConext()->get()->VSSetConstantBuffers(4, 1, &Poslight.buf);
+    man->getConext()->get()->VSSetConstantBuffers(5, 1, &Spotlight.buf);
     //aki akaba lode abstraer luego
     man->getConext()->get()->PSSetShader(man->pixshad.get(), NULL, 0);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &translation.buf);

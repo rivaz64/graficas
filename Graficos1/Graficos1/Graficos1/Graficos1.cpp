@@ -227,9 +227,18 @@ void UIRender()
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("Point Light")) {
-            ImGui::DragFloat3("direction", MiObj.pl.pos, .001f, -1.f, 1.f);
-            ImGui::DragFloat("attenuation", &MiObj.pl.att);
+            ImGui::DragFloat3("position", MiObj.pl.pos, .001f);
+            ImGui::DragFloat("attenuation", &MiObj.pl.att , .001f);
             ImGui::ColorPicker4("color", MiObj.pl.color);
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Spot Light")) {
+            ImGui::DragFloat3("direction", MiObj.sl.Dir, .001f);
+            ImGui::DragFloat3("position", MiObj.sl.Pos, .001f);
+            ImGui::DragFloat("attenuation", &MiObj.sl.Att, .001f);
+            ImGui::DragFloat("radious", &MiObj.sl.Rad, .001f);
+            ImGui::DragFloat("difucion", &MiObj.sl.dif, .001f);
+            ImGui::ColorPicker4("color", MiObj.sl.Color);
             ImGui::TreePop();
         }
         for (int i = 0; i < filenames.size(); i++) {
