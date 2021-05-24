@@ -1,5 +1,8 @@
 #pragma once
-class shader
-{
-};
+namespace GraphicsModule {
+	class shader
+	{
+	};
+}
+
 
