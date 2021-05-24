@@ -13,8 +13,9 @@ namespace GraphicsModule {
 	class shader
 	{
 	public:
+#ifdef directX
 		HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut, string tecnica);
-
+#endif
 	};
 }
 

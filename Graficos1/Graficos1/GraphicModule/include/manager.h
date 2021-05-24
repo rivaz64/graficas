@@ -41,7 +41,7 @@ namespace GraphicsModule {
 #endif
         UINT width;
         UINT height;
-        //unsigned int shader;
+        unsigned int shade;
         Device* getDevice() {
             return &dev;
         }

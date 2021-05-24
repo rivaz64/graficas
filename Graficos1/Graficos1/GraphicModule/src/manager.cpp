@@ -238,7 +238,7 @@ namespace GraphicsModule {
 			Model = glm::rotate(Model, float(o.rot[2] / 180.f * PI), glm::vec3(0,0,1));
 		
 		
-		GLuint worldID = glGetUniformLocation(shader, "world");
+		GLuint worldID = glGetUniformLocation(shade, "world");
 		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
 #endif
 #ifdef directX
@@ -288,7 +288,7 @@ namespace GraphicsModule {
 	void manager::compileshaders(std::string file, string tecnica)
 	{
 #ifdef openGL
-		shader = LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str(),tecnica );
+		shade = LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str(),tecnica );
 #endif
 
 #ifdef directX

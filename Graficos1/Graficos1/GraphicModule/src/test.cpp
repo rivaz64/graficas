@@ -348,29 +348,29 @@ namespace GraphicsModule
         man->getConext()->UpdateSubresource(Spotlight, &sl);
 
 #ifdef openGL
-        GLuint dirlID = glGetUniformLocation(man->shader, "dirlight");
+        GLuint dirlID = glGetUniformLocation(man->shade, "dirlight");
         glUniform4f(dirlID, dl.dir[0], dl.dir[1], dl.dir[2], 0);
-        dirlID = glGetUniformLocation(man->shader, "dirlightcolor");
+        dirlID = glGetUniformLocation(man->shade, "dirlightcolor");
         glUniform4f(dirlID, dl.color[0], dl.color[1], dl.color[2], dl.color[3]);
 
-        dirlID = glGetUniformLocation(man->shader, "PointLightPos");
+        dirlID = glGetUniformLocation(man->shade, "PointLightPos");
         glUniform4f(dirlID, pl.pos[0], pl.pos[1], pl.pos[2], 0);
-        dirlID = glGetUniformLocation(man->shader, "PointLightAttenuation");
+        dirlID = glGetUniformLocation(man->shade, "PointLightAttenuation");
         glUniform1f(dirlID, pl.att);
-        dirlID = glGetUniformLocation(man->shader, "PointColor");
+        dirlID = glGetUniformLocation(man->shade, "PointColor");
         glUniform4f(dirlID, pl.color[0], pl.color[1], pl.color[2], pl.color[3]);
 
-        dirlID = glGetUniformLocation(man->shader, "coneLightPos");
+        dirlID = glGetUniformLocation(man->shade, "coneLightPos");
         glUniform4f(dirlID, sl.Pos[0], sl.Pos[1], sl.Pos[2], 0);
-        dirlID = glGetUniformLocation(man->shader, "coneLightDir");
+        dirlID = glGetUniformLocation(man->shade, "coneLightDir");
         glUniform4f(dirlID, sl.Dir[0], sl.Dir[1], sl.Dir[2], 0);
-        dirlID = glGetUniformLocation(man->shader, "coneLightAttenuation");
+        dirlID = glGetUniformLocation(man->shade, "coneLightAttenuation");
         glUniform1f(dirlID, sl.Att);
-        dirlID = glGetUniformLocation(man->shader, "coneLightColor");
+        dirlID = glGetUniformLocation(man->shade, "coneLightColor");
         glUniform4f(dirlID, sl.Color[0], sl.Color[1], sl.Color[2], sl.Color[3]);
-        dirlID = glGetUniformLocation(man->shader, "Radious");
+        dirlID = glGetUniformLocation(man->shade, "Radious");
         glUniform1f(dirlID, sl.Rad);
-        dirlID = glGetUniformLocation(man->shader, "difucion");
+        dirlID = glGetUniformLocation(man->shade, "difucion");
         glUniform1f(dirlID, sl.dif);
         
         
@@ -381,11 +381,11 @@ namespace GraphicsModule
 #ifdef openGL
         glClearColor(.0f, .0f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram(man->shader);
-        glUniform1i(glGetUniformLocation(man->shader, "texture1"), 0);
+        glUseProgram(man->shade);
+        glUniform1i(glGetUniformLocation(man->shade, "texture1"), 0);
 
-        GLuint viewID = glGetUniformLocation(man->shader, "view");
-        GLuint proyectionID = glGetUniformLocation(man->shader, "proyection");
+        GLuint viewID = glGetUniformLocation(man->shade, "view");
+        GLuint proyectionID = glGetUniformLocation(man->shade, "proyection");
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
         glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));
 
