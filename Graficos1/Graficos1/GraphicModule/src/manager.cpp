@@ -162,33 +162,26 @@ namespace GraphicsModule {
 		}
 		dev.createVSwithInput(vrtxshdr, intplyut, blob);
 		blob->Release();
-		compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad, tecnica);
+		//compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad, tecnica);
+		hr = shad.CompileShaderFromFile((file + ".fx").c_str(), "PS", "ps_4_0", &blob, tecnica);
+		if (FAILED(hr))
+		{
+			MessageBox(NULL,
+				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
+			
+		}
+
+		// Create the pixel shader
+		ID3D11PixelShader* g_pPixelShader;
+		hr = dev.CreatePixelShader(blob, &g_pPixelShader);
+		pixshad.g_pPixelShader = g_pPixelShader;
+		blob->Release();
 #endif
 	}
 
 	
 
-	HRESULT manager::compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px, string tecnica)
-	{
-#ifdef directX
-		ID3DBlob* pPSBlob = NULL;
-		shader shad;
-		HRESULT hr = shad.CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pPSBlob,tecnica);
-		if (FAILED(hr))
-		{
-			MessageBox(NULL,
-				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
-			return hr;
-		}
 
-		// Create the pixel shader
-		ID3D11PixelShader* g_pPixelShader;
-		hr = dev.CreatePixelShader(pPSBlob, &g_pPixelShader);
-		px.g_pPixelShader = g_pPixelShader;
-		pPSBlob->Release();
-#endif
-		return S_OK;
-	}
 	
 	manager* getmanager()
 	{
