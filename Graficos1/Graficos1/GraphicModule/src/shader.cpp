@@ -49,7 +49,7 @@ namespace GraphicsModule {
 	}
 #endif
 #ifdef openGL
-	GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path, string tecnica)
+	GLuint shader::LoadShaders(const char* vertex_file_path, const char* fragment_file_path, string tecnica)
 	{
 		// Crear los shaders
 		GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
