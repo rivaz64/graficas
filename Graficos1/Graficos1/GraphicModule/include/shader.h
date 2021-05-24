@@ -16,6 +16,9 @@ namespace GraphicsModule {
 #ifdef directX
 		HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut, string tecnica);
 #endif
+#ifdef openGL
+		GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path, string tecnica);
+#endif
 	};
 }
 
