@@ -105,7 +105,7 @@ namespace GraphicsModule {
 }
 #endif
 #ifdef directX
-	HRESULT manager::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut, string tecnica)
+	HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut, string tecnica)
 	{
 
 		HRESULT hr = S_OK;

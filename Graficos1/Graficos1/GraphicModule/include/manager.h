@@ -51,9 +51,9 @@ namespace GraphicsModule {
         SwapChain* getSwapchain() {
             return &eswap;
         }
-#ifdef directX
+/*#ifdef directX
         HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut,string tecnica);
-#endif
+#endif*/
         VertexShader vrtxshdr;
         InputLayout intplyut;
         PixelShader pixshad;

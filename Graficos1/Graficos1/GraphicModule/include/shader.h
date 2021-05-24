@@ -2,6 +2,7 @@
 namespace GraphicsModule {
 	class shader
 	{
+
 	};
 }
 
