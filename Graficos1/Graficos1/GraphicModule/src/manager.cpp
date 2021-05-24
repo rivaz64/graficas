@@ -303,7 +303,8 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		ID3DBlob* pVSBlob = NULL;
-		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pVSBlob,tecnica);
+		shader shad;
+		HRESULT hr = shad.CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pVSBlob,tecnica);
 		if (FAILED(hr))
 		{
 			MessageBox(NULL,
