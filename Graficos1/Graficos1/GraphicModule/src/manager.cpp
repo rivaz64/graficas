@@ -9,6 +9,7 @@
 #endif
 #define PI 3.1415926535
 #include<iostream>
+#include "shader.h"
 namespace GraphicsModule {
 #ifdef openGL
 	GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path,string tecnica)
