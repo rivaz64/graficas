@@ -8,6 +8,8 @@
 #endif
 #ifdef openGL
 
+
+
 #include<glad\glad.h>
 #define GLFW_INCLUDE_NONE
 #include<glfw\glfw3.h>
@@ -118,7 +120,8 @@ HRESULT InitImgUI()
 #endif
     return S_OK;
 }
-void loadModel() {
+
+void loadModel(string estefile) {
     GraphicsModule::Textura* tx = new GraphicsModule::Textura;
     
     GraphicsModule::model* mes = new GraphicsModule::model;
@@ -126,14 +129,14 @@ void loadModel() {
 
     
     
-    std::string estefile = openfilename();
+    //std::string estefile = openfilename();
     char drive[_MAX_DRIVE];
     char dir[_MAX_DIR];
     char ext[_MAX_EXT];
     char file[_MAX_FNAME];
     _splitpath_s(estefile.c_str(), drive, _MAX_DRIVE,dir, _MAX_DIR,file , _MAX_FNAME, ext, _MAX_EXT);
     string sfile = file;
-    if (std::find(filenames.begin(), filenames.end(), sfile) == filenames.end()) {
+    if (true/*std::find(filenames.begin(), filenames.end(), sfile) == filenames.end()*/) {
         objects.push_back(GraphicsModule::objeto());
         filenames.push_back(sfile);
         const aiScene* scene = importer.ReadFile(estefile, NULL);
@@ -157,10 +160,11 @@ void loadModel() {
                 mes->modelo[mes->modelo.size() - 1]->points[i].normal[0] = mesh->mNormals[i].x;
                 mes->modelo[mes->modelo.size() - 1]->points[i].normal[1] = mesh->mNormals[i].y;
                 mes->modelo[mes->modelo.size() - 1]->points[i].normal[2] = mesh->mNormals[i].z;
-
-                mes->modelo[mes->modelo.size() - 1]->points[i].uv[0] = mesh->mTextureCoords[0][i].x;
-
-                mes->modelo[mes->modelo.size() - 1]->points[i].uv[1] = mesh->mTextureCoords[0][i].y;
+                if (mesh->HasTextureCoords(0)) {
+                    mes->modelo[mes->modelo.size() - 1]->points[i].uv[0] = mesh->mTextureCoords[0][i].x;
+                    mes->modelo[mes->modelo.size() - 1]->points[i].uv[1] = mesh->mTextureCoords[0][i].y;
+                }
+                
 
             }
             for (int i = 0; i < mesh->mNumFaces; i++) {
@@ -173,10 +177,10 @@ void loadModel() {
             }
             mes->modelo[mes->modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
             aiMaterial* siaimatirial = scene->mMaterials[scene->mMeshes[o]->mMaterialIndex];
-            std::cout << 'a' << AI_SUCCESS << std::endl;
+            //std::cout << 'a' << AI_SUCCESS << std::endl;
             for (int i = 1; i < aiTextureType_UNKNOWN; i++) {
                 if (siaimatirial->GetTextureCount((aiTextureType)i) > 0) {
-                    std::cout << (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) << std::endl;
+                    //std::cout << (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) << std::endl;
                     if (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
                         char drive[_MAX_DRIVE];
                         char dir[_MAX_DIR];
@@ -199,11 +203,16 @@ void loadModel() {
 
 
         objects[objects.size() - 1].mod = mes;
-        objects[objects.size() - 1].posi[0] = 3;
-        objects[objects.size() - 1].posi[1] = 3;
-        objects[objects.size() - 1].posi[2] = 3;
+        if (objects.size() > 1)
+        MiObj.fpl = &objects[1];
+        if (objects.size() > 2)
+            MiObj.fsl = &objects[2];
     }
     
+}
+void loadModel(string estefile, string name) {
+    loadModel(estefile);
+    filenames[filenames.size() - 1] = name;
 }
 void UIRender()
 {
@@ -221,6 +230,7 @@ void UIRender()
     // example window
     if (ImGui::Begin("Another Window", nullptr))
     {
+        ImGui::DragInt("chader", &MiObj.chadnum, 1, 0, 1);
         if (ImGui::TreeNode("Directional Light")) {
             ImGui::DragFloat3("direction", MiObj.dl.dir, .001f, -1.f, 1.f);
             ImGui::ColorPicker4("color", MiObj.dl.color);
@@ -265,7 +275,7 @@ void UIRender()
             }
         }
         if (ImGui::Button("load moddel", ImVec2(100, 50))) {
-            loadModel();
+            loadModel(openfilename());
         }
         
         
@@ -325,153 +335,20 @@ int main()
         ImGui::DestroyContext();
         return 0;
     }
-    /*
-
-    //*/
-
-    /*unsigned int text=0;
-    GraphicsModule::Textura bitco;
-    bitco.loadfromfile("bitco.jpg");
     
-    GraphicsModule::mesh triangle;
-    triangle.setvertex({ 
-   -1.0f, 1.0f, -1.0f, 0,0,
-    1.0f, 1.0f, -1.0f,1.0f, 0.0f,
-    1.0f, 1.0f, 1.0f,1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f,0.0f, 1.0f,
-    -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
-    1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
-    1.0f, -1.0f, 1.0f,1.0f, 1.0f,
-    -1.0f, -1.0f, 1.0f,1.0f, 1.0f,
-    -1.0f, -1.0f, 1.0f,0.0f, 0.0f,
-    -1.0f, -1.0f, -1.0f,1.0f, 0.0f,
-    -1.0f, 1.0f, -1.0f,1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f,1.0f, 1.0f,
-    1.0f, -1.0f, 1.0f,0.0f, 0.0f,
-    1.0f, -1.0f, -1.0f,1.0f, 0.0f,
-    1.0f, 1.0f, -1.0f,1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,1.0f, 1.0f,
-    -1.0f, -1.0f, -1.0f,0.0f, 0.0f,
-    1.0f, -1.0f, -1.0f,1.0f, 0.0f,
-    1.0f, 1.0f, -1.0f,1.0f, 1.0f,
-    -1.0f, 1.0f, -1.0f,1.0f, 1.0f,
-    -1.0f, -1.0f, 1.0f,0.0f, 0.0f,
-    1.0f, -1.0f, 1.0f,1.0f, 0.0f,
-    1.0f, 1.0f, 1.0f,1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f,1.0f, 1.0f,
-        },24);
-    triangle.setcolor({
-     0.583f,  0.771f,  0.014f,
-     0.609f,  0.115f,  0.436f,
-     0.327f,  0.483f,  0.844f,
-     0.822f,  0.569f,  0.201f,
-     0.435f,  0.602f,  0.223f,
-     0.310f,  0.747f,  0.185f,
-     0.597f,  0.770f,  0.761f,
-     0.559f,  0.436f,  0.730f,
-     0.359f,  0.583f,  0.152f,
-     0.483f,  0.596f,  0.789f,
-     0.559f,  0.861f,  0.639f,
-     0.195f,  0.548f,  0.859f,
-     0.014f,  0.184f,  0.576f,
-     0.771f,  0.328f,  0.970f,
-     0.406f,  0.615f,  0.116f,
-     0.676f,  0.977f,  0.133f,
-     0.971f,  0.572f,  0.833f,
-     0.140f,  0.616f,  0.489f,
-     0.997f,  0.513f,  0.064f,
-     0.945f,  0.719f,  0.592f,
-     0.543f,  0.021f,  0.978f,
-     0.279f,  0.317f,  0.505f,
-     0.167f,  0.620f,  0.077f,
-     0.347f,  0.857f,  0.137f,
-        });
-    triangle.setindices({
-         3,1,0,
-                2,1,3,
-
-                6,4,5,
-                7,4,6,
-
-                11,9,8,
-                10,9,11,
-
-                14,12,13,
-                15,12,14,
-
-                19,17,16,
-                18,17,19,
-
-                22,20,21,
-                23,20,22 },36);
-
-    GraphicsModule::model tris;
-    //GraphicsModule::model cubo;
-    tris.modelo.push_back(&triangle);
-    //cubo.modelo.push_back(&cube);
-    GraphicsModule::objeto t;
-    t.mod = &tris;
-    t.tx = &bitco;
-    //GraphicsModule::objeto c;
-    //c.mod = &cubo;
-//    glGenBuffers(1, &vertexB.buf);
-// The following commands will talk about our 'vertexbuffer' buffer
-    //glBindBuffer(GL_ARRAY_BUFFER, vertexB.buf);
-// Give our vertices to OpenGL.
-    //glBufferData((GLenum)vertexB.BindFlags, vertexB.ByteWidth, vertexB.Mem, (GLenum)vertexB.Usage);
-    
-    //triangulo.mod->modelo.push_back(&mesho);
-     /*scene = importer.ReadFile(openfilename(), NULL);
-     numvertices = 0;
-     numfaces = 0;
-    for (int i = 0; i < scene->mNumMeshes; i++) {
-        numvertices += scene->mMeshes[i]->mNumVertices;
-        numfaces += scene->mMeshes[i]->mNumFaces;
-        //cout << numvertices << endl;
+    loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl","origin");
+    for (int i = 0; i < 3; i++) {
+        objects[0].size[i] = .002f;
     }
-    aiMesh* me;// = scene->mMeshes[0];
-    //GraphicsModule::Textura tx;
-    //tx.loadfromfile("pitola.dds");
-
-    GraphicsModule::mesh meshh;
-
-    meshh.points = new GraphicsModule::mesh::vertex[numvertices];
-    meshh.indices = new int[numfaces * 3];
-    numvertices = 0;
-    numfaces = 0;
-    for (int o = 0; o < scene->mNumMeshes; o++) {
-        me = scene->mMeshes[o];
-        for (int i = 0; i < me->mNumVertices; i++)
-        {
-            aiVector3D pos = me->mVertices[i];
-            meshh.points[i + numvertices].posi[0] = pos.x;
-            meshh.points[i + numvertices].posi[1] = pos.y;
-            meshh.points[i + numvertices].posi[2] = pos.z;
-            meshh.points[i + numvertices].normal[0] = me->mNormals[i].x;
-            meshh.points[i + numvertices].normal[1] = me->mNormals[i].y;
-            meshh.points[i + numvertices].normal[2] = me->mNormals[i].z;
-            meshh.points[i + numvertices].uv[0] = me->mTextureCoords[0][i].x;
-            meshh.points[i + numvertices].uv[1] = 1 - me->mTextureCoords[0][i].y;
-        }
-        numvertices += me->mNumVertices;
-        for (int i = 0; i < me->mNumFaces; i++) {
-            const aiFace& Face = me->mFaces[i];
-            if (Face.mNumIndices == 3) {
-                meshh.indices[i * 3 + numfaces * 3] = i * 3 + numfaces * 3;
-                meshh.indices[i * 3 + 1 + numfaces * 3] = i * 3 + 1 + numfaces * 3;
-                meshh.indices[i * 3 + 2 + numfaces * 3] = i * 3 + 2 + numfaces * 3;
-            }
-        }
-        numfaces += me->mNumFaces;
+    loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl", "pointlight");
+    for (int i = 0; i < 3; i++) {
+        objects[1].size[i] = .002f;
     }
-
-
-
-    meshh.init(numvertices, numfaces * 3);
-    rana.mod = &mes;
-    rana.posi.x= 10;
-    rana.posi.y = 10;
-    rana.posi.z = 10;*/
+    loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl", "spotlight");
+    for (int i = 0; i < 3; i++) {
+        objects[2].size[i] = .002f;
+    }
+    //MiObj.fpl = &objects[1];
   // main loop
   MSG msg = { 0 };
   while (WM_QUIT != msg.message && MiObj.cerrar )

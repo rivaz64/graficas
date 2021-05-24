@@ -6,6 +6,7 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #endif
+#include <vector>
 namespace GraphicsModule {
 	class VertexShader
 	{

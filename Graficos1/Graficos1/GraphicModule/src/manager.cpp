@@ -9,8 +9,101 @@
 #endif
 #define PI 3.1415926535
 #include<iostream>
-#include "shader.h"
 namespace GraphicsModule {
+#ifdef openGL
+	GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path,string tecnica)
+	{
+		// Crear los shaders
+		GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+		GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+
+		// Leer el Vertex Shader desde archivo
+		std::string VertexShaderCode;
+		std::ifstream VertexShaderStream(vertex_file_path, std::ios::in);
+		if (VertexShaderStream.is_open()) {
+			std::stringstream sstr;
+			sstr << VertexShaderStream.rdbuf();
+			VertexShaderCode = "#version 400\n" + tecnica+sstr.str();
+			VertexShaderStream.close();
+		}
+		else {
+			printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_file_path);
+			getchar();
+			return 0;
+		}
+
+		// Leer el Fragment Shader desde archivo
+		std::string FragmentShaderCode;
+		std::ifstream FragmentShaderStream(fragment_file_path, std::ios::in);
+		if (FragmentShaderStream.is_open()) {
+			std::stringstream sstr;
+			sstr << FragmentShaderStream.rdbuf();
+			FragmentShaderCode = "#version 400\n"+tecnica+sstr.str();
+			FragmentShaderStream.close();
+		}
+
+		GLint Result = GL_FALSE;
+		GLint InfoLogLength;
+
+
+		// Compilar Vertex Shader
+		printf("Compiling shader : %s\n", vertex_file_path);
+		char const* VertexSourcePointer = VertexShaderCode.c_str();
+		glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
+		glCompileShader(VertexShaderID);
+
+		// Revisar Vertex Shader
+		glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
+		glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+		if (InfoLogLength > 0) {
+			std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
+			glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+			printf("%s\n", &VertexShaderErrorMessage[0]);
+		}
+
+		// Compilar Fragment Shader
+		printf("Compiling shader : %s\n", fragment_file_path);
+		char const* FragmentSourcePointer = FragmentShaderCode.c_str();
+		glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
+		glCompileShader(FragmentShaderID);
+
+		// Revisar Fragment Shader
+		glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
+		glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+		if (InfoLogLength > 0) {
+			std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
+			glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
+			printf("%s\n", &FragmentShaderErrorMessage[0]);
+		}
+
+
+
+		// Vincular el programa por medio del ID
+		printf("Linking program\n");
+		GLuint ProgramID = glCreateProgram();
+		glAttachShader(ProgramID, VertexShaderID);
+		glAttachShader(ProgramID, FragmentShaderID);
+		glLinkProgram(ProgramID);
+
+		// Revisar el programa
+		glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
+		glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+		if (InfoLogLength > 0) {
+			std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
+			glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
+			printf("%s\n", &ProgramErrorMessage[0]);
+		}
+
+
+		glDetachShader(ProgramID, VertexShaderID);
+		glDetachShader(ProgramID, FragmentShaderID);
+
+		glDeleteShader(VertexShaderID);
+		glDeleteShader(FragmentShaderID);
+
+		return ProgramID;
+}
+#endif
 
 	void manager::create(HWND g_hWnd) {
 #ifdef directX
@@ -97,7 +190,7 @@ namespace GraphicsModule {
 			Model = glm::rotate(Model, float(o.rot[2] / 180.f * PI), glm::vec3(0,0,1));
 		
 		
-		GLuint worldID = glGetUniformLocation(shade, "world");
+		GLuint worldID = glGetUniformLocation(shader, "world");
 		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
 #endif
 #ifdef directX
@@ -144,44 +237,58 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void manager::compileshaders(std::string file, string tecnica)
+	/*void manager::compileshaders(std::string file,string tecnica)
 	{
-		shader shad;
 #ifdef openGL
-		shade = shad.LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str(),tecnica );
+		shader = LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str(),tecnica );
 #endif
 
 #ifdef directX
-		ID3DBlob* blob = NULL;
+		compileVS((file+".fx").c_str(), "VS", "vs_4_0", vrtxshdr, intplyut,tecnica);
 		
-		HRESULT hr = shad.CompileShaderFromFile((file + ".fx").c_str(), "VS", "vs_4_0",  &blob, tecnica);
+
+		compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad,tecnica);
+#endif
+	}*/
+
+	/*HRESULT manager::compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,  VertexShader& vs,InputLayout& il, string tecnica)
+	{
+#ifdef directX
+		ID3DBlob* pVSBlob = NULL;
+		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pVSBlob,tecnica);
 		if (FAILED(hr))
 		{
 			MessageBox(NULL,
 				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
+			return hr;
 		}
-		dev.createVSwithInput(vrtxshdr, intplyut, blob);
-		blob->Release();
-		//compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad, tecnica);
-		hr = shad.CompileShaderFromFile((file + ".fx").c_str(), "PS", "ps_4_0", &blob, tecnica);
+		dev.createVSwithInput(vs, il, pVSBlob);
+		pVSBlob->Release();
+		return hr;
+#endif
+		return S_OK;
+	}
+
+	HRESULT manager::compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px,string tecnica)
+	{
+#ifdef directX
+		ID3DBlob* pPSBlob = NULL;
+		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pPSBlob,tecnica);
 		if (FAILED(hr))
 		{
 			MessageBox(NULL,
 				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
-			
+			return hr;
 		}
 
 		// Create the pixel shader
 		ID3D11PixelShader* g_pPixelShader;
-		hr = dev.CreatePixelShader(blob, &g_pPixelShader);
-		pixshad.g_pPixelShader = g_pPixelShader;
-		blob->Release();
+		hr = dev.CreatePixelShader(pPSBlob, &g_pPixelShader);
+		px.g_pPixelShader = g_pPixelShader;
+		pPSBlob->Release();
 #endif
-	}
-
-	
-
-
+		return S_OK;
+	}*/
 	
 	manager* getmanager()
 	{

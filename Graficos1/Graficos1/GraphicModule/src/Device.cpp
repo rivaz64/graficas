@@ -13,11 +13,11 @@ namespace GraphicsModule {
 		return S_OK;
 	}
 #ifdef directX
-	void Device::createVSwithInput(VertexShader& vs, InputLayout& il, ID3DBlob* Blob)
+	void Device::createVSwithInput(ID3D11VertexShader** vs, ID3D11InputLayout** il, ID3DBlob* Blob)
 	{
 
 		
-		g_pd3dDevice->CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize(), NULL, &vs.g_pVertexShader);
+		g_pd3dDevice->CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize(), NULL, vs);
 		ID3D11ShaderReflection* reflection = NULL;
 		if (FAILED(D3DReflect(Blob->GetBufferPointer(), Blob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection)))
 		{
@@ -70,7 +70,7 @@ namespace GraphicsModule {
 			inputLayoutDesc.push_back(elementDesc);
 		}
 		// Try to create Input Layout
-		HRESULT hr = g_pd3dDevice->CreateInputLayout(&inputLayoutDesc[0], inputLayoutDesc.size(), Blob->GetBufferPointer(), Blob->GetBufferSize(), &il.g_pVertexLayout);
+		HRESULT hr = g_pd3dDevice->CreateInputLayout(&inputLayoutDesc[0], inputLayoutDesc.size(), Blob->GetBufferPointer(), Blob->GetBufferSize(), il);
 
 		//Free allocation shader reflection memory
 		reflection->Release();

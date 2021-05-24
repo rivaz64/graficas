@@ -6,13 +6,16 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #endif
+#include <vector>
 namespace GraphicsModule
 {
 	class PixelShader
 	{
 	public:
+		int cual;
 #ifdef directX
 		ID3D11PixelShader* g_pPixelShader = NULL;
+
 #endif
 	public:
 #ifdef directX

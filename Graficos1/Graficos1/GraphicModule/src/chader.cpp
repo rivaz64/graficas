@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include "chader.h"
 #include"manager.h"
 #include <iostream>
 #include <fstream>
@@ -51,7 +51,7 @@ namespace GraphicsModule {
 		return S_OK;
 	}
 #endif
-	void Shader::compile(std::string file, std::string tecnique)
+	void chader::compile(std::string file, std::string tecnique)
 	{
 #ifdef directX
 		ID3DBlob* blob = NULL;
@@ -62,7 +62,7 @@ namespace GraphicsModule {
 				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
 			return;
 		}
-		//getmanager()->getDevice()->createVSwithInput(&VertexShader, &il,blob);
+		getmanager()->getDevice()->createVSwithInput(&VertexShader, &il,blob);
 		blob->Release();
 		ID3DBlob* blo = NULL;
 		hr = CompileShaderFromFile((file + ".fx").c_str(), "PS", "ps_4_0", &blo, tecnique);
@@ -77,7 +77,7 @@ namespace GraphicsModule {
 		blo->Release();
 #endif
 	}
-	void Shader::setShader()
+	void chader::setShader()
 	{
 #ifdef directX
 		getmanager()->getConext()->get()->VSSetShader(VertexShader, NULL, 0);

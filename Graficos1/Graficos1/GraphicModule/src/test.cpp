@@ -167,10 +167,12 @@ namespace GraphicsModule
         //man->getConext()->RSSetViewports(vp);
         man->RSSetViewports(vp);
 
-        man->compileshaders("chad","#define VERTEX_LIGHT");
-
-
-        
+        //man->compileshaders("chad","#define VERTEX_LIGHT");
+        chaders.push_back(chader());
+        chaders.push_back(chader());
+        chaders[0].compile("chad", "#define VERTEX_LIGHT");
+        chaders[1].compile("chad", "#define PIXEL_LIGHT");
+        //shad.setShader();
 
 
         cam = new camera;
@@ -342,35 +344,40 @@ namespace GraphicsModule
         }
         
        
-        
+        fpl->posi[0] = pl.pos[0];
+        fpl->posi[1] = pl.pos[1];
+        fpl->posi[2] = pl.pos[2];
+        fsl->posi[0] = sl.Pos[0];
+        fsl->posi[1] = sl.Pos[1];
+        fsl->posi[2] = sl.Pos[2];
         man->getConext()->UpdateSubresource(Dirlight, &dl);
         man->getConext()->UpdateSubresource(Poslight, &pl);//*/
         man->getConext()->UpdateSubresource(Spotlight, &sl);
 
 #ifdef openGL
-        GLuint dirlID = glGetUniformLocation(man->shade, "dirlight");
+        GLuint dirlID = glGetUniformLocation(man->shader, "dirlight");
         glUniform4f(dirlID, dl.dir[0], dl.dir[1], dl.dir[2], 0);
-        dirlID = glGetUniformLocation(man->shade, "dirlightcolor");
+        dirlID = glGetUniformLocation(man->shader, "dirlightcolor");
         glUniform4f(dirlID, dl.color[0], dl.color[1], dl.color[2], dl.color[3]);
 
-        dirlID = glGetUniformLocation(man->shade, "PointLightPos");
+        dirlID = glGetUniformLocation(man->shader, "PointLightPos");
         glUniform4f(dirlID, pl.pos[0], pl.pos[1], pl.pos[2], 0);
-        dirlID = glGetUniformLocation(man->shade, "PointLightAttenuation");
+        dirlID = glGetUniformLocation(man->shader, "PointLightAttenuation");
         glUniform1f(dirlID, pl.att);
-        dirlID = glGetUniformLocation(man->shade, "PointColor");
+        dirlID = glGetUniformLocation(man->shader, "PointColor");
         glUniform4f(dirlID, pl.color[0], pl.color[1], pl.color[2], pl.color[3]);
 
-        dirlID = glGetUniformLocation(man->shade, "coneLightPos");
+        dirlID = glGetUniformLocation(man->shader, "coneLightPos");
         glUniform4f(dirlID, sl.Pos[0], sl.Pos[1], sl.Pos[2], 0);
-        dirlID = glGetUniformLocation(man->shade, "coneLightDir");
+        dirlID = glGetUniformLocation(man->shader, "coneLightDir");
         glUniform4f(dirlID, sl.Dir[0], sl.Dir[1], sl.Dir[2], 0);
-        dirlID = glGetUniformLocation(man->shade, "coneLightAttenuation");
+        dirlID = glGetUniformLocation(man->shader, "coneLightAttenuation");
         glUniform1f(dirlID, sl.Att);
-        dirlID = glGetUniformLocation(man->shade, "coneLightColor");
+        dirlID = glGetUniformLocation(man->shader, "coneLightColor");
         glUniform4f(dirlID, sl.Color[0], sl.Color[1], sl.Color[2], sl.Color[3]);
-        dirlID = glGetUniformLocation(man->shade, "Radious");
+        dirlID = glGetUniformLocation(man->shader, "Radious");
         glUniform1f(dirlID, sl.Rad);
-        dirlID = glGetUniformLocation(man->shade, "difucion");
+        dirlID = glGetUniformLocation(man->shader, "difucion");
         glUniform1f(dirlID, sl.dif);
         
         
@@ -381,11 +388,11 @@ namespace GraphicsModule
 #ifdef openGL
         glClearColor(.0f, .0f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram(man->shade);
-        glUniform1i(glGetUniformLocation(man->shade, "texture1"), 0);
+        glUseProgram(man->shader);
+        glUniform1i(glGetUniformLocation(man->shader, "texture1"), 0);
 
-        GLuint viewID = glGetUniformLocation(man->shade, "view");
-        GLuint proyectionID = glGetUniformLocation(man->shade, "proyection");
+        GLuint viewID = glGetUniformLocation(man->shader, "view");
+        GLuint proyectionID = glGetUniformLocation(man->shader, "proyection");
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
         glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));
 
@@ -411,17 +418,8 @@ namespace GraphicsModule
     UINT stride = sizeof(SimpleVertex);
     UINT offset = 0;
 
-    //
-    // Render the cube
-    //
-    // Set the input layout
-    man->getConext()->IASetInputLayout(man->intplyut);
-/*#ifdef directX
+    chaders[chadnum].setShader();
     
-    man->getConext()->get()->RSSetState(g_Rasterizer);
-    
-#endif*/
-    man->getConext()->VSSetShader(man->vrtxshdr);
 #ifdef directX
 //luego abstraer sto
     man->getConext()->get()->VSSetConstantBuffers(0, 1, &view.buf);
@@ -430,8 +428,9 @@ namespace GraphicsModule
     man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
     man->getConext()->get()->VSSetConstantBuffers(4, 1, &Poslight.buf);
     man->getConext()->get()->VSSetConstantBuffers(5, 1, &Spotlight.buf);
-    //aki akaba lode abstraer luego
-    man->getConext()->get()->PSSetShader(man->pixshad.get(), NULL, 0);
+    man->getConext()->get()->PSSetConstantBuffers(3, 1, &Dirlight.buf);
+    man->getConext()->get()->PSSetConstantBuffers(4, 1, &Poslight.buf);
+    man->getConext()->get()->PSSetConstantBuffers(5, 1, &Spotlight.buf);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &translation.buf);
 #endif
   }

@@ -625,6 +625,7 @@
   <ItemGroup>
     <ClInclude Include="include\Buffer.h" />
     <ClInclude Include="include\camera.h" />
+    <ClInclude Include="include\chader.h" />
     <ClInclude Include="include\DepthStencil.h" />
     <ClInclude Include="include\Device.h" />
     <ClInclude Include="include\DeviceContext.h" />
@@ -639,7 +640,7 @@
     <ClInclude Include="include\PixelShader.h" />
     <ClInclude Include="include\RenderTargetView.h" />
     <ClInclude Include="include\SamplerState.h" />
-    <ClInclude Include="include\shader.h" />
+    <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\SwapChain.h" />
     <ClInclude Include="include\test.h" />
     <ClInclude Include="include\Textura.h" />
@@ -653,6 +654,7 @@
   <ItemGroup>
     <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\chader.cpp" />
     <ClCompile Include="src\DepthStencil.cpp" />
     <ClCompile Include="src\Device.cpp" />
     <ClCompile Include="src\DeviceContext.cpp" />
@@ -665,7 +667,7 @@
     <ClCompile Include="src\PixelShader.cpp" />
     <ClCompile Include="src\RenderTargetView.cpp" />
     <ClCompile Include="src\SamplerState.cpp" />
-    <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SwapChain.cpp" />
     <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\Textura.cpp" />

@@ -7,7 +7,7 @@
 #endif
 #include <string>
 namespace GraphicsModule {
-	class Shader
+	class chader
 	{
 
 #ifdef directX

@@ -26,9 +26,6 @@ namespace GraphicsModule {
         Device dev;
         DeviceContext devcon;
         SwapChain eswap;
-        //ID3D11Device* g_pd3dDevice;
-        //ID3D11DeviceContext* g_pImmediateContext = NULL;
-        //IDXGISwapChain* g_pSwapChain = NULL;
         HWND g_hWndM;
         
 
@@ -41,7 +38,7 @@ namespace GraphicsModule {
 #endif
         UINT width;
         UINT height;
-        unsigned int shade;
+        unsigned int shader;
         Device* getDevice() {
             return &dev;
         }
@@ -51,9 +48,9 @@ namespace GraphicsModule {
         SwapChain* getSwapchain() {
             return &eswap;
         }
-/*#ifdef directX
-        HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut,string tecnica);
-#endif*/
+#ifdef directX
+        //HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut,string tecnica);
+#endif
         VertexShader vrtxshdr;
         InputLayout intplyut;
         PixelShader pixshad;
@@ -64,7 +61,9 @@ namespace GraphicsModule {
         void RSSetViewports(Viewport& vp);
         void draw(objeto &o,  Buffer& changeveryFrameB);
         void setrenderfortextur(RenderTargetView& rtv);
-        void compileshaders(std::string file,string tecnica);
+        //void compileshaders(std::string file,string tecnica);
+        //HRESULT compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,VertexShader& vs ,InputLayout& il, string tecnica);
+        //HRESULT compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px, string tecnica);
         matrix Projection, View;
     };
     extern manager* getmanager();

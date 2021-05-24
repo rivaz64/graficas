@@ -22,6 +22,7 @@
 #include"InputLayout.h"
 #include"PixelShader.h"
 #include"SamplerState.h"
+#include "chader.h"
 #include<string>
 namespace GraphicsModule
 {
@@ -84,7 +85,9 @@ namespace GraphicsModule
       manager* man;
       
   public:
-
+      int chadnum=0;
+      chader shad;
+      vector<chader>chaders;
       dirlight dl;
       pointlight pl;
       spotlight sl;
@@ -121,6 +124,8 @@ namespace GraphicsModule
       Buffer Spotlight;
       SamplerState samsta;
       static test* esta;
+      objeto* fpl;
+      objeto* fsl;
       //unsigned int shader;
       //glm::mat4 matrix;
 #ifdef directX

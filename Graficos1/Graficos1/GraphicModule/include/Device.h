@@ -37,9 +37,9 @@ namespace GraphicsModule {
 		ID3D11RenderTargetView* g_pRenderTargetView;
 		ID3D11DepthStencilView* DepthStencilView = NULL;
 		ID3DBlob* pVSBlob;
-		ID3D11InputLayout* g_pVertexLayout;
+		//ID3D11InputLayout* g_pVertexLayout;
 		ID3D11ShaderResourceView* g_pTextureRV = NULL;
-		ID3D11SamplerState* g_pSamplerLinear = NULL;
+		//ID3D11SamplerState* g_pSamplerLinear = NULL;
 #endif
 		Buffer vertexB;
 		Buffer indexB;
@@ -50,7 +50,7 @@ namespace GraphicsModule {
 		UINT width, height;
 		HRESULT create(HWND g_hWnd);
 #ifdef directX
-		void createVSwithInput(VertexShader& vs, InputLayout& il, ID3DBlob* Blob);
+		void createVSwithInput(ID3D11VertexShader** vs, ID3D11InputLayout** il, ID3DBlob* Blob);
 #endif
 		void CreateRenderTargetView(RenderTargetView& rtv);
 		void CreateTexture2D(Textura& tx);
