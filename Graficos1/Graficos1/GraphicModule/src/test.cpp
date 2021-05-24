@@ -167,7 +167,7 @@ namespace GraphicsModule
         //man->getConext()->RSSetViewports(vp);
         man->RSSetViewports(vp);
 
-        man->compileshaders("chad","define VERTEX_LIGHT");
+        man->compileshaders("chad","#define VERTEX_LIGHT");
 
 
         

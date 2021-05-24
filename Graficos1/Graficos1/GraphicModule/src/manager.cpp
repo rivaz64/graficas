@@ -1,10 +1,10 @@
 #include "manager.h"
 #include"flags.h"
 #include"test.h"
-#ifdef openGL
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#ifdef openGL
 #include<glm\gtc\type_ptr.hpp>
 #endif
 #define PI 3.1415926535
@@ -120,8 +120,25 @@ namespace GraphicsModule {
 #endif
 
 		ID3DBlob* pErrorBlob;
-		hr = D3DX11CompileFromFileA(szFileName, NULL, NULL, szEntryPoint, szShaderModel,
-			dwShaderFlags, 0, NULL, ppBlobOut, &pErrorBlob, NULL);
+		std::string chader;
+		std::fstream file;
+		file.open(szFileName); std::ostringstream sstr;
+		sstr << file.rdbuf();
+		chader = tecnica + sstr.str();
+		file.close();
+		/*hr = D3DX11CompileFromFileA(szFileName, NULL, NULL, szEntryPoint, szShaderModel,
+			dwShaderFlags, 0, NULL, ppBlobOut, &pErrorBlob, NULL);*/
+		hr = D3DCompile(
+			chader.c_str(),
+			chader.length(),
+			nullptr,
+			nullptr,
+			nullptr,
+			szEntryPoint, szShaderModel,
+			dwShaderFlags,
+			0,
+			ppBlobOut,
+			&pErrorBlob);
 		if (FAILED(hr))
 		{
 			if (pErrorBlob != NULL)
