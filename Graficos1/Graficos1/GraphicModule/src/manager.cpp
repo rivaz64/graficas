@@ -274,14 +274,14 @@ namespace GraphicsModule {
 #endif
 
 #ifdef directX
-		compileVS((file+".fx").c_str(), "VS", "vs_4_0", vrtxshdr, intplyut);
+		compileVS((file+".fx").c_str(), "VS", "vs_4_0", vrtxshdr, intplyut,tecnica);
 		
 
-		compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad);
+		compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad, tecnica);
 #endif
 	}
 
-	HRESULT manager::compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,  VertexShader& vs,InputLayout& il)
+	HRESULT manager::compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,  VertexShader& vs,InputLayout& il, string tecnica)
 	{
 #ifdef directX
 		ID3DBlob* pVSBlob = NULL;
@@ -299,7 +299,7 @@ namespace GraphicsModule {
 		return S_OK;
 	}
 
-	HRESULT manager::compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px)
+	HRESULT manager::compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px, string tecnica)
 	{
 #ifdef directX
 		ID3DBlob* pPSBlob = NULL;
