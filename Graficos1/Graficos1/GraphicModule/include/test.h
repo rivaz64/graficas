@@ -23,6 +23,7 @@
 #include"PixelShader.h"
 #include"SamplerState.h"
 #include "chader.h"
+#include<vector>
 #include<string>
 namespace GraphicsModule
 {
@@ -87,7 +88,7 @@ namespace GraphicsModule
   public:
       int chadnum=0;
       chader shad;
-      vector<chader>chaders;
+      std::vector<chader>chaders;
       dirlight dl;
       pointlight pl;
       spotlight sl;
