@@ -11,7 +11,7 @@
 #include<iostream>
 namespace GraphicsModule {
 #ifdef openGL
-	GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path)
+	GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path,string tecnica)
 	{
 		// Crear los shaders
 		GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -23,7 +23,7 @@ namespace GraphicsModule {
 		if (VertexShaderStream.is_open()) {
 			std::stringstream sstr;
 			sstr << VertexShaderStream.rdbuf();
-			VertexShaderCode = sstr.str();
+			VertexShaderCode = "#version 400\n" + tecnica + sstr.str();
 			VertexShaderStream.close();
 		}
 		else {
@@ -38,7 +38,7 @@ namespace GraphicsModule {
 		if (FragmentShaderStream.is_open()) {
 			std::stringstream sstr;
 			sstr << FragmentShaderStream.rdbuf();
-			FragmentShaderCode = sstr.str();
+			FragmentShaderCode = "#version 400\n" + tecnica + sstr.str();
 			FragmentShaderStream.close();
 		}
 
@@ -287,7 +287,7 @@ namespace GraphicsModule {
 	void manager::compileshaders(std::string file, string tecnica)
 	{
 #ifdef openGL
-		shader = LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str() );
+		shader = LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str(),tecnica );
 #endif
 
 #ifdef directX
