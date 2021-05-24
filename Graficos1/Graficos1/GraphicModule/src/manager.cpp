@@ -152,17 +152,16 @@ namespace GraphicsModule {
 #endif
 
 #ifdef directX
-		ID3DBlob* pVSBlob = NULL;
+		ID3DBlob* blob = NULL;
 		
-		HRESULT hr = shad.CompileShaderFromFile((file + ".fx").c_str(), "VS", "vs_4_0",  &pVSBlob, tecnica);
+		HRESULT hr = shad.CompileShaderFromFile((file + ".fx").c_str(), "VS", "vs_4_0",  &blob, tecnica);
 		if (FAILED(hr))
 		{
 			MessageBox(NULL,
 				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
 		}
-		dev.createVSwithInput(vrtxshdr, intplyut, pVSBlob);
-		pVSBlob->Release();
-
+		dev.createVSwithInput(vrtxshdr, intplyut, blob);
+		blob->Release();
 		compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad, tecnica);
 #endif
 	}
