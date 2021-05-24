@@ -52,7 +52,7 @@ namespace GraphicsModule {
             return &eswap;
         }
 #ifdef directX
-        HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
+        HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut,string tecnica);
 #endif
         VertexShader vrtxshdr;
         InputLayout intplyut;

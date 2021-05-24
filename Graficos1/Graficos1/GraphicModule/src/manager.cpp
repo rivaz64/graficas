@@ -105,7 +105,7 @@ namespace GraphicsModule {
 }
 #endif
 #ifdef directX
-	HRESULT manager::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+	HRESULT manager::CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut, string tecnica)
 	{
 
 		HRESULT hr = S_OK;
@@ -285,7 +285,7 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		ID3DBlob* pVSBlob = NULL;
-		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pVSBlob);
+		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pVSBlob,tecnica);
 		if (FAILED(hr))
 		{
 			MessageBox(NULL,
@@ -303,7 +303,7 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		ID3DBlob* pPSBlob = NULL;
-		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pPSBlob);
+		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pPSBlob,tecnica);
 		if (FAILED(hr))
 		{
 			MessageBox(NULL,
