@@ -152,31 +152,22 @@ namespace GraphicsModule {
 #endif
 
 #ifdef directX
-		compileVS((file+".fx").c_str(), "VS", "vs_4_0", vrtxshdr, intplyut,tecnica);
+		ID3DBlob* pVSBlob = NULL;
 		
+		HRESULT hr = shad.CompileShaderFromFile((file + ".fx").c_str(), "VS", "vs_4_0",  &pVSBlob, tecnica);
+		if (FAILED(hr))
+		{
+			MessageBox(NULL,
+				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
+		}
+		dev.createVSwithInput(vrtxshdr, intplyut, pVSBlob);
+		pVSBlob->Release();
 
 		compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad, tecnica);
 #endif
 	}
 
-	HRESULT manager::compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,  VertexShader& vs,InputLayout& il, string tecnica)
-	{
-#ifdef directX
-		ID3DBlob* pVSBlob = NULL;
-		shader shad;
-		HRESULT hr = shad.CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pVSBlob,tecnica);
-		if (FAILED(hr))
-		{
-			MessageBox(NULL,
-				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
-			return hr;
-		}
-		dev.createVSwithInput(vs, il, pVSBlob);
-		pVSBlob->Release();
-		return hr;
-#endif
-		return S_OK;
-	}
+	
 
 	HRESULT manager::compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px, string tecnica)
 	{
