@@ -64,7 +64,7 @@ namespace GraphicsModule {
         void RSSetViewports(Viewport& vp);
         void draw(objeto &o,  Buffer& changeveryFrameB);
         void setrenderfortextur(RenderTargetView& rtv);
-        void compileshaders(std::string file);
+        void compileshaders(std::string file,string tecnica);
         HRESULT compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,VertexShader& vs ,InputLayout& il);
         HRESULT compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px);
         matrix Projection, View;

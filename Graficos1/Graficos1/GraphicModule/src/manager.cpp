@@ -267,7 +267,7 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void manager::compileshaders(std::string file)
+	void manager::compileshaders(std::string file, string tecnica)
 	{
 #ifdef openGL
 		shader = LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str() );
