@@ -117,8 +117,9 @@ namespace GraphicsModule {
 			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
 #ifdef directX
-			if (mo->tx != NULL)
-				devcon.PSSetShaderResources(mo->tx);
+			for (int m = 0; m < mo->material.size(); m++) {
+				devcon.PSSetShaderResources(mo->material[m], m);
+			}
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
 			devcon.draw(mo->indexnum);

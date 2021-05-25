@@ -91,10 +91,10 @@ namespace GraphicsModule {
 	}
 
 
-	void DeviceContext::PSSetShaderResources(Textura* t)
+	void DeviceContext::PSSetShaderResources(Textura* t,int cual)
 	{
 #ifdef directX
-		g_pImmediateContext->PSSetShaderResources(0, 1, &t->srv);
+		g_pImmediateContext->PSSetShaderResources(cual, 1, &t->srv);
 #endif
 	}
 

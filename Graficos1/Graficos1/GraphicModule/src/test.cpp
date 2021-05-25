@@ -170,8 +170,10 @@ namespace GraphicsModule
         //man->compileshaders("chad","#define VERTEX_LIGHT");
         chaders.push_back(chader());
         chaders.push_back(chader());
+        chaders.push_back(chader());
         chaders[0].compile("chad", "#define VERTEX_LIGHT");
         chaders[1].compile("chad", "#define PIXEL_LIGHT");
+        chaders[2].compile("chad", "#define NORMAL_MAP_LIGHT");
         //shad.setShader();
 
 

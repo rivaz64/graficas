@@ -122,7 +122,7 @@ HRESULT InitImgUI()
 }
 
 void loadModel(string estefile) {
-    GraphicsModule::Textura* tx = new GraphicsModule::Textura;
+    GraphicsModule::Textura* tx;//= new GraphicsModule::Textura;
     
     GraphicsModule::model* mes = new GraphicsModule::model;
     Assimp::Importer importer;
@@ -173,32 +173,68 @@ void loadModel(string estefile) {
                     mes->modelo[mes->modelo.size() - 1]->indices[i * 3] = i * 3;
                     mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 1] = i * 3 + 1;
                     mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 2] = i * 3 + 2;
+                    if (mesh->HasTextureCoords(0)) {
+                        aiVector3D deltaPos1 = mesh->mVertices[i * 3 + 1] - mesh->mVertices[i * 3];
+                        aiVector3D deltaPos2 = mesh->mVertices[i * 3 + 2] - mesh->mVertices[i * 3];
+                        aiVector3D deltaUV1 = mesh->mTextureCoords[0][i * 3+1]-mesh->mTextureCoords[0][i * 3];
+                        aiVector3D deltaUV2 = mesh->mTextureCoords[0][i * 3 + 2] - mesh->mTextureCoords[0][i * 3];
+                        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+                        aiVector3D tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+                        aiVector3D bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+                        mes->modelo[mes->modelo.size() - 1]->points[i*3].binormal[0] = bitangent.x;
+                        mes->modelo[mes->modelo.size() - 1]->points[i*3].binormal[1] = bitangent.y;
+                        mes->modelo[mes->modelo.size() - 1]->points[i*3].binormal[2] = bitangent.z;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3+1].binormal[0] = bitangent.x;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3+1].binormal[1] = bitangent.y;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3+1].binormal[2] = bitangent.z;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].binormal[0] = bitangent.x;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].binormal[1] = bitangent.y;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].binormal[2] = bitangent.z;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3].tangent[0] = tangent.x;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3].tangent[1] = tangent.y;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3].tangent[2] = tangent.z;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 1].tangent[0] = tangent.x;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 1].tangent[1] = tangent.y;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 1].tangent[2] = tangent.z;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].tangent[0] = tangent.x;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].tangent[1] = tangent.y;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].tangent[2] = tangent.z;
+
+                    }
+                    
                 }
+
             }
             mes->modelo[mes->modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
-            aiMaterial* siaimatirial = scene->mMaterials[scene->mMeshes[o]->mMaterialIndex];
-            //std::cout << 'a' << AI_SUCCESS << std::endl;
-            for (int i = 1; i < aiTextureType_UNKNOWN; i++) {
-                if (siaimatirial->GetTextureCount((aiTextureType)i) > 0) {
-                    //std::cout << (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) << std::endl;
-                    if (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
-                        char drive[_MAX_DRIVE];
-                        char dir[_MAX_DIR];
-                        char fname[_MAX_FNAME];
-                        char ext[_MAX_EXT];
+            aiMaterial* siaimatirial;// = scene->mMaterials[scene->mMeshes[o]->mMaterialIndex];
+            for (int u = 0; u < scene->mNumMaterials; u++) {
+                siaimatirial = scene->mMaterials[u];
+                for (int i = 1; i < aiTextureType_UNKNOWN; i++) {
+                    if (siaimatirial->GetTextureCount((aiTextureType)i) > 0) {
+                        //std::cout << (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) << std::endl;
+                        if (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+                            char drive[_MAX_DRIVE];
+                            char dir[_MAX_DIR];
+                            char fname[_MAX_FNAME];
+                            char ext[_MAX_EXT];
 
 
 
-                        _splitpath_s(Path.data, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
-
-                        Filename = fname;
-                        Filename += ext;
-                        break;
+                            _splitpath_s(Path.data, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
+                            std::cout << fname << std::endl;
+                            Filename = fname;
+                            Filename += ext;
+                            tx = new GraphicsModule::Textura;
+                            tx->loadfromfile(Filename.c_str(), inverted);
+                            mes->modelo[mes->modelo.size() - 1]->material.push_back(tx);
+                            //break;
+                        }
                     }
                 }
             }
-            tx->loadfromfile(Filename.c_str(), inverted);
-            mes->modelo[mes->modelo.size() - 1]->tx = tx;
+            //std::cout << 'a' << AI_SUCCESS << std::endl;
+            
+            
         }
 
 
@@ -230,7 +266,7 @@ void UIRender()
     // example window
     if (ImGui::Begin("Another Window", nullptr))
     {
-        ImGui::DragInt("chader", &MiObj.chadnum, 1, 0, 1);
+        ImGui::DragInt("chader", &MiObj.chadnum, 1, 0, 2);
         if (ImGui::TreeNode("Directional Light")) {
             ImGui::DragFloat3("direction", MiObj.dl.dir, .001f, -1.f, 1.f);
             ImGui::ColorPicker4("color", MiObj.dl.color);
@@ -280,11 +316,11 @@ void UIRender()
         
         
         //ImGui::DragInt("inverted", &inverted);
-        if (cual >= 0 && cual < objects.size()) {
+        /*if (cual >= 0 && cual < objects.size()) {
             for (GraphicsModule::mesh* i : objects[cual].mod->modelo) {
-                ImGui::Image((ImTextureID)i->tx->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+                ImGui::Image((ImTextureID)i->material[0]->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
             }
-        }
+        }*/
         /*for (GraphicsModule::objeto& i : objects) 
             ImGui::Image((ImTextureID)i.tx->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
     */}
