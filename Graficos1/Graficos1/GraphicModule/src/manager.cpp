@@ -112,7 +112,13 @@ namespace GraphicsModule {
 #endif
 		for (mesh* mo : (o.mod->modelo)) {
 #ifdef openGL
-			glBindTexture(GL_TEXTURE_2D, mo->tx->get);
+			if (mo->material.size() > 1) {
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, mo->material[0]->get);
+				glActiveTexture(GL_TEXTURE1);
+				glBindTexture(GL_TEXTURE_2D, mo->material[1]->get);
+			}
+			
 			glBindVertexArray(mo->vao);
 			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif

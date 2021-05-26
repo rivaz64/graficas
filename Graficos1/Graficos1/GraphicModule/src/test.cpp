@@ -393,7 +393,7 @@ namespace GraphicsModule
         //glUseProgram(chaders[chadnum].shader);
         chaders[chadnum].setShader();
         glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "texture1"), 0);
-
+        glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "NormalMap"), 1);
         GLuint viewID = glGetUniformLocation(chaders[chadnum].shader, "view");
         GLuint proyectionID = glGetUniformLocation(chaders[chadnum].shader, "proyection");
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));

@@ -266,7 +266,7 @@ void UIRender()
     // example window
     if (ImGui::Begin("Another Window", nullptr))
     {
-        ImGui::DragInt("chader", &MiObj.chadnum, 1, 0, 2);
+        ImGui::DragInt("chader", &MiObj.chadnum, .01f, 0, 2);
         if (ImGui::TreeNode("Directional Light")) {
             ImGui::DragFloat3("direction", MiObj.dl.dir, .001f, -1.f, 1.f);
             ImGui::ColorPicker4("color", MiObj.dl.color);
