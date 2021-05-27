@@ -293,6 +293,11 @@ void UIRender()
            
             ImGui::TreePop();
         }
+        if (ImGui::TreeNode("Ambience Light")) {
+            ImGui::DragFloat("intencity", &MiObj.al.k, .001f);
+            ImGui::ColorPicker4("color", MiObj.al.color);
+            ImGui::TreePop();
+        }
         if (ImGui::TreeNode("Directional Light")) {
             ImGui::DragFloat3("direction", MiObj.dl.dir, .001f, -1.f, 1.f);
             ImGui::ColorPicker4("color", MiObj.dl.color);

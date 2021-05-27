@@ -40,6 +40,11 @@ namespace GraphicsModule
   {
     float mView[16];
   };
+  struct amblight
+  {
+      float color[3];
+      float k;
+  };
   struct dirlight
   {
       float color[4];
@@ -89,6 +94,7 @@ namespace GraphicsModule
       int chadnum=0;
       chader shad;
       std::vector<chader>chaders;
+      amblight al;
       dirlight dl;
       pointlight pl;
       spotlight sl;
@@ -122,6 +128,7 @@ namespace GraphicsModule
       Buffer translation;
       Textura texturbitco;
       Textura texturmar;
+      Buffer Ambilight;
       Buffer Dirlight;
       Buffer Poslight;
       Buffer Spotlight;

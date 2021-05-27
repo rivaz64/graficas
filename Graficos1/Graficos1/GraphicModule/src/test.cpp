@@ -226,6 +226,12 @@ namespace GraphicsModule
         translation.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(translation);
 
+        Ambilight.Usage = USAGE::DEFAULT;
+        Ambilight.ByteWidth = sizeof(float[4]);
+        Ambilight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        Ambilight.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(Ambilight);
+
         Dirlight.Usage = USAGE::DEFAULT;
         Dirlight.ByteWidth = sizeof(float[8]);
         Dirlight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
@@ -378,6 +384,7 @@ namespace GraphicsModule
         f[2] = cam->eye.z;
         f[3] = specular;
         f[4] = shinines;
+        man->getConext()->UpdateSubresource(Ambilight, &al);
         man->getConext()->UpdateSubresource(Dirlight, &dl);
         man->getConext()->UpdateSubresource(Poslight, &pl);//*/
         man->getConext()->UpdateSubresource(Spotlight, &sl);
@@ -466,6 +473,7 @@ namespace GraphicsModule
     man->getConext()->get()->PSSetConstantBuffers(5, 1, &Spotlight.buf);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &translation.buf);
     man->getConext()->get()->PSSetConstantBuffers(6, 1, &specularb.buf);
+    man->getConext()->get()->PSSetConstantBuffers(7, 1, &Ambilight.buf);
 #endif
   }
   
