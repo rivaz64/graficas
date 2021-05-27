@@ -152,6 +152,7 @@ namespace GraphicsModule {
 #ifdef directX
 		ID3DBlob* blob = NULL;
 		HRESULT hr = CompileShaderFromFile((file + ".fx").c_str(), "VS", "vs_4_0", &blob, tecnique);
+
 		if (FAILED(hr))
 		{
 			MessageBox(NULL,

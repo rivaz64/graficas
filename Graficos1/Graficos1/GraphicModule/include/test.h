@@ -92,6 +92,8 @@ namespace GraphicsModule
       dirlight dl;
       pointlight pl;
       spotlight sl;
+      float specular;
+      float shinines=6.f;
       float posly[3] = { 7,7,7 };
       bool cerrar = true;
       HWND g_hwnd;
@@ -123,6 +125,7 @@ namespace GraphicsModule
       Buffer Dirlight;
       Buffer Poslight;
       Buffer Spotlight;
+      Buffer specularb;
       SamplerState samsta;
       static test* esta;
       objeto* fpl;
@@ -155,7 +158,7 @@ namespace GraphicsModule
       void draw(objeto& o);
       void Render();
       void CleanupDevice();
-      float f[16];
+      float f[8];
       HWND m_hwnd;
   };
 

@@ -171,9 +171,25 @@ namespace GraphicsModule
         chaders.push_back(chader());
         chaders.push_back(chader());
         chaders.push_back(chader());
+        chaders.push_back(chader());
+        chaders.push_back(chader());
+        chaders.push_back(chader());
+        chaders.push_back(chader());
+        chaders.push_back(chader());
+        chaders.push_back(chader());
+        chaders.push_back(chader());
+        chaders.push_back(chader());
         chaders[0].compile("chad", "#define VERTEX_LIGHT");
         chaders[1].compile("chad", "#define PIXEL_LIGHT");
         chaders[2].compile("chad", "#define NORMAL_MAP_LIGHT");
+        chaders[3].compile("chad", "#define PIXEL_LIGHT\n#define PHONG");
+        chaders[4].compile("chad", "#define NORMAL_MAP_LIGHT\n#define PHONG");
+        chaders[5].compile("chad", "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT");
+        chaders[6].compile("chad", "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT");
+        chaders[7].compile("chad", "#define PIXEL_LIGHT\n#define PHONG\n#define BLINN_PHONG");
+        chaders[8].compile("chad", "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG");
+        chaders[9].compile("chad", "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG");
+        chaders[10].compile("chad", "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG");
         //shad.setShader();
 
 
@@ -228,6 +244,11 @@ namespace GraphicsModule
         Spotlight.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(Spotlight);
 
+        specularb.Usage = USAGE::DEFAULT;
+        specularb.ByteWidth = sizeof(float[8]);
+        specularb.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        specularb.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(specularb);
         // Create the sample state
 #ifdef directX
         D3D11_SAMPLER_DESC sampDesc;
@@ -352,9 +373,15 @@ namespace GraphicsModule
         fsl->posi[0] = sl.Pos[0];
         fsl->posi[1] = sl.Pos[1];
         fsl->posi[2] = sl.Pos[2];
+        f[0] = cam->eye.x;
+        f[1] = cam->eye.y;
+        f[2] = cam->eye.z;
+        f[3] = specular;
+        f[4] = shinines;
         man->getConext()->UpdateSubresource(Dirlight, &dl);
         man->getConext()->UpdateSubresource(Poslight, &pl);//*/
         man->getConext()->UpdateSubresource(Spotlight, &sl);
+        man->getConext()->UpdateSubresource(specularb, f);
 
 #ifdef openGL
         GLuint dirlID = glGetUniformLocation(chaders[chadnum].shader, "dirlight");
@@ -433,10 +460,12 @@ namespace GraphicsModule
     man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
     man->getConext()->get()->VSSetConstantBuffers(4, 1, &Poslight.buf);
     man->getConext()->get()->VSSetConstantBuffers(5, 1, &Spotlight.buf);
+    
     man->getConext()->get()->PSSetConstantBuffers(3, 1, &Dirlight.buf);
     man->getConext()->get()->PSSetConstantBuffers(4, 1, &Poslight.buf);
     man->getConext()->get()->PSSetConstantBuffers(5, 1, &Spotlight.buf);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &translation.buf);
+    man->getConext()->get()->PSSetConstantBuffers(6, 1, &specularb.buf);
 #endif
   }
   

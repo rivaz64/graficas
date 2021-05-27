@@ -39,6 +39,7 @@ char* nombre = new char[64];
 int cual=0;
 vector<string> filenames;
 int inverted=0;
+bool pixli,norli,pon,spek,blin;
 bool b[4] = { true,false,false,false };
 string flagas[4] = { "normal","inverted","special","surprice" };
 #ifdef directX
@@ -267,6 +268,31 @@ void UIRender()
     if (ImGui::Begin("Another Window", nullptr))
     {
         ImGui::DragInt("chader", &MiObj.chadnum, .01f, 0, 2);
+        if (ImGui::TreeNode("Shader")) {
+            ImGui::Checkbox("pixelight", &pixli);
+            MiObj.chadnum = 0;
+            if (pixli) {
+                MiObj.chadnum = 1;
+                ImGui::Checkbox("Normal map", &norli);
+                ImGui::Checkbox("Phong", &pon);
+                if (norli)
+                    MiObj.chadnum += 1;
+                if (pon) {
+                    MiObj.chadnum += 2;
+                    ImGui::Checkbox("Specular Map", &spek);
+                    if (spek) {
+                        MiObj.chadnum += 2;
+                    }
+                    ImGui::Checkbox("blinn", &blin);
+                    if (blin) {
+                        MiObj.chadnum += 4;
+                    }
+                }
+                   
+            }
+           
+            ImGui::TreePop();
+        }
         if (ImGui::TreeNode("Directional Light")) {
             ImGui::DragFloat3("direction", MiObj.dl.dir, .001f, -1.f, 1.f);
             ImGui::ColorPicker4("color", MiObj.dl.color);
@@ -287,6 +313,8 @@ void UIRender()
             ImGui::ColorPicker4("color", MiObj.sl.Color);
             ImGui::TreePop();
         }
+        ImGui::DragFloat("specular", &MiObj.specular, .001f);
+        ImGui::DragFloat("shinines", &MiObj.shinines, .001f);
         for (int i = 0; i < filenames.size(); i++) {
             if (ImGui::Button(filenames[i].c_str()))
                 cual = i;
