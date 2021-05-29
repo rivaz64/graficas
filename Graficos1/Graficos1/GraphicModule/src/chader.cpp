@@ -160,7 +160,7 @@ namespace GraphicsModule {
 			return;
 		}
 		getmanager()->getDevice()->createVSwithInput(&VertexShader, &il,blob);
-		blob->Release();
+		//blob->Release();
 		ID3DBlob* blo = NULL;
 		hr = CompileShaderFromFile((file + ".fx").c_str(), "PS", "ps_4_0", &blo, tecnique);
 		if (FAILED(hr))
@@ -171,7 +171,7 @@ namespace GraphicsModule {
 		}
 
 		getmanager()->getDevice()->CreatePixelShader(blo, &PixelShader);
-		blo->Release();
+		//blo->Release();
 #endif
 #ifdef openGL
 		shader = LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str(), tecnique);

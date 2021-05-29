@@ -53,8 +53,8 @@ namespace GraphicsModule {
 		Textura pBackBuffer;
 		eswap.GetBuffer(pBackBuffer);
 		rtv.textur = pBackBuffer;
-		dev.CreateRenderTargetView(rtv);
-		pBackBuffer.release();
+		dev.CreateRenderTargetView(rtv,false);
+		//pBackBuffer.release();
 	}
 
 
@@ -117,7 +117,10 @@ namespace GraphicsModule {
 				glBindTexture(GL_TEXTURE_2D, mo->material[0]->get);
 				glActiveTexture(GL_TEXTURE1);
 				glBindTexture(GL_TEXTURE_2D, mo->material[1]->get);
+				glActiveTexture(GL_TEXTURE2);
+				glBindTexture(GL_TEXTURE_2D, mo->material[2]->get);
 			}
+			
 			
 			glBindVertexArray(mo->vao);
 			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
@@ -146,62 +149,11 @@ namespace GraphicsModule {
 		rtv.MostDetailedMip = 0;
 		rtv.MipLevels = 1;
 		dev.CreateShaderResourceView(rtv);
-		dev.CreateRenderTargetView(rtv);
+		dev.CreateRenderTargetView(rtv,false);
 #endif
 	}
 
-	/*void manager::compileshaders(std::string file,string tecnica)
-	{
-#ifdef openGL
-		shader = LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str(),tecnica );
-#endif
-
-#ifdef directX
-		compileVS((file+".fx").c_str(), "VS", "vs_4_0", vrtxshdr, intplyut,tecnica);
-		
-
-		compilePX((file + ".fx").c_str(), "PS", "ps_4_0", pixshad,tecnica);
-#endif
-	}*/
-
-	/*HRESULT manager::compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,  VertexShader& vs,InputLayout& il, string tecnica)
-	{
-#ifdef directX
-		ID3DBlob* pVSBlob = NULL;
-		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pVSBlob,tecnica);
-		if (FAILED(hr))
-		{
-			MessageBox(NULL,
-				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
-			return hr;
-		}
-		dev.createVSwithInput(vs, il, pVSBlob);
-		pVSBlob->Release();
-		return hr;
-#endif
-		return S_OK;
-	}
-
-	HRESULT manager::compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px,string tecnica)
-	{
-#ifdef directX
-		ID3DBlob* pPSBlob = NULL;
-		HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, &pPSBlob,tecnica);
-		if (FAILED(hr))
-		{
-			MessageBox(NULL,
-				"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
-			return hr;
-		}
-
-		// Create the pixel shader
-		ID3D11PixelShader* g_pPixelShader;
-		hr = dev.CreatePixelShader(pPSBlob, &g_pPixelShader);
-		px.g_pPixelShader = g_pPixelShader;
-		pPSBlob->Release();
-#endif
-		return S_OK;
-	}*/
+	
 	
 	manager* getmanager()
 	{

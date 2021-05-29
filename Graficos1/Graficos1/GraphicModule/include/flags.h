@@ -3,6 +3,7 @@
 namespace GraphicsModule {
     enum class DRIVER_TYPE
     {
+       
         DT_UNKNOWN = 0,
         DT_HARDWARE = (DT_UNKNOWN + 1),
         DT_REFERENCE = (DT_HARDWARE + 1),
@@ -21,11 +22,13 @@ namespace GraphicsModule {
     };
     enum class FORMAT {
         UNKNOWN = 0,
+        R32G32B32A32_FLOAT = 2,
         R32G32B32_FLOAT = 6,
         R8G8B8A8_UNORM = 28,
         TYPELESS = 39,
         FLOAT =40,
         R32_UINT = 42,
+        UNORM_S8_UINT = 45,
         R16_UINT = 57,
     };
     enum class USAGE

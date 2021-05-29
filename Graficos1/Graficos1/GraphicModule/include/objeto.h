@@ -10,6 +10,7 @@ namespace GraphicsModule {
 	public:
 		//mesh* m;
 		model* mod;
+		int shaderid = 0;
 		//Textura* tx=NULL;
 		float posi[3] = { 0,0,0 };
 		float size[3] = { 1,1,1 };

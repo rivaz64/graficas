@@ -17,7 +17,7 @@
 #include"Viewport.h"
 #include"Buffer.h"
 #include"objeto.h"
-#include"PixelShader.h"
+
 #include "camera.h"
 #include"chader.h"
 namespace GraphicsModule {
@@ -52,9 +52,7 @@ namespace GraphicsModule {
 #ifdef directX
         //HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut,string tecnica);
 #endif
-        VertexShader vrtxshdr;
-        InputLayout intplyut;
-        PixelShader pixshad;
+        
         void create(HWND g_hWnd);
         void descrivesch();
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);

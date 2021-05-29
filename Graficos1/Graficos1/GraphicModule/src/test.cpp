@@ -136,8 +136,20 @@ namespace GraphicsModule
         //RenderTargetView rtv;
 
         man->createrendertarget(rtv);
-
-
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////DEFERED
+        /*deferred.describe(FORMAT::R32G32B32A32_FLOAT, BIND_FLAG::RENDER_TARGET);
+        man->getDevice()->CreateTexture2D(deferred);
+        deferedtv.Format = FORMAT::R32G32B32A32_FLOAT;
+        deferedtv.ViewDimension = DIMENSION::TEXTURE2D;
+        deferedtv.textur = deferred;
+        man->getDevice()->CreateRenderTargetView(deferedtv, true);
+        man->getDevice()->CreateShaderResourceView(deferedtv);
+        depdefered.textur.describe(FORMAT::UNORM_S8_UINT, BIND_FLAG::DEPTH_STENCIL);
+        man->getDevice()->CreateTexture2D(depdefered.textur);*/
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //man->createrendertarget(deferedtv);
+        defered.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT);
 
         if (FAILED(hr))
             return hr;
@@ -152,7 +164,7 @@ namespace GraphicsModule
 
 
 
-        man->getConext()->OMSetRenderTargets(rtv, depstencil);
+        
         //g_pDepthStencilView = depstencil.view;
         //g_pDepthStencil = depstencil.textur.get;
         //Setup the viewport
@@ -166,30 +178,28 @@ namespace GraphicsModule
         vp.TopLeftY = 0;
         //man->getConext()->RSSetViewports(vp);
         man->RSSetViewports(vp);
-
+        std::vector<std::string> tecnicas = {
+            "#define VERTEX_LIGHT",
+         "#define PIXEL_LIGHT",
+         "#define NORMAL_MAP_LIGHT",
+         "#define PIXEL_LIGHT\n#define PHONG",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define BLINN_PHONG",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
+        };
         //man->compileshaders("chad","#define VERTEX_LIGHT");
+        for (int i = 0; i < tecnicas.size(); i++) {
+            chaders.push_back(chader());
+            chaders[i].compile("chad", tecnicas[i]);
+            //pases.push_back(pase());
+            //pases[i].chad = chaders[i];
+        }
         chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders.push_back(chader());
-        chaders[0].compile("chad", "#define VERTEX_LIGHT");
-        chaders[1].compile("chad", "#define PIXEL_LIGHT");
-        chaders[2].compile("chad", "#define NORMAL_MAP_LIGHT");
-        chaders[3].compile("chad", "#define PIXEL_LIGHT\n#define PHONG");
-        chaders[4].compile("chad", "#define NORMAL_MAP_LIGHT\n#define PHONG");
-        chaders[5].compile("chad", "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT");
-        chaders[6].compile("chad", "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT");
-        chaders[7].compile("chad", "#define PIXEL_LIGHT\n#define PHONG\n#define BLINN_PHONG");
-        chaders[8].compile("chad", "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG");
-        chaders[9].compile("chad", "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG");
-        chaders[10].compile("chad", "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG");
+        chaders[11].compile("prueba", "");
         //shad.setShader();
 
 
@@ -256,6 +266,9 @@ namespace GraphicsModule
         specularb.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(specularb);
         // Create the sample state
+
+        
+        
 #ifdef directX
         D3D11_SAMPLER_DESC sampDesc;
         ZeroMemory(&samsta.desc, sizeof(samsta.desc));
@@ -291,9 +304,6 @@ namespace GraphicsModule
 
  
   //Para ka textura nueva
-        man->setrenderfortextur(rtv2);
-        man->setrenderfortextur(rtv3);
-        man->setrenderfortextur(rtv4);
         if (FAILED(hr))
             return hr;
 
@@ -309,7 +319,7 @@ namespace GraphicsModule
         man->getSwapchain()->rezise(_lParam, rtv, true);
 
         man->getConext()->resizewindow(cam, _hwnd, rtv, proyection);
-        man->setrenderfortextur(rtv2);
+        //man->setrenderfortextur(rtv);
     }
     void test::Update() {
 #ifdef openGL
@@ -391,8 +401,13 @@ namespace GraphicsModule
         man->getConext()->UpdateSubresource(specularb, f);
 
 #ifdef openGL
-        GLuint dirlID = glGetUniformLocation(chaders[chadnum].shader, "dirlight");
+        GLuint dirlID;
+        dirlID = glGetUniformLocation(chaders[chadnum].shader, "kambience");
+        glUniform1f(dirlID, al.k);
+        dirlID = glGetUniformLocation(chaders[chadnum].shader, "dirlight");
         glUniform4f(dirlID, dl.dir[0], dl.dir[1], dl.dir[2], 0);
+        dirlID = glGetUniformLocation(chaders[chadnum].shader, "ambiencecolor");
+        glUniform3f(dirlID, al.color[0], al.color[1], al.color[2]);
         dirlID = glGetUniformLocation(chaders[chadnum].shader, "dirlightcolor");
         glUniform4f(dirlID, dl.color[0], dl.color[1], dl.color[2], dl.color[3]);
 
@@ -415,8 +430,12 @@ namespace GraphicsModule
         glUniform1f(dirlID, sl.Rad);
         dirlID = glGetUniformLocation(chaders[chadnum].shader, "difucion");
         glUniform1f(dirlID, sl.dif);
-        
-        
+        dirlID = glGetUniformLocation(chaders[chadnum].shader, "kspecular");
+        glUniform1f(dirlID, specular);
+        dirlID = glGetUniformLocation(chaders[chadnum].shader, "shinines");
+        glUniform1f(dirlID, shinines);
+        dirlID = glGetUniformLocation(chaders[chadnum].shader, "viewPosition");
+        glUniform3f(dirlID, cam->eye.x, cam->eye.y, cam->eye.z);
 #endif
     }
     void test::clear()
@@ -428,6 +447,7 @@ namespace GraphicsModule
         chaders[chadnum].setShader();
         glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "texture1"), 0);
         glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "NormalMap"), 1);
+        glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "SpecularMap"), 2);
         GLuint viewID = glGetUniformLocation(chaders[chadnum].shader, "view");
         GLuint proyectionID = glGetUniformLocation(chaders[chadnum].shader, "proyection");
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
@@ -437,9 +457,6 @@ namespace GraphicsModule
 #endif
 
     man->getConext()->ClearRenderTargetView(rtv);
-    man->getConext()->ClearRenderTargetView(rtv2);
-    man->getConext()->ClearRenderTargetView(rtv3);
-    man->getConext()->ClearRenderTargetView(rtv4);
     //
     // Clear the depth buffer to 1.0 (max depth)
     //
@@ -480,12 +497,13 @@ namespace GraphicsModule
   void test::draw(objeto& o)
   {
       man->draw(o, translation, chaders[chadnum]);
-
+      //chaders[11].setShader();
+      //man->draw(o, translation, chaders[11]);
   }
   
   void test::Render()
   {
-
+      man->getConext()->OMSetRenderTargets(rtv, depstencil);
     man->getSwapchain()->Present();
 #ifdef openGL
     glfwSwapBuffers(window);
@@ -500,6 +518,11 @@ namespace GraphicsModule
 #ifdef openGL
       glfwDestroyWindow(window);
 #endif
+  }
+
+  void test::renderSceneToTexture()
+  {
+      //man->getConext()->OMSetRenderTargets(deferedtv, depdefered); 
   }
  
 }

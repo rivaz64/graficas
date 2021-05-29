@@ -14,7 +14,6 @@
 #include"DepthStencil.h"
 #include"InputLayout.h"
 #include"flags.h"
-#include"PixelShader.h"
 class camera;
 namespace GraphicsModule {
 	class DeviceContext
@@ -48,7 +47,6 @@ namespace GraphicsModule {
 #endif
 			void * c);
 		void VSSetShader(VertexShader& vs);
-		void PSSetShader(PixelShader& ps);
 		void IASetInputLayout(InputLayout& il);
 
 		void draw(int n);

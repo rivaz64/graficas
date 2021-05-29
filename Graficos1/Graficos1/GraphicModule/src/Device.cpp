@@ -79,10 +79,19 @@ namespace GraphicsModule {
 
 	}
 #endif
-	void Device::CreateRenderTargetView(RenderTargetView& rtv)
+	void Device::CreateRenderTargetView(RenderTargetView& rtv,bool des)
 	{
 #ifdef directX
-		 g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, NULL, &rtv.get);
+		if (des) {
+			D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
+			renderTargetViewDesc.Format = (DXGI_FORMAT)rtv.Format;
+			renderTargetViewDesc.ViewDimension = (D3D11_RTV_DIMENSION)rtv.ViewDimension;
+			g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, &renderTargetViewDesc, &rtv.get);
+		}
+		else {
+			g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, NULL, &rtv.get);
+		}
+		 
 #endif
 	}
 

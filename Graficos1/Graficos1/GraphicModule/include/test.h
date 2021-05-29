@@ -18,13 +18,12 @@
 #include"manager.h"
 #include"camera.h"
 #include"objeto.h"
-#include"VertexShader.h"
-#include"InputLayout.h"
-#include"PixelShader.h"
 #include"SamplerState.h"
 #include "chader.h"
+#include"pase.h"
 #include<vector>
 #include<string>
+#include"renderer.h"
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -94,6 +93,8 @@ namespace GraphicsModule
       int chadnum=0;
       chader shad;
       std::vector<chader>chaders;
+      std::vector<pase>pases;
+      
       amblight al;
       dirlight dl;
       pointlight pl;
@@ -111,9 +112,7 @@ namespace GraphicsModule
       UINT width;
       UINT heigh;
       RenderTargetView rtv;
-      RenderTargetView rtv2;
-      RenderTargetView rtv3;
-      RenderTargetView rtv4;
+      //RenderTargetView deferedtv;
       camera* cam;
       mesh cubito;
       objeto cubo;
@@ -121,13 +120,16 @@ namespace GraphicsModule
       objeto cubo1;
       objeto cubo2;
       DepthStencil depstencil;
-      
+      Renderer mainrender;
+      Renderer defered;
+
+      //DepthStencil depdefered;
 
       Buffer view;
       Buffer proyection;
       Buffer translation;
-      Textura texturbitco;
-      Textura texturmar;
+      
+      //Textura deferred;
       Buffer Ambilight;
       Buffer Dirlight;
       Buffer Poslight;
@@ -165,6 +167,7 @@ namespace GraphicsModule
       void draw(objeto& o);
       void Render();
       void CleanupDevice();
+      void renderSceneToTexture();
       float f[8];
       HWND m_hwnd;
   };

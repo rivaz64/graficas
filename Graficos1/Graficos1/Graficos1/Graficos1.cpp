@@ -36,6 +36,8 @@ GraphicsModule::objeto pitola, pitola0, rana;
 vector<GraphicsModule::objeto> objects;
 GraphicsModule::mesh mesho;
 char* nombre = new char[64];
+string chnom = "qwerty";
+char* nombrechader = new char[16];
 int cual=0;
 vector<string> filenames;
 int inverted=0;
@@ -241,9 +243,11 @@ void loadModel(string estefile) {
 
         objects[objects.size() - 1].mod = mes;
         if (objects.size() > 1)
-        MiObj.fpl = &objects[1];
+            MiObj.fpl = &objects[1];
         if (objects.size() > 2)
             MiObj.fsl = &objects[2];
+        /*if (objects.size() > 3)
+            MiObj.pases[0].objts.push_back(&objects[objects.size()-1]);*/
     }
     
 }
@@ -265,61 +269,9 @@ void UIRender()
     ImGui::NewFrame();
     std::string name ="pitola";
     // example window
-    if (ImGui::Begin("Another Window", nullptr))
+    if (ImGui::Begin("objetos", nullptr))
     {
-        ImGui::DragInt("chader", &MiObj.chadnum, .01f, 0, 2);
-        if (ImGui::TreeNode("Shader")) {
-            ImGui::Checkbox("pixelight", &pixli);
-            MiObj.chadnum = 0;
-            if (pixli) {
-                MiObj.chadnum = 1;
-                ImGui::Checkbox("Normal map", &norli);
-                ImGui::Checkbox("Phong", &pon);
-                if (norli)
-                    MiObj.chadnum += 1;
-                if (pon) {
-                    MiObj.chadnum += 2;
-                    ImGui::Checkbox("Specular Map", &spek);
-                    if (spek) {
-                        MiObj.chadnum += 2;
-                    }
-                    ImGui::Checkbox("blinn", &blin);
-                    if (blin) {
-                        MiObj.chadnum += 4;
-                    }
-                }
-                   
-            }
-           
-            ImGui::TreePop();
-        }
-        if (ImGui::TreeNode("Ambience Light")) {
-            ImGui::DragFloat("intencity", &MiObj.al.k, .001f);
-            ImGui::ColorPicker4("color", MiObj.al.color);
-            ImGui::TreePop();
-        }
-        if (ImGui::TreeNode("Directional Light")) {
-            ImGui::DragFloat3("direction", MiObj.dl.dir, .001f, -1.f, 1.f);
-            ImGui::ColorPicker4("color", MiObj.dl.color);
-            ImGui::TreePop();
-        }
-        if (ImGui::TreeNode("Point Light")) {
-            ImGui::DragFloat3("position", MiObj.pl.pos, .001f);
-            ImGui::DragFloat("attenuation", &MiObj.pl.att , .001f);
-            ImGui::ColorPicker4("color", MiObj.pl.color);
-            ImGui::TreePop();
-        }
-        if (ImGui::TreeNode("Spot Light")) {
-            ImGui::DragFloat3("direction", MiObj.sl.Dir, .001f, -1.f, 1.f);
-            ImGui::DragFloat3("position", MiObj.sl.Pos, .001f);
-            ImGui::DragFloat("attenuation", &MiObj.sl.Att, .001f);
-            ImGui::DragFloat("radious", &MiObj.sl.Rad, .001f);
-            ImGui::DragFloat("difucion", &MiObj.sl.dif, .001f);
-            ImGui::ColorPicker4("color", MiObj.sl.Color);
-            ImGui::TreePop();
-        }
-        ImGui::DragFloat("specular", &MiObj.specular, .001f);
-        ImGui::DragFloat("shinines", &MiObj.shinines, .001f);
+        
         for (int i = 0; i < filenames.size(); i++) {
             if (ImGui::Button(filenames[i].c_str()))
                 cual = i;
@@ -358,7 +310,70 @@ void UIRender()
             ImGui::Image((ImTextureID)i.tx->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
     */}
     ImGui::End();
+    if (ImGui::Begin("lights", nullptr)) {
+        if (ImGui::TreeNode("Ambience Light")) {
+            ImGui::DragFloat("intencity", &MiObj.al.k, .001f);
+            ImGui::ColorPicker4("color", MiObj.al.color);
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Directional Light")) {
+            ImGui::DragFloat3("direction", MiObj.dl.dir, .001f, -1.f, 1.f);
+            ImGui::ColorPicker4("color", MiObj.dl.color);
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Point Light")) {
+            ImGui::DragFloat3("position", MiObj.pl.pos, .001f);
+            ImGui::DragFloat("attenuation", &MiObj.pl.att, .001f);
+            ImGui::ColorPicker4("color", MiObj.pl.color);
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Spot Light")) {
+            ImGui::DragFloat3("direction", MiObj.sl.Dir, .001f, -1.f, 1.f);
+            ImGui::DragFloat3("position", MiObj.sl.Pos, .001f);
+            ImGui::DragFloat("attenuation", &MiObj.sl.Att, .001f);
+            ImGui::DragFloat("radious", &MiObj.sl.Rad, .001f);
+            ImGui::DragFloat("difucion", &MiObj.sl.dif, .001f);
+            ImGui::ColorPicker4("color", MiObj.sl.Color);
+            ImGui::TreePop();
+        }
+        ImGui::DragFloat("specular", &MiObj.specular, .001f);
+        ImGui::DragFloat("shinines", &MiObj.shinines, .001f);
+    }
+    ImGui::End();
+    if (ImGui::Begin("shaders", nullptr)) {
+        ImGui::DragInt("chader", &MiObj.chadnum, .01f, 0, 2);
+        //ImGui::InputText("name",nombrechader,sizeof(nombrechader));
+        if (ImGui::TreeNode("create Shader")) {
+            ImGui::Checkbox("pixelight", &pixli);
+            MiObj.chadnum = 0;
+            if (pixli) {
+                MiObj.chadnum = 1;
+                ImGui::Checkbox("Normal map", &norli);
+                ImGui::Checkbox("Phong", &pon);
+                if (norli)
+                    MiObj.chadnum += 1;
+                if (pon) {
+                    MiObj.chadnum += 2;
+                    ImGui::Checkbox("Specular Map", &spek);
+                    if (spek) {
+                        MiObj.chadnum += 2;
+                    }
+                    ImGui::Checkbox("blinn", &blin);
+                    if (blin) {
+                        MiObj.chadnum += 4;
+                    }
+                }
 
+            }
+            if (ImGui::Button("Crear")) {
+                MiObj.pases.push_back(GraphicsModule::pase());
+                MiObj.pases[MiObj.pases.size()-1].chad = MiObj.chaders[MiObj.chadnum];
+            }
+            ImGui::TreePop();
+        }
+
+    }
+    ImGui::End();
     // render UI
     ImGui::Render();
 #ifdef directX
@@ -377,7 +392,7 @@ int main()
     if (!glfwInit())
         return 1; 
     
-    
+    nombrechader = "qwerty";
 #endif
     if (FAILED(MiObj.InitWindow(1280, 720, WndProc)))
     {

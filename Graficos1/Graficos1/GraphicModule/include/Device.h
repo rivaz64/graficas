@@ -52,7 +52,7 @@ namespace GraphicsModule {
 #ifdef directX
 		void createVSwithInput(ID3D11VertexShader** vs, ID3D11InputLayout** il, ID3DBlob* Blob);
 #endif
-		void CreateRenderTargetView(RenderTargetView& rtv);
+		void CreateRenderTargetView(RenderTargetView& rtv,bool des);
 		void CreateTexture2D(Textura& tx);
 		void CreateDepthStencilView(DepthStencil& ds);
 
