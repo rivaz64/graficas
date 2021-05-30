@@ -135,7 +135,7 @@ namespace GraphicsModule
             return hr;
         //RenderTargetView rtv;
 
-        man->createrendertarget(rtv);
+        //man->createrendertarget(rtv);
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////DEFERED
         /*deferred.describe(FORMAT::R32G32B32A32_FLOAT, BIND_FLAG::RENDER_TARGET);
@@ -149,18 +149,19 @@ namespace GraphicsModule
         man->getDevice()->CreateTexture2D(depdefered.textur);*/
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //man->createrendertarget(deferedtv);
-        defered.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT);
+        mainrender.init(FORMAT::UNKNOWN,FORMAT::FLOAT,false);
+        defered.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT,true);
 
         if (FAILED(hr))
             return hr;
         // Create depth stencil texture
-        depstencil.descrivetextur();
-        man->getDevice()->CreateTexture2D(depstencil.textur);
+        //depstencil.descrivetextur();
+        //man->getDevice()->CreateTexture2D(depstencil.textur);
 
 
         // Create the depth stencil view
-        depstencil.describeview();
-        man->getDevice()->CreateDepthStencilView(depstencil);
+        //mainrender.depth.describeview();
+        //man->getDevice()->CreateDepthStencilView(mainrender.depth);
 
 
 
@@ -168,7 +169,14 @@ namespace GraphicsModule
         //g_pDepthStencilView = depstencil.view;
         //g_pDepthStencil = depstencil.textur.get;
         //Setup the viewport
-
+        pantaia.points = new mesh::vertex[4];
+        pantaia.points[0] = { -1.f,-1.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+        pantaia.points[1] = { 1.f,-1.f,0.f,1.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+        pantaia.points[2] = { -1.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+        pantaia.points[3] = { 1.f,1.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+        pantaia.indices = new unsigned int[6]{ 1,0,2,1,2,3 };
+        pantaia.init(4, 6);
+        screen.loadfromfile("bitco.dds", false);
         Viewport vp;
         vp.Width = (FLOAT)width;
         vp.Height = (FLOAT)heigh;
@@ -198,9 +206,8 @@ namespace GraphicsModule
             //pases.push_back(pase());
             //pases[i].chad = chaders[i];
         }
-        chaders.push_back(chader());
-        chaders[11].compile("prueba", "");
-        //shad.setShader();
+        lightcorrection.compile("tonemap","");
+        
 
 
         cam = new camera;
@@ -265,8 +272,28 @@ namespace GraphicsModule
         specularb.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         specularb.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(specularb);
-        // Create the sample state
 
+        exposure.Usage = USAGE::DEFAULT;
+        exposure.ByteWidth = sizeof(float[4]);
+        exposure.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        exposure.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(exposure);
+
+
+        
+        // Create the sample state
+        paseprueba.vc.insert({ 0, &view });
+        paseprueba.vc.insert({ 1, &proyection });
+        paseprueba.vc.insert({ 2, &translation });
+        paseprueba.vc.insert({ 3, &Dirlight });
+        paseprueba.vc.insert({ 4, &Poslight });
+        paseprueba.vc.insert({ 5, &Spotlight });
+        paseprueba.pc.insert({ 2, &translation });
+        paseprueba.pc.insert({ 3, &Dirlight });
+        paseprueba.pc.insert({ 4, &Poslight });
+        paseprueba.pc.insert({ 5, &Spotlight });
+        paseprueba.pc.insert({ 6, &specularb });
+        paseprueba.pc.insert({ 7, &Ambilight });
         
         
 #ifdef directX
@@ -308,17 +335,13 @@ namespace GraphicsModule
             return hr;
 
         // create the rt Shader resource view
-
-
-
-       
         return S_OK;
     }
     void test::rezise(HWND& _hwnd, LPARAM _lParam)
     {
-        man->getSwapchain()->rezise(_lParam, rtv, true);
+        man->getSwapchain()->rezise(_lParam,mainrender.rtv, true);
 
-        man->getConext()->resizewindow(cam, _hwnd, rtv, proyection);
+        man->getConext()->resizewindow(cam, _hwnd, mainrender.rtv, proyection);
         //man->setrenderfortextur(rtv);
     }
     void test::Update() {
@@ -330,7 +353,11 @@ namespace GraphicsModule
         }
 #endif
         static float t = 0.0f;
-       
+        static int ti = 0;
+        if (ti > 36) {
+            ti=0;
+        }
+        ti++;
         LPPOINT p = new POINT;
         if ((GetKeyState(VK_RBUTTON) & 0x100) != 0) {
             GetCursorPos(p);
@@ -399,7 +426,8 @@ namespace GraphicsModule
         man->getConext()->UpdateSubresource(Poslight, &pl);//*/
         man->getConext()->UpdateSubresource(Spotlight, &sl);
         man->getConext()->UpdateSubresource(specularb, f);
-
+        f[0] = exp;
+        man->getConext()->UpdateSubresource(exposure, f);
 #ifdef openGL
         GLuint dirlID;
         dirlID = glGetUniformLocation(chaders[chadnum].shader, "kambience");
@@ -455,16 +483,22 @@ namespace GraphicsModule
 
       
 #endif
-
-    man->getConext()->ClearRenderTargetView(rtv);
-    //
-    // Clear the depth buffer to 1.0 (max depth)
-    //
-    man->getConext()->ClearDepthStencilView(depstencil);
+        if (deferar) {
+            defered.setTargets();
+            defered.clearTargets();
+        }
+        else {
+            mainrender.setTargets();
+            mainrender.clearTargets();
+        }
+        
+    //man->getConext()->ClearRenderTargetView(rtv);
+    
+    //man->getConext()->ClearDepthStencilView(depstencil);
     //
     // Update variables that change once per frame
     //
-    chaders[chadnum].setShader();
+    
     CBChangesEveryFrame cb;
     /*cb.mWorld = XMMatrixTranspose(g_World);
     cb.vMeshColor = g_vMeshColor;
@@ -478,7 +512,7 @@ namespace GraphicsModule
     
 #ifdef directX
 //luego abstraer sto
-    man->getConext()->get()->VSSetConstantBuffers(0, 1, &view.buf);
+    /*man->getConext()->get()->VSSetConstantBuffers(0, 1, &view.buf);
     man->getConext()->get()->VSSetConstantBuffers(1, 1, &proyection.buf);
     man->getConext()->get()->VSSetConstantBuffers(2, 1, &translation.buf);
     man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
@@ -490,8 +524,10 @@ namespace GraphicsModule
     man->getConext()->get()->PSSetConstantBuffers(5, 1, &Spotlight.buf);
     man->getConext()->get()->PSSetConstantBuffers(2, 1, &translation.buf);
     man->getConext()->get()->PSSetConstantBuffers(6, 1, &specularb.buf);
-    man->getConext()->get()->PSSetConstantBuffers(7, 1, &Ambilight.buf);
+    man->getConext()->get()->PSSetConstantBuffers(7, 1, &Ambilight.buf);*/
 #endif
+    chaders[chadnum].setShader();
+    paseprueba.render();
   }
   
   void test::draw(objeto& o)
@@ -503,7 +539,24 @@ namespace GraphicsModule
   
   void test::Render()
   {
-      man->getConext()->OMSetRenderTargets(rtv, depstencil);
+      /*static bool solounaves = true;
+      if (solounaves) {
+          solounaves = false;
+          D3DX11SaveTextureToFile(man->getConext()->get(), mainrender.tex.get, D3DX11_IFF_JPG, "screenchot.jpg");
+      }*/
+      if (deferar) {
+          lightcorrection.setShader();
+          getmanager()->getConext()->get()->PSSetConstantBuffers(0, 1, &exposure.buf);
+          mainrender.setTargets();
+          mainrender.clearTargets();
+          man->getConext()->get()->PSSetShaderResources(0, 1, &defered.rtv.srv);
+          //man->getConext()->get()->PSSetShaderResources(0, 1, &screen.srv);
+          man->getConext()->IASetVertexBuffers(pantaia.getvertex());
+          man->getConext()->IASetIndexBuffer(pantaia.getindices());
+          man->getConext()->draw(pantaia.indexnum);
+      }
+      
+      
     man->getSwapchain()->Present();
 #ifdef openGL
     glfwSwapBuffers(window);
@@ -520,9 +573,6 @@ namespace GraphicsModule
 #endif
   }
 
-  void test::renderSceneToTexture()
-  {
-      //man->getConext()->OMSetRenderTargets(deferedtv, depdefered); 
-  }
+  
  
 }

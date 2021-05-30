@@ -208,6 +208,7 @@ void loadModel(string estefile) {
                 }
 
             }
+
             mes->modelo[mes->modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
             aiMaterial* siaimatirial;// = scene->mMaterials[scene->mMeshes[o]->mMaterialIndex];
             for (int u = 0; u < scene->mNumMaterials; u++) {
@@ -334,16 +335,15 @@ void UIRender()
             ImGui::DragFloat("radious", &MiObj.sl.Rad, .001f);
             ImGui::DragFloat("difucion", &MiObj.sl.dif, .001f);
             ImGui::ColorPicker4("color", MiObj.sl.Color);
-            ImGui::TreePop();
+            
         }
-        ImGui::DragFloat("specular", &MiObj.specular, .001f);
-        ImGui::DragFloat("shinines", &MiObj.shinines, .001f);
+        
     }
     ImGui::End();
     if (ImGui::Begin("shaders", nullptr)) {
-        ImGui::DragInt("chader", &MiObj.chadnum, .01f, 0, 2);
-        //ImGui::InputText("name",nombrechader,sizeof(nombrechader));
-        if (ImGui::TreeNode("create Shader")) {
+        if (ImGui::TreeNode("Light")) {
+            ImGui::DragInt("chader", &MiObj.chadnum, .01f, 0, 2);
+            //ImGui::InputText("name",nombrechader,sizeof(nombrechader));
             ImGui::Checkbox("pixelight", &pixli);
             MiObj.chadnum = 0;
             if (pixli) {
@@ -354,23 +354,30 @@ void UIRender()
                     MiObj.chadnum += 1;
                 if (pon) {
                     MiObj.chadnum += 2;
+                    ImGui::DragFloat("shinines", &MiObj.shinines, .001f);
                     ImGui::Checkbox("Specular Map", &spek);
                     if (spek) {
                         MiObj.chadnum += 2;
+                    }
+                    else {
+                        ImGui::DragFloat("specular", &MiObj.specular, .001f);
                     }
                     ImGui::Checkbox("blinn", &blin);
                     if (blin) {
                         MiObj.chadnum += 4;
                     }
                 }
-
-            }
-            if (ImGui::Button("Crear")) {
-                MiObj.pases.push_back(GraphicsModule::pase());
-                MiObj.pases[MiObj.pases.size()-1].chad = MiObj.chaders[MiObj.chadnum];
             }
             ImGui::TreePop();
         }
+        if (ImGui::TreeNode("defered")) {
+            ImGui::Checkbox("blinn", &MiObj.deferar);
+            if (MiObj.deferar) {
+                ImGui::DragFloat("specular", &MiObj.exp, .001f);
+            }
+            ImGui::TreePop();
+        }
+        
 
     }
     ImGui::End();

@@ -638,6 +638,7 @@
     <ClInclude Include="include\model.h" />
     <ClInclude Include="include\objeto.h" />
     <ClInclude Include="include\pase.h" />
+    <ClInclude Include="include\Pass.h" />
     <ClInclude Include="include\renderer.h" />
     <ClInclude Include="include\RenderTargetView.h" />
     <ClInclude Include="include\SamplerState.h" />
@@ -666,6 +667,7 @@
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\objeto.cpp" />
     <ClCompile Include="src\pase.cpp" />
+    <ClCompile Include="src\Pass.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\RenderTargetView.cpp" />
     <ClCompile Include="src\SamplerState.cpp" />

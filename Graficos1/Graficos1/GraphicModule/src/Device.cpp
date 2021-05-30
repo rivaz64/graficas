@@ -102,10 +102,10 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void Device::CreateDepthStencilView(DepthStencil& ds)
+	HRESULT Device::CreateDepthStencilView(DepthStencil& ds)
 	{
 #ifdef directX
-		g_pd3dDevice->CreateDepthStencilView(ds.textur.get, &ds.des, &ds.view);
+		return g_pd3dDevice->CreateDepthStencilView(ds.textur.get, &ds.des, &ds.view);
 #endif
 	}
 
@@ -159,9 +159,9 @@ namespace GraphicsModule {
 		D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
 		ZeroMemory(&descViewRT, sizeof(descViewRT));
 		descViewRT.Format = (DXGI_FORMAT)rtv.Format;
-		descViewRT.ViewDimension = (D3D_SRV_DIMENSION)rtv.ViewDimension;
+		descViewRT.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;// (D3D_SRV_DIMENSION)rtv.ViewDimension;
 		descViewRT.Texture2D.MostDetailedMip = rtv.MostDetailedMip;
-		descViewRT.Texture2D.MipLevels = rtv.MipLevels;
+		descViewRT.Texture2D.MipLevels = 1;// rtv.MipLevels;
 		g_pd3dDevice->CreateShaderResourceView(rtv.textur.get, &descViewRT, &rtv.srv);
 #endif
 	}

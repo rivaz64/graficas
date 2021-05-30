@@ -20,10 +20,10 @@
 #include"objeto.h"
 #include"SamplerState.h"
 #include "chader.h"
-#include"pase.h"
 #include<vector>
 #include<string>
 #include"renderer.h"
+#include"Pass.h"
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -92,18 +92,21 @@ namespace GraphicsModule
   public:
       int chadnum=0;
       chader shad;
+      chader lightcorrection;
       std::vector<chader>chaders;
-      std::vector<pase>pases;
-      
+      //std::vector<pase>pases;
+      Pass paseprueba;
       amblight al;
       dirlight dl;
       pointlight pl;
       spotlight sl;
       float specular;
       float shinines=6.f;
+      float exp = 1;
       float posly[3] = { 7,7,7 };
       bool cerrar = true;
       HWND g_hwnd;
+      mesh pantaia;
 #ifdef openGL
       GLFWwindow* window;
 #endif
@@ -111,18 +114,14 @@ namespace GraphicsModule
       FEATURE_LEVEL                   g_featureLevel = FEATURE_LEVEL::LEVEL_11_0;
       UINT width;
       UINT heigh;
-      RenderTargetView rtv;
+      //RenderTargetView rtv;
       //RenderTargetView deferedtv;
       camera* cam;
-      mesh cubito;
-      objeto cubo;
-      objeto cubo0;
-      objeto cubo1;
-      objeto cubo2;
-      DepthStencil depstencil;
+      Textura screen;
+      //DepthStencil depstencil;
       Renderer mainrender;
       Renderer defered;
-
+      
       //DepthStencil depdefered;
 
       Buffer view;
@@ -135,7 +134,10 @@ namespace GraphicsModule
       Buffer Poslight;
       Buffer Spotlight;
       Buffer specularb;
+      Buffer exposure;
+      bool deferar;
       SamplerState samsta;
+      //pase paseprueba;
       static test* esta;
       objeto* fpl;
       objeto* fsl;
@@ -146,7 +148,6 @@ namespace GraphicsModule
       XMMATRIX                            g_World;
       XMMATRIX                            g_View;
       XMMATRIX                            g_Projection;
-      XMFLOAT4                            g_vMeshColor;
 
       //ID3D11RasterizerState* g_Rasterizer = NULL;
 #endif
@@ -167,7 +168,6 @@ namespace GraphicsModule
       void draw(objeto& o);
       void Render();
       void CleanupDevice();
-      void renderSceneToTexture();
       float f[8];
       HWND m_hwnd;
   };
