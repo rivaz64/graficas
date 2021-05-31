@@ -29,9 +29,11 @@ namespace GraphicsModule
 
     HRESULT test::InitWindow(LONG _width, LONG _height, LRESULT prochan(HWND, UINT, WPARAM, LPARAM) )
     {
-
+        man = getmanager();
         width = _width;
+        man->width = _width;
         heigh = _height;
+        man->height = _height;
 #ifdef openGL
 
         window = glfwCreateWindow(_width, _height, "TutorialWindowClass", NULL, NULL);
@@ -49,6 +51,7 @@ namespace GraphicsModule
         glDepthFunc(GL_LESS);
         //window->monitor;
 #endif
+        //man->wi
         // Register class
 #ifdef directX
 
@@ -133,47 +136,27 @@ namespace GraphicsModule
         }
         if (FAILED(hr))
             return hr;
-        //RenderTargetView rtv;
-
-        //man->createrendertarget(rtv);
         
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////DEFERED
-        /*deferred.describe(FORMAT::R32G32B32A32_FLOAT, BIND_FLAG::RENDER_TARGET);
-        man->getDevice()->CreateTexture2D(deferred);
-        deferedtv.Format = FORMAT::R32G32B32A32_FLOAT;
-        deferedtv.ViewDimension = DIMENSION::TEXTURE2D;
-        deferedtv.textur = deferred;
-        man->getDevice()->CreateRenderTargetView(deferedtv, true);
-        man->getDevice()->CreateShaderResourceView(deferedtv);
-        depdefered.textur.describe(FORMAT::UNORM_S8_UINT, BIND_FLAG::DEPTH_STENCIL);
-        man->getDevice()->CreateTexture2D(depdefered.textur);*/
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //man->createrendertarget(deferedtv);
         mainrender.init(FORMAT::UNKNOWN,FORMAT::FLOAT,false);
         defered.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT,true);
 
         if (FAILED(hr))
             return hr;
-        // Create depth stencil texture
-        //depstencil.descrivetextur();
-        //man->getDevice()->CreateTexture2D(depstencil.textur);
-
-
-        // Create the depth stencil view
-        //mainrender.depth.describeview();
-        //man->getDevice()->CreateDepthStencilView(mainrender.depth);
-
-
-
-        
-        //g_pDepthStencilView = depstencil.view;
-        //g_pDepthStencil = depstencil.textur.get;
-        //Setup the viewport
+       
         pantaia.points = new mesh::vertex[4];
+#ifdef directX
         pantaia.points[0] = { -1.f,-1.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
         pantaia.points[1] = { 1.f,-1.f,0.f,1.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
         pantaia.points[2] = { -1.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
         pantaia.points[3] = { 1.f,1.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+#endif
+#ifdef openGL
+        pantaia.points[0] = { -1.f,-1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+        pantaia.points[1] = { 1.f,-1.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+        pantaia.points[2] = { -1.f,1.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+        pantaia.points[3] = { 1.f,1.f,0.f,1.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+#endif
         pantaia.indices = new unsigned int[6]{ 1,0,2,1,2,3 };
         pantaia.init(4, 6);
         screen.loadfromfile("bitco.dds", false);
@@ -199,28 +182,31 @@ namespace GraphicsModule
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
         };
+        
         //man->compileshaders("chad","#define VERTEX_LIGHT");
         for (int i = 0; i < tecnicas.size(); i++) {
             chaders.push_back(chader());
             chaders[i].compile("chad", tecnicas[i]);
-            //pases.push_back(pase());
-            //pases[i].chad = chaders[i];
         }
-        lightcorrection.compile("tonemap","");
-        
-
+        //lightcorrection.compile("tonemap","");
+        tecnicas = {
+            "#define BASIC",
+         "#define REINHARD",
+         "#define BURGES_DAWSON",
+         "#define UNCHARTED2TONEMAP",
+         "#define UNCHARTED2",
+         "#define ALL",
+        };
+        for (int i = 0; i < tecnicas.size(); i++) {
+            lightcorrection.push_back(chader());
+            lightcorrection[i].compile("tonemap", tecnicas[i]);
+        }//*/
 
         cam = new camera;
-/*#ifdef openGL
-        cam->seteye(4.0f, 3.0f, 3.0f);
-        cam->setat(0.0f, 0.f, 0);
-        cam->setup(0.0f, 1.0f, 0);
-#endif
-#ifdef directX*/
+
         cam->seteye(0.0f, 3.0f, -6.0f);
         cam->setat(0.0f, 1.f, 0);
         cam->setup(0.0f, 1.0f, 0);
-//#endif
         cam->axis();
         
         
@@ -294,7 +280,7 @@ namespace GraphicsModule
         paseprueba.pc.insert({ 5, &Spotlight });
         paseprueba.pc.insert({ 6, &specularb });
         paseprueba.pc.insert({ 7, &Ambilight });
-        
+        defpas.pc.insert({ 0,&exposure });
         
 #ifdef directX
         D3D11_SAMPLER_DESC sampDesc;
@@ -427,6 +413,7 @@ namespace GraphicsModule
         man->getConext()->UpdateSubresource(Spotlight, &sl);
         man->getConext()->UpdateSubresource(specularb, f);
         f[0] = exp;
+        f[1] = exp+expo;
         man->getConext()->UpdateSubresource(exposure, f);
 #ifdef openGL
         GLuint dirlID;
@@ -468,9 +455,19 @@ namespace GraphicsModule
     }
     void test::clear()
     {
+
+        if (deferar) {
+            defered.setTargets();
+            defered.clearTargets();
+        }
+        else {
+            mainrender.setTargets();
+            mainrender.clearTargets();
+        }
 #ifdef openGL
-        glClearColor(.0f, .0f, 1.f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        
         //glUseProgram(chaders[chadnum].shader);
         chaders[chadnum].setShader();
         glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "texture1"), 0);
@@ -481,17 +478,8 @@ namespace GraphicsModule
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
         glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));
 
-      
+
 #endif
-        if (deferar) {
-            defered.setTargets();
-            defered.clearTargets();
-        }
-        else {
-            mainrender.setTargets();
-            mainrender.clearTargets();
-        }
-        
     //man->getConext()->ClearRenderTargetView(rtv);
     
     //man->getConext()->ClearDepthStencilView(depstencil);
@@ -510,22 +498,7 @@ namespace GraphicsModule
 
     
     
-#ifdef directX
-//luego abstraer sto
-    /*man->getConext()->get()->VSSetConstantBuffers(0, 1, &view.buf);
-    man->getConext()->get()->VSSetConstantBuffers(1, 1, &proyection.buf);
-    man->getConext()->get()->VSSetConstantBuffers(2, 1, &translation.buf);
-    man->getConext()->get()->VSSetConstantBuffers(3, 1, &Dirlight.buf);
-    man->getConext()->get()->VSSetConstantBuffers(4, 1, &Poslight.buf);
-    man->getConext()->get()->VSSetConstantBuffers(5, 1, &Spotlight.buf);
-    
-    man->getConext()->get()->PSSetConstantBuffers(3, 1, &Dirlight.buf);
-    man->getConext()->get()->PSSetConstantBuffers(4, 1, &Poslight.buf);
-    man->getConext()->get()->PSSetConstantBuffers(5, 1, &Spotlight.buf);
-    man->getConext()->get()->PSSetConstantBuffers(2, 1, &translation.buf);
-    man->getConext()->get()->PSSetConstantBuffers(6, 1, &specularb.buf);
-    man->getConext()->get()->PSSetConstantBuffers(7, 1, &Ambilight.buf);*/
-#endif
+
     chaders[chadnum].setShader();
     paseprueba.render();
   }
@@ -545,11 +518,26 @@ namespace GraphicsModule
           D3DX11SaveTextureToFile(man->getConext()->get(), mainrender.tex.get, D3DX11_IFF_JPG, "screenchot.jpg");
       }*/
       if (deferar) {
-          lightcorrection.setShader();
-          getmanager()->getConext()->get()->PSSetConstantBuffers(0, 1, &exposure.buf);
+
+          lightcorrection[tonenum].setShader();
+          defpas.render();
           mainrender.setTargets();
           mainrender.clearTargets();
+#ifdef directX
           man->getConext()->get()->PSSetShaderResources(0, 1, &defered.rtv.srv);
+#endif
+#ifdef openGL
+          GLuint Id;
+          Id = glGetUniformLocation(lightcorrection[tonenum].shader, "light");
+          glUniform1i(Id, 0);
+          Id = glGetUniformLocation(lightcorrection[tonenum].shader, "exposure");
+          glUniform1f(Id, exp);
+          glActiveTexture(GL_TEXTURE0);
+          glBindTexture(GL_TEXTURE_2D, defered.renderedTexture);
+          glBindVertexArray(pantaia.vao);
+          glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, pantaia.indexnum, GL_UNSIGNED_INT, 0);
+          //glUniform1f(dirlID, al.k);
+#endif
           //man->getConext()->get()->PSSetShaderResources(0, 1, &screen.srv);
           man->getConext()->IASetVertexBuffers(pantaia.getvertex());
           man->getConext()->IASetIndexBuffer(pantaia.getindices());

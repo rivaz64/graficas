@@ -14,6 +14,11 @@ namespace GraphicsModule {
 		DepthStencil depth;
 		Viewport vp;
 		chader* shad;
+#ifdef openGL
+		GLuint renderedTexture;
+		GLuint FramebufferName = 0;
+#endif
+		
 		void init(FORMAT f,FORMAT d,bool b);
 		void setTargets();
 		void clearTargets();

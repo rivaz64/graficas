@@ -85,7 +85,9 @@ namespace GraphicsModule {
 		if (des) {
 			D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
 			renderTargetViewDesc.Format = (DXGI_FORMAT)rtv.Format;
-			renderTargetViewDesc.ViewDimension = (D3D11_RTV_DIMENSION)rtv.ViewDimension;
+			renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+			renderTargetViewDesc.Texture2D.MipSlice = 0;
+			//renderTargetViewDesc.
 			g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, &renderTargetViewDesc, &rtv.get);
 		}
 		else {
@@ -102,10 +104,10 @@ namespace GraphicsModule {
 #endif
 	}
 
-	HRESULT Device::CreateDepthStencilView(DepthStencil& ds)
+	void Device::CreateDepthStencilView(DepthStencil& ds)
 	{
 #ifdef directX
-		return g_pd3dDevice->CreateDepthStencilView(ds.textur.get, &ds.des, &ds.view);
+		g_pd3dDevice->CreateDepthStencilView(ds.textur.get, &ds.des, &ds.view);
 #endif
 	}
 

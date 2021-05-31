@@ -54,7 +54,7 @@ namespace GraphicsModule {
 #endif
 		void CreateRenderTargetView(RenderTargetView& rtv,bool des);
 		void CreateTexture2D(Textura& tx);
-		HRESULT CreateDepthStencilView(DepthStencil& ds);
+		void CreateDepthStencilView(DepthStencil& ds);
 
 		//HRESULT CreateInputLayout();
 

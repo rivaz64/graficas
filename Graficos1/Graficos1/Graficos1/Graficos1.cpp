@@ -41,7 +41,7 @@ char* nombrechader = new char[16];
 int cual=0;
 vector<string> filenames;
 int inverted=0;
-bool pixli,norli,pon,spek,blin;
+bool pixli,norli,pon,spek,blin,basic,reinhard;
 bool b[4] = { true,false,false,false };
 string flagas[4] = { "normal","inverted","special","surprice" };
 #ifdef directX
@@ -281,7 +281,7 @@ void UIRender()
         if (cual >= 0 && cual < objects.size()) {
             ImGui::DragFloat3("location", objects[cual].posi, .001f);
             ImGui::DragFloat3("size", objects[cual].size, .001f);
-            ImGui::DragFloat3("rotation", objects[cual].rot, .001f);
+            ImGui::DragFloat3("rotation", objects[cual].rot, .1f);
         }
 
 
@@ -371,9 +371,11 @@ void UIRender()
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("defered")) {
-            ImGui::Checkbox("blinn", &MiObj.deferar);
+            ImGui::Checkbox("acitve", &MiObj.deferar);
             if (MiObj.deferar) {
-                ImGui::DragFloat("specular", &MiObj.exp, .001f);
+                ImGui::DragFloat("exposure", &MiObj.exp, .001f);
+                ImGui::DragFloat("exponent", &MiObj.expo, .001f);
+                ImGui::DragInt("defe", &MiObj.tonenum, .006f, 0, 5);
             }
             ImGui::TreePop();
         }
@@ -399,7 +401,7 @@ int main()
     if (!glfwInit())
         return 1; 
     
-    nombrechader = "qwerty";
+    //nombrechader = "qwerty";
 #endif
     if (FAILED(MiObj.InitWindow(1280, 720, WndProc)))
     {

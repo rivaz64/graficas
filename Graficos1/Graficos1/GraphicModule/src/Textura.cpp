@@ -19,6 +19,7 @@ namespace GraphicsModule {
         des.CPUAccessFlags = 0;
         des.MiscFlags = 0;
         
+        
 #endif
     }
     void Textura::loadfromfile(LPCSTR f, int inverted)

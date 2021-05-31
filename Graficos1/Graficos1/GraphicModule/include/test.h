@@ -91,11 +91,13 @@ namespace GraphicsModule
       
   public:
       int chadnum=0;
+      int tonenum = 0;
       chader shad;
-      chader lightcorrection;
+      std::vector<chader>lightcorrection;
       std::vector<chader>chaders;
       //std::vector<pase>pases;
       Pass paseprueba;
+      Pass defpas;
       amblight al;
       dirlight dl;
       pointlight pl;
@@ -103,6 +105,7 @@ namespace GraphicsModule
       float specular;
       float shinines=6.f;
       float exp = 1;
+      float expo = 1;
       float posly[3] = { 7,7,7 };
       bool cerrar = true;
       HWND g_hwnd;
@@ -123,7 +126,7 @@ namespace GraphicsModule
       Renderer defered;
       
       //DepthStencil depdefered;
-
+      //Texture screen;
       Buffer view;
       Buffer proyection;
       Buffer translation;
