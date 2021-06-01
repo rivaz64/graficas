@@ -90,11 +90,11 @@ namespace GraphicsModule
       manager* man;
       
   public:
-      int chadnum=0;
-      int tonenum = 0;
+      //int chadnum=0;
+      //int tonenum = 0;
       chader shad;
-      std::vector<chader>lightcorrection;
-      std::vector<chader>chaders;
+      //std::vector<chader>lightcorrection;
+      //std::vector<chader>chaders;
       //std::vector<pase>pases;
       Pass paseprueba;
       Pass defpas;

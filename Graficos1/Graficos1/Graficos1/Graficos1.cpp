@@ -342,29 +342,29 @@ void UIRender()
     ImGui::End();
     if (ImGui::Begin("shaders", nullptr)) {
         if (ImGui::TreeNode("Light")) {
-            ImGui::DragInt("chader", &MiObj.chadnum, .01f, 0, 2);
+            ImGui::DragInt("chader", &MiObj.paseprueba.chadernum, .01f, 0, 2);
             //ImGui::InputText("name",nombrechader,sizeof(nombrechader));
             ImGui::Checkbox("pixelight", &pixli);
-            MiObj.chadnum = 0;
+            MiObj.paseprueba.chadernum = 0;
             if (pixli) {
-                MiObj.chadnum = 1;
+                MiObj.paseprueba.chadernum = 1;
                 ImGui::Checkbox("Normal map", &norli);
                 ImGui::Checkbox("Phong", &pon);
                 if (norli)
-                    MiObj.chadnum += 1;
+                    MiObj.paseprueba.chadernum += 1;
                 if (pon) {
-                    MiObj.chadnum += 2;
+                    MiObj.paseprueba.chadernum += 2;
                     ImGui::DragFloat("shinines", &MiObj.shinines, .001f);
                     ImGui::Checkbox("Specular Map", &spek);
                     if (spek) {
-                        MiObj.chadnum += 2;
+                        MiObj.paseprueba.chadernum += 2;
                     }
                     else {
                         ImGui::DragFloat("specular", &MiObj.specular, .001f);
                     }
                     ImGui::Checkbox("blinn", &blin);
                     if (blin) {
-                        MiObj.chadnum += 4;
+                        MiObj.paseprueba.chadernum += 4;
                     }
                 }
             }
@@ -375,7 +375,7 @@ void UIRender()
             if (MiObj.deferar) {
                 ImGui::DragFloat("exposure", &MiObj.exp, .001f);
                 ImGui::DragFloat("exponent", &MiObj.expo, .001f);
-                ImGui::DragInt("defe", &MiObj.tonenum, .006f, 0, 5);
+                ImGui::DragInt("defe", &MiObj.defpas.chadernum, .006f, 0, 5);
             }
             ImGui::TreePop();
         }

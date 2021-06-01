@@ -185,8 +185,8 @@ namespace GraphicsModule
         
         //man->compileshaders("chad","#define VERTEX_LIGHT");
         for (int i = 0; i < tecnicas.size(); i++) {
-            chaders.push_back(chader());
-            chaders[i].compile("chad", tecnicas[i]);
+            paseprueba.chaders.push_back(chader());
+            paseprueba.chaders[i].compile("chad", tecnicas[i]);
         }
         //lightcorrection.compile("tonemap","");
         tecnicas = {
@@ -198,8 +198,8 @@ namespace GraphicsModule
          "#define ALL",
         };
         for (int i = 0; i < tecnicas.size(); i++) {
-            lightcorrection.push_back(chader());
-            lightcorrection[i].compile("tonemap", tecnicas[i]);
+            defpas.chaders.push_back(chader());
+            defpas.chaders[i].compile("tonemap", tecnicas[i]);
         }//*/
 
         cam = new camera;
@@ -499,13 +499,13 @@ namespace GraphicsModule
     
     
 
-    chaders[chadnum].setShader();
+    //chaders[chadnum].setShader();
     paseprueba.render();
   }
   
   void test::draw(objeto& o)
   {
-      man->draw(o, translation, chaders[chadnum]);
+      man->draw(o, translation, paseprueba.chaders[paseprueba.chadernum]);
       //chaders[11].setShader();
       //man->draw(o, translation, chaders[11]);
   }
@@ -519,7 +519,7 @@ namespace GraphicsModule
       }*/
       if (deferar) {
 
-          lightcorrection[tonenum].setShader();
+          //lightcorrection[tonenum].setShader();
           defpas.render();
           mainrender.setTargets();
           mainrender.clearTargets();
