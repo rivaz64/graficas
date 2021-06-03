@@ -263,9 +263,9 @@ namespace GraphicsModule
 
         
         // Create the sample state
-        paseprueba.vc.insert({ 0, &view });
-        paseprueba.vc.insert({ 1, &proyection });
-        paseprueba.vc.insert({ 2, &translation });
+        paseprueba.vc.insert({ 0, &translation });
+        paseprueba.vc.insert({ 1, &view });
+        paseprueba.vc.insert({ 2, &proyection });
         paseprueba.vc.insert({ 3, &Dirlight });
         paseprueba.vc.insert({ 4, &Poslight });
         paseprueba.vc.insert({ 5, &Spotlight });
@@ -451,14 +451,14 @@ namespace GraphicsModule
     void test::clear()
     {
 
-        if (deferar) {
+        /*if (deferar) {
             defered.setTargets();
             defered.clearTargets();
         }
         else {
             paseprueba.ren.setTargets();
             paseprueba.ren.clearTargets();
-        }
+        }*/
 #ifdef openGL
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -495,14 +495,18 @@ namespace GraphicsModule
     
 
     //chaders[chadnum].setShader();
-    paseprueba.render();
+    //paseprueba.render();
   }
   
   void test::draw(objeto* o)
   {
-      man->draw(o, translation, paseprueba.chaders[paseprueba.chadernum]);
-      //chaders[11].setShader();
-      //man->draw(o, translation, chaders[11]);
+      //man->draw(o, translation, paseprueba.chaders[paseprueba.chadernum]);
+      
+  }
+
+  void test::draw(vector<GraphicsModule::objeto*>& v)
+  {
+      paseprueba.render(v);
   }
   
   void test::Render()
@@ -515,7 +519,7 @@ namespace GraphicsModule
       if (deferar) {
 
           //lightcorrection[tonenum].setShader();
-          defpas.render();
+          //defpas.render();
           paseprueba.ren.setTargets();
           paseprueba.ren.clearTargets();
 #ifdef directX

@@ -455,8 +455,9 @@ int main()
     {
         MiObj.Update();
         MiObj.clear();
-        for (GraphicsModule::objeto* i : objects)
-            MiObj.draw(i);
+        MiObj.draw(objects);
+        /*for (GraphicsModule::objeto* i : objects)
+            MiObj.draw(i);*/
         UIRender();
         MiObj.Render();
         

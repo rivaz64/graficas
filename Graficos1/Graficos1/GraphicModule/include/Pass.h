@@ -20,7 +20,7 @@ namespace GraphicsModule {
 		Renderer ren;
 		static bool first;
 		void compile(std::string file, std::vector<std::string> tecnicas);
-		void render();// std::vector<objeto*>);
+		void render( std::vector<objeto*>& objts);
 	};
 }
 

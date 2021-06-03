@@ -169,6 +169,7 @@ namespace GraphicsModule
       void Update();
       void clear();
       void draw(objeto* o);
+      void draw(vector<GraphicsModule::objeto*>& v);
       void Render();
       void CleanupDevice();
       float f[8];
