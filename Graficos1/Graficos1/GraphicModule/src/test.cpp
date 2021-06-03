@@ -169,7 +169,8 @@ namespace GraphicsModule
         vp.TopLeftY = 0;
         //man->getConext()->RSSetViewports(vp);
         man->RSSetViewports(vp);
-        std::vector<std::string> tecnicas = {
+        std::vector<std::string> tecnicas = {};
+        paseprueba.compile("chad", {
             "#define VERTEX_LIGHT",
          "#define PIXEL_LIGHT",
          "#define NORMAL_MAP_LIGHT",
@@ -181,14 +182,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-        };
-        paseprueba.compile("", { "" });
-        //man->compileshaders("chad","#define VERTEX_LIGHT");
-        for (int i = 0; i < tecnicas.size(); i++) {
-            paseprueba.chaders.push_back(chader());
-            paseprueba.chaders[i].compile("chad", tecnicas[i]);
-        }
-        //lightcorrection.compile("tonemap","");
+            });
+        
         tecnicas = {
             "#define BASIC",
          "#define REINHARD",

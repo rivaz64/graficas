@@ -11,5 +11,8 @@ void GraphicsModule::Pass::render()
     }
 }
 void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas) {
-    std::cout << 'o' << std::endl;
+    for (int i = 0; i < tecnicas.size(); i++) {
+        chaders.push_back(chader());
+        chaders[i].compile(file, tecnicas[i]);
+    }
 }
