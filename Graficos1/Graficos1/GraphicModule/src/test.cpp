@@ -182,7 +182,7 @@ namespace GraphicsModule
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
         };
-        
+        paseprueba.compile("", { "" });
         //man->compileshaders("chad","#define VERTEX_LIGHT");
         for (int i = 0; i < tecnicas.size(); i++) {
             paseprueba.chaders.push_back(chader());
