@@ -168,7 +168,7 @@ namespace GraphicsModule
       void rezise(HWND& _hwnd, LPARAM _lParam);
       void Update();
       void clear();
-      void draw(objeto& o);
+      void draw(objeto* o);
       void Render();
       void CleanupDevice();
       float f[8];

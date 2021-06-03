@@ -79,7 +79,7 @@ namespace GraphicsModule {
 
 
 
-	void manager::draw(objeto& o, Buffer& changeveryFrameB, chader& chad)
+	void manager::draw(objeto* o, Buffer& changeveryFrameB, chader& chad)
 	{
 #ifdef openGL
 		glActiveTexture(GL_TEXTURE0);
@@ -104,13 +104,13 @@ namespace GraphicsModule {
 		XMMATRIX g_World;
 		CBChangesEveryFrame cb;
 		
-		g_World = XMMatrixMultiply(XMMatrixScaling(o.size[0], o.size[1], o.size[2]), XMMatrixTranslation(o.posi[0], o.posi[1], o.posi[2]));
-		g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o.rot[0]/180.f*PI, o.rot[1] / 180.f * PI, o.rot[2] / 180.f * PI), g_World);
+		g_World = XMMatrixMultiply(XMMatrixScaling(o->size[0], o->size[1], o->size[2]), XMMatrixTranslation(o->posi[0], o->posi[1], o->posi[2]));
+		g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o->rot[0]/180.f*PI, o->rot[1] / 180.f * PI, o->rot[2] / 180.f * PI), g_World);
 		cb.mWorld = XMMatrixTranspose(g_World);
 
 		devcon.UpdateSubresource(changeveryFrameB, &cb);
 #endif
-		for (mesh* mo : (o.mod->modelo)) {
+		for (mesh* mo : (o->mod->modelo)) {
 #ifdef openGL
 			if (mo->material.size() > 1) {
 				glActiveTexture(GL_TEXTURE0);

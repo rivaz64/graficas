@@ -6,6 +6,7 @@
 #include<string>
 #include <vector>
 #include <renderer.h>
+#include<objeto.h>
 namespace GraphicsModule {
 	class Pass
 	{
@@ -19,7 +20,7 @@ namespace GraphicsModule {
 		Renderer ren;
 		static bool first;
 		void compile(std::string file, std::vector<std::string> tecnicas);
-		void render();
+		void render();// std::vector<objeto*>);
 	};
 }
 

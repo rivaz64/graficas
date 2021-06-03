@@ -33,7 +33,7 @@ HWND g_hwnd=nullptr;
 GraphicsModule::test MiObj;
 GraphicsModule::Textura tx;
 GraphicsModule::objeto pitola, pitola0, rana;
-vector<GraphicsModule::objeto> objects;
+vector<GraphicsModule::objeto*> objects;
 GraphicsModule::mesh mesho;
 char* nombre = new char[64];
 string chnom = "qwerty";
@@ -140,7 +140,7 @@ void loadModel(string estefile) {
     _splitpath_s(estefile.c_str(), drive, _MAX_DRIVE,dir, _MAX_DIR,file , _MAX_FNAME, ext, _MAX_EXT);
     string sfile = file;
     if (true/*std::find(filenames.begin(), filenames.end(), sfile) == filenames.end()*/) {
-        objects.push_back(GraphicsModule::objeto());
+        objects.push_back(new GraphicsModule::objeto);
         filenames.push_back(sfile);
         const aiScene* scene = importer.ReadFile(estefile, NULL);
         int numvertices = 0;
@@ -242,11 +242,11 @@ void loadModel(string estefile) {
         }
 
 
-        objects[objects.size() - 1].mod = mes;
+        objects[objects.size() - 1]->mod = mes;
         if (objects.size() > 1)
-            MiObj.fpl = &objects[1];
+            MiObj.fpl = objects[1];
         if (objects.size() > 2)
-            MiObj.fsl = &objects[2];
+            MiObj.fsl = objects[2];
         /*if (objects.size() > 3)
             MiObj.pases[0].objts.push_back(&objects[objects.size()-1]);*/
     }
@@ -279,9 +279,9 @@ void UIRender()
         }
 
         if (cual >= 0 && cual < objects.size()) {
-            ImGui::DragFloat3("location", objects[cual].posi, .001f);
-            ImGui::DragFloat3("size", objects[cual].size, .001f);
-            ImGui::DragFloat3("rotation", objects[cual].rot, .1f);
+            ImGui::DragFloat3("location", objects[cual]->posi, .001f);
+            ImGui::DragFloat3("size", objects[cual]->size, .001f);
+            ImGui::DragFloat3("rotation", objects[cual]->rot, .1f);
         }
 
 
@@ -431,15 +431,15 @@ int main()
     
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl","origin");
     for (int i = 0; i < 3; i++) {
-        objects[0].size[i] = .002f;
+        objects[0]->size[i] = .002f;
     }
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl", "pointlight");
     for (int i = 0; i < 3; i++) {
-        objects[1].size[i] = .002f;
+        objects[1]->size[i] = .002f;
     }
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl", "spotlight");
     for (int i = 0; i < 3; i++) {
-        objects[2].size[i] = .002f;
+        objects[2]->size[i] = .002f;
     }
     //MiObj.fpl = &objects[1];
   // main loop
@@ -455,7 +455,7 @@ int main()
     {
         MiObj.Update();
         MiObj.clear();
-        for (GraphicsModule::objeto& i : objects)
+        for (GraphicsModule::objeto* i : objects)
             MiObj.draw(i);
         UIRender();
         MiObj.Render();

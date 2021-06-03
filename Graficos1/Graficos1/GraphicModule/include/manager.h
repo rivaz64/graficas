@@ -58,7 +58,7 @@ namespace GraphicsModule {
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);
         void createrendertarget(RenderTargetView& rtv);
         void RSSetViewports(Viewport& vp);
-        void draw(objeto &o,  Buffer& changeveryFrameB,chader& chad);
+        void draw(objeto *o,  Buffer& changeveryFrameB,chader& chad);
         void setrenderfortextur(RenderTargetView& rtv);
         //void compileshaders(std::string file,string tecnica);
         //HRESULT compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,VertexShader& vs ,InputLayout& il, string tecnica);

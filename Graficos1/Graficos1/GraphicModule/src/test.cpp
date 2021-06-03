@@ -498,7 +498,7 @@ namespace GraphicsModule
     paseprueba.render();
   }
   
-  void test::draw(objeto& o)
+  void test::draw(objeto* o)
   {
       man->draw(o, translation, paseprueba.chaders[paseprueba.chadernum]);
       //chaders[11].setShader();
