@@ -138,7 +138,7 @@ namespace GraphicsModule
             return hr;
         
         //man->createrendertarget(deferedtv);
-        mainrender.init(FORMAT::UNKNOWN,FORMAT::FLOAT,false);
+        //mainrender.init(FORMAT::UNKNOWN,FORMAT::FLOAT,false);
         defered.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT,true);
 
         if (FAILED(hr))
@@ -320,9 +320,9 @@ namespace GraphicsModule
     }
     void test::rezise(HWND& _hwnd, LPARAM _lParam)
     {
-        man->getSwapchain()->rezise(_lParam,mainrender.rtv, true);
+        //man->getSwapchain()->rezise(_lParam,mainrender.rtv, true);
 
-        man->getConext()->resizewindow(cam, _hwnd, mainrender.rtv, proyection);
+        //man->getConext()->resizewindow(cam, _hwnd, mainrender.rtv, proyection);
         //man->setrenderfortextur(rtv);
     }
     void test::Update() {
@@ -456,8 +456,8 @@ namespace GraphicsModule
             defered.clearTargets();
         }
         else {
-            mainrender.setTargets();
-            mainrender.clearTargets();
+            paseprueba.ren.setTargets();
+            paseprueba.ren.clearTargets();
         }
 #ifdef openGL
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -516,8 +516,8 @@ namespace GraphicsModule
 
           //lightcorrection[tonenum].setShader();
           defpas.render();
-          mainrender.setTargets();
-          mainrender.clearTargets();
+          paseprueba.ren.setTargets();
+          paseprueba.ren.clearTargets();
 #ifdef directX
           man->getConext()->get()->PSSetShaderResources(0, 1, &defered.rtv.srv);
 #endif

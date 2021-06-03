@@ -122,7 +122,7 @@ namespace GraphicsModule
       camera* cam;
       Textura screen;
       //DepthStencil depstencil;
-      Renderer mainrender;
+      //Renderer mainrender;
       Renderer defered;
       
       //DepthStencil depdefered;

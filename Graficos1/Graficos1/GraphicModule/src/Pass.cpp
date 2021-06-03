@@ -1,5 +1,6 @@
 #include "Pass.h"
 #include<iostream>
+bool  GraphicsModule::Pass::first=true;
 void GraphicsModule::Pass::render()
 {
     chaders[chadernum].setShader();
@@ -11,6 +12,10 @@ void GraphicsModule::Pass::render()
     }
 }
 void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas) {
+    if (first) {
+        first = false;
+        ren.init(FORMAT::UNKNOWN, FORMAT::FLOAT, false);
+    }
     for (int i = 0; i < tecnicas.size(); i++) {
         chaders.push_back(chader());
         chaders[i].compile(file, tecnicas[i]);

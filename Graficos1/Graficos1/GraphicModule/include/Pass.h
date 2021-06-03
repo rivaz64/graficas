@@ -5,6 +5,7 @@
 #include<chader.h>
 #include<string>
 #include <vector>
+#include <renderer.h>
 namespace GraphicsModule {
 	class Pass
 	{
@@ -15,6 +16,8 @@ namespace GraphicsModule {
 		std::map<int, Buffer*> pc;
 		std::map<int, Buffer*> pt;
 		std::map<int, Buffer*> vt;
+		Renderer ren;
+		static bool first;
 		void compile(std::string file, std::vector<std::string> tecnicas);
 		void render();
 	};
