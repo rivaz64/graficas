@@ -139,7 +139,7 @@ namespace GraphicsModule
         
         //man->createrendertarget(deferedtv);
         //mainrender.init(FORMAT::UNKNOWN,FORMAT::FLOAT,false);
-        defered.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT,true);
+        //defered.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT,true);
 
         if (FAILED(hr))
             return hr;
@@ -159,7 +159,11 @@ namespace GraphicsModule
 #endif
         pantaia.indices = new unsigned int[6]{ 1,0,2,1,2,3 };
         pantaia.init(4, 6);
-        screen.loadfromfile("bitco.dds", false);
+        man->screen = new objeto;
+        man->screen->mod = new model;
+        man->screen->mod->modelo = {&pantaia};
+        man->screen->mod->modelo[0]->material.push_back(new Textura);
+        //screen.loadfromfile("bitco.dds", false);
         Viewport vp;
         vp.Width = (FLOAT)width;
         vp.Height = (FLOAT)heigh;
@@ -182,8 +186,9 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            });
-        
+            },true,1);
+        Gbuffer.compile("Gbuffer", { "" },false,2);
+        Copy.compile("copy", { "" }, true,1);
         tecnicas = {
             "#define BASIC",
          "#define REINHARD",
@@ -276,7 +281,9 @@ namespace GraphicsModule
         paseprueba.pc.insert({ 6, &specularb });
         paseprueba.pc.insert({ 7, &Ambilight });
         defpas.pc.insert({ 0,&exposure });
-        
+        Gbuffer.vc.insert({ 0, &translation });
+        Gbuffer.vc.insert({ 1, &view });
+        Gbuffer.vc.insert({ 2, &proyection });
 #ifdef directX
         D3D11_SAMPLER_DESC sampDesc;
         ZeroMemory(&samsta.desc, sizeof(samsta.desc));
@@ -506,7 +513,15 @@ namespace GraphicsModule
 
   void test::draw(vector<GraphicsModule::objeto*>& v)
   {
-      paseprueba.render(v);
+      if (deferar) {
+          Gbuffer.render(v);
+          Copy.render({ man->screen });
+
+      }
+      else {
+          paseprueba.render(v);
+      }
+      
   }
   
   void test::Render()
@@ -516,7 +531,7 @@ namespace GraphicsModule
           solounaves = false;
           D3DX11SaveTextureToFile(man->getConext()->get(), mainrender.tex.get, D3DX11_IFF_JPG, "screenchot.jpg");
       }*/
-      if (deferar) {
+      /*if (deferar) {
 
           //lightcorrection[tonenum].setShader();
           //defpas.render();
@@ -541,7 +556,7 @@ namespace GraphicsModule
           man->getConext()->IASetVertexBuffers(pantaia.getvertex());
           man->getConext()->IASetIndexBuffer(pantaia.getindices());
           man->getConext()->draw(pantaia.indexnum);
-      }
+      }*/
       
       
     man->getSwapchain()->Present();

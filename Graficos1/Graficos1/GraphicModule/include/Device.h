@@ -52,7 +52,7 @@ namespace GraphicsModule {
 #ifdef directX
 		void createVSwithInput(ID3D11VertexShader** vs, ID3D11InputLayout** il, ID3DBlob* Blob);
 #endif
-		void CreateRenderTargetView(RenderTargetView& rtv,bool des);
+		void CreateRenderTargetView(RenderTargetView& rtv,bool des,int n);
 		void CreateTexture2D(Textura& tx);
 		void CreateDepthStencilView(DepthStencil& ds);
 
@@ -60,7 +60,7 @@ namespace GraphicsModule {
 
 
 		void CreateShaderResourceViewFromFile(LPCSTR file);
-		void CreateShaderResourceView(RenderTargetView& rtv);
+		void CreateShaderResourceView(RenderTargetView& rtv,int n);
 #ifdef directX
 		void CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
 #endif

@@ -1,26 +1,33 @@
 #include "renderer.h"
 
 namespace GraphicsModule {
-	void Renderer::init(FORMAT f, FORMAT d,bool b)
+	void Renderer::init(FORMAT f, FORMAT d,bool b,int n)
 	{
+		size = n;
 #ifdef directX
-		tex.describe(f, BIND_FLAG::RENDER_TARGET);
-		getmanager()->getDevice()->CreateTexture2D(tex);
+		for (int i = 0; i < n; i++) {
+			tex.push_back(Textura());
+			tex[i].describe(f, BIND_FLAG::RENDER_TARGET);
+			getmanager()->getDevice()->CreateTexture2D(tex[i]);
+		}
+		
+		
 		if (b) {
 			rtv.Format = f;
 			rtv.ViewDimension = DIMENSION::TEXTURE2D;
 			rtv.textur = tex;
-			getmanager()->getDevice()->CreateRenderTargetView(rtv, true);
+
+			getmanager()->getDevice()->CreateRenderTargetView(rtv, true,n);
 			//getmanager()->getDevice()->CreateShaderResourceView(rtv);
 		}
 		else {
 			//Textura pBackBuffer;
-			getmanager()->getSwapchain()->GetBuffer(tex);
-			rtv.textur = tex;
-			getmanager()->getDevice()->CreateRenderTargetView(rtv, false);
+			getmanager()->getSwapchain()->GetBuffer(tex[0]);
+			rtv.textur =tex;
+			getmanager()->getDevice()->CreateRenderTargetView(rtv, false,n);
 
 		}
-		getmanager()->getDevice()->CreateShaderResourceView(rtv);
+		getmanager()->getDevice()->CreateShaderResourceView(rtv,n);
 		depth.textur.describe(d, BIND_FLAG::DEPTH_STENCIL);
 		depth.textur.des.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::DEPTH_STENCIL;
 		getmanager()->getDevice()->CreateTexture2D(depth.textur);
@@ -77,7 +84,10 @@ namespace GraphicsModule {
 #if openGL
 		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
 #endif
-		getmanager()->getConext()->OMSetRenderTargets(rtv, depth);
+#ifdef directX
+		getmanager()->getConext()->get()->OMSetRenderTargets(size, *rtv.get.begin(), depth.view);
+#endif
+		//getmanager()->getConext()->OMSetRenderTargets(rtv, depth);
 		getmanager()->RSSetViewports(vp);
 	}
 	void Renderer::clearTargets()
@@ -86,7 +96,7 @@ namespace GraphicsModule {
 		glClearColor(.0f, .0f, 1.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 #endif
-		getmanager()->getConext()->ClearRenderTargetView(rtv);
+		getmanager()->getConext()->ClearRenderTargetView(rtv,size);
 		getmanager()->getConext()->ClearDepthStencilView(depth);
 	}
 	void Renderer::render()

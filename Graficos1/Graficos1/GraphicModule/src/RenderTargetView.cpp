@@ -8,9 +8,9 @@ void GraphicsModule::RenderTargetView::setClearColor(std::initializer_list<float
 void GraphicsModule::RenderTargetView::release()
 {
 #ifdef  directX
-	if (get) {
-		get->Release();
-	}
+	/*if (get) {
+		*get->Release();
+	}*/
 	
 #endif //  directX
 

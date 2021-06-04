@@ -52,7 +52,7 @@ namespace GraphicsModule {
 #ifdef directX
         //HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut,string tecnica);
 #endif
-        
+        objeto* screen;
         void create(HWND g_hWnd);
         void descrivesch();
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);

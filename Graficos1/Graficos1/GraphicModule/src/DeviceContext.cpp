@@ -48,7 +48,7 @@ namespace GraphicsModule {
 	void DeviceContext::resizewindow(camera* cam, HWND& g_hWnd,RenderTargetView& rtv,Buffer& chor)
 	{
 #ifdef directX
-		g_pImmediateContext->OMSetRenderTargets(1,&rtv.get, NULL);
+		g_pImmediateContext->OMSetRenderTargets(1,rtv.get[0], NULL);
 #endif
 		RECT rc;
 		GetClientRect(g_hWnd, &rc);
@@ -83,10 +83,11 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void DeviceContext::ClearRenderTargetView(RenderTargetView& rtv)
+	void DeviceContext::ClearRenderTargetView(RenderTargetView& rtv,int n)
 	{
 #ifdef directX
-		g_pImmediateContext->ClearRenderTargetView(rtv.get, rtv.ClearColor);
+		for(int i=0;i<n;i++)
+		g_pImmediateContext->ClearRenderTargetView(*rtv.get[i], rtv.ClearColor);
 #endif
 	}
 
@@ -101,7 +102,7 @@ namespace GraphicsModule {
 	void DeviceContext::OMSetRenderTargets(RenderTargetView& r, DepthStencil& d)
 	{
 #ifdef directX
-		g_pImmediateContext->OMSetRenderTargets(1, &r.get, d.view);
+		//g_pImmediateContext->OMSetRenderTargets(1, &r.get, d.view);
 #endif
 	}
 

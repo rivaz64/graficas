@@ -16,7 +16,7 @@ namespace GraphicsModule {
 			getmanager()->createrendertarget(rtv);
 		}
 		else {
-			getmanager()->getDevice()->CreateRenderTargetView(rtv,false);
+			//getmanager()->getDevice()->CreateRenderTargetView(rtv,false);
 		}
 	}
 

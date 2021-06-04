@@ -52,8 +52,8 @@ namespace GraphicsModule {
 	{
 		Textura pBackBuffer;
 		eswap.GetBuffer(pBackBuffer);
-		rtv.textur = pBackBuffer;
-		dev.CreateRenderTargetView(rtv,false);
+		rtv.textur[0] = pBackBuffer;
+		dev.CreateRenderTargetView(rtv,false,1);
 		//pBackBuffer.release();
 	}
 
@@ -107,8 +107,10 @@ namespace GraphicsModule {
 		g_World = XMMatrixMultiply(XMMatrixScaling(o->size[0], o->size[1], o->size[2]), XMMatrixTranslation(o->posi[0], o->posi[1], o->posi[2]));
 		g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o->rot[0]/180.f*PI, o->rot[1] / 180.f * PI, o->rot[2] / 180.f * PI), g_World);
 		cb.mWorld = XMMatrixTranspose(g_World);
-
-		devcon.UpdateSubresource(*changeveryFrameB, &cb);
+		if (changeveryFrameB != NULL) {
+			devcon.UpdateSubresource(*changeveryFrameB, &cb);
+		}
+		
 #endif
 		for (mesh* mo : (o->mod->modelo)) {
 #ifdef openGL
@@ -140,7 +142,7 @@ namespace GraphicsModule {
 	void manager::setrenderfortextur(RenderTargetView& rtv)
 	{
 #ifdef  directX
-		rtv.release();
+		/*rtv.release();
 		rtv.textur.release();
 		rtv.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
 		dev.CreateTexture2D(rtv.textur);
@@ -149,7 +151,7 @@ namespace GraphicsModule {
 		rtv.MostDetailedMip = 0;
 		rtv.MipLevels = 1;
 		dev.CreateShaderResourceView(rtv);
-		dev.CreateRenderTargetView(rtv,false);
+		dev.CreateRenderTargetView(rtv,false);*/
 #endif
 	}
 

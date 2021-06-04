@@ -79,19 +79,24 @@ namespace GraphicsModule {
 
 	}
 #endif
-	void Device::CreateRenderTargetView(RenderTargetView& rtv,bool des)
+	void Device::CreateRenderTargetView(RenderTargetView& rtv,bool des,int n)
 	{
 #ifdef directX
+		for (int i = 0; i < n; i++)
+			rtv.get.push_back(new ID3D11RenderTargetView*);
+		//rtv.get = new ID3D11RenderTargetView * [n];
 		if (des) {
 			D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
 			renderTargetViewDesc.Format = (DXGI_FORMAT)rtv.Format;
 			renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 			renderTargetViewDesc.Texture2D.MipSlice = 0;
 			//renderTargetViewDesc.
-			g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, &renderTargetViewDesc, &rtv.get);
+			for(int i=0;i<n;i++)
+			g_pd3dDevice->CreateRenderTargetView(rtv.textur[i].get, &renderTargetViewDesc, rtv.get[i]);
 		}
 		else {
-			g_pd3dDevice->CreateRenderTargetView(rtv.textur.get, NULL, &rtv.get);
+			for (int i = 0; i < n; i++)
+			g_pd3dDevice->CreateRenderTargetView(rtv.textur[i].get, NULL, rtv.get[i]);
 		}
 		 
 #endif
@@ -155,16 +160,19 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void Device::CreateShaderResourceView(RenderTargetView& rtv)
+	void Device::CreateShaderResourceView(RenderTargetView& rtv,int n)
 	{
 #ifdef directX
+		for (int i = 0; i < n; i++)
+			rtv.srv.push_back(new ID3D11ShaderResourceView*);
 		D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
 		ZeroMemory(&descViewRT, sizeof(descViewRT));
 		descViewRT.Format = (DXGI_FORMAT)rtv.Format;
 		descViewRT.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;// (D3D_SRV_DIMENSION)rtv.ViewDimension;
 		descViewRT.Texture2D.MostDetailedMip = rtv.MostDetailedMip;
 		descViewRT.Texture2D.MipLevels = 1;// rtv.MipLevels;
-		g_pd3dDevice->CreateShaderResourceView(rtv.textur.get, &descViewRT, &rtv.srv);
+		for(int i=0;i<n;i++)
+		g_pd3dDevice->CreateShaderResourceView(rtv.textur[i].get, &descViewRT, rtv.srv[i]);
 #endif
 	}
 

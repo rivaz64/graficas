@@ -9,19 +9,20 @@
 #include "Textura.h"
 #include <initializer_list>
 #include "flags.h"
+#include <vector>
 namespace GraphicsModule {
 	class RenderTargetView
 	{
 	public:
 #ifdef directX
-		ID3D11RenderTargetView* get = NULL;
-		ID3D11ShaderResourceView* srv = NULL;
+		std::vector<ID3D11RenderTargetView**> get;
+		std::vector < ID3D11ShaderResourceView**> srv;
 #endif
 		FORMAT Format;
 		DIMENSION ViewDimension;
 		UINT MostDetailedMip;
 		UINT MipLevels;
-		Textura textur;
+		std::vector<Textura> textur;
 		float ClearColor[4]= { 0.0f, 0.125f, 0.3f, 1.0f };
 		void setClearColor(std::initializer_list<float> c);
 		void release();

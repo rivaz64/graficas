@@ -17,10 +17,12 @@ namespace GraphicsModule {
 		std::map<int, Buffer*> pc;
 		std::map<int, Buffer*> pt;
 		std::map<int, Buffer*> vt;
+		bool ulti;
 		Renderer ren;
 		static bool first;
-		void compile(std::string file, std::vector<std::string> tecnicas);
-		void render( std::vector<objeto*>& objts);
+		void compile(std::string file, std::vector<std::string> tecnicas,bool ultimo,int n);
+		void render( std::vector<objeto*> objts);
+		
 	};
 }
 

@@ -3,7 +3,7 @@ namespace GraphicsModule {
     void objeto::setTexture(RenderTargetView rtv)
     {
 #ifdef directX
-        //tx->srv = rtv.srv;
+        //mod->modelo[0]->material[0]->srv= rtv.srv;
 #endif
 
     }

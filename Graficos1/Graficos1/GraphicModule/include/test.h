@@ -98,6 +98,8 @@ namespace GraphicsModule
       //std::vector<pase>pases;
       Pass paseprueba;
       Pass defpas;
+      Pass Gbuffer;
+      Pass Copy;
       amblight al;
       dirlight dl;
       pointlight pl;
