@@ -65,7 +65,15 @@ namespace GraphicsModule
       float Rad;
       float dif;
   };
-
+  struct AOC
+  {
+      float sampleRadius;
+      float scale;
+      float bias;
+      float intensity;
+      int sampleIterations;
+  };
+  
   struct CBChangeOnResize
   {
 #ifdef openGL
@@ -88,7 +96,7 @@ namespace GraphicsModule
   class test
   {
       manager* man;
-      
+
   public:
       //int chadnum=0;
       //int tonenum = 0;
@@ -100,6 +108,7 @@ namespace GraphicsModule
       Pass tonemap;
       Pass Gbuffer;
       Pass lights;
+      Pass AmbientOcluccion;
       Pass Copy;
       Pass* actual;
       amblight al;
@@ -107,11 +116,12 @@ namespace GraphicsModule
       pointlight pl;
       spotlight sl;
       float specular;
-      float shinines=6.f;
+      float shinines = 6.f;
       float exp = 1;
       float expo = 1;
       float posly[3] = { 7,7,7 };
       bool cerrar = true;
+      AOC amoc;
       HWND g_hwnd;
       mesh pantaia;
 #ifdef openGL
@@ -128,13 +138,13 @@ namespace GraphicsModule
       //DepthStencil depstencil;
       //Renderer mainrender;
       Renderer defered;
-      
+
       //DepthStencil depdefered;
       //Texture screen;
       Buffer view;
       Buffer proyection;
       Buffer translation;
-      
+
       //Textura deferred;
       Buffer Ambilight;
       Buffer Dirlight;
@@ -142,9 +152,11 @@ namespace GraphicsModule
       Buffer Spotlight;
       Buffer specularb;
       Buffer exposure;
+      Buffer aob;
       bool deferar;
       bool gbuf;
       bool lightson;
+      bool sao;
       SamplerState samsta;
       //pase paseprueba;
       static test* esta;

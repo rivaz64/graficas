@@ -380,6 +380,14 @@ void UIRender()
             /*if (MiObj.gbuf) {
                 ImGui::DragInt("Gbufer", &MiObj.Gbuffer.outnum, .006f, 0, 3);
             }*/
+            ImGui::Checkbox("Ambient Oclucion", &MiObj.sao);
+            if (MiObj.sao) {
+                ImGui::DragFloat("Sample Radius", &MiObj.amoc.sampleRadius, .001f);
+                ImGui::DragFloat("Scale", &MiObj.amoc.scale, .001f);
+                ImGui::DragFloat("Bias", &MiObj.amoc.bias, .001f);
+                ImGui::DragFloat("Intensity", &MiObj.amoc.intensity, .001f);
+                ImGui::DragInt("Sample Iterations", &MiObj.amoc.sampleIterations, .036f);
+            }
             ImGui::Checkbox("acitve", &MiObj.deferar);
             if (MiObj.deferar) {
                 ImGui::DragFloat("exposure", &MiObj.exp, .001f);

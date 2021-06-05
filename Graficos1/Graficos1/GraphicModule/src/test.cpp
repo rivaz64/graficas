@@ -162,7 +162,7 @@ namespace GraphicsModule
         man->screen = new objeto;
         man->screen->mod = new model;
         man->screen->mod->modelo = {&pantaia};
-        for(int i=0;i<4;i++)
+        for(int i=0;i<5;i++)
             man->screen->material.push_back(new Textura);
         //screen.loadfromfile("bitco.dds", false);
         Viewport vp;
@@ -186,8 +186,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            },true,1);
-        Gbuffer.compile("Gbuffer", { "" },false,4);
+            }, true, { 0 });
+        Gbuffer.compile("Gbuffer", { "" }, false, { 0,1,2,3 });
         lights.compile("lights", {
             "#define VERTEX_LIGHT",
          "#define PIXEL_LIGHT",
@@ -200,7 +200,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, 1);
+            }, false, { 0 });
+        AmbientOcluccion.compile("AO", { "" }, false, { 4 });
         tonemap.compile("tonemap", {
             "#define BASIC",
          "#define REINHARD",
@@ -208,10 +209,10 @@ namespace GraphicsModule
          "#define UNCHARTED2TONEMAP",
          "#define UNCHARTED2",
          "#define ALL",
-            },false,1);
+            }, false, { 0 });
         
        
-        Copy.compile("copy", { "" }, true, 1);
+        Copy.compile("copy", { "" }, true, { 0 });
         cam = new camera;
 
         cam->seteye(0.0f, 3.0f, -6.0f);
@@ -275,7 +276,11 @@ namespace GraphicsModule
         exposure.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(exposure);
 
-
+        aob.Usage = USAGE::DEFAULT;
+        aob.ByteWidth = sizeof(float[8]);
+        aob.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        aob.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(aob);
         
         // Create the sample state
         paseprueba.vc.insert({ 0, &translation });
@@ -298,6 +303,7 @@ namespace GraphicsModule
         lights.pc.insert({ 2, &Spotlight });
         lights.pc.insert({ 3, &specularb });
         lights.pc.insert({ 4, &Ambilight });
+        AmbientOcluccion.pc.insert({ 0,&aob });
         tonemap.pc.insert({ 0,&exposure });
 #ifdef directX
         D3D11_SAMPLER_DESC sampDesc;
@@ -438,6 +444,7 @@ namespace GraphicsModule
         f[0] = exp;
         f[1] = exp+expo;
         man->getConext()->UpdateSubresource(exposure, f);
+        man->getConext()->UpdateSubresource(aob, &amoc);
 #ifdef openGL
         GLuint dirlID;
         dirlID = glGetUniformLocation(chaders[chadnum].shader, "kambience");
@@ -538,8 +545,13 @@ namespace GraphicsModule
           Gbuffer.render(v);
           if (lightson) {
               lights.render({ man->screen });
+              if (sao) {
+                  AmbientOcluccion.render({ man->screen });
+                  tonemap.render({ man->screen });
+              }
               if (deferar) {
                   tonemap.render({ man->screen });
+                  
               }
           }
           Copy.render({ man->screen });

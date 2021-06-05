@@ -21,8 +21,9 @@ namespace GraphicsModule {
 		bool ulti;
 		Renderer ren;
 		int size;
+		vector<int> outs;
 		static bool first;
-		void compile(std::string file, std::vector<std::string> tecnicas,bool ultimo,int n);
+		void compile(std::string file, std::vector<std::string> tecnicas,bool ultimo,vector<int> n);
 		void render( std::vector<objeto*> objts);
 		
 	};
