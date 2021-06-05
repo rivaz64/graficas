@@ -12,6 +12,7 @@ namespace GraphicsModule {
 	{
 	public:
 		int chadernum=0;
+		int outnum = 0;
 		std::vector<chader>chaders;
 		std::map<int, Buffer*> vc;
 		std::map<int, Buffer*> pc;
@@ -19,6 +20,7 @@ namespace GraphicsModule {
 		std::map<int, Buffer*> vt;
 		bool ulti;
 		Renderer ren;
+		int size;
 		static bool first;
 		void compile(std::string file, std::vector<std::string> tecnicas,bool ultimo,int n);
 		void render( std::vector<objeto*> objts);

@@ -162,7 +162,8 @@ namespace GraphicsModule
         man->screen = new objeto;
         man->screen->mod = new model;
         man->screen->mod->modelo = {&pantaia};
-        man->screen->mod->modelo[0]->material.push_back(new Textura);
+        for(int i=0;i<4;i++)
+            man->screen->material.push_back(new Textura);
         //screen.loadfromfile("bitco.dds", false);
         Viewport vp;
         vp.Width = (FLOAT)width;
@@ -173,7 +174,6 @@ namespace GraphicsModule
         vp.TopLeftY = 0;
         //man->getConext()->RSSetViewports(vp);
         man->RSSetViewports(vp);
-        std::vector<std::string> tecnicas = {};
         paseprueba.compile("chad", {
             "#define VERTEX_LIGHT",
          "#define PIXEL_LIGHT",
@@ -187,21 +187,31 @@ namespace GraphicsModule
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
             },true,1);
-        Gbuffer.compile("Gbuffer", { "" },false,2);
-        Copy.compile("copy", { "" }, true,1);
-        tecnicas = {
+        Gbuffer.compile("Gbuffer", { "" },false,4);
+        lights.compile("lights", {
+            "#define VERTEX_LIGHT",
+         "#define PIXEL_LIGHT",
+         "#define NORMAL_MAP_LIGHT",
+         "#define PIXEL_LIGHT\n#define PHONG",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define BLINN_PHONG",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
+            }, false, 1);
+        tonemap.compile("tonemap", {
             "#define BASIC",
          "#define REINHARD",
          "#define BURGES_DAWSON",
          "#define UNCHARTED2TONEMAP",
          "#define UNCHARTED2",
          "#define ALL",
-        };
-        for (int i = 0; i < tecnicas.size(); i++) {
-            defpas.chaders.push_back(chader());
-            defpas.chaders[i].compile("tonemap", tecnicas[i]);
-        }//*/
-
+            },false,1);
+        
+       
+        Copy.compile("copy", { "" }, true, 1);
         cam = new camera;
 
         cam->seteye(0.0f, 3.0f, -6.0f);
@@ -280,10 +290,15 @@ namespace GraphicsModule
         paseprueba.pc.insert({ 5, &Spotlight });
         paseprueba.pc.insert({ 6, &specularb });
         paseprueba.pc.insert({ 7, &Ambilight });
-        defpas.pc.insert({ 0,&exposure });
         Gbuffer.vc.insert({ 0, &translation });
         Gbuffer.vc.insert({ 1, &view });
         Gbuffer.vc.insert({ 2, &proyection });
+        lights.pc.insert({ 0, &Dirlight });
+        lights.pc.insert({ 1, &Poslight });
+        lights.pc.insert({ 2, &Spotlight });
+        lights.pc.insert({ 3, &specularb });
+        lights.pc.insert({ 4, &Ambilight });
+        tonemap.pc.insert({ 0,&exposure });
 #ifdef directX
         D3D11_SAMPLER_DESC sampDesc;
         ZeroMemory(&samsta.desc, sizeof(samsta.desc));
@@ -333,6 +348,12 @@ namespace GraphicsModule
         //man->setrenderfortextur(rtv);
     }
     void test::Update() {
+        if (lightson) {
+            actual = &lights;
+        }
+        else {
+            actual = &paseprueba;
+        }
 #ifdef openGL
         glfwMakeContextCurrent(window);
         glfwPollEvents();
@@ -513,11 +534,17 @@ namespace GraphicsModule
 
   void test::draw(vector<GraphicsModule::objeto*>& v)
   {
-      if (deferar) {
+      if (gbuf) {
           Gbuffer.render(v);
+          if (lightson) {
+              lights.render({ man->screen });
+              if (deferar) {
+                  tonemap.render({ man->screen });
+              }
+          }
           Copy.render({ man->screen });
-
       }
+      
       else {
           paseprueba.render(v);
       }

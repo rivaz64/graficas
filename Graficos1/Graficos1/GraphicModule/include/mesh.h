@@ -26,7 +26,7 @@ namespace GraphicsModule {
 		Buffer colorB;
 		unsigned int vao;
 		Buffer* getindices();
-		std::vector<Textura*> material;
+		
 		int n = 0;
 		void setindices(std::initializer_list<unsigned int> i,int in);
 		Buffer* getvertex();

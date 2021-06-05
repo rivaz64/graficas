@@ -1,12 +1,8 @@
 #include "Pass.h"
 #include<iostream>
 #include"manager.h"
-bool  GraphicsModule::Pass::first=true;
 void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
 {
-    
-    //getmanager()->draw();
-    static bool solounaves = false;
     ren.setTargets();
     ren.clearTargets();
     chaders[chadernum].setShader();
@@ -20,17 +16,15 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     for (GraphicsModule::objeto* i : objts)
         getmanager()->draw(i,vc[0], chaders[chadernum]);
     if (!ulti) {
-        /*if (solounaves) {
-            solounaves = false;
-            D3DX11SaveTextureToFile(man->getConext()->get(), mainrender.tex.get, D3DX11_IFF_JPG, "screenchot.jpg");
-        }*/
-        //getmanager()->screen->mod->modelo[0]->material[0]->srv = ren.rtv.srv;
+        for(int i=0;i<size;i++)
+        getmanager()->screen->material[i]->srv = ren.rtv.srv[i];
         //aka 47
     }
 }
 
 void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,int n) {
     ulti = ultimo;
+    size = n;
     if (ultimo) {
         ren.init(FORMAT::UNKNOWN, FORMAT::FLOAT, false,n);
     }

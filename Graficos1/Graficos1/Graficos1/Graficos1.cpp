@@ -230,7 +230,8 @@ void loadModel(string estefile) {
                             Filename += ext;
                             tx = new GraphicsModule::Textura;
                             tx->loadfromfile(Filename.c_str(), inverted);
-                            mes->modelo[mes->modelo.size() - 1]->material.push_back(tx);
+                            //mes->modelo[mes->modelo.size() - 1]
+                            objects[objects.size() - 1]->material.push_back(tx);
                             //break;
                         }
                     }
@@ -335,47 +336,56 @@ void UIRender()
             ImGui::DragFloat("radious", &MiObj.sl.Rad, .001f);
             ImGui::DragFloat("difucion", &MiObj.sl.dif, .001f);
             ImGui::ColorPicker4("color", MiObj.sl.Color);
-            
+            ImGui::TreePop();
         }
         
     }
     ImGui::End();
     if (ImGui::Begin("shaders", nullptr)) {
         if (ImGui::TreeNode("Light")) {
-            ImGui::DragInt("chader", &MiObj.paseprueba.chadernum, .01f, 0, 2);
+            ImGui::DragInt("chader", &MiObj.actual->chadernum, .01f, 0, 2);
             //ImGui::InputText("name",nombrechader,sizeof(nombrechader));
             ImGui::Checkbox("pixelight", &pixli);
-            MiObj.paseprueba.chadernum = 0;
+            MiObj.actual->chadernum = 0;
             if (pixli) {
-                MiObj.paseprueba.chadernum = 1;
+                MiObj.actual->chadernum = 1;
                 ImGui::Checkbox("Normal map", &norli);
                 ImGui::Checkbox("Phong", &pon);
                 if (norli)
-                    MiObj.paseprueba.chadernum += 1;
+                    MiObj.actual->chadernum += 1;
                 if (pon) {
-                    MiObj.paseprueba.chadernum += 2;
+                    MiObj.actual->chadernum += 2;
                     ImGui::DragFloat("shinines", &MiObj.shinines, .001f);
                     ImGui::Checkbox("Specular Map", &spek);
                     if (spek) {
-                        MiObj.paseprueba.chadernum += 2;
+                        MiObj.actual->chadernum += 2;
                     }
                     else {
                         ImGui::DragFloat("specular", &MiObj.specular, .001f);
                     }
                     ImGui::Checkbox("blinn", &blin);
                     if (blin) {
-                        MiObj.paseprueba.chadernum += 4;
+                        MiObj.actual->chadernum += 4;
                     }
                 }
             }
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("defered")) {
+            ImGui::Checkbox("Gbuf", &MiObj.gbuf);
+            if (MiObj.gbuf) {
+                ImGui::DragInt("Gbufer", &MiObj.Gbuffer.outnum, .006f, 0, 3);
+            }
+            ImGui::Checkbox("lightson", &MiObj.lightson);
+            /*if (MiObj.gbuf) {
+                ImGui::DragInt("Gbufer", &MiObj.Gbuffer.outnum, .006f, 0, 3);
+            }*/
             ImGui::Checkbox("acitve", &MiObj.deferar);
             if (MiObj.deferar) {
                 ImGui::DragFloat("exposure", &MiObj.exp, .001f);
                 ImGui::DragFloat("exponent", &MiObj.expo, .001f);
-                ImGui::DragInt("defe", &MiObj.defpas.chadernum, .006f, 0, 5);
+                ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 5);
+                
             }
             ImGui::TreePop();
         }
@@ -476,7 +486,9 @@ int main()
 #endif
   ImGui::DestroyContext();
   MiObj.CleanupDevice();
-  
+  for (GraphicsModule::objeto* o : objects) {
+      delete o;
+  }
   return (int)msg.wParam;
 }
 /*

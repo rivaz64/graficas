@@ -112,6 +112,9 @@ namespace GraphicsModule {
 		}
 		
 #endif
+		for (int m = 0; m < o->material.size(); m++) {
+			devcon.PSSetShaderResources(o->material[m], m);
+		}
 		for (mesh* mo : (o->mod->modelo)) {
 #ifdef openGL
 			if (mo->material.size() > 1) {
@@ -128,9 +131,9 @@ namespace GraphicsModule {
 			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
 #ifdef directX
-			for (int m = 0; m < mo->material.size(); m++) {
+			/*for (int m = 0; m < mo->material.size(); m++) {
 				devcon.PSSetShaderResources(mo->material[m], m);
-			}
+			}*/
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
 			devcon.draw(mo->indexnum);

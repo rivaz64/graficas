@@ -85,7 +85,7 @@ namespace GraphicsModule {
 		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
 #endif
 #ifdef directX
-		getmanager()->getConext()->get()->OMSetRenderTargets(size, *rtv.get.begin(), depth.view);
+		getmanager()->getConext()->get()->OMSetRenderTargets(size, rtv.get.data(), depth.view);
 #endif
 		//getmanager()->getConext()->OMSetRenderTargets(rtv, depth);
 		getmanager()->RSSetViewports(vp);

@@ -15,8 +15,8 @@ namespace GraphicsModule {
 	{
 	public:
 #ifdef directX
-		std::vector<ID3D11RenderTargetView**> get;
-		std::vector < ID3D11ShaderResourceView**> srv;
+		std::vector<ID3D11RenderTargetView*> get;
+		std::vector < ID3D11ShaderResourceView*> srv;
 #endif
 		FORMAT Format;
 		DIMENSION ViewDimension;

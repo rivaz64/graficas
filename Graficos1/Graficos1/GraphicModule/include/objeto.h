@@ -8,6 +8,7 @@
 namespace GraphicsModule {
 	class objeto {
 	public:
+		std::vector<Textura*> material;
 		//mesh* m;
 		model* mod;
 		int shaderid = 0;

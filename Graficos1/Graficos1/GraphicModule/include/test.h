@@ -97,9 +97,11 @@ namespace GraphicsModule
       //std::vector<chader>chaders;
       //std::vector<pase>pases;
       Pass paseprueba;
-      Pass defpas;
+      Pass tonemap;
       Pass Gbuffer;
+      Pass lights;
       Pass Copy;
+      Pass* actual;
       amblight al;
       dirlight dl;
       pointlight pl;
@@ -141,6 +143,8 @@ namespace GraphicsModule
       Buffer specularb;
       Buffer exposure;
       bool deferar;
+      bool gbuf;
+      bool lightson;
       SamplerState samsta;
       //pase paseprueba;
       static test* esta;

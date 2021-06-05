@@ -1,6 +1,12 @@
 #include "Device.h"
 #include"DeviceContext.h"
 #include "SwapChain.h"
+#ifdef directX
+#include <d3d11.h>
+#include <d3dx11.h>
+#include <d3dcompiler.h>
+#include <xnamath.h>
+#endif
 #include"test.h"
 namespace GraphicsModule {
 	HRESULT Device::create(HWND g_hWnd)
@@ -83,7 +89,7 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		for (int i = 0; i < n; i++)
-			rtv.get.push_back(new ID3D11RenderTargetView*);
+			rtv.get.push_back(NULL);
 		//rtv.get = new ID3D11RenderTargetView * [n];
 		if (des) {
 			D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -92,11 +98,11 @@ namespace GraphicsModule {
 			renderTargetViewDesc.Texture2D.MipSlice = 0;
 			//renderTargetViewDesc.
 			for(int i=0;i<n;i++)
-			g_pd3dDevice->CreateRenderTargetView(rtv.textur[i].get, &renderTargetViewDesc, rtv.get[i]);
+			g_pd3dDevice->CreateRenderTargetView(rtv.textur[i].get, &renderTargetViewDesc, &rtv.get[i]);
 		}
 		else {
 			for (int i = 0; i < n; i++)
-			g_pd3dDevice->CreateRenderTargetView(rtv.textur[i].get, NULL, rtv.get[i]);
+			g_pd3dDevice->CreateRenderTargetView(rtv.textur[i].get, NULL, &rtv.get[i]);
 		}
 		 
 #endif
@@ -164,7 +170,7 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		for (int i = 0; i < n; i++)
-			rtv.srv.push_back(new ID3D11ShaderResourceView*);
+			rtv.srv.push_back(NULL);
 		D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
 		ZeroMemory(&descViewRT, sizeof(descViewRT));
 		descViewRT.Format = (DXGI_FORMAT)rtv.Format;
@@ -172,7 +178,7 @@ namespace GraphicsModule {
 		descViewRT.Texture2D.MostDetailedMip = rtv.MostDetailedMip;
 		descViewRT.Texture2D.MipLevels = 1;// rtv.MipLevels;
 		for(int i=0;i<n;i++)
-		g_pd3dDevice->CreateShaderResourceView(rtv.textur[i].get, &descViewRT, rtv.srv[i]);
+		g_pd3dDevice->CreateShaderResourceView(rtv.textur[i].get, &descViewRT, &rtv.srv[i]);
 #endif
 	}
 
