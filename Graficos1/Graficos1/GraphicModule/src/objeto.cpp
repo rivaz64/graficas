@@ -14,4 +14,11 @@ namespace GraphicsModule {
         //tx->get = t;
 #endif
     }
+    objeto::~objeto()
+    {
+        for (Textura* t : material) {
+            delete t;
+        }
+        delete mod;
+    }
 }

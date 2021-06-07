@@ -162,9 +162,10 @@ namespace GraphicsModule
         man->screen = new objeto;
         man->screen->mod = new model;
         man->screen->mod->modelo = {&pantaia};
-        for(int i=0;i<5;i++)
+        for(int i=0;i<6;i++)
             man->screen->material.push_back(new Textura);
-        //screen.loadfromfile("bitco.dds", false);
+        ///screen.loadfromfile("Earth.dds", false,SRV_DIMENSION::TEXTURECUBE);
+        
         Viewport vp;
         vp.Width = (FLOAT)width;
         vp.Height = (FLOAT)heigh;
@@ -186,8 +187,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, true, { 0 });
-        Gbuffer.compile("Gbuffer", { "" }, false, { 0,1,2,3 });
+            }, true, { 0 },SRV_DIMENSION::TEXTURE2D);
+        Gbuffer.compile("Gbuffer", { "" }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D);
         lights.compile("lights", {
             "#define VERTEX_LIGHT",
          "#define PIXEL_LIGHT",
@@ -200,8 +201,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 });
-        AmbientOcluccion.compile("AO", { "" }, false, { 4 });
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D);
+        AmbientOcluccion.compile("AO", { "" }, false, { 4 }, SRV_DIMENSION::TEXTURE2D);
         tonemap.compile("tonemap", {
             "#define BASIC",
          "#define REINHARD",
@@ -209,10 +210,12 @@ namespace GraphicsModule
          "#define UNCHARTED2TONEMAP",
          "#define UNCHARTED2",
          "#define ALL",
-            }, false, { 0 });
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D);
         
        
-        Copy.compile("copy", { "" }, true, { 0 });
+        Copy.compile("copy", { "" }, true, { 0 },SRV_DIMENSION::TEXTURE2D);
+
+        skypas.compile("skybox", { "" }, false, {5} ,SRV_DIMENSION::TEXTURE2D);
         cam = new camera;
 
         cam->seteye(0.0f, 3.0f, -6.0f);
@@ -305,6 +308,9 @@ namespace GraphicsModule
         lights.pc.insert({ 4, &Ambilight });
         AmbientOcluccion.pc.insert({ 0,&aob });
         tonemap.pc.insert({ 0,&exposure });
+        skypas.vc.insert({ 0, &translation });
+        skypas.vc.insert({ 1, &view });
+        skypas.vc.insert({ 2, &proyection });
 #ifdef directX
         D3D11_SAMPLER_DESC sampDesc;
         ZeroMemory(&samsta.desc, sizeof(samsta.desc));
@@ -544,19 +550,24 @@ namespace GraphicsModule
       if (gbuf) {
           Gbuffer.render(v);
           if (lightson) {
-              lights.render({ man->screen });
+              
               if (sao) {
-                  AmbientOcluccion.render({ man->screen });
-                  tonemap.render({ man->screen });
+                 
               }
               if (deferar) {
                   tonemap.render({ man->screen });
-                  
               }
           }
           Copy.render({ man->screen });
       }
-      
+      else if (isky) {
+          Gbuffer.render(v);
+          skypas.render({ skypox });
+          lights.render({ man->screen });
+          AmbientOcluccion.render({ man->screen });
+          tonemap.render({ man->screen });
+          Copy.render({ man->screen });
+      }
       else {
           paseprueba.render(v);
       }

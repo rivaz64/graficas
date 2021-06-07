@@ -15,13 +15,12 @@ namespace GraphicsModule {
 		DepthStencil depth;
 		Viewport vp;
 		chader* shad;
-		
+		ID3D11RasterizerState* g_Rasterizer = NULL;
 #ifdef openGL
 		GLuint renderedTexture;
 		GLuint FramebufferName = 0;
 #endif
-		
-		void init(FORMAT f,FORMAT d,bool b,int n);
+		void init(FORMAT f,FORMAT d,bool b,int n, SRV_DIMENSION dsrv);
 		void setTargets();
 		void clearTargets();
 		void render();

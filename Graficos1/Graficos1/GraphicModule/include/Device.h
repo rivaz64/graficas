@@ -60,7 +60,7 @@ namespace GraphicsModule {
 
 
 		void CreateShaderResourceViewFromFile(LPCSTR file);
-		void CreateShaderResourceView(RenderTargetView& rtv,int n);
+		void CreateShaderResourceView(RenderTargetView& rtv,int n,SRV_DIMENSION d);
 #ifdef directX
 		void CreateBuffer(D3D11_BUFFER_DESC &bd, D3D11_SUBRESOURCE_DATA & InitData,Buffer &b);
 #endif

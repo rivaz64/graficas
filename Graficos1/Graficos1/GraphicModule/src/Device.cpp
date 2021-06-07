@@ -111,7 +111,8 @@ namespace GraphicsModule {
 	void Device::CreateTexture2D(Textura& tx)
 	{
 #ifdef directX
-		HRESULT hr = g_pd3dDevice->CreateTexture2D(&tx.des,NULL, &tx.get);
+		HRESULT hr = g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
+		
 #endif
 	}
 
@@ -166,7 +167,7 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void Device::CreateShaderResourceView(RenderTargetView& rtv,int n)
+	void Device::CreateShaderResourceView(RenderTargetView& rtv,int n,SRV_DIMENSION d)
 	{
 #ifdef directX
 		for (int i = 0; i < n; i++)
@@ -174,7 +175,7 @@ namespace GraphicsModule {
 		D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
 		ZeroMemory(&descViewRT, sizeof(descViewRT));
 		descViewRT.Format = (DXGI_FORMAT)rtv.Format;
-		descViewRT.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;// (D3D_SRV_DIMENSION)rtv.ViewDimension;
+		descViewRT.ViewDimension = (D3D11_SRV_DIMENSION)d;// (D3D_SRV_DIMENSION)rtv.ViewDimension;
 		descViewRT.Texture2D.MostDetailedMip = rtv.MostDetailedMip;
 		descViewRT.Texture2D.MipLevels = 1;// rtv.MipLevels;
 		for(int i=0;i<n;i++)

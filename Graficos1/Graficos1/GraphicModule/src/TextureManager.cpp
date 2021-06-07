@@ -45,8 +45,7 @@ namespace GraphicsModule {
 		m_inst = 0;
 	}
 
-	bool TextureManager::LoadTexture(const char* filename,
-		int inverted, Textura* tex)
+	bool TextureManager::LoadTexture(const char* filename,int inverted, Textura* tex, SRV_DIMENSION d)
 	{
 		//image format
 		FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
@@ -120,7 +119,10 @@ namespace GraphicsModule {
 		tex->des.Width = width;
 		tex->des.Height = height;
 		tex->des.MipLevels = 1;
-		tex->des.ArraySize = 1;
+		tex->des.ArraySize = 1;//esta fue modificada para cube, debria ser 1
+		if (d == SRV_DIMENSION::TEXTURECUBE) {
+			tex->des.ArraySize = 6;
+		}
 		DXGI_FORMAT formats[4] = { DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM,DXGI_FORMAT_R16G16_UNORM,DXGI_FORMAT_R10G10B10A2_UNORM };
 		tex->des.Format = formats[inverted];
 		
@@ -135,23 +137,33 @@ namespace GraphicsModule {
 		tex->des.Usage = (D3D11_USAGE)GraphicsModule::USAGE::DEFAULT;
 		tex->des.BindFlags = (UINT)GraphicsModule::BIND_FLAG::SHADER_RESOURCE;
 		tex->des.CPUAccessFlags = 0;
-		tex->des.MiscFlags = 0;
+		tex->des.MiscFlags = 0;//esta fue modificada para cube, debria ser 0
+		if (d == SRV_DIMENSION::TEXTURECUBE) {
+			tex->des.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+			D3DX11_IMAGE_LOAD_INFO loadSMInfo;
+			loadSMInfo.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+			D3DX11CreateTextureFromFile(GraphicsModule::getmanager()->getDevice()->get(), filename,
+				&loadSMInfo, 0, (ID3D11Resource**)&tex->get, 0);
+		}
+		
+		
+		if (d == SRV_DIMENSION::TEXTURE2D) {
+			GraphicsModule::getmanager()->getDevice()->CreateTexture2D(*tex);
+			unsigned int esta = FreeImage_GetPitch(dib);
+			GraphicsModule::getmanager()->getConext()->get()->UpdateSubresource(tex->get, 0, NULL, bits, FreeImage_GetPitch(dib), 0);
+		}
 
-		/*if (FAILED(getmanager()->getDevice()->CreateTexture2D(*tex)))
-		{
-			return false;
-		}/*/
-		GraphicsModule::getmanager()->getDevice()->CreateTexture2D(*tex);
-		unsigned int esta = FreeImage_GetPitch(dib);
-		GraphicsModule::getmanager()->getConext()->get()->UpdateSubresource(tex->get, 0, NULL, bits, FreeImage_GetPitch(dib), 0);
+		
+		
 		CD3D11_SHADER_RESOURCE_VIEW_DESC srvd;
 		ZeroMemory(&srvd, sizeof(srvd));
 		/*if (Flags & MODEL_LOAD_FORMAT_RGBA)
 			srvd.Format = FORMAT_R8G8B8A8_UNORM;
 		else if (Flags & MODEL_LOAD_FORMAT_BGRA)
 			srvd.Format = FORMAT_B8G8R8A8_UNORM;//*/
-		srvd.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvd.ViewDimension = (D3D11_SRV_DIMENSION)d;
 		srvd.Texture2D.MipLevels = 1; // same as orig texture
+
 		GraphicsModule::getmanager()->getDevice()->get()->CreateShaderResourceView(tex->get, &srvd, &tex->srv);//*/
 
 #endif

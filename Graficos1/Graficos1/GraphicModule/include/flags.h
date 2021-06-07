@@ -79,7 +79,14 @@ namespace GraphicsModule {
         TEXTURE2D = 3,
         TEXTURE2DARRAY = 4,
         TEXTURE2DMS = 5,
-        TEXTURE2DMSARRAY = 6
+        TEXTURE2DMSARRAY = 6,
+        TEXTURECUBE = 9,
+    };
+    enum class SRV_DIMENSION
+    {
+        
+        TEXTURE2D = 4,
+        TEXTURECUBE = 9,
     };
     enum class INPUT_C
     {

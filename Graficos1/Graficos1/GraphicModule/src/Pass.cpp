@@ -18,19 +18,18 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     if (!ulti) {
         for(int i=0;i<size;i++)
         getmanager()->screen->material[outs[i]]->srv = ren.rtv.srv[i];
-        //aka 47
     }
 }
 
-void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n) {
+void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n, SRV_DIMENSION d) {
     ulti = ultimo;
     outs = n;
     size = n.size();
     if (ultimo) {
-        ren.init(FORMAT::UNKNOWN, FORMAT::FLOAT, false, n.size());
+        ren.init(FORMAT::UNKNOWN, FORMAT::FLOAT, false, n.size(),d);
     }
     else {
-        ren.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT, true, n.size());
+        ren.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT, true, n.size(),d);
     }
     for (int i = 0; i < tecnicas.size(); i++) {
         chaders.push_back(chader());

@@ -23,7 +23,7 @@ namespace GraphicsModule {
 #endif
 
 		void describe(FORMAT f, BIND_FLAG bf);
-		void loadfromfile(LPCSTR f,int inverted);
+		void loadfromfile(LPCSTR f,int inverted, SRV_DIMENSION d);
 		void release();
 #ifdef openGL
 		unsigned int

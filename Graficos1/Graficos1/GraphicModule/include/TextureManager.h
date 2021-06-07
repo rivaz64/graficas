@@ -16,6 +16,7 @@
 #include "FreeImage.h"
 #include "Textura.h"
 #include <map>
+#include "flags.h"
 namespace GraphicsModule {
 	class TextureManager
 	{
@@ -25,9 +26,7 @@ namespace GraphicsModule {
 
 		//load a texture an make it the current texture
 		//if texID is already in use, it will be unloaded and replaced with this texture
-		bool LoadTexture(const char* filename,
-			int inverted, Textura*tex
-		);					
+		bool LoadTexture(const char* filename,int inverted, Textura*tex, SRV_DIMENSION d);
 
 		//free the memory for a texture
 		bool UnloadTexture(const unsigned int texID);

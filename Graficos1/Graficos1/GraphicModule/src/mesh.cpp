@@ -117,4 +117,9 @@ namespace GraphicsModule {
         glEnableVertexAttribArray(4);
 #endif
     }
+    mesh::~mesh()
+    {
+        delete[] points;
+        delete[] indices;
+    }
 }

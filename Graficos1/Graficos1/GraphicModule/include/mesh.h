@@ -16,6 +16,7 @@ namespace GraphicsModule {
 			float tangent[3];
 		};
 		mesh() {}
+		~mesh();
 		int indexnum;
 		vertex* points;
 

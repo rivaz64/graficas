@@ -7,14 +7,10 @@
 #include "imgui_impl_win32.h"
 #endif
 #ifdef openGL
-
-
-
 #include<glad\glad.h>
 #define GLFW_INCLUDE_NONE
 #include<glfw\glfw3.h>
 #include<glfw\glfw3native.h>
-
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #endif
@@ -124,10 +120,11 @@ HRESULT InitImgUI()
     return S_OK;
 }
 
-void loadModel(string estefile) {
+std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
     GraphicsModule::Textura* tx;//= new GraphicsModule::Textura;
-    
+    obj = new GraphicsModule::objeto;
     GraphicsModule::model* mes = new GraphicsModule::model;
+    //obj = new GraphicsModule::model;
     Assimp::Importer importer;
 
     
@@ -140,8 +137,8 @@ void loadModel(string estefile) {
     _splitpath_s(estefile.c_str(), drive, _MAX_DRIVE,dir, _MAX_DIR,file , _MAX_FNAME, ext, _MAX_EXT);
     string sfile = file;
     if (true/*std::find(filenames.begin(), filenames.end(), sfile) == filenames.end()*/) {
-        objects.push_back(new GraphicsModule::objeto);
-        filenames.push_back(sfile);
+        //objects.push_back(new GraphicsModule::objeto);
+        //filenames.push_back(sfile);
         const aiScene* scene = importer.ReadFile(estefile, NULL);
         int numvertices = 0;
         int numfaces = 0;
@@ -160,9 +157,11 @@ void loadModel(string estefile) {
                 mes->modelo[mes->modelo.size() - 1]->points[i].posi[0] = pos.x;
                 mes->modelo[mes->modelo.size() - 1]->points[i].posi[1] = pos.y;
                 mes->modelo[mes->modelo.size() - 1]->points[i].posi[2] = pos.z;
-                mes->modelo[mes->modelo.size() - 1]->points[i].normal[0] = mesh->mNormals[i].x;
-                mes->modelo[mes->modelo.size() - 1]->points[i].normal[1] = mesh->mNormals[i].y;
-                mes->modelo[mes->modelo.size() - 1]->points[i].normal[2] = mesh->mNormals[i].z;
+                if (mesh->HasNormals()) {
+                    mes->modelo[mes->modelo.size() - 1]->points[i].normal[0] = mesh->mNormals[i].x;
+                    mes->modelo[mes->modelo.size() - 1]->points[i].normal[1] = mesh->mNormals[i].y;
+                    mes->modelo[mes->modelo.size() - 1]->points[i].normal[2] = mesh->mNormals[i].z;
+                }
                 if (mesh->HasTextureCoords(0)) {
                     mes->modelo[mes->modelo.size() - 1]->points[i].uv[0] = mesh->mTextureCoords[0][i].x;
                     mes->modelo[mes->modelo.size() - 1]->points[i].uv[1] = mesh->mTextureCoords[0][i].y;
@@ -179,17 +178,17 @@ void loadModel(string estefile) {
                     if (mesh->HasTextureCoords(0)) {
                         aiVector3D deltaPos1 = mesh->mVertices[i * 3 + 1] - mesh->mVertices[i * 3];
                         aiVector3D deltaPos2 = mesh->mVertices[i * 3 + 2] - mesh->mVertices[i * 3];
-                        aiVector3D deltaUV1 = mesh->mTextureCoords[0][i * 3+1]-mesh->mTextureCoords[0][i * 3];
+                        aiVector3D deltaUV1 = mesh->mTextureCoords[0][i * 3 + 1] - mesh->mTextureCoords[0][i * 3];
                         aiVector3D deltaUV2 = mesh->mTextureCoords[0][i * 3 + 2] - mesh->mTextureCoords[0][i * 3];
                         float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
                         aiVector3D tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
                         aiVector3D bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
-                        mes->modelo[mes->modelo.size() - 1]->points[i*3].binormal[0] = bitangent.x;
-                        mes->modelo[mes->modelo.size() - 1]->points[i*3].binormal[1] = bitangent.y;
-                        mes->modelo[mes->modelo.size() - 1]->points[i*3].binormal[2] = bitangent.z;
-                        mes->modelo[mes->modelo.size() - 1]->points[i * 3+1].binormal[0] = bitangent.x;
-                        mes->modelo[mes->modelo.size() - 1]->points[i * 3+1].binormal[1] = bitangent.y;
-                        mes->modelo[mes->modelo.size() - 1]->points[i * 3+1].binormal[2] = bitangent.z;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3].binormal[0] = bitangent.x;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3].binormal[1] = bitangent.y;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3].binormal[2] = bitangent.z;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 1].binormal[0] = bitangent.x;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 1].binormal[1] = bitangent.y;
+                        mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 1].binormal[2] = bitangent.z;
                         mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].binormal[0] = bitangent.x;
                         mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].binormal[1] = bitangent.y;
                         mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].binormal[2] = bitangent.z;
@@ -204,9 +203,9 @@ void loadModel(string estefile) {
                         mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].tangent[2] = tangent.z;
 
                     }
-                    
-                }
 
+                }
+            
             }
 
             mes->modelo[mes->modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
@@ -229,9 +228,9 @@ void loadModel(string estefile) {
                             Filename = fname;
                             Filename += ext;
                             tx = new GraphicsModule::Textura;
-                            tx->loadfromfile(Filename.c_str(), inverted);
+                            tx->loadfromfile(Filename.c_str(), inverted,GraphicsModule::SRV_DIMENSION::TEXTURE2D);
                             //mes->modelo[mes->modelo.size() - 1]
-                            objects[objects.size() - 1]->material.push_back(tx);
+                            obj->material.push_back(tx);
                             //break;
                         }
                     }
@@ -243,15 +242,20 @@ void loadModel(string estefile) {
         }
 
 
-        objects[objects.size() - 1]->mod = mes;
+        obj->mod = mes;
         if (objects.size() > 1)
             MiObj.fpl = objects[1];
         if (objects.size() > 2)
             MiObj.fsl = objects[2];
+        return sfile;
         /*if (objects.size() > 3)
             MiObj.pases[0].objts.push_back(&objects[objects.size()-1]);*/
     }
     
+}
+void loadModel(string estefile) {
+    objects.push_back(NULL);
+    filenames.push_back(loadModel(estefile, objects[objects.size() - 1]));
 }
 void loadModel(string estefile, string name) {
     loadModel(estefile);
@@ -274,11 +278,10 @@ void UIRender()
     if (ImGui::Begin("objetos", nullptr))
     {
         
-        for (int i = 0; i < filenames.size(); i++) {
-            if (ImGui::Button(filenames[i].c_str()))
-                cual = i;
+        for (int i = 0; i < filenames.size()-3; i++) {
+            if (ImGui::Button(filenames[i+3].c_str()))
+                cual = i+3;
         }
-
         if (cual >= 0 && cual < objects.size()) {
             ImGui::DragFloat3("location", objects[cual]->posi, .001f);
             ImGui::DragFloat3("size", objects[cual]->size, .001f);
@@ -395,6 +398,7 @@ void UIRender()
                 ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 5);
                 
             }
+            ImGui::Checkbox("SkyBox", &MiObj.isky);
             ImGui::TreePop();
         }
         
@@ -446,7 +450,13 @@ int main()
         ImGui::DestroyContext();
         return 0;
     }
-    
+    loadModel("D:/github/graficas/Graficos1/Graficos1/bin/Sphere.3ds",MiObj.skypox);
+    MiObj.skypox->material.push_back(new GraphicsModule::Textura);
+    MiObj.skypox->material[0]->loadfromfile("Snow.dds", false, GraphicsModule::SRV_DIMENSION::TEXTURECUBE);
+    /*D3DX11_IMAGE_LOAD_INFO loadSMInfo;
+    loadSMInfo.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+    D3DX11CreateTextureFromFile(GraphicsModule::getmanager()->getDevice()->get(), "Earth.dds",
+        &loadSMInfo, 0, (ID3D11Resource**)&MiObj.skypox->material[0]->get, 0);*/
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl","origin");
     for (int i = 0; i < 3; i++) {
         objects[0]->size[i] = .002f;
@@ -459,6 +469,8 @@ int main()
     for (int i = 0; i < 3; i++) {
         objects[2]->size[i] = .002f;
     }
+    
+    
     //MiObj.fpl = &objects[1];
   // main loop
   MSG msg = { 0 };

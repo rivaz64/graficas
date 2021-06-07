@@ -7,7 +7,7 @@ namespace GraphicsModule {
 	class model
 	{
 	public:
-		
 		vector<mesh*> modelo;
+		~model();
 	};
 }

@@ -110,6 +110,7 @@ namespace GraphicsModule
       Pass lights;
       Pass AmbientOcluccion;
       Pass Copy;
+      Pass skypas;
       Pass* actual;
       amblight al;
       dirlight dl;
@@ -153,15 +154,18 @@ namespace GraphicsModule
       Buffer specularb;
       Buffer exposure;
       Buffer aob;
+      
       bool deferar;
       bool gbuf;
       bool lightson;
       bool sao;
+      bool isky;
       SamplerState samsta;
       //pase paseprueba;
       static test* esta;
       objeto* fpl;
       objeto* fsl;
+      objeto* skypox;
       //unsigned int shader;
       //glm::mat4 matrix;
 #ifdef directX

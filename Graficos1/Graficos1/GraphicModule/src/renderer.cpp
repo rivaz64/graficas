@@ -1,7 +1,12 @@
 #include "renderer.h"
-
+#ifdef directX
+#include <d3d11.h>
+#include <d3dx11.h>
+#include <d3dcompiler.h>
+#include <xnamath.h>
+#endif
 namespace GraphicsModule {
-	void Renderer::init(FORMAT f, FORMAT d,bool b,int n)
+	void Renderer::init(FORMAT f, FORMAT d,bool b,int n, SRV_DIMENSION dsrv)
 	{
 		size = n;
 #ifdef directX
@@ -27,7 +32,7 @@ namespace GraphicsModule {
 			getmanager()->getDevice()->CreateRenderTargetView(rtv, false,n);
 
 		}
-		getmanager()->getDevice()->CreateShaderResourceView(rtv,n);
+		getmanager()->getDevice()->CreateShaderResourceView(rtv,n,dsrv);
 		depth.textur.describe(d, BIND_FLAG::DEPTH_STENCIL);
 		depth.textur.des.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::DEPTH_STENCIL;
 		getmanager()->getDevice()->CreateTexture2D(depth.textur);
@@ -44,6 +49,11 @@ namespace GraphicsModule {
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
+		D3D11_RASTERIZER_DESC rasdes;
+		ZeroMemory(&rasdes, sizeof(rasdes));
+		rasdes.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+		rasdes.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+		getmanager()->getDevice()->get()->CreateRasterizerState(&rasdes, &g_Rasterizer);
 #endif
 #ifdef openGL
 		if (b) {
@@ -89,6 +99,7 @@ namespace GraphicsModule {
 #endif
 		//getmanager()->getConext()->OMSetRenderTargets(rtv, depth);
 		getmanager()->RSSetViewports(vp);
+		getmanager()->getConext()->get()->RSSetState(g_Rasterizer);
 	}
 	void Renderer::clearTargets()
 	{
