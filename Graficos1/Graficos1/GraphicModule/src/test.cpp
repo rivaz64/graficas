@@ -162,8 +162,13 @@ namespace GraphicsModule
         man->screen = new objeto;
         man->screen->mod = new model;
         man->screen->mod->modelo = {&pantaia};
+        man->saves = new objeto;
+        man->saves->mod = new model;
+        man->saves->mod->modelo = { &pantaia };
         for(int i=0;i<6;i++)
             man->screen->material.push_back(new Textura);
+        for (int i = 0; i < 9; i++)
+            man->saves->material.push_back(new Textura);
         ///screen.loadfromfile("Earth.dds", false,SRV_DIMENSION::TEXTURECUBE);
         
         Viewport vp;
@@ -187,8 +192,20 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, true, { 0 },SRV_DIMENSION::TEXTURE2D);
-        Gbuffer.compile("Gbuffer", { "" }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D);
+            }, false, { 0 },SRV_DIMENSION::TEXTURE2D);
+        Gbuffer.compile("Gbuffer", {
+            "#define VERTEX_LIGHT",
+         "#define PIXEL_LIGHT",
+         "#define NORMAL_MAP_LIGHT",
+         "#define PIXEL_LIGHT\n#define PHONG",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define BLINN_PHONG",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
+            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D);
         lights.compile("lights", {
             "#define VERTEX_LIGHT",
          "#define PIXEL_LIGHT",
@@ -547,7 +564,7 @@ namespace GraphicsModule
 
   void test::draw(vector<GraphicsModule::objeto*>& v)
   {
-      if (gbuf) {
+      /*if (gbuf) {
           Gbuffer.render(v);
           if (lightson) {
               
@@ -559,56 +576,30 @@ namespace GraphicsModule
               }
           }
           Copy.render({ man->screen });
-      }
-      else if (isky) {
+      }*/
+      Pass::outn = 0;
+      for (int i = 0; i < 6; i++)
+          getmanager()->screen->material[i]->srv = NULL;
+      lights.chadernum = Gbuffer.chadernum;
+      if (deferar) {
           Gbuffer.render(v);
-          skypas.render({ skypox });
-          lights.render({ man->screen });
+           lights.render({ man->screen });
           AmbientOcluccion.render({ man->screen });
           tonemap.render({ man->screen });
+          skypas.render({ skypox });
           Copy.render({ man->screen });
       }
       else {
+          //skypas.render({ skypox });
           paseprueba.render(v);
+          //tonemap.render({ man->screen });
+          Copy.render({ man->screen });
       }
       
   }
   
   void test::Render()
   {
-      /*static bool solounaves = true;
-      if (solounaves) {
-          solounaves = false;
-          D3DX11SaveTextureToFile(man->getConext()->get(), mainrender.tex.get, D3DX11_IFF_JPG, "screenchot.jpg");
-      }*/
-      /*if (deferar) {
-
-          //lightcorrection[tonenum].setShader();
-          //defpas.render();
-          paseprueba.ren.setTargets();
-          paseprueba.ren.clearTargets();
-#ifdef directX
-          man->getConext()->get()->PSSetShaderResources(0, 1, &defered.rtv.srv);
-#endif
-#ifdef openGL
-          GLuint Id;
-          Id = glGetUniformLocation(lightcorrection[tonenum].shader, "light");
-          glUniform1i(Id, 0);
-          Id = glGetUniformLocation(lightcorrection[tonenum].shader, "exposure");
-          glUniform1f(Id, exp);
-          glActiveTexture(GL_TEXTURE0);
-          glBindTexture(GL_TEXTURE_2D, defered.renderedTexture);
-          glBindVertexArray(pantaia.vao);
-          glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, pantaia.indexnum, GL_UNSIGNED_INT, 0);
-          //glUniform1f(dirlID, al.k);
-#endif
-          //man->getConext()->get()->PSSetShaderResources(0, 1, &screen.srv);
-          man->getConext()->IASetVertexBuffers(pantaia.getvertex());
-          man->getConext()->IASetIndexBuffer(pantaia.getindices());
-          man->getConext()->draw(pantaia.indexnum);
-      }*/
-      
-      
     man->getSwapchain()->Present();
 #ifdef openGL
     glfwSwapBuffers(window);
@@ -624,7 +615,4 @@ namespace GraphicsModule
       glfwDestroyWindow(window);
 #endif
   }
-
-  
- 
 }

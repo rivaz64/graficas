@@ -274,7 +274,21 @@ void UIRender()
 #endif
     ImGui::NewFrame();
     std::string name ="pitola";
-    // example window
+    if (ImGui::Begin("shader resourse views", nullptr)) {
+        for (int i = 0; i < 8; i++)
+        {
+            ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->material[i]->srv), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+
+        }
+        //if (cual >= 3 && cual < objects.size()) {
+          //  ImGui::Image((ImTextureID)objects[cual]->material[0]->srv, ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+
+            /*for (GraphicsModule::mesh* i : objects[cual]->mod->modelo) {
+                ImGui::Image((ImTextureID)i->material[0]->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+            }*/
+        //}
+    }
+    ImGui::End();
     if (ImGui::Begin("objetos", nullptr))
     {
         
@@ -311,9 +325,11 @@ void UIRender()
                 ImGui::Image((ImTextureID)i->material[0]->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
             }
         }*/
-        /*for (GraphicsModule::objeto& i : objects) 
-            ImGui::Image((ImTextureID)i.tx->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
-    */}
+        
+
+        //for (GraphicsModule::objeto& i : objects) 
+          //  ImGui::Image((ImTextureID)i.tx->geter(), ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+    }
     ImGui::End();
     if (ImGui::Begin("lights", nullptr)) {
         if (ImGui::TreeNode("Ambience Light")) {
@@ -346,57 +362,65 @@ void UIRender()
     ImGui::End();
     if (ImGui::Begin("shaders", nullptr)) {
         if (ImGui::TreeNode("Light")) {
-            ImGui::DragInt("chader", &MiObj.actual->chadernum, .01f, 0, 2);
+            ImGui::DragInt("chader", &MiObj.Gbuffer.chadernum, .01f, 0, 2);
             //ImGui::InputText("name",nombrechader,sizeof(nombrechader));
             ImGui::Checkbox("pixelight", &pixli);
-            MiObj.actual->chadernum = 0;
+            MiObj.Gbuffer.chadernum = 0;
             if (pixli) {
-                MiObj.actual->chadernum = 1;
+                MiObj.Gbuffer.chadernum = 1;
                 ImGui::Checkbox("Normal map", &norli);
                 ImGui::Checkbox("Phong", &pon);
                 if (norli)
-                    MiObj.actual->chadernum += 1;
+                    MiObj.Gbuffer.chadernum += 1;
                 if (pon) {
-                    MiObj.actual->chadernum += 2;
+                    MiObj.Gbuffer.chadernum += 2;
                     ImGui::DragFloat("shinines", &MiObj.shinines, .001f);
                     ImGui::Checkbox("Specular Map", &spek);
                     if (spek) {
-                        MiObj.actual->chadernum += 2;
+                        MiObj.Gbuffer.chadernum += 2;
                     }
                     else {
                         ImGui::DragFloat("specular", &MiObj.specular, .001f);
                     }
                     ImGui::Checkbox("blinn", &blin);
                     if (blin) {
-                        MiObj.actual->chadernum += 4;
+                        MiObj.Gbuffer.chadernum += 4;
                     }
                 }
             }
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Ambient Oclucion")) {
+            ImGui::DragFloat("Sample Radius", &MiObj.amoc.sampleRadius, .001f);
+            ImGui::DragFloat("Scale", &MiObj.amoc.scale, .001f);
+            ImGui::DragFloat("Bias", &MiObj.amoc.bias, .001f);
+            ImGui::DragFloat("Intensity", &MiObj.amoc.intensity, .001f);
+            ImGui::DragInt("Sample Iterations", &MiObj.amoc.sampleIterations, .036f);
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Tone Correction")) {
+
+            ImGui::DragFloat("exposure", &MiObj.exp, .001f);
+            ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 5);
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("defered")) {
             ImGui::Checkbox("Gbuf", &MiObj.gbuf);
             if (MiObj.gbuf) {
                 ImGui::DragInt("Gbufer", &MiObj.Gbuffer.outnum, .006f, 0, 3);
+
             }
             ImGui::Checkbox("lightson", &MiObj.lightson);
             /*if (MiObj.gbuf) {
                 ImGui::DragInt("Gbufer", &MiObj.Gbuffer.outnum, .006f, 0, 3);
             }*/
-            ImGui::Checkbox("Ambient Oclucion", &MiObj.sao);
-            if (MiObj.sao) {
-                ImGui::DragFloat("Sample Radius", &MiObj.amoc.sampleRadius, .001f);
-                ImGui::DragFloat("Scale", &MiObj.amoc.scale, .001f);
-                ImGui::DragFloat("Bias", &MiObj.amoc.bias, .001f);
-                ImGui::DragFloat("Intensity", &MiObj.amoc.intensity, .001f);
-                ImGui::DragInt("Sample Iterations", &MiObj.amoc.sampleIterations, .036f);
-            }
             ImGui::Checkbox("acitve", &MiObj.deferar);
+
             if (MiObj.deferar) {
                 ImGui::DragFloat("exposure", &MiObj.exp, .001f);
                 ImGui::DragFloat("exponent", &MiObj.expo, .001f);
                 ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 5);
-                
+                MiObj.actual = &MiObj.Gbuffer;
             }
             ImGui::Checkbox("SkyBox", &MiObj.isky);
             ImGui::TreePop();

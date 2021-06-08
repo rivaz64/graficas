@@ -1,6 +1,7 @@
 #include "Pass.h"
 #include<iostream>
 #include"manager.h"
+int GraphicsModule::Pass::outn=0;
 void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
 {
     ren.setTargets();
@@ -16,8 +17,13 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     for (GraphicsModule::objeto* i : objts)
         getmanager()->draw(i,vc[0], chaders[chadernum]);
     if (!ulti) {
-        for(int i=0;i<size;i++)
-        getmanager()->screen->material[outs[i]]->srv = ren.rtv.srv[i];
+        for (int i = 0; i < size; i++)
+        {
+            getmanager()->saves->material[outn]->srv = ren.rtv.srv[i];
+            getmanager()->screen->material[outs[i]]->srv = ren.rtv.srv[i];
+            outn++;
+        }
+        
     }
 }
 

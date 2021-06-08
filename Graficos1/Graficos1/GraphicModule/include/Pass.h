@@ -13,6 +13,7 @@ namespace GraphicsModule {
 	public:
 		int chadernum=0;
 		int outnum = 0;
+		static int outn;
 		std::vector<chader>chaders;
 		std::map<int, Buffer*> vc;
 		std::map<int, Buffer*> pc;
