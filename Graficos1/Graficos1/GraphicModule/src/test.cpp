@@ -227,6 +227,12 @@ namespace GraphicsModule
          "#define UNCHARTED2TONEMAP",
          "#define UNCHARTED2",
          "#define ALL",
+          "#define BASIC\n#define DEFFERED",
+         "#define REINHARD\n#define DEFFERED",
+         "#define BURGES_DAWSON\n#define DEFFERED",
+         "#define UNCHARTED2TONEMAP\n#define DEFFERED",
+         "#define UNCHARTED2\n#define DEFFERED",
+         "#define ALL\n#define DEFFERED",
             }, false, { 0 }, SRV_DIMENSION::TEXTURE2D);
         
        
@@ -592,7 +598,7 @@ namespace GraphicsModule
       else {
           //skypas.render({ skypox });
           paseprueba.render(v);
-          //tonemap.render({ man->screen });
+          tonemap.render({ man->screen });
           Copy.render({ man->screen });
       }
       

@@ -401,7 +401,7 @@ void UIRender()
         if (ImGui::TreeNode("Tone Correction")) {
 
             ImGui::DragFloat("exposure", &MiObj.exp, .001f);
-            ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 5);
+            ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 11);
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("defered")) {
@@ -415,13 +415,15 @@ void UIRender()
                 ImGui::DragInt("Gbufer", &MiObj.Gbuffer.outnum, .006f, 0, 3);
             }*/
             ImGui::Checkbox("acitve", &MiObj.deferar);
-
+            MiObj.tonemap.chadernum %= 6;
             if (MiObj.deferar) {
                 ImGui::DragFloat("exposure", &MiObj.exp, .001f);
                 ImGui::DragFloat("exponent", &MiObj.expo, .001f);
                 ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 5);
                 MiObj.actual = &MiObj.Gbuffer;
+                MiObj.tonemap.chadernum += 6;
             }
+          
             ImGui::Checkbox("SkyBox", &MiObj.isky);
             ImGui::TreePop();
         }
