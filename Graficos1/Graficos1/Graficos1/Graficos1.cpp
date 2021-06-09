@@ -140,6 +140,9 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
         //objects.push_back(new GraphicsModule::objeto);
         //filenames.push_back(sfile);
         const aiScene* scene = importer.ReadFile(estefile, NULL);
+        if (scene == NULL) {
+            return "";
+        }
         int numvertices = 0;
         int numfaces = 0;
         std::string Filename = "";
@@ -362,29 +365,37 @@ void UIRender()
     ImGui::End();
     if (ImGui::Begin("shaders", nullptr)) {
         if (ImGui::TreeNode("Light")) {
-            ImGui::DragInt("chader", &MiObj.Gbuffer.chadernum, .01f, 0, 2);
+            if (MiObj.deferar) {
+                MiObj.actual = &MiObj.Gbuffer;
+            }
+            else {
+                MiObj.actual = &MiObj.paseprueba;
+            }
+            //MiObj.actual = &MiObj.paseprueba;
+            ImGui::DragInt("chader", &MiObj.actual->chadernum, .01f, 0, 2);
+            //std::cout << MiObj.actual << std::endl << &MiObj.paseprueba << std::endl << std::endl;
             //ImGui::InputText("name",nombrechader,sizeof(nombrechader));
             ImGui::Checkbox("pixelight", &pixli);
-            MiObj.Gbuffer.chadernum = 0;
+            MiObj.actual->chadernum = 0;
             if (pixli) {
-                MiObj.Gbuffer.chadernum = 1;
+                MiObj.actual->chadernum = 1;
                 ImGui::Checkbox("Normal map", &norli);
                 ImGui::Checkbox("Phong", &pon);
                 if (norli)
-                    MiObj.Gbuffer.chadernum += 1;
+                    MiObj.actual->chadernum += 1;
                 if (pon) {
-                    MiObj.Gbuffer.chadernum += 2;
+                    MiObj.actual->chadernum += 2;
                     ImGui::DragFloat("shinines", &MiObj.shinines, .001f);
                     ImGui::Checkbox("Specular Map", &spek);
                     if (spek) {
-                        MiObj.Gbuffer.chadernum += 2;
+                        MiObj.actual->chadernum += 2;
                     }
                     else {
                         ImGui::DragFloat("specular", &MiObj.specular, .001f);
                     }
                     ImGui::Checkbox("blinn", &blin);
                     if (blin) {
-                        MiObj.Gbuffer.chadernum += 4;
+                        MiObj.actual->chadernum += 4;
                     }
                 }
             }
@@ -405,26 +416,21 @@ void UIRender()
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("defered")) {
-            ImGui::Checkbox("Gbuf", &MiObj.gbuf);
-            if (MiObj.gbuf) {
-                ImGui::DragInt("Gbufer", &MiObj.Gbuffer.outnum, .006f, 0, 3);
-
-            }
-            ImGui::Checkbox("lightson", &MiObj.lightson);
-            /*if (MiObj.gbuf) {
-                ImGui::DragInt("Gbufer", &MiObj.Gbuffer.outnum, .006f, 0, 3);
-            }*/
+            
+            
             ImGui::Checkbox("acitve", &MiObj.deferar);
             MiObj.tonemap.chadernum %= 6;
             if (MiObj.deferar) {
                 ImGui::DragFloat("exposure", &MiObj.exp, .001f);
                 ImGui::DragFloat("exponent", &MiObj.expo, .001f);
                 ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 5);
-                MiObj.actual = &MiObj.Gbuffer;
+                //MiObj.actual = &MiObj.Gbuffer;
                 MiObj.tonemap.chadernum += 6;
+                MiObj.Copy.chadernum = 1;
             }
-          
-            ImGui::Checkbox("SkyBox", &MiObj.isky);
+            else {
+                MiObj.Copy.chadernum = 0;
+            }
             ImGui::TreePop();
         }
         

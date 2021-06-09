@@ -4,8 +4,11 @@
 int GraphicsModule::Pass::outn=0;
 void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
 {
-    ren.setTargets();
-    ren.clearTargets();
+    if (setear) {
+        ren.setTargets();
+        ren.clearTargets();
+    }
+    
     chaders[chadernum].setShader();
     if(vc.size()>1)
     for (std::pair<int, Buffer*> p : vc) {
@@ -16,7 +19,7 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     }
     for (GraphicsModule::objeto* i : objts)
         getmanager()->draw(i,vc[0], chaders[chadernum]);
-    if (!ulti) {
+    if (!ulti&&setear) {
         for (int i = 0; i < size; i++)
         {
             getmanager()->saves->material[outn]->srv = ren.rtv.srv[i];
@@ -27,10 +30,11 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     }
 }
 
-void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n, SRV_DIMENSION d) {
+void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n, SRV_DIMENSION d, bool set) {
     ulti = ultimo;
     outs = n;
     size = n.size();
+    setear = set;
     if (ultimo) {
         ren.init(FORMAT::UNKNOWN, FORMAT::FLOAT, false, n.size(),d);
     }

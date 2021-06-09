@@ -110,6 +110,7 @@ namespace GraphicsModule
       Pass lights;
       Pass AmbientOcluccion;
       Pass Copy;
+      Pass random;
       Pass skypas;
       Pass* actual;
       amblight al;

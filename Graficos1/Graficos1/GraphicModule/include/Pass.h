@@ -24,7 +24,8 @@ namespace GraphicsModule {
 		int size;
 		vector<int> outs;
 		static bool first;
-		void compile(std::string file, std::vector<std::string> tecnicas,bool ultimo,vector<int> n, SRV_DIMENSION d);
+		bool setear;
+		void compile(std::string file, std::vector<std::string> tecnicas,bool ultimo,vector<int> n, SRV_DIMENSION d,bool set);
 		void render( std::vector<objeto*> objts);
 		
 	};
