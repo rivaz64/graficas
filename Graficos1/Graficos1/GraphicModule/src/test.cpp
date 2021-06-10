@@ -589,7 +589,9 @@ namespace GraphicsModule
       lights.chadernum = Gbuffer.chadernum;
       if (deferar) {
           Gbuffer.render(v);
-           lights.render({ man->screen });
+          lights.ren.setTargets();
+          man->getConext()->PSSetShaderResources(skypox->material[0], 8);
+          lights.render({ man->screen });
           AmbientOcluccion.render({ man->screen });
           tonemap.render({ man->screen });
           skypas.render({ skypox });
