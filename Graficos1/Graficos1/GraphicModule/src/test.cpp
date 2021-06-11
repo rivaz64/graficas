@@ -334,6 +334,30 @@ namespace GraphicsModule
         skypas.vc.insert({ 0, &translation });
         skypas.vc.insert({ 1, &view });
         skypas.vc.insert({ 2, &proyection });
+
+
+        /*Gbuffer.render(v);
+        lights.ren.setTargets();
+        //man->getConext()->PSSetShaderResources(skypox->material[0], 8);
+        lights.render({ man->screen });
+        AmbientOcluccion.render({ man->screen });
+        tonemap.render({ man->screen });
+        skypas.render({ skypox });
+        Copy.render({ man->screen });
+      }
+      else {
+      skypas.render({ skypox });
+      paseprueba.render(v);
+      tonemap.render({ man->screen });//*/
+      //random.render({ man->screen });
+      //Copy.render({ man->screen });
+
+
+
+        /*deferred.pases = { &Gbuffer,&lights,&AmbientOcluccion,&tonemap,&skypas,&Copy };
+        deferred.objts = { { man->screen },{ man->screen },{ man->screen },{ skypox } ,{ man->screen } };
+        forward.pases = { &paseprueba ,&skypas,&tonemap,&Copy };
+        forward.objts = { { skypox } ,{ man->screen } ,{ man->screen } };//*/
 #ifdef directX
         D3D11_SAMPLER_DESC sampDesc;
         ZeroMemory(&samsta.desc, sizeof(samsta.desc));
@@ -364,14 +388,13 @@ namespace GraphicsModule
         matrix cbChangesOnResize;
         cam->getProyectionMatrixPerspective(cbChangesOnResize);
         man->Projection = cbChangesOnResize;
-        //cbChangesOnResize.mProjection = cam->getProyectionMatrixPerspective(width, width / (FLOAT)height, 0.01f, 600.0f);
         man->getConext()->UpdateSubresource(proyection, &cbChangesOnResize);
 
  
   //Para ka textura nueva
         if (FAILED(hr))
             return hr;
-
+        //lights.pt.insert({ 8,skypox->material[0] });
         // create the rt Shader resource view
         return S_OK;
     }
@@ -570,40 +593,29 @@ namespace GraphicsModule
 
   void test::draw(vector<GraphicsModule::objeto*>& v)
   {
-      /*if (gbuf) {
-          Gbuffer.render(v);
-          if (lightson) {
-              
-              if (sao) {
-                 
-              }
-              if (deferar) {
-                  tonemap.render({ man->screen });
-              }
-          }
-          Copy.render({ man->screen });
-      }*/
+      
       Pass::outn = 0;
       for (int i = 0; i < 6; i++)
           getmanager()->screen->material[i]->srv = NULL;
       lights.chadernum = Gbuffer.chadernum;
       if (deferar) {
-          Gbuffer.render(v);
+          deferred.render(v);
+          /*Gbuffer.render(v);
           lights.ren.setTargets();
-          man->getConext()->PSSetShaderResources(skypox->material[0], 8);
+          //man->getConext()->PSSetShaderResources(skypox->material[0], 8);
           lights.render({ man->screen });
           AmbientOcluccion.render({ man->screen });
           tonemap.render({ man->screen });
           skypas.render({ skypox });
-          Copy.render({ man->screen });
+          Copy.render({ man->screen });*/
       }
       else {
-          skypas.render({ skypox });
-
+          forward.render(v);
+          /*skypas.render({ skypox });
           paseprueba.render(v);
-          tonemap.render({ man->screen });//*/
+          tonemap.render({ man->screen });//
           //random.render({ man->screen });
-          Copy.render({ man->screen });
+          Copy.render({ man->screen });*/
       }
       
   }

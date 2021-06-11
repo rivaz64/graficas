@@ -24,6 +24,7 @@
 #include<string>
 #include"renderer.h"
 #include"Pass.h"
+#include"effecto.h"
 namespace GraphicsModule
 {
   struct SimpleVertex
@@ -113,6 +114,8 @@ namespace GraphicsModule
       Pass random;
       Pass skypas;
       Pass* actual;
+      effecto deferred;
+      effecto forward;
       amblight al;
       dirlight dl;
       pointlight pl;

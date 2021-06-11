@@ -485,6 +485,11 @@ int main()
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/Sphere.3ds",MiObj.skypox);
     MiObj.skypox->material.push_back(new GraphicsModule::Textura);
     MiObj.skypox->material[0]->loadfromfile("Snow.dds", false, GraphicsModule::SRV_DIMENSION::TEXTURECUBE);
+    GraphicsModule::getmanager()->getConext()->PSSetShaderResources(MiObj.skypox->material[0], 8);
+    MiObj.deferred.pases = { &MiObj.Gbuffer,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
+    MiObj.deferred.objts = { {GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } };
+    MiObj.forward.pases = { &MiObj.paseprueba ,&MiObj.skypas,&MiObj.tonemap,&MiObj.Copy };
+    MiObj.forward.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
     /*D3DX11_IMAGE_LOAD_INFO loadSMInfo;
     loadSMInfo.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
     D3DX11CreateTextureFromFile(GraphicsModule::getmanager()->getDevice()->get(), "Earth.dds",

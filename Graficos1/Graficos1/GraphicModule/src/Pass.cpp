@@ -17,6 +17,9 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     for (std::pair<int, Buffer*> p : pc) {
         getmanager()->getConext()->get()->PSSetConstantBuffers(p.first, 1, &p.second->buf);
     }
+    for (std::pair<int, Textura*> p : pt) {
+        getmanager()->getConext()->PSSetShaderResources(p.second, p.first);
+    }
     for (GraphicsModule::objeto* i : objts)
         getmanager()->draw(i,vc[0], chaders[chadernum]);
     if (!ulti&&setear) {

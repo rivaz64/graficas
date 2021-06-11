@@ -629,6 +629,7 @@
     <ClInclude Include="include\DepthStencil.h" />
     <ClInclude Include="include\Device.h" />
     <ClInclude Include="include\DeviceContext.h" />
+    <ClInclude Include="include\effecto.h" />
     <ClInclude Include="include\flags.h" />
     <ClInclude Include="include\GraphicModule.h" />
     <ClInclude Include="include\InputLayout.h" />
@@ -660,6 +661,7 @@
     <ClCompile Include="src\DepthStencil.cpp" />
     <ClCompile Include="src\Device.cpp" />
     <ClCompile Include="src\DeviceContext.cpp" />
+    <ClCompile Include="src\effecto.cpp" />
     <ClCompile Include="src\InputLayout.cpp" />
     <ClCompile Include="src\manager.cpp" />
     <ClCompile Include="src\Matirial.cpp" />

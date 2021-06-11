@@ -7,6 +7,7 @@
 #include <vector>
 #include <renderer.h>
 #include<objeto.h>
+#include<Textura.h>
 namespace GraphicsModule {
 	class Pass
 	{
@@ -17,7 +18,7 @@ namespace GraphicsModule {
 		std::vector<chader>chaders;
 		std::map<int, Buffer*> vc;
 		std::map<int, Buffer*> pc;
-		std::map<int, Buffer*> pt;
+		std::map<int, Textura*> pt;
 		std::map<int, Buffer*> vt;
 		bool ulti;
 		Renderer ren;

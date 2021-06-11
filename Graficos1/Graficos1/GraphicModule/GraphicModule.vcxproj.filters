@@ -96,6 +96,9 @@
     <ClInclude Include="include\Pass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\effecto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\test.cpp">
@@ -165,6 +168,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Pass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\effecto.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
