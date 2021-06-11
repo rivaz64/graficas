@@ -89,11 +89,6 @@ namespace GraphicsModule
 
     HRESULT test::InitDevice()
     {
-
-
-
-
-
         man = getmanager();
 
         man->create(g_hwnd);
@@ -136,14 +131,14 @@ namespace GraphicsModule
         }
         if (FAILED(hr))
             return hr;
-        
+
         //man->createrendertarget(deferedtv);
         //mainrender.init(FORMAT::UNKNOWN,FORMAT::FLOAT,false);
         //defered.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT,true);
 
         if (FAILED(hr))
             return hr;
-       
+
         pantaia.points = new mesh::vertex[4];
 #ifdef directX
         pantaia.points[0] = { -1.f,-1.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
@@ -161,16 +156,16 @@ namespace GraphicsModule
         pantaia.init(4, 6);
         man->screen = new objeto;
         man->screen->mod = new model;
-        man->screen->mod->modelo = {&pantaia};
+        man->screen->mod->modelo = { &pantaia };
         man->saves = new objeto;
         man->saves->mod = new model;
         man->saves->mod->modelo = { &pantaia };
-        for(int i=0;i<6;i++)
+        for (int i = 0; i < 6; i++)
             man->screen->material.push_back(new Textura);
         for (int i = 0; i < 9; i++)
             man->saves->material.push_back(new Textura);
         ///screen.loadfromfile("Earth.dds", false,SRV_DIMENSION::TEXTURECUBE);
-        
+
         Viewport vp;
         vp.Width = (FLOAT)width;
         vp.Height = (FLOAT)heigh;
@@ -192,7 +187,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 },SRV_DIMENSION::TEXTURE2D,true);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+
         Gbuffer.compile("Gbuffer", {
             "#define VERTEX_LIGHT",
          "#define PIXEL_LIGHT",
@@ -205,7 +201,11 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D, true);
+            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D, true, CULING::NONE);
+        //Gbuffer.setear();
+        Gbuffer.chaders[Gbuffer.chadernum].setShader();
+
+#ifdef directX
         lights.compile("lights", {
             "#define VERTEX_LIGHT",
          "#define PIXEL_LIGHT",
@@ -218,8 +218,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true);
-        AmbientOcluccion.compile("AO", { "" }, false, { 4 }, SRV_DIMENSION::TEXTURE2D, true);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+        AmbientOcluccion.compile("AO", { "" }, false, { 4 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
         tonemap.compile("tonemap", {
             "#define BASIC",
          "#define REINHARD",
@@ -233,12 +233,13 @@ namespace GraphicsModule
          "#define UNCHARTED2TONEMAP\n#define DEFFERED",
          "#define UNCHARTED2\n#define DEFFERED",
          "#define ALL\n#define DEFFERED",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D,true);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D,true, CULING::BACK);
         
        
-        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 },SRV_DIMENSION::TEXTURE2D, true);
-        random.compile("randomnoise", { "" }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true);
-        skypas.compile("skybox", { "" }, false, {5} ,SRV_DIMENSION::TEXTURE2D, true);
+        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 },SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+        random.compile("randomnoise", { "" }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+        skypas.compile("skybox", { "" }, false, {5} ,SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+#endif
         cam = new camera;
 
         cam->seteye(0.0f, 3.0f, -6.0f);
@@ -321,9 +322,11 @@ namespace GraphicsModule
         paseprueba.pc.insert({ 5, &Spotlight });
         paseprueba.pc.insert({ 6, &specularb });
         paseprueba.pc.insert({ 7, &Ambilight });
+
         Gbuffer.vc.insert({ 0, &translation });
         Gbuffer.vc.insert({ 1, &view });
         Gbuffer.vc.insert({ 2, &proyection });
+
         lights.pc.insert({ 0, &Dirlight });
         lights.pc.insert({ 1, &Poslight });
         lights.pc.insert({ 2, &Spotlight });
@@ -498,6 +501,7 @@ namespace GraphicsModule
         man->getConext()->UpdateSubresource(exposure, f);
         man->getConext()->UpdateSubresource(aob, &amoc);
 #ifdef openGL
+        /*
         GLuint dirlID;
         dirlID = glGetUniformLocation(chaders[chadnum].shader, "kambience");
         glUniform1f(dirlID, al.k);
@@ -533,33 +537,27 @@ namespace GraphicsModule
         glUniform1f(dirlID, shinines);
         dirlID = glGetUniformLocation(chaders[chadnum].shader, "viewPosition");
         glUniform3f(dirlID, cam->eye.x, cam->eye.y, cam->eye.z);
+        */
 #endif
     }
     void test::clear()
     {
 
-        /*if (deferar) {
-            defered.setTargets();
-            defered.clearTargets();
-        }
-        else {
-            paseprueba.ren.setTargets();
-            paseprueba.ren.clearTargets();
-        }*/
+        
 #ifdef openGL
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         
         //glUseProgram(chaders[chadnum].shader);
-        chaders[chadnum].setShader();
-        glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "texture1"), 0);
+        //chaders[chadnum].setShader();
+        /*glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "texture1"), 0);
         glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "NormalMap"), 1);
         glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "SpecularMap"), 2);
         GLuint viewID = glGetUniformLocation(chaders[chadnum].shader, "view");
         GLuint proyectionID = glGetUniformLocation(chaders[chadnum].shader, "proyection");
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
-        glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));
-
+        glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));*/
+        
 
 #endif
     //man->getConext()->ClearRenderTargetView(rtv);
@@ -596,26 +594,21 @@ namespace GraphicsModule
       
       Pass::outn = 0;
       for (int i = 0; i < 6; i++)
+#ifdef directX
           getmanager()->screen->material[i]->srv = NULL;
+#endif
       lights.chadernum = Gbuffer.chadernum;
       if (deferar) {
           deferred.render(v);
-          /*Gbuffer.render(v);
-          lights.ren.setTargets();
-          //man->getConext()->PSSetShaderResources(skypox->material[0], 8);
-          lights.render({ man->screen });
-          AmbientOcluccion.render({ man->screen });
-          tonemap.render({ man->screen });
-          skypas.render({ skypox });
-          Copy.render({ man->screen });*/
+
       }
       else {
+#ifdef directX
           forward.render(v);
-          /*skypas.render({ skypox });
-          paseprueba.render(v);
-          tonemap.render({ man->screen });//
-          //random.render({ man->screen });
-          Copy.render({ man->screen });*/
+#endif
+#ifdef openGL
+          openglprueba.render(v);
+#endif
       }
       
   }

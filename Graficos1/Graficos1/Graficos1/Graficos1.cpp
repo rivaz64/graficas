@@ -280,8 +280,12 @@ void UIRender()
     if (ImGui::Begin("shader resourse views", nullptr)) {
         for (int i = 0; i < 8; i++)
         {
+#ifdef directX
             ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->material[i]->srv), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
-
+#endif
+#ifdef openGL
+            ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->material[i]->get), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+#endif
         }
         //if (cual >= 3 && cual < objects.size()) {
           //  ImGui::Image((ImTextureID)objects[cual]->material[0]->srv, ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
@@ -490,6 +494,8 @@ int main()
     MiObj.deferred.objts = { {GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } };
     MiObj.forward.pases = { &MiObj.paseprueba ,&MiObj.skypas,&MiObj.tonemap,&MiObj.Copy };
     MiObj.forward.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
+    MiObj.openglprueba.pases = { &MiObj.Gbuffer };
+    MiObj.openglprueba.objts = {};
     /*D3DX11_IMAGE_LOAD_INFO loadSMInfo;
     loadSMInfo.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
     D3DX11CreateTextureFromFile(GraphicsModule::getmanager()->getDevice()->get(), "Earth.dds",

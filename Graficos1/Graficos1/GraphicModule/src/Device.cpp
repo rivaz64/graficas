@@ -112,7 +112,13 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		HRESULT hr = g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
-		
+#endif
+#ifdef openGL
+		glGenTextures(1, &tx.get);
+		glBindTexture(GL_TEXTURE_2D, tx.get);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getmanager()->width, getmanager()->height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 #endif
 	}
 
@@ -120,6 +126,12 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		g_pd3dDevice->CreateDepthStencilView(ds.textur.get, &ds.des, &ds.view);
+#endif
+#ifdef openGL
+		glGenRenderbuffers(1, &ds.get);
+		glBindRenderbuffer(GL_RENDERBUFFER, ds.get);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, getmanager()->width, getmanager()->height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, ds.get);
 #endif
 	}
 

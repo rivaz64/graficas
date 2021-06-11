@@ -114,8 +114,11 @@ namespace GraphicsModule
       Pass random;
       Pass skypas;
       Pass* actual;
+
       effecto deferred;
       effecto forward;
+      effecto openglprueba;
+
       amblight al;
       dirlight dl;
       pointlight pl;
@@ -136,21 +139,12 @@ namespace GraphicsModule
       FEATURE_LEVEL                   g_featureLevel = FEATURE_LEVEL::LEVEL_11_0;
       UINT width;
       UINT heigh;
-      //RenderTargetView rtv;
-      //RenderTargetView deferedtv;
       camera* cam;
       Textura screen;
-      //DepthStencil depstencil;
-      //Renderer mainrender;
-      Renderer defered;
 
-      //DepthStencil depdefered;
-      //Texture screen;
       Buffer view;
       Buffer proyection;
       Buffer translation;
-
-      //Textura deferred;
       Buffer Ambilight;
       Buffer Dirlight;
       Buffer Poslight;

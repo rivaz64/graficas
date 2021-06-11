@@ -48,10 +48,16 @@
     <ClCompile Include="..\..\..\..\..\downloads\imgui-master\imgui-master\backends\imgui_impl_glfw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rasterizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\externals\glfw\glfw3.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rasterizer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

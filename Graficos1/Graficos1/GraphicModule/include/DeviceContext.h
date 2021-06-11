@@ -34,6 +34,10 @@ namespace GraphicsModule {
 		void RSSetViewports(Viewport& vp);
 		void IASetVertexBuffers(Buffer* b);
 		void IASetIndexBuffer(Buffer* b);
+
+		void VSSetConstantBuffers(int i, Buffer* b);
+		void PSSetConstantBuffers(int i, Buffer* b);
+
 		void UpdateView(camera* cam);
 		void resizewindow(camera* cam, HWND& g_hWnd, RenderTargetView &rtv, Buffer& chor);
 		void IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY pt);

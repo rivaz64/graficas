@@ -9,6 +9,9 @@ namespace GraphicsModule {
 		D3D11_DEPTH_STENCIL_VIEW_DESC des;
 		ID3D11DepthStencilView* view;
 #endif
+#ifdef openGL
+		unsigned int get;
+#endif
 		Textura textur;
 		void descrivetextur();
 		void describeview();

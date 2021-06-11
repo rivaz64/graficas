@@ -151,4 +151,16 @@ namespace GraphicsModule {
         TRIANGLESTRIP_ADJ = 13,
        
     };
+    enum class CULING {
+#ifdef directX
+        NONE=1,
+        FRONT,
+        BACK
+#endif
+#ifdef openGL
+        NONE = 0x0408,
+        FRONT = 0x0404,
+        BACK = 0x0405,
+#endif
+    };
 }

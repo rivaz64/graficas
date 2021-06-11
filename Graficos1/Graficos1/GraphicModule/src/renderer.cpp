@@ -6,17 +6,47 @@
 #include <xnamath.h>
 #endif
 namespace GraphicsModule {
-	void Renderer::init(FORMAT f, FORMAT d,bool b,int n, SRV_DIMENSION dsrv)
+#ifdef openGL
+	GLenum *Renderer::DrawBuffers = new GLenum[10]{ 
+		GL_COLOR_ATTACHMENT0,
+		GL_COLOR_ATTACHMENT1,
+		GL_COLOR_ATTACHMENT2,
+		GL_COLOR_ATTACHMENT3,
+		GL_COLOR_ATTACHMENT4,
+		GL_COLOR_ATTACHMENT5,
+		GL_COLOR_ATTACHMENT6,
+		GL_COLOR_ATTACHMENT7,
+		GL_COLOR_ATTACHMENT8,
+		GL_COLOR_ATTACHMENT9,
+	};
+#endif
+	void Renderer::init(FORMAT f, FORMAT d,bool b,int n, SRV_DIMENSION dsrv, CULING cul)
 	{
 		size = n;
-#ifdef directX
+#ifdef openGL
+		GLenum* Draws =new GLenum[n];
+#endif
 		for (int i = 0; i < n; i++) {
 			tex.push_back(Textura());
 			tex[i].describe(f, BIND_FLAG::RENDER_TARGET);
 			getmanager()->getDevice()->CreateTexture2D(tex[i]);
+#ifdef openGL
+			glFramebufferTexture(GL_FRAMEBUFFER, DrawBuffers[i], tex[i].get, 0);
+			Draws[i] = DrawBuffers[i];
+#endif
 		}
-		
-		
+#ifdef openGL
+		glDrawBuffers(n, Draws);
+#endif
+		depth.textur.describe(d, BIND_FLAG::DEPTH_STENCIL);
+#ifdef directX
+		depth.textur.des.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::DEPTH_STENCIL;
+#endif
+		getmanager()->getDevice()->CreateTexture2D(depth.textur);
+		depth.describeview();
+
+		getmanager()->getDevice()->CreateDepthStencilView(depth);
+#ifdef directX
 		if (b) {
 			rtv.Format = f;
 			rtv.ViewDimension = DIMENSION::TEXTURE2D;
@@ -33,13 +63,7 @@ namespace GraphicsModule {
 
 		}
 		getmanager()->getDevice()->CreateShaderResourceView(rtv,n,dsrv);
-		depth.textur.describe(d, BIND_FLAG::DEPTH_STENCIL);
-		depth.textur.des.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::DEPTH_STENCIL;
-		getmanager()->getDevice()->CreateTexture2D(depth.textur);
-		depth.describeview();
-		
-		//HRESULT hr;
-		getmanager()->getDevice()->CreateDepthStencilView(depth);
+		//aka iva el dep
 		/*if (FAILED(hr)) {
 			int x = 1;
 		}*/
@@ -49,13 +73,13 @@ namespace GraphicsModule {
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
-		D3D11_RASTERIZER_DESC rasdes;
-		ZeroMemory(&rasdes, sizeof(rasdes));
-		rasdes.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-		rasdes.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-		getmanager()->getDevice()->get()->CreateRasterizerState(&rasdes, &g_Rasterizer);
+		ras.create(cul);
 #endif
 #ifdef openGL
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			return ;
+#endif
+/*#ifdef openGL
 		if (b) {
 			glGenFramebuffers(1, &FramebufferName);
 			glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
@@ -86,7 +110,7 @@ namespace GraphicsModule {
 			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 				int xyz = 1;
 		}
-#endif
+#endif*/
 
 	}
 	void Renderer::setTargets()
@@ -99,7 +123,8 @@ namespace GraphicsModule {
 #endif
 		//getmanager()->getConext()->OMSetRenderTargets(rtv, depth);
 		getmanager()->RSSetViewports(vp);
-		getmanager()->getConext()->get()->RSSetState(g_Rasterizer);
+		ras.setear();
+		//getmanager()->getConext()->get()->RSSetState(g_Rasterizer);
 	}
 	void Renderer::clearTargets()
 	{

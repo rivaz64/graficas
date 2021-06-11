@@ -151,7 +151,7 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		ID3DBlob* blob = NULL;
-		HRESULT hr = CompileShaderFromFile((file + ".fx").c_str(), "VS", "vs_4_0", &blob, tecnique);
+		HRESULT hr = CompileShaderFromFile(("shadersX/"+file + ".fx").c_str(), "VS", "vs_4_0", &blob, tecnique);
 
 		if (FAILED(hr))
 		{
@@ -162,7 +162,7 @@ namespace GraphicsModule {
 		getmanager()->getDevice()->createVSwithInput(&VertexShader, &il,blob);
 		//blob->Release();
 		ID3DBlob* blo = NULL;
-		hr = CompileShaderFromFile((file + ".fx").c_str(), "PS", "ps_4_0", &blo, tecnique);
+		hr = CompileShaderFromFile(("shadersX/" + file + ".fx").c_str(), "PS", "ps_4_0", &blo, tecnique);
 		if (FAILED(hr))
 		{
 			MessageBox(NULL,
@@ -174,7 +174,7 @@ namespace GraphicsModule {
 		//blo->Release();
 #endif
 #ifdef openGL
-		shader = LoadShaders((file + "v.txt").c_str(), (file + "p.txt").c_str(), tecnique);
+		shader = LoadShaders(("shadersGL/"+file + ".vs.txt").c_str(), ("shadersGL/" + file + ".ps.txt").c_str(), tecnique);
 		
 #endif
 	}
@@ -187,6 +187,7 @@ namespace GraphicsModule {
 #endif
 #ifdef openGL
 		glUseProgram(shader);
+		getmanager()->actualchader = shader;
 #endif
 	}
 }

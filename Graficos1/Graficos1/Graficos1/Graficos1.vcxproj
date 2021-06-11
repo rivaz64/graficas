@@ -557,9 +557,11 @@
     <ClCompile Include="..\..\Externals\imgui-1.8\imgui_tables.cpp" />
     <ClCompile Include="..\..\Externals\imgui-1.8\imgui_widgets.cpp" />
     <ClCompile Include="Graficos1.cpp" />
+    <ClCompile Include="rasterizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\externals\glfw\glfw3.h" />
+    <ClInclude Include="rasterizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

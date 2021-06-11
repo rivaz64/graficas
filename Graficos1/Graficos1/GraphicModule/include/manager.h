@@ -52,6 +52,9 @@ namespace GraphicsModule {
 #ifdef directX
         //HRESULT CompileShaderFromFile(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut,string tecnica);
 #endif
+#ifdef openGL
+        int actualchader;
+#endif
         objeto* screen;
         objeto* saves;
         void create(HWND g_hWnd);

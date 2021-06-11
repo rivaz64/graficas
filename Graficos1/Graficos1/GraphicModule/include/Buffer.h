@@ -5,6 +5,7 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #endif
+#include <glm/glm.hpp>
 #include "flags.h"
 namespace GraphicsModule {
     class Buffer
@@ -15,6 +16,8 @@ namespace GraphicsModule {
 #endif // directX
 #ifdef openGL
         unsigned int buf = 0;
+    public:
+        glm::mat4 data;
 #endif
     public:
         USAGE Usage;

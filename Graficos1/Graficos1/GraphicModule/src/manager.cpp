@@ -85,19 +85,27 @@ namespace GraphicsModule {
 		glActiveTexture(GL_TEXTURE0);
 		
 		glm::mat4 Model = glm::mat4(1.0f);
-		float rotate = o.rot[0]+ o.rot[1]+ o.rot[2];
-		Model = glm::translate(Model, glm::vec3(o.posi[0], o.posi[1], o.posi[2]));
-		Model = glm::scale(Model, glm::vec3(o.size[0], o.size[1], o.size[2]));
-		if(o.rot[0]!=0)
-			Model = glm::rotate(Model, float(o.rot[0] / 180.f * PI), glm::vec3(1, 0,0));
-		if (o.rot[1] != 0)
-			Model = glm::rotate(Model, float(o.rot[1] / 180.f * PI), glm::vec3(0,1, 0));
-		if (o.rot[2] != 0)
-			Model = glm::rotate(Model, float(o.rot[2] / 180.f * PI), glm::vec3(0,0,1));
+		float rotate = o->rot[0]+ o->rot[1]+ o->rot[2];
+		Model = glm::translate(Model, glm::vec3(o->posi[0], o->posi[1], o->posi[2]));
+		Model = glm::scale(Model, glm::vec3(o->size[0], o->size[1], o->size[2]));
+		if(o->rot[0]!=0)
+			Model = glm::rotate(Model, float(o->rot[0] / 180.f * PI), glm::vec3(1, 0,0));
+		if (o->rot[1] != 0)
+			Model = glm::rotate(Model, float(o->rot[1] / 180.f * PI), glm::vec3(0,1, 0));
+		if (o->rot[2] != 0)
+			Model = glm::rotate(Model, float(o->rot[2] / 180.f * PI), glm::vec3(0,0,1));
 		
 		
 		GLuint worldID = glGetUniformLocation(chad.shader, "world");
 		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
+		if (o->material.size() > 1) {
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, o->material[0]->get);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, o->material[1]->get);
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, o->material[2]->get);
+		}
 #endif
 #ifdef directX
 		getmanager()->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
@@ -117,16 +125,6 @@ namespace GraphicsModule {
 		}
 		for (mesh* mo : (o->mod->modelo)) {
 #ifdef openGL
-			if (mo->material.size() > 1) {
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, mo->material[0]->get);
-				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, mo->material[1]->get);
-				glActiveTexture(GL_TEXTURE2);
-				glBindTexture(GL_TEXTURE_2D, mo->material[2]->get);
-			}
-			
-			
 			glBindVertexArray(mo->vao);
 			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif

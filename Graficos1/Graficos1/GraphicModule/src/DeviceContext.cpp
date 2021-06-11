@@ -2,8 +2,12 @@
 #include "camera.h"
 #include"test.h"
 #include"Viewport.h"
+#ifdef openGL
+#include<glm\gtc\type_ptr.hpp>
+#endif
+#include"Buffer.h"
 namespace GraphicsModule {
-	
+
 
 	void DeviceContext::RSSetViewports(Viewport& vp)
 	{
@@ -17,7 +21,7 @@ namespace GraphicsModule {
 		devcon.g_pImmediateContext->RSSetViewports(1, &v);*/
 	}
 
-	
+
 
 	void DeviceContext::IASetVertexBuffers(Buffer* b)
 	{
@@ -33,6 +37,27 @@ namespace GraphicsModule {
 	{
 #ifdef directX
 		g_pImmediateContext->IASetIndexBuffer(b->buf, (DXGI_FORMAT)FORMAT::R32_UINT, 0);
+#endif
+	}
+
+	void DeviceContext::VSSetConstantBuffers(int i, Buffer* b)
+	{
+#ifdef directX
+		g_pImmediateContext->VSSetConstantBuffers(i, 1, &b->buf);
+#endif
+#ifdef openGL
+		GLuint ID;
+		ID = glGetUniformLocation(getmanager()->actualchader, ("b" + std::to_string(i)).c_str());
+		glUniformMatrix4fv(ID, 1, GL_FALSE, glm::value_ptr(b->data));
+		//glUniform1f(ID, al.k);
+#endif
+		
+	}
+
+	void DeviceContext::PSSetConstantBuffers(int i, Buffer* b)
+	{
+#ifdef directX
+		g_pImmediateContext->PSSetConstantBuffers(i, 1, &b->buf);
 #endif
 	}
 
@@ -120,7 +145,7 @@ namespace GraphicsModule {
 		void* c) {
 #ifdef openGL
 		//b.Mem = &((matrix*)c)->m;
-		
+		b.data = *((glm::mat4*)c);
 #endif
 #ifdef directX
 		g_pImmediateContext->UpdateSubresource(b.buf, 0, NULL, c, 0, 0);
