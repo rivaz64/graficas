@@ -25,28 +25,40 @@ namespace GraphicsModule {
 		size = n;
 #ifdef openGL
 		GLenum* Draws =new GLenum[n];
+		glGenFramebuffers(1, &FramebufferName);
+		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
 #endif
+
 		for (int i = 0; i < n; i++) {
 			tex.push_back(Textura());
 			tex[i].describe(f, BIND_FLAG::RENDER_TARGET);
 			getmanager()->getDevice()->CreateTexture2D(tex[i]);
 #ifdef openGL
-			glFramebufferTexture(GL_FRAMEBUFFER, DrawBuffers[i], tex[i].get, 0);
+			glFramebufferTexture(GL_FRAMEBUFFER, DrawBuffers[i], getmanager()->screen->material[i]->get, 0);
 			Draws[i] = DrawBuffers[i];
 #endif
 		}
+
 #ifdef openGL
 		glDrawBuffers(n, Draws);
 #endif
+
 		depth.textur.describe(d, BIND_FLAG::DEPTH_STENCIL);
+
 #ifdef directX
 		depth.textur.des.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::DEPTH_STENCIL;
 #endif
+
 		getmanager()->getDevice()->CreateTexture2D(depth.textur);
 		depth.describeview();
 
 		getmanager()->getDevice()->CreateDepthStencilView(depth);
-#ifdef directX
+
+
+
+
+
+
 		if (b) {
 			rtv.Format = f;
 			rtv.ViewDimension = DIMENSION::TEXTURE2D;
@@ -55,6 +67,7 @@ namespace GraphicsModule {
 			getmanager()->getDevice()->CreateRenderTargetView(rtv, true,n);
 			//getmanager()->getDevice()->CreateShaderResourceView(rtv);
 		}
+#ifdef directX
 		else {
 			//Textura pBackBuffer;
 			getmanager()->getSwapchain()->GetBuffer(tex[0]);
@@ -116,7 +129,7 @@ namespace GraphicsModule {
 	void Renderer::setTargets()
 	{
 #if openGL
-		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
+		//glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
 #endif
 #ifdef directX
 		getmanager()->getConext()->get()->OMSetRenderTargets(size, rtv.get.data(), depth.view);
@@ -138,7 +151,7 @@ namespace GraphicsModule {
 	void Renderer::render()
 	{
 #ifdef openGL
-		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
+		//glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
 		glViewport(0, 0, 1024, 768);
 #endif
 	}

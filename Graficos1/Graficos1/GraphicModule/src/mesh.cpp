@@ -104,6 +104,7 @@ namespace GraphicsModule {
 #endif
         getmanager()->getDevice()->CreateBuffer(vertexB);
         getmanager()->getDevice()->CreateBuffer(indexB);
+
 #ifdef openGL
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 *sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
@@ -116,10 +117,12 @@ namespace GraphicsModule {
         glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(11 * sizeof(float)));
         glEnableVertexAttribArray(4);
 #endif
+        //delete[] vertexB.Mem;
+        delete[] points;
+        delete[] indices;
     }
     mesh::~mesh()
     {
-        delete[] points;
-        delete[] indices;
+        
     }
 }

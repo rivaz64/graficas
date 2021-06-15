@@ -152,7 +152,7 @@ namespace GraphicsModule
         pantaia.points[2] = { -1.f,1.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
         pantaia.points[3] = { 1.f,1.f,0.f,1.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 #endif
-        pantaia.indices = new unsigned int[6]{ 1,0,2,1,2,3 };
+        pantaia.indices = new unsigned int[6]{1,0,2,1,2,3 };
         pantaia.init(4, 6);
         man->screen = new objeto;
         man->screen->mod = new model;
@@ -160,8 +160,12 @@ namespace GraphicsModule
         man->saves = new objeto;
         man->saves->mod = new model;
         man->saves->mod->modelo = { &pantaia };
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++) {
             man->screen->material.push_back(new Textura);
+#ifdef openGL
+            man->getDevice()->CreateTexture2D(*man->screen->material[man->screen->material.size() - 1]);
+#endif
+        }
         for (int i = 0; i < 9; i++)
             man->saves->material.push_back(new Textura);
         ///screen.loadfromfile("Earth.dds", false,SRV_DIMENSION::TEXTURECUBE);
@@ -201,11 +205,9 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D, true, CULING::NONE);
+            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
         //Gbuffer.setear();
-        Gbuffer.chaders[Gbuffer.chadernum].setShader();
-
-#ifdef directX
+        //Gbuffer.chaders[Gbuffer.chadernum].setShader();
         lights.compile("lights", {
             "#define VERTEX_LIGHT",
          "#define PIXEL_LIGHT",
@@ -219,7 +221,8 @@ namespace GraphicsModule
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
             }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
-        AmbientOcluccion.compile("AO", { "" }, false, { 4 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+        AmbientOcluccion.compile("AO", { "" }, false, {4}, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+
         tonemap.compile("tonemap", {
             "#define BASIC",
          "#define REINHARD",
@@ -233,13 +236,15 @@ namespace GraphicsModule
          "#define UNCHARTED2TONEMAP\n#define DEFFERED",
          "#define UNCHARTED2\n#define DEFFERED",
          "#define ALL\n#define DEFFERED",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D,true, CULING::BACK);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+
+#ifdef directX
         
-       
-        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 },SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+        
         random.compile("randomnoise", { "" }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
         skypas.compile("skybox", { "" }, false, {5} ,SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
 #endif
+        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
         cam = new camera;
 
         cam->seteye(0.0f, 3.0f, -6.0f);
@@ -337,8 +342,9 @@ namespace GraphicsModule
         skypas.vc.insert({ 0, &translation });
         skypas.vc.insert({ 1, &view });
         skypas.vc.insert({ 2, &proyection });
-
-
+#ifdef openGL
+        
+#endif
         /*Gbuffer.render(v);
         lights.ren.setTargets();
         //man->getConext()->PSSetShaderResources(skypox->material[0], 8);
@@ -458,15 +464,15 @@ namespace GraphicsModule
         {
             cam->movey(v);
         }
-        if (GetKeyState('A') & 0x8000)
+        if (GetKeyState('E') & 0x8000)
         {
             cam->movey(-v);
         }
-        if (GetKeyState('X') & 0x8000)
+        if (GetKeyState('A') & 0x8000)
         {
             cam->movex(v);
         }
-        if (GetKeyState('Z') & 0x8000)
+        if (GetKeyState('D') & 0x8000)
         {
             cam->movex(-v);
         }
@@ -546,61 +552,36 @@ namespace GraphicsModule
         
 #ifdef openGL
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+        /*glUniform1i(glGetUniformLocation(man->actualchader, "texture1"), 0);
+        glUniform1i(glGetUniformLocation(man->actualchader, "NormalMap"), 1);
+        glUniform1i(glGetUniformLocation(man->actualchader, "SpecularMap"), 2);*/
         
         //glUseProgram(chaders[chadnum].shader);
         //chaders[chadnum].setShader();
-        /*glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "texture1"), 0);
-        glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "NormalMap"), 1);
-        glUniform1i(glGetUniformLocation(chaders[chadnum].shader, "SpecularMap"), 2);
-        GLuint viewID = glGetUniformLocation(chaders[chadnum].shader, "view");
+        
+       /* GLuint viewID = glGetUniformLocation(chaders[chadnum].shader, "view");
         GLuint proyectionID = glGetUniformLocation(chaders[chadnum].shader, "proyection");
         glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
         glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));*/
         
 
 #endif
-    //man->getConext()->ClearRenderTargetView(rtv);
     
-    //man->getConext()->ClearDepthStencilView(depstencil);
-    //
-    // Update variables that change once per frame
-    //
-    
-    CBChangesEveryFrame cb;
-    /*cb.mWorld = XMMatrixTranspose(g_World);
-    cb.vMeshColor = g_vMeshColor;
-    man->getConext()->g_pImmediateContext->UpdateSubresource(translation.buf, 0, NULL, &cb, 0, 0);*/
-
-
-    UINT stride = sizeof(SimpleVertex);
-    UINT offset = 0;
-
-    
-    
-
-    //chaders[chadnum].setShader();
-    //paseprueba.render();
   }
   
-  void test::draw(objeto* o)
-  {
-      //man->draw(o, translation, paseprueba.chaders[paseprueba.chadernum]);
-      
-  }
-
   void test::draw(vector<GraphicsModule::objeto*>& v)
   {
       
       Pass::outn = 0;
-      for (int i = 0; i < 6; i++)
 #ifdef directX
+      for (int i = 0; i < 6; i++) {
           getmanager()->screen->material[i]->srv = NULL;
+      }
 #endif
+
       lights.chadernum = Gbuffer.chadernum;
       if (deferar) {
           deferred.render(v);
-
       }
       else {
 #ifdef directX

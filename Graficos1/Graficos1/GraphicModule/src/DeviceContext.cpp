@@ -56,6 +56,11 @@ namespace GraphicsModule {
 
 	void DeviceContext::PSSetConstantBuffers(int i, Buffer* b)
 	{
+#ifdef openGL
+		GLuint ID;
+		ID = glGetUniformLocation(getmanager()->actualchader, ("b" + std::to_string(i)).c_str());
+		glUniformMatrix4fv(ID, 1, GL_FALSE, glm::value_ptr(b->data));
+#endif
 #ifdef directX
 		g_pImmediateContext->PSSetConstantBuffers(i, 1, &b->buf);
 #endif

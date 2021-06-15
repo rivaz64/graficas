@@ -99,12 +99,10 @@ namespace GraphicsModule {
 		GLuint worldID = glGetUniformLocation(chad.shader, "world");
 		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
 		if (o->material.size() > 1) {
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, o->material[0]->get);
-			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, o->material[1]->get);
-			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, o->material[2]->get);
+			for (int i = 0; i < o->material.size(); i++) {
+				glActiveTexture(GL_TEXTURE0+i);
+				glBindTexture(GL_TEXTURE_2D, o->material[i]->get);
+			}
 		}
 #endif
 #ifdef directX

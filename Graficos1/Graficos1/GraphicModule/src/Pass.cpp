@@ -7,11 +7,32 @@
 int GraphicsModule::Pass::outn=0;
 void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
 {
+    manager* man = getmanager();
+#ifdef openGL
+    if (ulti) {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    else {
+        glBindFramebuffer(GL_FRAMEBUFFER, ren.FramebufferName);
+        for (int i = 0; i < outs.size(); i++) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, ren.DrawBuffers[i], GL_TEXTURE_2D, ren.rtv.textur[i].get,0);
+        }
+        
+    }
+    glUniform1i(glGetUniformLocation(man->actualchader, "texture1"), 0);
+    glUniform1i(glGetUniformLocation(man->actualchader, "NormalMap"), 1);
+    glUniform1i(glGetUniformLocation(man->actualchader, "SpecularMap"), 2);
+    glUniform1i(glGetUniformLocation(man->actualchader, "Position"), 3);
+    glUniform1i(glGetUniformLocation(man->actualchader, "AmbientOclucion"), 4);
+#endif
     if (setear) {
         ren.setTargets();
         ren.clearTargets();
     }
     chaders[chadernum].setShader();
+
+    
+
     if(vc.size()>1)
     for (std::pair<int, Buffer*> p : vc) {
         getmanager()->getConext()->VSSetConstantBuffers(p.first,p.second);
@@ -23,18 +44,35 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
         getmanager()->getConext()->PSSetShaderResources(p.second, p.first);
     }
     for (GraphicsModule::objeto* i : objts)
-        getmanager()->draw(i,vc[0], chaders[chadernum]);
+        getmanager()->draw(i, vc[0], chaders[chadernum]);
+#ifdef openGL
+    glEnable(GL_CULL_FACE);
+    glCullFace((GLenum)c);
+    glFrontFace(GL_CW);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        GLenum frame = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        int xyz = 1;
+    }
+    
+#endif
+    
+
+
     if (!ulti&&setear) {
         for (int i = 0; i < size; i++)
         {
 #ifdef directX
             getmanager()->saves->material[outn]->srv = ren.rtv.srv[i];
             getmanager()->screen->material[outs[i]]->srv = ren.rtv.srv[i];
-            outn++;
 #endif
+#ifdef openGL
+            man->screen->material[outs[i]]->get = ren.rtv.textur[i].get;
+#endif
+            outn++;
+
         }
-        
     }
+
 }
 
 void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n, SRV_DIMENSION d, bool set, CULING cul) {
@@ -42,6 +80,7 @@ void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> te
     outs = n;
     size = n.size();
     setear = set;
+    c = cul;
     if (ultimo) {
         ren.init(FORMAT::UNKNOWN, FORMAT::FLOAT, false, n.size(),d,cul);
     }

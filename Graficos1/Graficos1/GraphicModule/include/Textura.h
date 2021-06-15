@@ -19,7 +19,7 @@ namespace GraphicsModule {
 		ID3D11Texture2D* get=NULL;
 		ID3D11ShaderResourceView* srv = NULL;
 #else 
-		unsigned int get;
+		unsigned int get=0;
 #endif
 
 		void describe(FORMAT f, BIND_FLAG bf);

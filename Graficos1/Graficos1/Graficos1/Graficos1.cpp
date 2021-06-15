@@ -140,6 +140,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
         //objects.push_back(new GraphicsModule::objeto);
         //filenames.push_back(sfile);
         const aiScene* scene = importer.ReadFile(estefile, NULL);
+        
         if (scene == NULL) {
             return "";
         }
@@ -240,11 +241,12 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                 }
             }
             //std::cout << 'a' << AI_SUCCESS << std::endl;
-            
+            /*if (mesh != NULL) {
+                delete[] mesh->mVertices;
+            }*/
             
         }
-
-
+        //delete scene;
         obj->mod = mes;
         if (objects.size() > 1)
             MiObj.fpl = objects[1];
@@ -375,7 +377,7 @@ void UIRender()
             else {
                 MiObj.actual = &MiObj.paseprueba;
             }
-            //MiObj.actual = &MiObj.paseprueba;
+            MiObj.actual = &MiObj.Gbuffer;
             ImGui::DragInt("chader", &MiObj.actual->chadernum, .01f, 0, 2);
             //std::cout << MiObj.actual << std::endl << &MiObj.paseprueba << std::endl << std::endl;
             //ImGui::InputText("name",nombrechader,sizeof(nombrechader));
@@ -494,8 +496,8 @@ int main()
     MiObj.deferred.objts = { {GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } };
     MiObj.forward.pases = { &MiObj.paseprueba ,&MiObj.skypas,&MiObj.tonemap,&MiObj.Copy };
     MiObj.forward.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
-    MiObj.openglprueba.pases = { &MiObj.Gbuffer };
-    MiObj.openglprueba.objts = {};
+    MiObj.openglprueba.pases = { &MiObj.Gbuffer,&MiObj.lights, &MiObj.Copy };
+    MiObj.openglprueba.objts = { { GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen } };
     /*D3DX11_IMAGE_LOAD_INFO loadSMInfo;
     loadSMInfo.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
     D3DX11CreateTextureFromFile(GraphicsModule::getmanager()->getDevice()->get(), "Earth.dds",
