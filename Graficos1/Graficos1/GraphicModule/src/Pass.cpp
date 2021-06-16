@@ -24,11 +24,22 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     glUniform1i(glGetUniformLocation(man->actualchader, "SpecularMap"), 2);
     glUniform1i(glGetUniformLocation(man->actualchader, "Position"), 3);
     glUniform1i(glGetUniformLocation(man->actualchader, "AmbientOclucion"), 4);
+    glUniform1i(glGetUniformLocation(man->actualchader, "cubemap"), 5);
 #endif
     if (setear) {
         ren.setTargets();
         ren.clearTargets();
     }
+#ifdef openGL
+    glEnable(GL_CULL_FACE);
+    glCullFace((GLenum)c);
+    glFrontFace(GL_CCW);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        GLenum frame = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        int xyz = 1;
+    }
+
+#endif
     chaders[chadernum].setShader();
 
     
@@ -45,16 +56,7 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     }
     for (GraphicsModule::objeto* i : objts)
         getmanager()->draw(i, vc[0], chaders[chadernum]);
-#ifdef openGL
-    glEnable(GL_CULL_FACE);
-    glCullFace((GLenum)c);
-    glFrontFace(GL_CW);
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        GLenum frame = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        int xyz = 1;
-    }
-    
-#endif
+
     
 
 
@@ -67,6 +69,7 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
 #endif
 #ifdef openGL
             man->screen->material[outs[i]]->get = ren.rtv.textur[i].get;
+            man->saves->material[outn]->get = ren.rtv.textur[i].get;
 #endif
             outn++;
 

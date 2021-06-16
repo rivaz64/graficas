@@ -191,8 +191,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
-
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+        //GL_FRONT;
         Gbuffer.compile("Gbuffer", {
             "#define VERTEX_LIGHT",
          "#define PIXEL_LIGHT",
@@ -205,7 +205,7 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
         //Gbuffer.setear();
         //Gbuffer.chaders[Gbuffer.chadernum].setShader();
         lights.compile("lights", {
@@ -220,8 +220,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
-        AmbientOcluccion.compile("AO", { "" }, false, {4}, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+        AmbientOcluccion.compile("AO", { "" }, false, {4}, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
 
         tonemap.compile("tonemap", {
             "#define BASIC",
@@ -236,15 +236,14 @@ namespace GraphicsModule
          "#define UNCHARTED2TONEMAP\n#define DEFFERED",
          "#define UNCHARTED2\n#define DEFFERED",
          "#define ALL\n#define DEFFERED",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
 
 #ifdef directX
-        
-        
         random.compile("randomnoise", { "" }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
-        skypas.compile("skybox", { "" }, false, {5} ,SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
 #endif
-        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+        skypas.compile("skybox", { "" }, false, { 5 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
+        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+       
         cam = new camera;
 
         cam->seteye(0.0f, 3.0f, -6.0f);
@@ -548,26 +547,7 @@ namespace GraphicsModule
     }
     void test::clear()
     {
-
-        
-#ifdef openGL
-        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        /*glUniform1i(glGetUniformLocation(man->actualchader, "texture1"), 0);
-        glUniform1i(glGetUniformLocation(man->actualchader, "NormalMap"), 1);
-        glUniform1i(glGetUniformLocation(man->actualchader, "SpecularMap"), 2);*/
-        
-        //glUseProgram(chaders[chadnum].shader);
-        //chaders[chadnum].setShader();
-        
-       /* GLuint viewID = glGetUniformLocation(chaders[chadnum].shader, "view");
-        GLuint proyectionID = glGetUniformLocation(chaders[chadnum].shader, "proyection");
-        glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(man->View.m));
-        glUniformMatrix4fv(proyectionID, 1, GL_FALSE, glm::value_ptr(man->Projection.m));*/
-        
-
-#endif
-    
-  }
+    }
   
   void test::draw(vector<GraphicsModule::objeto*>& v)
   {

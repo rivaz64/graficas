@@ -120,7 +120,7 @@ namespace GraphicsModule {
 #ifdef openGL
 		glGenTextures(1, &tx.get);
 		glBindTexture(GL_TEXTURE_2D, tx.get);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getmanager()->width, getmanager()->height,0, GL_RGB, GL_FLOAT, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getmanager()->width, getmanager()->height,0, GL_RGBA, GL_FLOAT, 0);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

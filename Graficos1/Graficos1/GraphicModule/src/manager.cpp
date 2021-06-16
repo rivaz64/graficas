@@ -98,10 +98,10 @@ namespace GraphicsModule {
 		
 		GLuint worldID = glGetUniformLocation(chad.shader, "world");
 		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
-		if (o->material.size() > 1) {
+		if (o->material.size() >= 1) {
 			for (int i = 0; i < o->material.size(); i++) {
 				glActiveTexture(GL_TEXTURE0+i);
-				glBindTexture(GL_TEXTURE_2D, o->material[i]->get);
+				glBindTexture(o->material[i]->format, o->material[i]->get);
 			}
 		}
 #endif

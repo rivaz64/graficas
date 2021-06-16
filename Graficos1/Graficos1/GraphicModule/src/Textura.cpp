@@ -22,18 +22,16 @@ namespace GraphicsModule {
         
 #endif
     }
+    /*unsigned int Textura::loadCubemap(vector<std::string> faces)
+    {
+#ifdef openGL
+        
+#endif
+        return 0;
+    }*/
     void Textura::loadfromfile(LPCSTR f, int inverted, SRV_DIMENSION d)
     {
         TextureManager::Inst()->LoadTexture(f, inverted,this,d);
-#ifdef openGL
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-#endif
-#ifdef directX
-        //D3DX11CreateShaderResourceViewFromFile(getmanager()->getDevice()->get(), f, NULL, NULL, &srv, NULL);
-#endif
     }
 
     void Textura::release()

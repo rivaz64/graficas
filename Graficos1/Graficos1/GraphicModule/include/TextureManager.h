@@ -24,8 +24,8 @@ namespace GraphicsModule {
 		static TextureManager* Inst();
 		virtual ~TextureManager();
 
-		//load a texture an make it the current texture
-		//if texID is already in use, it will be unloaded and replaced with this texture
+		unsigned char* readTexture(const char* filename, unsigned int& width, unsigned int& height, FIBITMAP*& dib);
+		
 		bool LoadTexture(const char* filename,int inverted, Textura*tex, SRV_DIMENSION d);
 
 		//free the memory for a texture

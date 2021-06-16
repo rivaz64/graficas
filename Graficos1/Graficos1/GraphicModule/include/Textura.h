@@ -6,6 +6,12 @@
 #include <d3dcompiler.h>
 #include <xnamath.h>
 #endif
+#ifdef openGL
+#include<glad\glad.h>
+#define GLFW_INCLUDE_NONE
+#include<glfw\glfw3.h>
+#include<glfw\glfw3native.h>
+#endif
 #include"flags.h"
 #include<string>
 using std::string;
@@ -20,10 +26,12 @@ namespace GraphicsModule {
 		ID3D11ShaderResourceView* srv = NULL;
 #else 
 		unsigned int get=0;
+		GLenum format= GL_TEXTURE_2D;
 #endif
 
 		void describe(FORMAT f, BIND_FLAG bf);
 		void loadfromfile(LPCSTR f,int inverted, SRV_DIMENSION d);
+		//unsigned int loadCubemap(vector<std::string> faces);
 		void release();
 #ifdef openGL
 		unsigned int
