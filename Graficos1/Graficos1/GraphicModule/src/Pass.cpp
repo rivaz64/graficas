@@ -17,7 +17,6 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
         for (int i = 0; i < outs.size(); i++) {
             glFramebufferTexture2D(GL_FRAMEBUFFER, ren.DrawBuffers[i], GL_TEXTURE_2D, ren.rtv.textur[i].get,0);
         }
-        
     }
     glUniform1i(glGetUniformLocation(man->actualchader, "texture1"), 0);
     glUniform1i(glGetUniformLocation(man->actualchader, "NormalMap"), 1);

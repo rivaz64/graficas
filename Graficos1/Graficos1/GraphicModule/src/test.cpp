@@ -318,14 +318,14 @@ namespace GraphicsModule
         paseprueba.vc.insert({ 1, &view });
         paseprueba.vc.insert({ 2, &proyection });
         paseprueba.vc.insert({ 3, &Dirlight });
-        paseprueba.vc.insert({ 4, &Poslight });
-        paseprueba.vc.insert({ 5, &Spotlight });
-        paseprueba.pc.insert({ 2, &translation });
+        //paseprueba.vc.insert({ 4, &Poslight });
+        //paseprueba.vc.insert({ 5, &Spotlight });
+        //paseprueba.pc.insert({ 2, &translation });*/
         paseprueba.pc.insert({ 3, &Dirlight });
-        paseprueba.pc.insert({ 4, &Poslight });
-        paseprueba.pc.insert({ 5, &Spotlight });
+        //paseprueba.pc.insert({ 4, &Poslight });
+        //paseprueba.pc.insert({ 5, &Spotlight });
         paseprueba.pc.insert({ 6, &specularb });
-        paseprueba.pc.insert({ 7, &Ambilight });
+        //paseprueba.pc.insert({ 7, &Ambilight });*/
 
         Gbuffer.vc.insert({ 0, &translation });
         Gbuffer.vc.insert({ 1, &view });
@@ -506,43 +506,43 @@ namespace GraphicsModule
         man->getConext()->UpdateSubresource(exposure, f);
         man->getConext()->UpdateSubresource(aob, &amoc);
 #ifdef openGL
-        /*
-        GLuint dirlID;
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "kambience");
+        
+        /*GLuint dirlID;
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "kambience");
         glUniform1f(dirlID, al.k);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "dirlight");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "dirlight");
         glUniform4f(dirlID, dl.dir[0], dl.dir[1], dl.dir[2], 0);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "ambiencecolor");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "ambiencecolor");
         glUniform3f(dirlID, al.color[0], al.color[1], al.color[2]);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "dirlightcolor");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "dirlightcolor");
         glUniform4f(dirlID, dl.color[0], dl.color[1], dl.color[2], dl.color[3]);
 
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "PointLightPos");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "PointLightPos");
         glUniform4f(dirlID, pl.pos[0], pl.pos[1], pl.pos[2], 0);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "PointLightAttenuation");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "PointLightAttenuation");
         glUniform1f(dirlID, pl.att);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "PointColor");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "PointColor");
         glUniform4f(dirlID, pl.color[0], pl.color[1], pl.color[2], pl.color[3]);
 
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "coneLightPos");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "coneLightPos");
         glUniform4f(dirlID, sl.Pos[0], sl.Pos[1], sl.Pos[2], 0);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "coneLightDir");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "coneLightDir");
         glUniform4f(dirlID, sl.Dir[0], sl.Dir[1], sl.Dir[2], 0);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "coneLightAttenuation");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "coneLightAttenuation");
         glUniform1f(dirlID, sl.Att);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "coneLightColor");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "coneLightColor");
         glUniform4f(dirlID, sl.Color[0], sl.Color[1], sl.Color[2], sl.Color[3]);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "Radious");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "Radious");
         glUniform1f(dirlID, sl.Rad);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "difucion");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "difucion");
         glUniform1f(dirlID, sl.dif);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "kspecular");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "kspecular");
         glUniform1f(dirlID, specular);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "shinines");
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "shinines");
         glUniform1f(dirlID, shinines);
-        dirlID = glGetUniformLocation(chaders[chadnum].shader, "viewPosition");
-        glUniform3f(dirlID, cam->eye.x, cam->eye.y, cam->eye.z);
-        */
+        dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "viewPosition");
+        glUniform3f(dirlID, cam->eye.x, cam->eye.y, cam->eye.z);*/
+        
 #endif
     }
     void test::clear()
@@ -564,14 +564,8 @@ namespace GraphicsModule
           deferred.render(v);
       }
       else {
-#ifdef directX
           forward.render(v);
-#endif
-#ifdef openGL
-          openglprueba.render(v);
-#endif
       }
-      
   }
   
   void test::Render()

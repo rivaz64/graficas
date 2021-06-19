@@ -117,7 +117,7 @@ namespace GraphicsModule
 
       effecto deferred;
       effecto forward;
-      effecto openglprueba;
+     
 
       amblight al;
       dirlight dl;
@@ -153,7 +153,7 @@ namespace GraphicsModule
       Buffer exposure;
       Buffer aob;
       
-      bool deferar;
+      bool deferar=false;
       bool gbuf;
       bool lightson;
       bool sao;

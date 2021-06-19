@@ -377,7 +377,6 @@ void UIRender()
             else {
                 MiObj.actual = &MiObj.paseprueba;
             }
-            MiObj.actual = &MiObj.Gbuffer;
             ImGui::DragInt("chader", &MiObj.actual->chadernum, .01f, 0, 2);
             //std::cout << MiObj.actual << std::endl << &MiObj.paseprueba << std::endl << std::endl;
             //ImGui::InputText("name",nombrechader,sizeof(nombrechader));
@@ -502,16 +501,15 @@ int main()
     GraphicsModule::getmanager()->getConext()->PSSetShaderResources(MiObj.skypox->material[0], 8);
     MiObj.deferred.pases = { &MiObj.Gbuffer,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
     MiObj.deferred.objts = { {GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } };
+//#ifdef directX
     MiObj.forward.pases = { &MiObj.paseprueba ,&MiObj.skypas,&MiObj.tonemap,&MiObj.Copy };
     MiObj.forward.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
-
-    MiObj.openglprueba.pases = { &MiObj.Gbuffer,&MiObj.skypas ,&MiObj.Copy };
-    MiObj.openglprueba.objts = { { MiObj.skypox   },{ GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen } };
-
-    /*D3DX11_IMAGE_LOAD_INFO loadSMInfo;
-    loadSMInfo.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
-    D3DX11CreateTextureFromFile(GraphicsModule::getmanager()->getDevice()->get(), "Earth.dds",
-        &loadSMInfo, 0, (ID3D11Resource**)&MiObj.skypox->material[0]->get, 0);*/
+/*#endif
+#ifdef openGL
+    MiObj.forward.pases = { &MiObj.paseprueba  ,&MiObj.Copy };
+    MiObj.forward.objts = { { GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
+#endif*/
+    
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl","origin");
     for (int i = 0; i < 3; i++) {
         objects[0]->size[i] = .002f;

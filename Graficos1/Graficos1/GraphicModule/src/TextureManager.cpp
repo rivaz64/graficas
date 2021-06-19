@@ -132,7 +132,7 @@ namespace GraphicsModule {
 		
 #endif
 #ifdef directX
-
+		bits = readTexture(filename, width, height, dib);
 		ZeroMemory(&tex->des, sizeof(tex->des));
 		tex->des.Width = width;
 		tex->des.Height = height;

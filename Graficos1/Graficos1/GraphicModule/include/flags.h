@@ -154,8 +154,8 @@ namespace GraphicsModule {
     enum class CULING {
 #ifdef directX
         NONE=1,
+        BACK,
         FRONT,
-        BACK
 #endif
 #ifdef openGL
         NONE = 0x0408,
