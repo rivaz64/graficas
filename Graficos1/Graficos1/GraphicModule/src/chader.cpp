@@ -101,6 +101,7 @@ namespace GraphicsModule {
 			std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
 			glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
 			printf("%s\n", &VertexShaderErrorMessage[0]);
+			return 0;
 		}
 
 		// Compilar Fragment Shader
@@ -116,6 +117,7 @@ namespace GraphicsModule {
 			std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
 			glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
 			printf("%s\n", &FragmentShaderErrorMessage[0]);
+			return 0;
 		}
 
 
@@ -134,6 +136,7 @@ namespace GraphicsModule {
 			std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
 			glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
 			printf("%s\n", &ProgramErrorMessage[0]);
+			return 0;
 		}
 
 

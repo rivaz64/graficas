@@ -152,7 +152,7 @@ namespace GraphicsModule
         pantaia.points[2] = { -1.f,1.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
         pantaia.points[3] = { 1.f,1.f,0.f,1.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 #endif
-        pantaia.indices = new unsigned int[6]{1,0,2,1,2,3 };
+        pantaia.indices = new unsigned int[6]{ 1,0,2,1,2,3 };
         pantaia.init(4, 6);
         man->screen = new objeto;
         man->screen->mod = new model;
@@ -221,7 +221,7 @@ namespace GraphicsModule
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
             }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
-        AmbientOcluccion.compile("AO", { "" }, false, {4}, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+        AmbientOcluccion.compile("AO", { "" }, false, { 4 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
 
         tonemap.compile("tonemap", {
             "#define BASIC",
@@ -243,15 +243,15 @@ namespace GraphicsModule
 #endif
         skypas.compile("skybox", { "" }, false, { 5 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
         Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
-       
+
         cam = new camera;
 
         cam->seteye(0.0f, 3.0f, -6.0f);
         cam->setat(0.0f, 1.f, 0);
         cam->setup(0.0f, 1.0f, 0);
         cam->axis();
-        
-        
+
+
 
         view.Usage = USAGE::DEFAULT;
         view.ByteWidth = sizeof(CBNeverChanges);
@@ -312,20 +312,20 @@ namespace GraphicsModule
         aob.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         aob.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(aob);
-        
+
         // Create the sample state
         paseprueba.vc.insert({ 0, &translation });
         paseprueba.vc.insert({ 1, &view });
         paseprueba.vc.insert({ 2, &proyection });
         paseprueba.vc.insert({ 3, &Dirlight });
-        //paseprueba.vc.insert({ 4, &Poslight });
-        //paseprueba.vc.insert({ 5, &Spotlight });
+        paseprueba.vc.insert({ 4, &Poslight });
+        paseprueba.vc.insert({ 5, &Spotlight });
         //paseprueba.pc.insert({ 2, &translation });*/
         paseprueba.pc.insert({ 3, &Dirlight });
-        //paseprueba.pc.insert({ 4, &Poslight });
-        //paseprueba.pc.insert({ 5, &Spotlight });
+        paseprueba.pc.insert({ 4, &Poslight });
+        paseprueba.pc.insert({ 5, &Spotlight });
         paseprueba.pc.insert({ 6, &specularb });
-        //paseprueba.pc.insert({ 7, &Ambilight });*/
+        paseprueba.pc.insert({ 7, &Ambilight });//*/
 
         Gbuffer.vc.insert({ 0, &translation });
         Gbuffer.vc.insert({ 1, &view });
