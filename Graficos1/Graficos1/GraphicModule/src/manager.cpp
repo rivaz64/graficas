@@ -106,7 +106,7 @@ namespace GraphicsModule {
 		}
 #endif
 #ifdef directX
-		getmanager()->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+		
 		XMMATRIX g_World;
 		CBChangesEveryFrame cb;
 		
@@ -127,17 +127,33 @@ namespace GraphicsModule {
 			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
 #ifdef directX
-			/*for (int m = 0; m < mo->material.size(); m++) {
-				devcon.PSSetShaderResources(mo->material[m], m);
-			}*/
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
 			devcon.draw(mo->indexnum);
+			for (int b = 0; b < mo->BonesNum; b++) {//g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o->rot[0] / 180.f * PI, o->rot[1] / 180.f * PI, o->rot[2] / 180.f * PI), g_World);
+				cubito->posi[0] = mo->bones[b].offset.m[0];
+				cubito->posi[1] = mo->bones[b].offset.m[5];
+				cubito->posi[2] = mo->bones[b].offset.m[10];
+				draw(cubito, changeveryFrameB, chad);
+			}
 #endif
 		}
 
 	}
+	void manager::draw(objeto* o , Buffer* changeveryFrameB, matrix& m)
+	{
+		XMMATRIX g_World;
+		CBChangesEveryFrame cb;
+		g_World = XMMatrixMultiply(XMMatrixScaling(o->size[0], o->size[1], o->size[2]), m.m);
+		cb.mWorld = XMMatrixTranspose(g_World);
+		if (changeveryFrameB != NULL) {
+			devcon.UpdateSubresource(*changeveryFrameB, &cb);
+		}
+		devcon.IASetVertexBuffers(o->mod->modelo[0]->getvertex());
+		devcon.IASetIndexBuffer(o->mod->modelo[0]->getindices());
+		devcon.draw(o->mod->modelo[0]->indexnum);
 
+	}
 	void manager::setrenderfortextur(RenderTargetView& rtv)
 	{
 #ifdef  directX

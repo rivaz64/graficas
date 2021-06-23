@@ -2,12 +2,17 @@
 #include <initializer_list>
 #include"Buffer.h"
 #include"Textura.h"
+#include "camera.h"
 #include<vector>
 namespace GraphicsModule {
 	class mesh
 	{
 		
 	public:
+		struct Bone {
+			const char* name;
+			matrix offset;
+		};
 		struct vertex {
 			float posi[3];
 			float uv[2];
@@ -18,8 +23,9 @@ namespace GraphicsModule {
 		mesh() {}
 		~mesh();
 		int indexnum;
+		int BonesNum = 0;
 		vertex* points;
-
+		Bone* bones;
 
 		unsigned int* indices;
 		Buffer vertexB;

@@ -164,6 +164,8 @@ namespace GraphicsModule
       objeto* fpl;
       objeto* fsl;
       objeto* skypox;
+
+      
       //unsigned int shader;
       //glm::mat4 matrix;
 #ifdef directX
@@ -192,6 +194,7 @@ namespace GraphicsModule
       void Render();
       void CleanupDevice();
       float f[8];
+      
       HWND m_hwnd;
   };
 

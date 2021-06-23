@@ -43,6 +43,33 @@ string flagas[4] = { "normal","inverted","special","surprice" };
 #ifdef directX
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
+
+
+
+void readmatrix(matrix& m, aiMatrix4x4 &aim) {
+    m.m[0] = aim.a1;
+    m.m[1] = aim.a2;
+    m.m[2] = aim.a3;
+    m.m[3] = aim.a4;
+    m.m[4] = aim.b1;
+    m.m[5] = aim.b2;
+    m.m[6] = aim.b3;
+    m.m[7] = aim.b4;
+    m.m[8] = aim.c1;
+    m.m[9] = aim.c2;
+    m.m[10] = aim.c3;
+    m.m[11] = aim.c4;
+    m.m[12] = aim.d1;
+    m.m[13] = aim.d2;
+    m.m[14] = aim.d3;
+    m.m[15] = aim.d4;
+}
+
+
+
+
+
+
 string openfilename(const char* filter = "All Files (*.*)\0*.*\0", HWND owner = NULL) {
     OPENFILENAME ofn;
     char fileName[MAX_PATH] = "";
@@ -149,29 +176,45 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
         std::string Filename = "";
         aiMesh* mesh;// = scene->mMeshes[0];
         aiString Path;
+        int numodel = 0;
         for (int o = 0; o < scene->mNumMeshes; o++) {
             mesh = scene->mMeshes[o];
             mes->modelo.push_back(new GraphicsModule::mesh);
-
-            mes->modelo[mes->modelo.size() - 1]->points = new GraphicsModule::mesh::vertex[mesh->mNumVertices];
-            mes->modelo[mes->modelo.size() - 1]->indices = new unsigned int[mesh->mNumFaces * 3];
+            numodel = mes->modelo.size() - 1;
+            mes->modelo[numodel]->points = new GraphicsModule::mesh::vertex[mesh->mNumVertices];
+            mes->modelo[numodel]->indices = new unsigned int[mesh->mNumFaces * 3];
             for (int i = 0; i < mesh->mNumVertices; i++)
             {
                 aiVector3D pos = mesh->mVertices[i];
-                mes->modelo[mes->modelo.size() - 1]->points[i].posi[0] = pos.x;
-                mes->modelo[mes->modelo.size() - 1]->points[i].posi[1] = pos.y;
-                mes->modelo[mes->modelo.size() - 1]->points[i].posi[2] = pos.z;
+                mes->modelo[numodel]->points[i].posi[0] = pos.x;
+                mes->modelo[numodel]->points[i].posi[1] = pos.y;
+                mes->modelo[numodel]->points[i].posi[2] = pos.z;
                 if (mesh->HasNormals()) {
-                    mes->modelo[mes->modelo.size() - 1]->points[i].normal[0] = mesh->mNormals[i].x;
-                    mes->modelo[mes->modelo.size() - 1]->points[i].normal[1] = mesh->mNormals[i].y;
-                    mes->modelo[mes->modelo.size() - 1]->points[i].normal[2] = mesh->mNormals[i].z;
+                    mes->modelo[numodel]->points[i].normal[0] = mesh->mNormals[i].x;
+                    mes->modelo[numodel]->points[i].normal[1] = mesh->mNormals[i].y;
+                    mes->modelo[numodel]->points[i].normal[2] = mesh->mNormals[i].z;
                 }
                 if (mesh->HasTextureCoords(0)) {
-                    mes->modelo[mes->modelo.size() - 1]->points[i].uv[0] = mesh->mTextureCoords[0][i].x;
-                    mes->modelo[mes->modelo.size() - 1]->points[i].uv[1] = mesh->mTextureCoords[0][i].y;
+                    mes->modelo[numodel]->points[i].uv[0] = mesh->mTextureCoords[0][i].x;
+                    mes->modelo[numodel]->points[i].uv[1] = mesh->mTextureCoords[0][i].y;
                 }
                 
+                
 
+            }
+            if (mesh->HasBones()) {
+                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[mesh->mNumBones];
+                mes->modelo[numodel]->BonesNum = mesh->mNumBones;
+                
+                for (int i = 0; i < mesh->mNumBones; i++) {
+                    mes->modelo[numodel]->bones[i].name = mesh->mBones[i]->mName.C_Str();
+                    readmatrix(mes->modelo[numodel]->bones[i].offset , mesh->mBones[i]->mOffsetMatrix);
+                    std::cout << "Bone: "<<mesh->mBones[i]->mName.C_Str() << std::endl;
+                    /*std::cout << "NumWeights: " << mesh->mBones[i]->mNumWeights << std::endl;
+                    for (int u = 0; u < mesh->mBones[i]->mNumWeights; u++) {
+                        std::cout << "ID: " << mesh->mBones[i]->mWeights[u].mVertexId << std::endl;
+                    }*/
+                }
             }
             for (int i = 0; i < mesh->mNumFaces; i++) {
                 const aiFace& Face = mesh->mFaces[i];
@@ -511,6 +554,7 @@ int main()
 #endif*/
     
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl","origin");
+    GraphicsModule::getmanager()->cubito = objects[0];
     for (int i = 0; i < 3; i++) {
         objects[0]->size[i] = .002f;
     }
