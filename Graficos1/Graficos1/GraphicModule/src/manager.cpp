@@ -127,15 +127,16 @@ namespace GraphicsModule {
 			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
 #ifdef directX
+			getmanager()->getConext()->VSSetConstantBuffers(8,&mo->BonesB);
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
 			devcon.draw(mo->indexnum);
-			for (int b = 0; b < mo->BonesNum; b++) {//g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o->rot[0] / 180.f * PI, o->rot[1] / 180.f * PI, o->rot[2] / 180.f * PI), g_World);
-				cubito->posi[0] = mo->bones[b].offset.m[0];
-				cubito->posi[1] = mo->bones[b].offset.m[5];
-				cubito->posi[2] = mo->bones[b].offset.m[10];
+			/*for (int b = 0; b < mo->BonesNum; b++) {//g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o->rot[0] / 180.f * PI, o->rot[1] / 180.f * PI, o->rot[2] / 180.f * PI), g_World);
+				cubito->posi[0] = mo->databones[b].offset.m[0];
+				cubito->posi[1] = mo->databones[b].offset.m[5];
+				cubito->posi[2] = mo->databones[b].offset.m[10];
 				draw(cubito, changeveryFrameB, chad);
-			}
+			}*/
 #endif
 		}
 

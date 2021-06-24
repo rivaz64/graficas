@@ -204,16 +204,18 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
             }
             if (mesh->HasBones()) {
                 mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[mesh->mNumBones];
+                mes->modelo[numodel]->databones = new GraphicsModule::mesh::BoneData[mesh->mNumBones];
                 mes->modelo[numodel]->BonesNum = mesh->mNumBones;
                 
                 for (int i = 0; i < mesh->mNumBones; i++) {
-                    mes->modelo[numodel]->bones[i].name = mesh->mBones[i]->mName.C_Str();
-                    readmatrix(mes->modelo[numodel]->bones[i].offset , mesh->mBones[i]->mOffsetMatrix);
-                    std::cout << "Bone: "<<mesh->mBones[i]->mName.C_Str() << std::endl;
-                    /*std::cout << "NumWeights: " << mesh->mBones[i]->mNumWeights << std::endl;
+                    mes->modelo[numodel]->databones[i].name = mesh->mBones[i]->mName.C_Str();
+                    readmatrix(mes->modelo[numodel]->databones[i].offset , mesh->mBones[i]->mOffsetMatrix);
+                    std::cout << mesh->mBones[i]->mNumWeights << std::endl;
                     for (int u = 0; u < mesh->mBones[i]->mNumWeights; u++) {
-                        std::cout << "ID: " << mesh->mBones[i]->mWeights[u].mVertexId << std::endl;
-                    }*/
+                        mes->modelo[numodel]->bones[i].VertexID[u] = mesh->mBones[i]->mWeights[u].mVertexId;
+                        mes->modelo[numodel]->points[mesh->mBones[i]->mWeights[u].mVertexId].boneid = mesh->mBones[i]->mWeights[u].mVertexId;
+                        mes->modelo[numodel]->bones[i].Weight[u] = mesh->mBones[i]->mWeights[u].mWeight;
+                    }
                 }
             }
             for (int i = 0; i < mesh->mNumFaces; i++) {

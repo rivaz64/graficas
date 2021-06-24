@@ -92,12 +92,16 @@ namespace GraphicsModule {
         vertexB.Usage = GraphicsModule::USAGE::DEFAULT;
         vertexB.ByteWidth = sizeof(vertex) * n;
         vertexB.Mem = points;
+
         indexnum = ni;
+        indexB.BindFlags = BIND_FLAG::INDEX_BUFFER;
         indexB.Usage = USAGE::DEFAULT;
         indexB.ByteWidth = sizeof(unsigned int) * ni;
-        indexB.BindFlags = BIND_FLAG::INDEX_BUFFER;
         indexB.CPUAccessFlags = 0;
         indexB.Mem = indices;
+
+
+        
 #ifdef openGL
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -105,6 +109,15 @@ namespace GraphicsModule {
         getmanager()->getDevice()->CreateBuffer(vertexB);
         getmanager()->getDevice()->CreateBuffer(indexB);
 
+        if (BonesNum > 0) {
+            BonesB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+            BonesB.Usage = USAGE::DEFAULT;
+            BonesB.ByteWidth = sizeof(Bone) * BonesNum;
+            BonesB.CPUAccessFlags = 0;
+            BonesB.Mem = bones;
+            getmanager()->getDevice()->CreateBuffer(BonesB);
+        }
+        //getmanager()->getDevice()->CreateBuffer(BonesB);
 #ifdef openGL
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 *sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
