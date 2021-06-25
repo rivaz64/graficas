@@ -155,7 +155,8 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
     Assimp::Importer importer;
 
     
-    
+    int vertexId;
+    GraphicsModule::mesh::vertex* v;
     //std::string estefile = openfilename();
     char drive[_MAX_DRIVE];
     char dir[_MAX_DIR];
@@ -203,18 +204,29 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
 
             }
             if (mesh->HasBones()) {
-                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[mesh->mNumBones];
-                mes->modelo[numodel]->databones = new GraphicsModule::mesh::BoneData[mesh->mNumBones];
+                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[1024];
                 mes->modelo[numodel]->BonesNum = mesh->mNumBones;
+
                 
                 for (int i = 0; i < mesh->mNumBones; i++) {
-                    mes->modelo[numodel]->databones[i].name = mesh->mBones[i]->mName.C_Str();
-                    readmatrix(mes->modelo[numodel]->databones[i].offset , mesh->mBones[i]->mOffsetMatrix);
+                    
+                    readmatrix(mes->modelo[numodel]->bones[i].offset , mesh->mBones[i]->mOffsetMatrix);
                     std::cout << mesh->mBones[i]->mNumWeights << std::endl;
                     for (int u = 0; u < mesh->mBones[i]->mNumWeights; u++) {
-                        mes->modelo[numodel]->bones[i].VertexID[u] = mesh->mBones[i]->mWeights[u].mVertexId;
-                        mes->modelo[numodel]->points[mesh->mBones[i]->mWeights[u].mVertexId].boneid = mesh->mBones[i]->mWeights[u].mVertexId;
-                        mes->modelo[numodel]->bones[i].Weight[u] = mesh->mBones[i]->mWeights[u].mWeight;
+                        vertexId = mesh->mBones[i]->mWeights[u].mVertexId;
+                        v = &mes->modelo[numodel]->points[vertexId];
+                        if (v->Weight[3] != 0) {
+                            std::cout << "nesesita mas" << std::endl;
+                        }
+                        for (int n = 0; n < 4; n++) {
+                            if (v->Weight[n] == 0) {
+                                v->boneid[n] = i;
+                                v->Weight[n] = mesh->mBones[i]->mWeights[u].mWeight;
+                                break;
+                            }
+
+
+                        }
                     }
                 }
             }

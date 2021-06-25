@@ -11,21 +11,21 @@ namespace GraphicsModule {
 		
 	public:
 		struct Bone {
-			unsigned int VertexID[NUM_BONES_PER_VEREX];
-			float Weight[NUM_BONES_PER_VEREX];
+			matrix offset;
 		};
-		struct BoneData {
+		/*struct BoneData {
 			const char* name;
 			matrix offset;
 			unsigned int  vw;
-		};
+		};*/
 		struct vertex {
 			float posi[3];
 			float uv[2];
 			float normal[3];
 			float binormal[3];
 			float tangent[3];
-			float boneid;
+			int boneid[4] = { 0 ,0 ,0 ,0 };
+			float Weight[4] = { 0.0f ,0.0f ,0.0f ,0.0f };
 		};
 		mesh() {}
 		~mesh();
@@ -33,7 +33,7 @@ namespace GraphicsModule {
 		int BonesNum = 0;
 		vertex* points;
 		Bone* bones;
-		BoneData* databones;
+		//BoneData* databones;
 		unsigned int* indices;
 		Buffer vertexB;
 		Buffer indexB;

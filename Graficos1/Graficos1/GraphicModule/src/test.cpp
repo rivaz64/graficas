@@ -451,11 +451,11 @@ namespace GraphicsModule
         }
         if (GetKeyState('A') & 0x8000)
         {
-            cam->movex(v);
+            cam->movex(-v);
         }
         if (GetKeyState('D') & 0x8000)
         {
-            cam->movex(-v);
+            cam->movex(v);
         }
         matrix cbNeverChanges;
         //man->getConext()->UpdateSubresource(cam);
