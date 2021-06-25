@@ -90,6 +90,7 @@ namespace GraphicsModule
 
     HRESULT test::InitDevice()
     {
+        
         man = getmanager();
 
         man->create(g_hwnd);
@@ -314,6 +315,12 @@ namespace GraphicsModule
         aob.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(aob);
 
+        
+        /*BoneB.Usage = USAGE::DEFAULT;
+        BoneB.ByteWidth = sizeof(float[1024]);
+        BoneB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        BoneB.CPUAccessFlags = 0;
+        man->getDevice()->CreateBuffer(BoneB);*/
         // Create the sample state
         paseprueba.vc.insert({ 0, &translation });
         paseprueba.vc.insert({ 1, &view });
@@ -321,6 +328,7 @@ namespace GraphicsModule
         paseprueba.vc.insert({ 3, &Dirlight });
         paseprueba.vc.insert({ 4, &Poslight });
         paseprueba.vc.insert({ 5, &Spotlight });
+        //paseprueba.vc.insert({ 8, &Spotlight });
         //paseprueba.pc.insert({ 2, &translation });*/
         paseprueba.pc.insert({ 3, &Dirlight });
         paseprueba.pc.insert({ 4, &Poslight });
@@ -451,11 +459,11 @@ namespace GraphicsModule
         }
         if (GetKeyState('A') & 0x8000)
         {
-            cam->movex(v);
+            cam->movex(-v);
         }
         if (GetKeyState('D') & 0x8000)
         {
-            cam->movex(-v);
+            cam->movex(v);
         }
         matrix cbNeverChanges;
         //man->getConext()->UpdateSubresource(cam);

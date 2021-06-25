@@ -142,6 +142,8 @@ namespace GraphicsModule
       camera* cam;
       Textura screen;
 
+      
+
       Buffer view;
       Buffer proyection;
       Buffer translation;
@@ -152,6 +154,7 @@ namespace GraphicsModule
       Buffer specularb;
       Buffer exposure;
       Buffer aob;
+      Buffer BoneB;
       
       bool deferar=false;
       bool gbuf;

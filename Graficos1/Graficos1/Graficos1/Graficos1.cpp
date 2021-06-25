@@ -44,29 +44,31 @@ string flagas[4] = { "normal","inverted","special","surprice" };
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
 
-
+#define BONESPERVERTEX 8
 
 void readmatrix(matrix& m, aiMatrix4x4 &aim) {
-    m.m[0] = aim.a1;
-    m.m[1] = aim.a2;
-    m.m[2] = aim.a3;
-    m.m[3] = aim.a4;
-    m.m[4] = aim.b1;
-    m.m[5] = aim.b2;
-    m.m[6] = aim.b3;
-    m.m[7] = aim.b4;
-    m.m[8] = aim.c1;
-    m.m[9] = aim.c2;
-    m.m[10] = aim.c3;
-    m.m[11] = aim.c4;
-    m.m[12] = aim.d1;
-    m.m[13] = aim.d2;
-    m.m[14] = aim.d3;
-    m.m[15] = aim.d4;
+    m.m._11 = aim.a1;
+    m.m._12 = aim.a2;
+    m.m._13 = aim.a3;
+    m.m._14= aim.a4;
+    m.m._21 = aim.b1;
+    m.m._22 = aim.b2;
+    m.m._23 = aim.b3;
+    m.m._24 = aim.b4;
+    m.m._31 = aim.c1;
+    m.m._32 = aim.c2;
+    m.m._33 = aim.c3;
+    m.m._34 = aim.c4;
+    m.m._41 = aim.d1;
+    m.m._42 = aim.d2;
+    m.m._43 = aim.d3;
+    m.m._44 = aim.d4;
 }
 
 
+void addBoneData(int ID, float Weight) {
 
+}
 
 
 
@@ -154,7 +156,8 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
     //obj = new GraphicsModule::model;
     Assimp::Importer importer;
 
-    
+    int vertexId;
+    GraphicsModule::mesh::vertex* v;
     
     //std::string estefile = openfilename();
     char drive[_MAX_DRIVE];
@@ -181,6 +184,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
             mesh = scene->mMeshes[o];
             mes->modelo.push_back(new GraphicsModule::mesh);
             numodel = mes->modelo.size() - 1;
+            mes->modelo[numodel]->m_pScene = scene;
             mes->modelo[numodel]->points = new GraphicsModule::mesh::vertex[mesh->mNumVertices];
             mes->modelo[numodel]->indices = new unsigned int[mesh->mNumFaces * 3];
             for (int i = 0; i < mesh->mNumVertices; i++)
@@ -202,29 +206,54 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                 
 
             }
-            if (mesh->HasBones()) {
-                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[mesh->mNumBones];
-                mes->modelo[numodel]->databones = new GraphicsModule::mesh::BoneData[mesh->mNumBones];
-                mes->modelo[numodel]->BonesNum = mesh->mNumBones;
+            /*if (mesh->HasBones()) {
+                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[1024];
+                //mes->modelo[numodel]->BonesNum = mesh->mNumBones;
                 
                 for (int i = 0; i < mesh->mNumBones; i++) {
-                    mes->modelo[numodel]->databones[i].name = mesh->mBones[i]->mName.C_Str();
-                    readmatrix(mes->modelo[numodel]->databones[i].offset , mesh->mBones[i]->mOffsetMatrix);
+                    unsigned int BoneIndex = 0;
+                    string BoneName(mesh->mBones[i]->mName.C_Str());
+                    if (mes->modelo[numodel]->m_BoneMapping.find(BoneName) == mes->modelo[numodel]->m_BoneMapping.end()) {
+                        BoneIndex = mes->modelo[numodel]->BonesNum;
+                        mes->modelo[numodel]->BonesNum++;
+                        //ofset
+                        readmatrix(mes->modelo[numodel]->bones[BoneIndex].offset, mesh->mBones[BoneIndex]->mOffsetMatrix);
+                        mes->modelo[numodel]->m_BoneMapping.insert({ BoneName,BoneIndex });
+                        
+                    }
+                    else {
+                        BoneIndex = mes->modelo[numodel]->m_BoneMapping[BoneName];
+                    }
+                    
+
+
+                    
                     std::cout << mesh->mBones[i]->mNumWeights << std::endl;
                     for (int u = 0; u < mesh->mBones[i]->mNumWeights; u++) {
-                        mes->modelo[numodel]->bones[i].VertexID[u] = mesh->mBones[i]->mWeights[u].mVertexId;
-                        mes->modelo[numodel]->points[mesh->mBones[i]->mWeights[u].mVertexId].boneid = mesh->mBones[i]->mWeights[u].mVertexId;
-                        mes->modelo[numodel]->bones[i].Weight[u] = mesh->mBones[i]->mWeights[u].mWeight;
+                        vertexId = mesh->mBones[i]->mWeights[u].mVertexId;
+                        v = &mes->modelo[numodel]->points[vertexId];
+                        if (v->Weight[3] != 0) {
+                            std::cout << "nesesita mas" << std::endl;
+                        }
+                        for (int n = 0; n < 4; n++) {
+                            if (v->Weight[n] == 0) {
+                                v->boneid[n] = i;
+                                v->Weight[n] = mesh->mBones[i]->mWeights[u].mWeight;
+                                break;
+                            }
+                            
+                             
+                        }
                     }
                 }
-            }
+            }*/
             for (int i = 0; i < mesh->mNumFaces; i++) {
                 const aiFace& Face = mesh->mFaces[i];
                 if (Face.mNumIndices == 3) {
                     mes->modelo[mes->modelo.size() - 1]->indices[i * 3] = i * 3;
                     mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 1] = i * 3 + 1;
                     mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 2] = i * 3 + 2;
-                    if (mesh->HasTextureCoords(0)) {
+                    if (mesh->HasTextureCoords(0)&& mesh->HasNormals()) {
                         aiVector3D deltaPos1 = mesh->mVertices[i * 3 + 1] - mesh->mVertices[i * 3];
                         aiVector3D deltaPos2 = mesh->mVertices[i * 3 + 2] - mesh->mVertices[i * 3];
                         aiVector3D deltaUV1 = mesh->mTextureCoords[0][i * 3 + 1] - mesh->mTextureCoords[0][i * 3];
@@ -256,6 +285,8 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                 }
             
             }
+
+            //scene->mRootNode->mNumChildren;
 
             mes->modelo[mes->modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
             aiMaterial* siaimatirial;// = scene->mMaterials[scene->mMeshes[o]->mMaterialIndex];
@@ -582,6 +613,7 @@ int main()
     }
     else
     {
+        
         MiObj.Update();
         MiObj.clear();
         MiObj.draw(objects);

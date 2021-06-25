@@ -4,6 +4,9 @@
 #include"Textura.h"
 #include "camera.h"
 #include<vector>
+#include"assimp\Importer.hpp"
+#include"assimp\scene.h"
+#include<map>
 #define NUM_BONES_PER_VEREX 1024
 namespace GraphicsModule {
 	class mesh
@@ -11,21 +14,17 @@ namespace GraphicsModule {
 		
 	public:
 		struct Bone {
-			unsigned int VertexID[NUM_BONES_PER_VEREX];
-			float Weight[NUM_BONES_PER_VEREX];
-		};
-		struct BoneData {
-			const char* name;
 			matrix offset;
-			unsigned int  vw;
 		};
+		
 		struct vertex {
 			float posi[3];
 			float uv[2];
 			float normal[3];
 			float binormal[3];
 			float tangent[3];
-			float boneid;
+			int boneid[4] = { 0 ,0 ,0 ,0 };
+			float Weight[4] = {0.0f ,0.0f ,0.0f ,0.0f };
 		};
 		mesh() {}
 		~mesh();
@@ -33,16 +32,29 @@ namespace GraphicsModule {
 		int BonesNum = 0;
 		vertex* points;
 		Bone* bones;
-		BoneData* databones;
+		//BoneData* databones;
 		unsigned int* indices;
 		Buffer vertexB;
 		Buffer indexB;
 		Buffer BonesB;
 		Buffer colorB;
 		unsigned int vao;
-		Buffer* getindices();
-		
 		int n = 0;
+		float time = 0;
+		const aiScene* m_pScene;
+		std::map<string, unsigned int> m_BoneMapping;
+		void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		unsigned int FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		unsigned int FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		unsigned int FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
+		void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const matrix& ParentTransform);
+
+		void BoneTransform(float time, std::vector<matrix>& transforms);
+		//void ReadNodeHeriarchy(float time, const aiNode* pNode);
+		Buffer* getindices();
 		void setindices(std::initializer_list<unsigned int> i,int in);
 		Buffer* getvertex();
 		void setvertex(std::initializer_list<vertex> i);

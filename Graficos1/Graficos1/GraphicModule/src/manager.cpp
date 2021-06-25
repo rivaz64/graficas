@@ -127,7 +127,11 @@ namespace GraphicsModule {
 			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
 #ifdef directX
-			getmanager()->getConext()->VSSetConstantBuffers(8,&mo->BonesB);
+			if (mo->BonesNum != 0) {
+				devcon.UpdateSubresource(mo->BonesB, mo->bones);
+				getmanager()->getConext()->VSSetConstantBuffers(8, &mo->BonesB);
+			}
+			
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
 			devcon.draw(mo->indexnum);
