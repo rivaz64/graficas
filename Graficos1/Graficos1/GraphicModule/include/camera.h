@@ -16,7 +16,8 @@ struct matrix
 #ifdef openGL
 	glm::mat4 m;
 #else
-	XMMATRIX m;
+	float m[16];
+	//XMMATRIX m;
 #endif
 };
 class camera

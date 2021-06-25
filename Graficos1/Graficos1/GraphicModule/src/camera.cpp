@@ -109,22 +109,22 @@ void camera::getView(matrix& matrix)
 	matrix.m[3][2] = -zaxis.dot(eye);
 	matrix.m[3][3] = 1;
 #else
-	matrix.m._11 = xaxis.x;
-	matrix.m._12 = yaxis.x;
-	matrix.m._13 = zaxis.x;
-	matrix.m._14 = 0;
-	matrix.m._21 = xaxis.y;
-	matrix.m._22 = yaxis.y;
-	matrix.m._23 = zaxis.y;
-	matrix.m._24 = 0;
-	matrix.m._31 = xaxis.z;
-	matrix.m._32= yaxis.z;
-	matrix.m._33 = zaxis.z;
-	matrix.m._34 = 0;
-	matrix.m._41 = -xaxis.dot(eye);
-	matrix.m._42 = -yaxis.dot(eye);
-	matrix.m._43 = -zaxis.dot(eye);
-	matrix.m._44 = 1;
+	matrix.m[0] = xaxis.x;
+	matrix.m[4] = yaxis.x;
+	matrix.m[8] = zaxis.x;
+	matrix.m[12] = 0;
+	matrix.m[1] = xaxis.y;
+	matrix.m[5] = yaxis.y;
+	matrix.m[9] = zaxis.y;
+	matrix.m[13] = 0;
+	matrix.m[2] = xaxis.z;
+	matrix.m[6] = yaxis.z;
+	matrix.m[10] = zaxis.z;
+	matrix.m[14] = 0;
+	matrix.m[3] = -xaxis.dot(eye);
+	matrix.m[7] = -yaxis.dot(eye);
+	matrix.m[11] = -zaxis.dot(eye);
+	matrix.m[15] = 1;
 		/*
 	matrix.m[0] = xaxis.x;
 	matrix.m[4] = yaxis.x;
@@ -167,22 +167,22 @@ void camera::getProyectionMatrixPerspective(matrix& matrix)
 	matrix.m[3][3] = 0;
 #else
 	
-	matrix.m._11 = (co / s) / ratio;
-	matrix.m._12= 0;
-	matrix.m._13 = 0;
-	matrix.m._14 = 0;
-	matrix.m._21 = 0;
-	matrix.m._22= co / s;
-	matrix.m._23= 0;
-	matrix.m._24 = 0;
-	matrix.m._31 = 0;
-	matrix.m._32 = 0;
-	matrix.m._33= farp / (farp - nearp);
-	matrix.m._34 = 1;
-	matrix.m._41 = 0;
-	matrix.m._42 = 0;
-	matrix.m._43 = -farp * nearp / (farp - nearp);
-	matrix.m._44 = 0;
+	matrix.m[0] = (co / s) / ratio;
+	matrix.m[4] = 0;
+	matrix.m[8] = 0;
+	matrix.m[12] = 0;
+	matrix.m[1] = 0;
+	matrix.m[5] = co / s;
+	matrix.m[9] = 0;
+	matrix.m[13] = 0;
+	matrix.m[2] = 0;
+	matrix.m[6] = 0;
+	matrix.m[10] = farp / (farp - nearp);
+	matrix.m[14] = 1;
+	matrix.m[3] = 0;
+	matrix.m[7] = 0;
+	matrix.m[11] = -farp * nearp / (farp - nearp);
+	matrix.m[15] = 0;
 #endif
 }
 

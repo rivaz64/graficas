@@ -47,22 +47,22 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 #define BONESPERVERTEX 8
 
 void readmatrix(matrix& m, aiMatrix4x4 &aim) {
-    m.m._11 = aim.a1;
-    m.m._12 = aim.a2;
-    m.m._13 = aim.a3;
-    m.m._14= aim.a4;
-    m.m._21 = aim.b1;
-    m.m._22 = aim.b2;
-    m.m._23 = aim.b3;
-    m.m._24 = aim.b4;
-    m.m._31 = aim.c1;
-    m.m._32 = aim.c2;
-    m.m._33 = aim.c3;
-    m.m._34 = aim.c4;
-    m.m._41 = aim.d1;
-    m.m._42 = aim.d2;
-    m.m._43 = aim.d3;
-    m.m._44 = aim.d4;
+    m.m[0] = aim.a1;
+    m.m[1] = aim.a2;
+    m.m[2] = aim.a3;
+    m.m[3] = aim.a4;
+    m.m[4] = aim.b1;
+    m.m[5] = aim.b2;
+    m.m[6] = aim.b3;
+    m.m[7] = aim.b4;
+    m.m[8] = aim.c1;
+    m.m[9] = aim.c2;
+    m.m[10] = aim.c3;
+    m.m[11] = aim.c4;
+    m.m[12] = aim.d1;
+    m.m[13] = aim.d2;
+    m.m[14] = aim.d3;
+    m.m[15] = aim.d4;
 }
 
 
@@ -206,7 +206,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                 
 
             }
-            /*if (mesh->HasBones()) {
+            if (mesh->HasBones()) {
                 mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[1024];
                 //mes->modelo[numodel]->BonesNum = mesh->mNumBones;
                 
@@ -246,7 +246,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                         }
                     }
                 }
-            }*/
+            }//*/
             for (int i = 0; i < mesh->mNumFaces; i++) {
                 const aiFace& Face = mesh->mFaces[i];
                 if (Face.mNumIndices == 3) {
