@@ -20,6 +20,7 @@
 #include<vector>
 #include"assimp\Importer.hpp"
 #include"assimp\scene.h"
+#include"assimp\postprocess.h"
 #include<algorithm>
 #pragma comment(lib, "ComDlg32.lib")
 #undef _DEBUG
@@ -186,7 +187,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
     if (true/*std::find(filenames.begin(), filenames.end(), sfile) == filenames.end()*/) {
         //objects.push_back(new GraphicsModule::objeto);
         //filenames.push_back(sfile);
-        const aiScene* scene = importer.ReadFile(estefile, NULL);
+        const aiScene* scene = importer.ReadFile(estefile, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph);
         
         if (scene == NULL) {
             return "";
@@ -254,7 +255,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                     for (int u = 0; u < mesh->mBones[i]->mNumWeights; u++) {
                         vertexId = mesh->mBones[i]->mWeights[u].mVertexId;
                         v = &mes->modelo[numodel]->points[vertexId];
-                        if (v->Weight[3] != 0) {
+                        /*if (v->Weight[3] != 0) {
                             std::cout << "nesesita mas" << std::endl;
                         }
                         for (int n = 0; n < 4; n++) {
@@ -265,7 +266,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                             }
                             
                              
-                        }
+                        }*/
                     }
                 }
             }//*/

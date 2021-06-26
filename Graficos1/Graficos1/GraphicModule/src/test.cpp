@@ -193,7 +193,7 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::NONE);
         //GL_FRONT;
         Gbuffer.compile("Gbuffer", {
             "#define VERTEX_LIGHT",
