@@ -65,7 +65,24 @@ void readmatrix(matrix& m, aiMatrix4x4 &aim) {
     m.m[15] = aim.d4;
 }
 
-
+void readmatriz(XMMATRIX& m, const aiMatrix4x4& aim) {
+    m._11 = aim.a1;
+    m._12 = aim.a2;
+    m._13 = aim.a3;
+    m._14 = aim.a4;
+    m._21 = aim.b1;
+    m._22 = aim.b2;
+    m._23 = aim.b3;
+    m._24 = aim.b4;
+    m._31 = aim.c1;
+    m._32 = aim.c2;
+    m._33 = aim.c3;
+    m._34 = aim.c4;
+    m._41 = aim.d1;
+    m._42 = aim.d2;
+    m._43 = aim.d3;
+    m._44 = aim.d4;
+}
 void addBoneData(int ID, float Weight) {
 
 }
@@ -148,13 +165,13 @@ HRESULT InitImgUI()
 #endif
     return S_OK;
 }
-
+Assimp::Importer importer;
 std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
     GraphicsModule::Textura* tx;//= new GraphicsModule::Textura;
     obj = new GraphicsModule::objeto;
     GraphicsModule::model* mes = new GraphicsModule::model;
     //obj = new GraphicsModule::model;
-    Assimp::Importer importer;
+    
 
     int vertexId;
     GraphicsModule::mesh::vertex* v;
@@ -207,9 +224,13 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
 
             }
             if (mesh->HasBones()) {
-                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[1024];
+                mes->modelo[numodel]->bones = new GraphicsModule::mesh::BoneInfo[1024];
+                mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[1024];
                 //mes->modelo[numodel]->BonesNum = mesh->mNumBones;
-                
+                readmatriz(mes->modelo[numodel]->m_GlobalInverseTransform, scene->mRootNode->mTransformation);
+                XMVECTOR det;
+                mes->modelo[numodel]->m_GlobalInverseTransform=XMMatrixInverse(&det,mes->modelo[numodel]->m_GlobalInverseTransform);
+                //m_GlobalInverseTransform.Inverse();
                 for (int i = 0; i < mesh->mNumBones; i++) {
                     unsigned int BoneIndex = 0;
                     string BoneName(mesh->mBones[i]->mName.C_Str());
@@ -218,6 +239,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                         mes->modelo[numodel]->BonesNum++;
                         //ofset
                         readmatrix(mes->modelo[numodel]->bones[BoneIndex].offset, mesh->mBones[BoneIndex]->mOffsetMatrix);
+
                         mes->modelo[numodel]->m_BoneMapping.insert({ BoneName,BoneIndex });
                         
                     }

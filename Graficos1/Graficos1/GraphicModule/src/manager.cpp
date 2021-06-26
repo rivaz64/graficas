@@ -128,7 +128,8 @@ namespace GraphicsModule {
 #endif
 #ifdef directX
 			if (mo->BonesNum != 0) {
-				devcon.UpdateSubresource(mo->BonesB, mo->bones);
+				mo->BoneTransform(0);
+				devcon.UpdateSubresource(mo->BonesB, mo->bonesPos);
 				getmanager()->getConext()->VSSetConstantBuffers(8, &mo->BonesB);
 			}
 			

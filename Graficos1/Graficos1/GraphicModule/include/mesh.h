@@ -14,9 +14,12 @@ namespace GraphicsModule {
 		
 	public:
 		struct Bone {
-			matrix offset;
+			matrix ofset;
 		};
-		
+		struct BoneInfo {
+			matrix offset;
+			matrix FinalTransformation;
+		};
 		struct vertex {
 			float posi[3];
 			float uv[2];
@@ -31,7 +34,9 @@ namespace GraphicsModule {
 		int indexnum;
 		int BonesNum = 0;
 		vertex* points;
-		Bone* bones;
+		BoneInfo* bones;
+		Bone* bonesPos;
+		XMMATRIX m_GlobalInverseTransform;
 		//BoneData* databones;
 		unsigned int* indices;
 		Buffer vertexB;
@@ -52,7 +57,7 @@ namespace GraphicsModule {
 		const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
 		void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const matrix& ParentTransform);
 
-		void BoneTransform(float time, std::vector<matrix>& transforms);
+		void BoneTransform(float time);
 		//void ReadNodeHeriarchy(float time, const aiNode* pNode);
 		Buffer* getindices();
 		void setindices(std::initializer_list<unsigned int> i,int in);
