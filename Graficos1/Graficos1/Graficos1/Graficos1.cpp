@@ -225,10 +225,10 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
 
             }
             if (mesh->HasBones()) {
-                mes->modelo[numodel]->bones = new GraphicsModule::mesh::BoneInfo[1024];
-                mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[1024];
+                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[1024];
+                //mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[1024];
                 //mes->modelo[numodel]->BonesNum = mesh->mNumBones;
-                readmatriz(mes->modelo[numodel]->m_GlobalInverseTransform, scene->mRootNode->mTransformation);
+                readmatriz(mes->modelo[numodel]->m_GlobalInverseTransform, scene->mRootNode->mTransformation.Inverse());
                 XMVECTOR det;
                 mes->modelo[numodel]->m_GlobalInverseTransform=XMMatrixInverse(&det,mes->modelo[numodel]->m_GlobalInverseTransform);
                 //m_GlobalInverseTransform.Inverse();
@@ -239,7 +239,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                         BoneIndex = mes->modelo[numodel]->BonesNum;
                         mes->modelo[numodel]->BonesNum++;
                         //ofset
-                        readmatrix(mes->modelo[numodel]->bones[BoneIndex].offset, mesh->mBones[BoneIndex]->mOffsetMatrix);
+                        
 
                         mes->modelo[numodel]->m_BoneMapping.insert({ BoneName,BoneIndex });
                         
@@ -247,35 +247,35 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                     else {
                         BoneIndex = mes->modelo[numodel]->m_BoneMapping[BoneName];
                     }
-                    
+                    readmatrix(mes->modelo[numodel]->bones[BoneIndex].offset, mesh->mBones[BoneIndex]->mOffsetMatrix);
 
 
                     
-                    std::cout << mesh->mBones[i]->mNumWeights << std::endl;
+                    //std::cout << mesh->mBones[i]->mNumWeights << std::endl;
                     for (int u = 0; u < mesh->mBones[i]->mNumWeights; u++) {
-                        vertexId = mesh->mBones[i]->mWeights[u].mVertexId;
+                        vertexId = mesh->mBones[BoneIndex]->mWeights[u].mVertexId;
                         v = &mes->modelo[numodel]->points[vertexId];
-                        /*if (v->Weight[3] != 0) {
+                        if (v->Weight[3] != 0) {
                             std::cout << "nesesita mas" << std::endl;
                         }
                         for (int n = 0; n < 4; n++) {
                             if (v->Weight[n] == 0) {
-                                v->boneid[n] = i;
-                                v->Weight[n] = mesh->mBones[i]->mWeights[u].mWeight;
+                                v->boneid[n] = BoneIndex;
+                                v->Weight[n] = mesh->mBones[BoneIndex]->mWeights[u].mWeight;
                                 break;
                             }
-                            
-                             
-                        }*/
+                        }
                     }
                 }
             }//*/
             for (int i = 0; i < mesh->mNumFaces; i++) {
                 const aiFace& Face = mesh->mFaces[i];
+                //std::cout << Face.mNumIndices << std::endl;
                 if (Face.mNumIndices == 3) {
-                    mes->modelo[mes->modelo.size() - 1]->indices[i * 3] = i * 3;
-                    mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 1] = i * 3 + 1;
-                    mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 2] = i * 3 + 2;
+                    
+                    mes->modelo[mes->modelo.size() - 1]->indices[i * 3] = Face.mIndices[0];// i * 3;
+                    mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 1] = Face.mIndices[1];// i * 3 + 1;
+                    mes->modelo[mes->modelo.size() - 1]->indices[i * 3 + 2] = Face.mIndices[2]; //i * 3 + 2;
                     if (mesh->HasTextureCoords(0)&& mesh->HasNormals()) {
                         aiVector3D deltaPos1 = mesh->mVertices[i * 3 + 1] - mesh->mVertices[i * 3];
                         aiVector3D deltaPos2 = mesh->mVertices[i * 3 + 2] - mesh->mVertices[i * 3];

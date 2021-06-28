@@ -241,9 +241,9 @@ namespace GraphicsModule {
         XMVECTOR nein;
         if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
             unsigned int BoneIndex = m_BoneMapping[NodeName];
-            readmatrix(bonofset, bones[BoneIndex].offset);
+            //readmatrix(bonofset, bones[BoneIndex].offset);
             //este va descomentado aka
-            readmatriz(bones[BoneIndex].FinalTransformation,m_GlobalInverseTransform * GlobalTransformation * bonofset);
+            readmatriz(bones[BoneIndex].offset,m_GlobalInverseTransform * GlobalTransformation * bonofset);
             //bones[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * bonofset;
 
         }
@@ -266,9 +266,9 @@ namespace GraphicsModule {
 
         
 
-        for (int i = 0; i < BonesNum; i++) {
+        /*for (int i = 0; i < BonesNum; i++) {
             bonesPos[i].ofset = bones[i].FinalTransformation;
-        }
+        }*/
 
     }
     /*void mesh::ReadNodeHeriarchy(float time, const aiNode* pNode)

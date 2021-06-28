@@ -14,7 +14,7 @@ namespace GraphicsModule {
 		
 	public:
 		struct Bone {
-			matrix ofset;
+			matrix offset;
 		};
 		struct BoneInfo {
 			matrix offset;
@@ -26,16 +26,16 @@ namespace GraphicsModule {
 			float normal[3];
 			float binormal[3];
 			float tangent[3];
-			//int boneid[4] = { 0 ,0 ,0 ,0 };
-			//float Weight[4] = {0.0f ,0.0f ,0.0f ,0.0f };
+			int boneid[4] = { 0 ,0 ,0 ,0 };
+			float Weight[4] = {0.0f ,0.0f ,0.0f ,0.0f };
 		};
 		mesh() {}
 		~mesh();
 		int indexnum;
 		int BonesNum = 0;
 		vertex* points;
-		BoneInfo* bones;
-		Bone* bonesPos;
+		Bone* bones;
+		//Bone* bonesPos;
 		XMMATRIX m_GlobalInverseTransform;
 		//BoneData* databones;
 		unsigned int* indices;
