@@ -226,11 +226,10 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
             }
             if (mesh->HasBones()) {
                 mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[1024];
-                //mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[1024];
+                mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[1024];
                 //mes->modelo[numodel]->BonesNum = mesh->mNumBones;
-                readmatriz(mes->modelo[numodel]->m_GlobalInverseTransform, scene->mRootNode->mTransformation.Inverse());
-                XMVECTOR det;
-                mes->modelo[numodel]->m_GlobalInverseTransform=XMMatrixInverse(&det,mes->modelo[numodel]->m_GlobalInverseTransform);
+                mes->modelo[numodel]->m_GlobalInverseTransform = scene->mRootNode->mTransformation.Inverse();
+                
                 //m_GlobalInverseTransform.Inverse();
                 for (int i = 0; i < mesh->mNumBones; i++) {
                     unsigned int BoneIndex = 0;
@@ -238,20 +237,15 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                     if (mes->modelo[numodel]->m_BoneMapping.find(BoneName) == mes->modelo[numodel]->m_BoneMapping.end()) {
                         BoneIndex = mes->modelo[numodel]->BonesNum;
                         mes->modelo[numodel]->BonesNum++;
-                        //ofset
-                        
-
                         mes->modelo[numodel]->m_BoneMapping.insert({ BoneName,BoneIndex });
                         
                     }
                     else {
                         BoneIndex = mes->modelo[numodel]->m_BoneMapping[BoneName];
                     }
+
                     readmatrix(mes->modelo[numodel]->bones[BoneIndex].offset, mesh->mBones[BoneIndex]->mOffsetMatrix);
 
-
-                    
-                    //std::cout << mesh->mBones[i]->mNumWeights << std::endl;
                     for (int u = 0; u < mesh->mBones[i]->mNumWeights; u++) {
                         vertexId = mesh->mBones[BoneIndex]->mWeights[u].mVertexId;
                         v = &mes->modelo[numodel]->points[vertexId];

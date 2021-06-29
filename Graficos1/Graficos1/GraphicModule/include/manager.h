@@ -55,6 +55,7 @@ namespace GraphicsModule {
 #ifdef openGL
         int actualchader;
 #endif
+        float timer = 0;
         objeto* screen;
         objeto* saves;
         void create(HWND g_hWnd);

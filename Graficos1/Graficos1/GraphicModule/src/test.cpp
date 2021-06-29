@@ -389,6 +389,7 @@ namespace GraphicsModule
 #ifdef directX
         getmanager()->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 #endif
+        
   //Para ka textura nueva
         if (FAILED(hr))
             return hr;
@@ -404,6 +405,7 @@ namespace GraphicsModule
         //man->setrenderfortextur(rtv);
     }
     void test::Update() {
+        man->timer += .01;
         if (lightson) {
             actual = &lights;
         }

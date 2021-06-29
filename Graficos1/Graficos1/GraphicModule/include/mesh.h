@@ -7,6 +7,7 @@
 #include"assimp\Importer.hpp"
 #include"assimp\scene.h"
 #include<map>
+//#include <chrono>
 #define NUM_BONES_PER_VEREX 1024
 namespace GraphicsModule {
 	class mesh
@@ -35,8 +36,8 @@ namespace GraphicsModule {
 		int BonesNum = 0;
 		vertex* points;
 		Bone* bones;
-		//Bone* bonesPos;
-		XMMATRIX m_GlobalInverseTransform;
+		Bone* bonesPos;
+		aiMatrix4x4 m_GlobalInverseTransform;
 		//BoneData* databones;
 		unsigned int* indices;
 		Buffer vertexB;
@@ -45,7 +46,7 @@ namespace GraphicsModule {
 		Buffer colorB;
 		unsigned int vao;
 		int n = 0;
-		float time = 0;
+		float timer = 0;
 		const aiScene* m_pScene;
 		std::map<string, unsigned int> m_BoneMapping;
 		void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
@@ -55,7 +56,7 @@ namespace GraphicsModule {
 		unsigned int FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
 		unsigned int FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
 		const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
-		void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const matrix& ParentTransform);
+		void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform);
 
 		void BoneTransform(float time);
 		//void ReadNodeHeriarchy(float time, const aiNode* pNode);

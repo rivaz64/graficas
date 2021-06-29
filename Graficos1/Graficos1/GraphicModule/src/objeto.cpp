@@ -16,9 +16,9 @@ namespace GraphicsModule {
     }
     objeto::~objeto()
     {
-        for (Textura* t : material) {
+        /*for (Textura* t : material) {
             delete t;
-        }
+        }*/
         delete mod;
     }
 }

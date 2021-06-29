@@ -16,7 +16,11 @@ struct matrix
 #ifdef openGL
 	glm::mat4 m;
 #else
-	float m[16];
+	float m[16] = { 
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1, };
 	//XMMATRIX m;
 #endif
 };

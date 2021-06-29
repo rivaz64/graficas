@@ -18,77 +18,44 @@ void readmatrix(matrix& m, const aiMatrix4x4& aim) {
     m.m[14] = aim.d3;
     m.m[15] = aim.d4;
 }
-void readmatrix(XMMATRIX& m, const aiMatrix4x4& aim) {
-    m._11 = aim.a1;
-    m._12 = aim.a2;
-    m._13 = aim.a3;
-    m._14 = aim.a4;
-    m._21 = aim.b1;
-    m._22 = aim.b2;
-    m._23 = aim.b3;
-    m._24 = aim.b4;
-    m._31 = aim.c1;
-    m._32 = aim.c2;
-    m._33 = aim.c3;
-    m._34 = aim.c4;
-    m._41 = aim.d1;
-    m._42 = aim.d2;
-    m._43 = aim.d3;
-    m._44 = aim.d4;
+
+void readmatrix(aiMatrix4x4& aim,matrix& m) {
+    aim.a1 = m.m[0];
+    aim.a2 = m.m[1];
+    aim.a3 = m.m[2];
+    aim.a4 = m.m[3];
+    aim.b1 = m.m[4];
+    aim.b2 = m.m[5];
+    aim.b3 = m.m[6];
+    aim.b4 = m.m[7];
+    aim.c1 = m.m[8];
+    aim.c2 = m.m[9];
+    aim.c3 = m.m[10];
+    aim.c4 = m.m[11];
+    aim.d1 = m.m[12];
+    aim.d2 = m.m[13];
+    aim.d3 = m.m[14];
+    aim.d4 = m.m[15];
 }
-void readmatrix(XMMATRIX& m, const matrix& aim) {
-    m._11 = aim.m[0];
-    m._12 = aim.m[1];
-    m._13 = aim.m[2];
-    m._14 = aim.m[3];
-    m._21 = aim.m[4];
-    m._22 = aim.m[5];
-    m._23 = aim.m[6];
-    m._24 = aim.m[7];
-    m._31 = aim.m[8];
-    m._32 = aim.m[9];
-    m._33 = aim.m[10];
-    m._34 = aim.m[11];
-    m._41 = aim.m[12];
-    m._42 = aim.m[13];
-    m._43 = aim.m[14];
-    m._44 = aim.m[15];
-}
-void readmatriz( matrix& aim, _XMMATRIX m) {
-    aim.m[0] = m._11;
-    aim.m[1] = m._12;
-    aim.m[2] = m._13;
-    aim.m[3] = m._14;
-    aim.m[4] = m._21;
-    aim.m[5] = m._22;
-    aim.m[6] = m._23;
-    aim.m[7] = m._24;
-    aim.m[8] = m._31;
-    aim.m[9] = m._32;
-    aim.m[10] = m._33;
-    aim.m[11] = m._34;
-    aim.m[12] = m._41;
-    aim.m[13] = m._42;
-    aim.m[14] = m._43;
-    aim.m[15] = m._44;
-}
-void readRotation(XMMATRIX& m, const aiMatrix3x3& aim) {
-    m._11 = aim.a1;
-    m._12 = aim.a2;
-    m._13 = aim.a3;
-    m._14 = 0;
-    m._21 = aim.b1;
-    m._22 = aim.b2;
-    m._23 = aim.b3;
-    m._24 = 0;
-    m._31 = aim.c1;
-    m._32 = aim.c2;
-    m._33 = aim.c3;
-    m._34 = 0;
-    m._41 = 0;
-    m._42 = 0;
-    m._43 = 0;
-    m._44 = 1;
+
+
+void readRotation(aiMatrix4x4& m, const aiMatrix3x3t<ai_real>& aim) {
+    m.a1 = aim.a1;
+    m.a2 = aim.a2;
+    m.a3 = aim.a3;
+    m.a4 = 0;
+    m.b1 = aim.b1;
+    m.b2 = aim.b2;
+    m.b3 = aim.b3;
+    m.b4 = 0;
+    m.c1 = aim.c1;
+    m.c2 = aim.c2;
+    m.c3 = aim.c3;
+    m.c4 = 0;
+    m.d1 = 0;
+    m.d2 = 0;
+    m.d3 = 0;
+    m.d4 = 1;
 }
 namespace GraphicsModule {
     void mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
@@ -197,72 +164,77 @@ namespace GraphicsModule {
 
         return NULL;
     }
-    void mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const matrix& ParentTransform)
+    void mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
     {
         string NodeName(pNode->mName.data);
 
         const aiAnimation* pAnimation = m_pScene->mAnimations[0];
-
-        XMMATRIX NodeTransformation;
-        readmatrix(NodeTransformation, pNode->mTransformation);
+        aiMatrix4x4 NodeTransformation;
+        NodeTransformation = pNode->mTransformation;
         const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
 
         if (pNodeAnim) {
             // Interpolate scaling and generate scaling transformation matrix
             aiVector3D Scaling;
             CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
-            XMMATRIX ScalingM;
-            ScalingM = XMMatrixScaling(Scaling.x, Scaling.y, Scaling.z);
+            aiMatrix4x4 ScalingM;
+            ScalingM.a1 = Scaling.x;
+            ScalingM.b2 = Scaling.y;
+            ScalingM.c3 = Scaling.z;
             //ScalingM.InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
-
+            
             // Interpolate rotation and generate rotation transformation matrix
             aiQuaternion RotationQ;
             CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim);
-            XMMATRIX RotationM;
+            
+            //readRotation(RotationM, RotationQ.GetMatrix());
+            aiMatrix4x4 RotationM;
             readRotation(RotationM, RotationQ.GetMatrix());
-
             // Interpolate translation and generate translation transformation matrix
             aiVector3D Translation;
             CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
-            XMMATRIX TranslationM;
-            TranslationM = XMMatrixTranslation(Translation.x, Translation.y, Translation.z);
-
+            
+            aiMatrix4x4 TranslationM;
+            TranslationM.a4 = Translation.x;
+            TranslationM.b4 = Translation.y;
+            TranslationM.c4 = Translation.z;
             // Combine the above transformations
            
-            NodeTransformation = TranslationM * RotationM * ScalingM;
-        }
+            NodeTransformation = TranslationM* RotationM* ScalingM;
+        }//*/
 
-        XMMATRIX GlobalTransformation;
-        XMMATRIX parent;
-        readmatrix(parent, ParentTransform);
+        aiMatrix4x4 GlobalTransformation;
+        /*XMMATRIX parent;
+        readmatrix(parent, ParentTransform);*/
 
-        GlobalTransformation= parent * NodeTransformation;
-        XMMATRIX bonofset;
-        XMVECTOR nein;
+        GlobalTransformation= ParentTransform * NodeTransformation;
+        aiMatrix4x4 bonofset;
+        /*XMMATRIX bonofset;
+        XMVECTOR nein;*/
         if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
             unsigned int BoneIndex = m_BoneMapping[NodeName];
-            //readmatrix(bonofset, bones[BoneIndex].offset);
+            readmatrix(bonofset, bones[BoneIndex].offset);
             //este va descomentado aka
-            readmatriz(bones[BoneIndex].offset,m_GlobalInverseTransform * GlobalTransformation * bonofset);
+            readmatrix(bonesPos[BoneIndex].offset,m_GlobalInverseTransform * GlobalTransformation * bonofset);
             //bones[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * bonofset;
 
         }
-        matrix global;
-        readmatriz(global, GlobalTransformation);
+        /*matrix global;
+        readmatriz(global, GlobalTransformation);*/
         for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
-            ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], global);
+            ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
         }//*/
     }
     void mesh::BoneTransform(float time)
     {
-        XMMATRIX Identity = XMMatrixIdentity();
 
-        /*float TicksPerSecond = (float)(m_pScene->mAnimations[0]->mTicksPerSecond != 0 ? m_pScene->mAnimations[0]->mTicksPerSecond : 25.0f);
-        float TimeInTicks = TimeInSeconds * TicksPerSecond;
+        float TicksPerSecond = (float)(m_pScene->mAnimations[0]->mTicksPerSecond != 0 ? m_pScene->mAnimations[0]->mTicksPerSecond : 25.0f);
+        float TimeInTicks = time * TicksPerSecond;
         float AnimationTime = fmod(TimeInTicks, (float)m_pScene->mAnimations[0]->mDuration);//*/
         matrix iden;
-        readmatriz(iden, Identity);
-        ReadNodeHeirarchy(0, m_pScene->mRootNode, iden);
+        aiMatrix4x4 ide;
+        readmatrix(ide, iden);
+        ReadNodeHeirarchy(AnimationTime, m_pScene->mRootNode, ide);
 
         
 
