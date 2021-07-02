@@ -163,13 +163,13 @@ namespace GraphicsModule
         man->saves->mod = new model;
         man->saves->mod->modelo = { &pantaia };
         for (int i = 0; i < 6; i++) {
-            man->screen->material.push_back(new Textura);
+            man->screen->mod->modelo[0]->material.push_back(new Textura);
 #ifdef openGL
-            man->getDevice()->CreateTexture2D(*man->screen->material[man->screen->material.size() - 1]);
+            man->getDevice()->CreateTexture2D(*man->screen->mod->modelo[0]->material[man->screen->mod->modelo[0]->material.size() - 1]);
 #endif
         }
         for (int i = 0; i < 9; i++)
-            man->saves->material.push_back(new Textura);
+            man->saves->mod->modelo[0]->material.push_back(new Textura);
         ///screen.loadfromfile("Earth.dds", false,SRV_DIMENSION::TEXTURECUBE);
 
         Viewport vp;
@@ -547,7 +547,7 @@ namespace GraphicsModule
       Pass::outn = 0;
 #ifdef directX
       for (int i = 0; i < 6; i++) {
-          getmanager()->screen->material[i]->srv = NULL;
+          getmanager()->screen->mod->modelo[0]->material[i]->srv = NULL;
       }
 #endif
 

@@ -63,12 +63,12 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
         for (int i = 0; i < size; i++)
         {
 #ifdef directX
-            getmanager()->saves->material[outn]->srv = ren.rtv.srv[i];
-            getmanager()->screen->material[outs[i]]->srv = ren.rtv.srv[i];
+            getmanager()->saves->mod->modelo[0]->material[outn]->srv = ren.rtv.srv[i];
+            getmanager()->screen->mod->modelo[0]->material[outs[i]]->srv = ren.rtv.srv[i];
 #endif
 #ifdef openGL
-            man->screen->material[outs[i]]->get = ren.rtv.textur[i].get;
-            man->saves->material[outn]->get = ren.rtv.textur[i].get;
+            man->screen->mod->modelo[0]->material[outs[i]]->get = ren.rtv.textur[i].get;
+            man->saves->mod->modelo[0]->material[outn]->get = ren.rtv.textur[i].get;
 #endif
             outn++;
 

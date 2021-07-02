@@ -1,6 +1,25 @@
 #include "mesh.h"
 #include"test.h"
 void readmatrix(matrix& m, const aiMatrix4x4& aim) {
+#ifdef openGL
+    m.m[0][0] = aim.a1;
+    m.m[0][1] = aim.a2;
+    m.m[0][2] = aim.a3;
+    m.m[0][3] = aim.a4;
+    m.m[1][0] = aim.b1;
+    m.m[1][1] = aim.b2;
+    m.m[1][2] = aim.b3;
+    m.m[1][3] = aim.b4;
+    m.m[2][0] = aim.c1;
+    m.m[2][1] = aim.c2;
+    m.m[2][1] = aim.c3;
+    m.m[2][3] = aim.c4;
+    m.m[3][0] = aim.d1;
+    m.m[3][1] = aim.d2;
+    m.m[3][2] = aim.d3;
+    m.m[3][3] = aim.d4;
+#endif
+#ifdef directX
     m.m[0] = aim.a1;
     m.m[1] = aim.a2;
     m.m[2] = aim.a3;
@@ -17,9 +36,29 @@ void readmatrix(matrix& m, const aiMatrix4x4& aim) {
     m.m[13] = aim.d2;
     m.m[14] = aim.d3;
     m.m[15] = aim.d4;
+#endif
 }
 
 void readmatrix(aiMatrix4x4& aim,matrix& m) {
+#ifdef openGL
+    aim.a1 = m.m[0][0];
+    aim.a2 = m.m[0][1];
+    aim.a3 = m.m[0][2];
+    aim.a4 = m.m[0][3];
+    aim.b1 = m.m[1][0];
+    aim.b2 = m.m[1][1];
+    aim.b3 = m.m[1][2];
+    aim.b4 = m.m[1][3];
+    aim.c1 = m.m[2][0];
+    aim.c2 = m.m[2][1];
+    aim.c3 = m.m[2][2];
+    aim.c4 = m.m[2][3];
+    aim.d1 = m.m[3][0];
+    aim.d2 = m.m[3][1];
+    aim.d3 = m.m[3][2];
+    aim.d4 = m.m[3][3];
+#endif
+#ifdef directX
     aim.a1 = m.m[0];
     aim.a2 = m.m[1];
     aim.a3 = m.m[2];
@@ -36,6 +75,7 @@ void readmatrix(aiMatrix4x4& aim,matrix& m) {
     aim.d2 = m.m[13];
     aim.d3 = m.m[14];
     aim.d4 = m.m[15];
+#endif
 }
 
 
@@ -204,23 +244,15 @@ namespace GraphicsModule {
         }//*/
 
         aiMatrix4x4 GlobalTransformation;
-        /*XMMATRIX parent;
-        readmatrix(parent, ParentTransform);*/
 
         GlobalTransformation= ParentTransform * NodeTransformation;
         aiMatrix4x4 bonofset;
-        /*XMMATRIX bonofset;
-        XMVECTOR nein;*/
         if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
             unsigned int BoneIndex = m_BoneMapping[NodeName];
             readmatrix(bonofset, bones[BoneIndex].offset);
-            //este va descomentado aka
             readmatrix(bonesPos[BoneIndex].offset,m_GlobalInverseTransform * GlobalTransformation * bonofset);
-            //bones[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * bonofset;
 
         }
-        /*matrix global;
-        readmatriz(global, GlobalTransformation);*/
         for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
             ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
         }//*/
@@ -371,15 +403,19 @@ namespace GraphicsModule {
             getmanager()->getDevice()->CreateBuffer(BonesB);
         }
 #ifdef openGL
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 *sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 22 *sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(5 * sizeof(float)));
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(5 * sizeof(float)));
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(8 * sizeof(float)));
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(8 * sizeof(float)));
         glEnableVertexAttribArray(3);
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(11 * sizeof(float)));
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(11 * sizeof(float)));
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(5, 4, GL_INT, GL_FALSE, 22 * sizeof(float), (void*)(14 * sizeof(int)));
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(18 * sizeof(float)));
         glEnableVertexAttribArray(4);
 #endif
         //delete[] vertexB.Mem;

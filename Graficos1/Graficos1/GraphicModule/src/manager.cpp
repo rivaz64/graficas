@@ -96,14 +96,14 @@ namespace GraphicsModule {
 			Model = glm::rotate(Model, float(o->rot[2] / 180.f * PI), glm::vec3(0,0,1));
 		
 		
-		GLuint worldID = glGetUniformLocation(chad.shader, "world");
+		/*GLuint worldID = glGetUniformLocation(chad.shader, "world");
 		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
 		if (o->material.size() >= 1) {
 			for (int i = 0; i < o->material.size(); i++) {
 				glActiveTexture(GL_TEXTURE0+i);
 				glBindTexture(o->material[i]->format, o->material[i]->get);
 			}
-		}
+		}*/
 #endif
 #ifdef directX
 		
@@ -118,15 +118,20 @@ namespace GraphicsModule {
 		}
 		
 #endif
-		for (int m = 0; m < o->material.size(); m++) {
-			devcon.PSSetShaderResources(o->material[m], m);
+		for (int m = 0; m < o->mod->modelo[0]->material.size(); m++) {
+			devcon.PSSetShaderResources(o->mod->modelo[0]->material[m], m);
 		}
 		for (mesh* mo : (o->mod->modelo)) {
 #ifdef openGL
 			glBindVertexArray(mo->vao);
 			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
+			for (int m = 0; m < mo->material.size(); m++) {
+
+				devcon.PSSetShaderResources(mo->material[m], m);
+			}
 #ifdef directX
+			
 			if (mo->BonesNum != 0) {
 				mo->BoneTransform(timer);
 				devcon.UpdateSubresource(mo->BonesB, mo->bonesPos);
@@ -147,6 +152,7 @@ namespace GraphicsModule {
 	}
 	void manager::draw(objeto* o , Buffer* changeveryFrameB, matrix& m)
 	{
+#ifdef directX
 		XMMATRIX g_World;
 		CBChangesEveryFrame cb;
 		g_World = XMMatrixMultiply(XMMatrixScaling(o->size[0], o->size[1], o->size[2]), m.m);
@@ -157,7 +163,7 @@ namespace GraphicsModule {
 		devcon.IASetVertexBuffers(o->mod->modelo[0]->getvertex());
 		devcon.IASetIndexBuffer(o->mod->modelo[0]->getindices());
 		devcon.draw(o->mod->modelo[0]->indexnum);
-
+#endif
 	}
 	void manager::setrenderfortextur(RenderTargetView& rtv)
 	{

@@ -40,6 +40,8 @@ namespace GraphicsModule {
 		aiMatrix4x4 m_GlobalInverseTransform;
 		//BoneData* databones;
 		unsigned int* indices;
+		std::vector<Textura*> material;
+		int numaterial = 0;
 		Buffer vertexB;
 		Buffer indexB;
 		Buffer BonesB;

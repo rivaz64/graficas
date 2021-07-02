@@ -127,6 +127,10 @@ namespace GraphicsModule {
 #ifdef directX
 		g_pImmediateContext->PSSetShaderResources(cual, 1, &t->srv);
 #endif
+#ifdef openGL
+		glActiveTexture(GL_TEXTURE0 + cual);
+		glBindTexture(t->format, t->get);
+#endif
 	}
 
 	void DeviceContext::OMSetRenderTargets(RenderTargetView& r, DepthStencil& d)

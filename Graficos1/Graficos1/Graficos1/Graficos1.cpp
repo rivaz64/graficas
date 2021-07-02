@@ -48,6 +48,25 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 #define BONESPERVERTEX 8
 
 void readmatrix(matrix& m, aiMatrix4x4 &aim) {
+#ifdef openGL
+    m.m[0][0] = aim.a1;
+    m.m[0][1] = aim.a2;
+    m.m[0][2] = aim.a3;
+    m.m[0][3] = aim.a4;
+    m.m[1][0] = aim.b1;
+    m.m[1][1] = aim.b2;
+    m.m[1][2] = aim.b3;
+    m.m[1][3] = aim.b4;
+    m.m[2][0] = aim.c1;
+    m.m[2][1] = aim.c2;
+    m.m[2][1] = aim.c3;
+    m.m[2][3] = aim.c4;
+    m.m[3][0] = aim.d1;
+    m.m[3][1] = aim.d2;
+    m.m[3][2] = aim.d3;
+    m.m[3][3] = aim.d4;
+#endif
+#ifdef directX
     m.m[0] = aim.a1;
     m.m[1] = aim.a2;
     m.m[2] = aim.a3;
@@ -64,8 +83,9 @@ void readmatrix(matrix& m, aiMatrix4x4 &aim) {
     m.m[13] = aim.d2;
     m.m[14] = aim.d3;
     m.m[15] = aim.d4;
+#endif
 }
-
+#ifdef directX
 void readmatriz(XMMATRIX& m, const aiMatrix4x4& aim) {
     m._11 = aim.a1;
     m._12 = aim.a2;
@@ -84,6 +104,7 @@ void readmatriz(XMMATRIX& m, const aiMatrix4x4& aim) {
     m._43 = aim.d3;
     m._44 = aim.d4;
 }
+#endif
 void addBoneData(int ID, float Weight) {
 
 }
@@ -205,6 +226,49 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
             mes->modelo[numodel]->m_pScene = scene;
             mes->modelo[numodel]->points = new GraphicsModule::mesh::vertex[mesh->mNumVertices];
             mes->modelo[numodel]->indices = new unsigned int[mesh->mNumFaces * 3];
+            aiMaterial* siaimatirial;// = scene->mMaterials[scene->mMeshes[o]->mMaterialIndex];
+            for (int u = 0; u < scene->mNumMaterials; u++) {
+                siaimatirial = scene->mMaterials[u];
+                for (int i = 1; i < aiTextureType_UNKNOWN; i++) {
+                    if (siaimatirial->GetTextureCount((aiTextureType)i) > 0) {
+                        //std::cout << (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) << std::endl;
+                        if (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+                            char drive[_MAX_DRIVE];
+                            char dir[_MAX_DIR];
+                            char fname[_MAX_FNAME];
+                            char ext[_MAX_EXT];
+
+
+
+                            _splitpath_s(Path.data, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
+                            std::cout << fname << std::endl;
+                            Filename = fname;
+                            Filename += ext;
+                            tx = new GraphicsModule::Textura;
+                            tx->loadfromfile(Filename.c_str(), inverted,GraphicsModule::SRV_DIMENSION::TEXTURE2D);
+                            //mes->modelo[mes->modelo.size() - 1]
+                            
+                            if (mesh->HasBones()) {
+                                //std::cout << "textur charged " << mes->modelo[o]->material.size() <<in<< std::endl;
+                                if (o == 1) {
+                                    //mes->modelo[0]->material.push_back(tx);
+                                }
+                                else if (o == 2) {
+                                    //mes->modelo[1]->material.push_back(tx);
+                                }
+                                /*else
+                                    mes->modelo[2]->material.push_back(tx);*/
+                                GraphicsModule::getmanager()->materials.push_back(tx);
+                            }
+                            
+                            else
+                            mes->modelo[0]->material.push_back(tx);
+                            //break;
+                        }
+                    }
+                }
+            }
+            //mesh->mMaterialIndex
             for (int i = 0; i < mesh->mNumVertices; i++)
             {
                 aiVector3D pos = mesh->mVertices[i];
@@ -225,6 +289,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
 
             }
             if (mesh->HasBones()) {
+                
                 mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[1024];
                 mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[1024];
                 //mes->modelo[numodel]->BonesNum = mesh->mNumBones;
@@ -246,7 +311,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
 
                     readmatrix(mes->modelo[numodel]->bones[BoneIndex].offset, mesh->mBones[BoneIndex]->mOffsetMatrix);
 
-                    for (int u = 0; u < mesh->mBones[i]->mNumWeights; u++) {
+                    for (int u = 0; u < mesh->mBones[BoneIndex]->mNumWeights; u++) {
                         vertexId = mesh->mBones[BoneIndex]->mWeights[u].mVertexId;
                         v = &mes->modelo[numodel]->points[vertexId];
                         if (v->Weight[3] != 0) {
@@ -262,6 +327,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                     }
                 }
             }//*/
+
             for (int i = 0; i < mesh->mNumFaces; i++) {
                 const aiFace& Face = mesh->mFaces[i];
                 //std::cout << Face.mNumIndices << std::endl;
@@ -306,39 +372,31 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
             //scene->mRootNode->mNumChildren;
 
             mes->modelo[mes->modelo.size() - 1]->init(mesh->mNumVertices, mesh->mNumFaces * 3);
-            aiMaterial* siaimatirial;// = scene->mMaterials[scene->mMeshes[o]->mMaterialIndex];
-            for (int u = 0; u < scene->mNumMaterials; u++) {
-                siaimatirial = scene->mMaterials[u];
-                for (int i = 1; i < aiTextureType_UNKNOWN; i++) {
-                    if (siaimatirial->GetTextureCount((aiTextureType)i) > 0) {
-                        //std::cout << (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) << std::endl;
-                        if (siaimatirial->GetTexture(aiTextureType(o), 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
-                            char drive[_MAX_DRIVE];
-                            char dir[_MAX_DIR];
-                            char fname[_MAX_FNAME];
-                            char ext[_MAX_EXT];
-
-
-
-                            _splitpath_s(Path.data, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
-                            std::cout << fname << std::endl;
-                            Filename = fname;
-                            Filename += ext;
-                            tx = new GraphicsModule::Textura;
-                            tx->loadfromfile(Filename.c_str(), inverted,GraphicsModule::SRV_DIMENSION::TEXTURE2D);
-                            //mes->modelo[mes->modelo.size() - 1]
-                            obj->material.push_back(tx);
-                            //break;
-                        }
-                    }
-                }
-            }
+            
             //std::cout << 'a' << AI_SUCCESS << std::endl;
             /*if (mesh != NULL) {
                 delete[] mesh->mVertices;
             }*/
             
         }
+        /*if (mes->modelo.size() > 1) {
+            if (mes->modelo[0]->material.size())
+                mes->modelo[0]->material[0] = GraphicsModule::getmanager()->materials[scene->mMeshes[0]->mMaterialIndex];
+            if (mes->modelo[1]->material.size())
+                mes->modelo[1]->material[0] = GraphicsModule::getmanager()->materials[scene->mMeshes[1]->mMaterialIndex];
+        }*/
+        GraphicsModule::manager* man = GraphicsModule::getmanager();
+        for (int o = 0; o < scene->mNumMeshes; o++) {
+            if (scene->mMeshes[0]->HasBones()) {
+                mes->modelo[0]->material.push_back(man->materials[scene->mMeshes[0]->mMaterialIndex]);
+                mes->modelo[1]->material.push_back(man->materials[scene->mMeshes[1]->mMaterialIndex]);
+                mes->modelo[2]->material.push_back(man->materials[scene->mMeshes[2]->mMaterialIndex]);
+                mes->modelo[3]->material.push_back(man->materials[scene->mMeshes[3]->mMaterialIndex]);
+                mes->modelo[4]->material.push_back(man->materials[scene->mMeshes[4]->mMaterialIndex]);
+                mes->modelo[5]->material.push_back(man->materials[scene->mMeshes[5]->mMaterialIndex]);
+            }
+        }
+        
         //delete scene;
         obj->mod = mes;
         if (objects.size() > 1)
@@ -376,10 +434,10 @@ void UIRender()
         for (int i = 0; i < 8; i++)
         {
 #ifdef directX
-            ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->material[i]->srv), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+            ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->mod->modelo[0]->material[i]->srv), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
 #endif
 #ifdef openGL
-            ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->material[i]->get), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+            ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->mod->modelo[0]->material[i]->get), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
 #endif
         }
         //if (cual >= 3 && cual < objects.size()) {
@@ -581,9 +639,9 @@ int main()
         return 0;
     }
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/Sphere.3ds",MiObj.skypox);
-    MiObj.skypox->material.push_back(new GraphicsModule::Textura);
+    MiObj.skypox->mod->modelo[0]->material.push_back(new GraphicsModule::Textura);
 
-    MiObj.skypox->material[0]->loadfromfile(
+    MiObj.skypox->mod->modelo[0]->material[0]->loadfromfile(
 #ifdef directX
         "Snow.dds"
 #endif
@@ -591,17 +649,13 @@ int main()
         "skybox"
 #endif
         , false, GraphicsModule::SRV_DIMENSION::TEXTURECUBE);
-    GraphicsModule::getmanager()->getConext()->PSSetShaderResources(MiObj.skypox->material[0], 8);
+    GraphicsModule::getmanager()->getConext()->PSSetShaderResources(MiObj.skypox->mod->modelo[0]->material[0], 8);
     MiObj.deferred.pases = { &MiObj.Gbuffer,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
     MiObj.deferred.objts = { {GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } };
-//#ifdef directX
+
     MiObj.forward.pases = { &MiObj.paseprueba ,&MiObj.skypas,&MiObj.tonemap,&MiObj.Copy };
     MiObj.forward.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
-/*#endif
-#ifdef openGL
-    MiObj.forward.pases = { &MiObj.paseprueba  ,&MiObj.Copy };
-    MiObj.forward.objts = { { GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
-#endif*/
+
     
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl","origin");
     GraphicsModule::getmanager()->cubito = objects[0];

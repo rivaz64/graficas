@@ -56,6 +56,7 @@ namespace GraphicsModule {
         int actualchader;
 #endif
         float timer = 0;
+        std::vector<Textura*> materials;
         objeto* screen;
         objeto* saves;
         void create(HWND g_hWnd);
