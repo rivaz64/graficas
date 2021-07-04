@@ -288,7 +288,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                 
 
             }
-            if (mesh->HasBones()) {
+            /*if (mesh->HasBones()) {
                 
                 mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[1024];
                 mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[1024];
