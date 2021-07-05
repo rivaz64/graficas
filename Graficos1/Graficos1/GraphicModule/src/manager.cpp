@@ -96,9 +96,9 @@ namespace GraphicsModule {
 			Model = glm::rotate(Model, float(o->rot[2] / 180.f * PI), glm::vec3(0,0,1));
 		
 		
-		/*GLuint worldID = glGetUniformLocation(chad.shader, "world");
+		GLuint worldID = glGetUniformLocation(chad.shader, "world");
 		glUniformMatrix4fv(worldID, 1, GL_FALSE, glm::value_ptr(Model));
-		if (o->material.size() >= 1) {
+		/*if (o->material.size() >= 1) {
 			for (int i = 0; i < o->material.size(); i++) {
 				glActiveTexture(GL_TEXTURE0+i);
 				glBindTexture(o->material[i]->format, o->material[i]->get);
@@ -122,21 +122,21 @@ namespace GraphicsModule {
 			devcon.PSSetShaderResources(o->mod->modelo[0]->material[m], m);
 		}
 		for (mesh* mo : (o->mod->modelo)) {
-#ifdef openGL
-			glBindVertexArray(mo->vao);
-			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
-#endif
+
 			for (int m = 0; m < mo->material.size(); m++) {
 
 				devcon.PSSetShaderResources(mo->material[m], m);
 			}
-#ifdef directX
-			
 			if (mo->BonesNum != 0) {
 				mo->BoneTransform(timer);
 				devcon.UpdateSubresource(mo->BonesB, mo->bonesPos);
 				getmanager()->getConext()->VSSetConstantBuffers(8, &mo->BonesB);
 			}
+#ifdef openGL
+			glBindVertexArray(mo->vao);
+			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
+#endif
+#ifdef directX
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
 			devcon.draw(mo->indexnum);

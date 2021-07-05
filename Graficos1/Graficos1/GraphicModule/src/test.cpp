@@ -149,9 +149,9 @@ namespace GraphicsModule
         pantaia.points[3] = { 1.f,1.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 #endif
 #ifdef openGL
-        pantaia.points[0] = { -1.f,-1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
-        pantaia.points[1] = { 1.f,-1.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
-        pantaia.points[2] = { -1.f,1.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+        pantaia.points[0] = { -1.f,-1.f,0.f,0.f,0.f,  0.f, 0.f, 0.f,  0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+        pantaia.points[1] = { 1.f,-1.f,0.f,1.f,0.f, 0.f,0.f,0.f, 0.f,0.f,0.f,0.f,0.f,0.f };
+        pantaia.points[2] = { -1.f,1.f,0.f,0.f,1.f,0.f,0.f,0.f, 0.f,0.f,0.f,0.f,0.f,0.f };
         pantaia.points[3] = { 1.f,1.f,0.f,1.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 #endif
         pantaia.indices = new unsigned int[6]{ 1,0,2,1,2,3 };
@@ -193,7 +193,7 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::NONE);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
         //GL_FRONT;
         Gbuffer.compile("Gbuffer", {
             "#define VERTEX_LIGHT",

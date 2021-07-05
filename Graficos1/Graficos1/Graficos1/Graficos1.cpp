@@ -288,10 +288,10 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                 
 
             }
-            /*if (mesh->HasBones()) {
+            if (mesh->HasBones()) {
                 
-                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[1024];
-                mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[1024];
+                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[128];
+                mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[128];
                 //mes->modelo[numodel]->BonesNum = mesh->mNumBones;
                 mes->modelo[numodel]->m_GlobalInverseTransform = scene->mRootNode->mTransformation.Inverse();
                 
@@ -363,7 +363,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                         mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].tangent[1] = tangent.y;
                         mes->modelo[mes->modelo.size() - 1]->points[i * 3 + 2].tangent[2] = tangent.z;
 
-                    }
+                    }//*/
 
                 }
             
@@ -653,7 +653,7 @@ int main()
     MiObj.deferred.pases = { &MiObj.Gbuffer,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
     MiObj.deferred.objts = { {GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } };
 
-    MiObj.forward.pases = { &MiObj.paseprueba ,&MiObj.skypas,&MiObj.tonemap,&MiObj.Copy };
+    MiObj.forward.pases = { &MiObj.paseprueba,&MiObj.skypas,&MiObj.tonemap, &MiObj.Copy };
     MiObj.forward.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
 
     

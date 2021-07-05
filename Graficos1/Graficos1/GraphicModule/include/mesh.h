@@ -27,8 +27,8 @@ namespace GraphicsModule {
 			float normal[3];
 			float binormal[3];
 			float tangent[3];
-			//int boneid[4] = { 0 ,0 ,0 ,0 };
-			//float Weight[4] = {0.0f ,0.0f ,0.0f ,0.0f };
+			int boneid[4] = { 0 ,0 ,0 ,0 };
+			float Weight[4] = {0.0f ,0.0f ,0.0f ,0.0f };
 		};
 		mesh() {}
 		~mesh();

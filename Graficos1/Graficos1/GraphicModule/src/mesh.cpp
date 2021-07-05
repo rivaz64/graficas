@@ -403,20 +403,20 @@ namespace GraphicsModule {
             getmanager()->getDevice()->CreateBuffer(BonesB);
         }
 #ifdef openGL
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 *sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 22*sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(5 * sizeof(float)));
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE,22 * sizeof(float), (void*)(5 * sizeof(float)));
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(8 * sizeof(float)));
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(8 * sizeof(float)));
         glEnableVertexAttribArray(3);
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(11 * sizeof(float)));
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(11 * sizeof(float)));
         glEnableVertexAttribArray(4);
-        /*glVertexAttribPointer(5, 4, GL_INT, GL_FALSE, 22 * sizeof(float), (void*)(14 * sizeof(int)));
+        glVertexAttribPointer(5, 4, GL_INT, GL_FALSE, 22 * sizeof(float), (void*)(14 * sizeof(int)));
         glEnableVertexAttribArray(5);
         glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(18 * sizeof(float)));
-        glEnableVertexAttribArray(6);*/
+        glEnableVertexAttribArray(6);
 #endif
         //delete[] vertexB.Mem;
         //delete[] points;
