@@ -2,22 +2,39 @@
 #include"test.h"
 void readmatrix(matrix& m, const aiMatrix4x4& aim) {
 #ifdef openGL
-    m.m[0][0] = aim.a1;
-    m.m[0][1] = aim.a2;
-    m.m[0][2] = aim.a3;
-    m.m[0][3] = aim.a4;
-    m.m[1][0] = aim.b1;
-    m.m[1][1] = aim.b2;
-    m.m[1][2] = aim.b3;
-    m.m[1][3] = aim.b4;
-    m.m[2][0] = aim.c1;
-    m.m[2][1] = aim.c2;
-    m.m[2][1] = aim.c3;
-    m.m[2][3] = aim.c4;
-    m.m[3][0] = aim.d1;
-    m.m[3][1] = aim.d2;
-    m.m[3][2] = aim.d3;
-    m.m[3][3] = aim.d4;
+    m.m[0].x = aim.a1;
+    m.m[1].x = aim.a2;
+    m.m[2].x = aim.a3;
+    m.m[3].x = aim.a4;
+    m.m[0].y = aim.b1;
+    m.m[1].y = aim.b2;
+    m.m[2].y = aim.b3;
+    m.m[3].y = aim.b4;
+    m.m[0].z = aim.c1;
+    m.m[1].z = aim.c2;
+    m.m[2].z = aim.c3;
+    m.m[3].z = aim.c4;
+    m.m[0].w = aim.d1;
+    m.m[1].w = aim.d2;
+    m.m[2].w = aim.d3;
+    m.m[3].w = aim.d4;
+    //aim = aim.Transpose();
+    /*m.m[0].x = aim.a1;
+    m.m[0].y = aim.a2;
+    m.m[0].z = aim.a3;
+    m.m[0].w = aim.a4;
+    m.m[1].x = aim.b1;
+    m.m[1].y = aim.b2;
+    m.m[1].z = aim.b3;
+    m.m[1].w = aim.b4;
+    m.m[2].x = aim.c1;
+    m.m[2].y = aim.c2;
+    m.m[2].z = aim.c3;
+    m.m[2].w = aim.c4;
+    m.m[3].x = aim.d1;
+    m.m[3].y = aim.d2;
+    m.m[3].z = aim.d3;
+    m.m[3].w = aim.d4;*/
 #endif
 #ifdef directX
     m.m[0] = aim.a1;
@@ -41,22 +58,38 @@ void readmatrix(matrix& m, const aiMatrix4x4& aim) {
 
 void readmatrix(aiMatrix4x4& aim,matrix& m) {
 #ifdef openGL
-    aim.a1 = m.m[0][0];
-    aim.a2 = m.m[0][1];
-    aim.a3 = m.m[0][2];
-    aim.a4 = m.m[0][3];
-    aim.b1 = m.m[1][0];
-    aim.b2 = m.m[1][1];
-    aim.b3 = m.m[1][2];
-    aim.b4 = m.m[1][3];
-    aim.c1 = m.m[2][0];
-    aim.c2 = m.m[2][1];
-    aim.c3 = m.m[2][2];
-    aim.c4 = m.m[2][3];
-    aim.d1 = m.m[3][0];
-    aim.d2 = m.m[3][1];
-    aim.d3 = m.m[3][2];
-    aim.d4 = m.m[3][3];
+    /*aim.a1 = m.m[0].x;
+    aim.a2 = m.m[0].y;
+    aim.a3 = m.m[0].z;
+    aim.a4 = m.m[0].w;
+    aim.b1 = m.m[1].x;
+    aim.b2 = m.m[1].y;
+    aim.b3 = m.m[1].z;
+    aim.b4 = m.m[1].w;
+    aim.c1 = m.m[2].x;
+    aim.c2 = m.m[2].y;
+    aim.c3 = m.m[2].z;
+    aim.c4 = m.m[2].w;
+    aim.d1 = m.m[3].x;
+    aim.d2 = m.m[3].y;
+    aim.d3 = m.m[3].z;
+    aim.d4 = m.m[3].w;*/
+    aim.a1 = m.m[0].x;
+    aim.a2 = m.m[1].x;
+    aim.a3 = m.m[2].x;
+    aim.a4 = m.m[3].x;
+    aim.b1 = m.m[0].y;
+    aim.b2 = m.m[1].y;
+    aim.b3 = m.m[2].y;
+    aim.b4 = m.m[3].y;
+    aim.c1 = m.m[0].z;
+    aim.c2 = m.m[1].z;
+    aim.c3 = m.m[2].z;
+    aim.c4 = m.m[3].z;
+    aim.d1 = m.m[0].w;
+    aim.d2 = m.m[1].w;
+    aim.d3 = m.m[2].w;
+    aim.d4 = m.m[3].w;
 #endif
 #ifdef directX
     aim.a1 = m.m[0];
@@ -265,6 +298,7 @@ namespace GraphicsModule {
         float AnimationTime = fmod(TimeInTicks, (float)m_pScene->mAnimations[0]->mDuration);//*/
         matrix iden;
         aiMatrix4x4 ide;
+        
         readmatrix(ide, iden);
         ReadNodeHeirarchy(AnimationTime, m_pScene->mRootNode, ide);
 
@@ -376,6 +410,7 @@ namespace GraphicsModule {
         vertexB.BindFlags = GraphicsModule::BIND_FLAG::VERTEX_BUFFER;
         vertexB.Usage = GraphicsModule::USAGE::DEFAULT;
         vertexB.ByteWidth = sizeof(vertex) * n;
+        indexB.CPUAccessFlags = 0;
         vertexB.Mem = points;
 
         indexnum = ni;
@@ -397,7 +432,7 @@ namespace GraphicsModule {
         if (BonesNum > 0) {
             BonesB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
             BonesB.Usage = USAGE::DEFAULT;
-            BonesB.ByteWidth = sizeof(Bone) * 1024;
+            BonesB.ByteWidth = sizeof(Bone) * 128;
             BonesB.CPUAccessFlags = 0;
             BonesB.Mem = bones;
             getmanager()->getDevice()->CreateBuffer(BonesB);

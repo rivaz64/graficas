@@ -14,7 +14,7 @@
 struct matrix
 {
 #ifdef openGL
-	glm::mat4 m;
+	glm::mat4 m= glm::mat4(1.0f);
 #else
 	float m[16] = { 
 		1,0,0,0,

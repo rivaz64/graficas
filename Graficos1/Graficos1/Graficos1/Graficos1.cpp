@@ -49,22 +49,23 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 void readmatrix(matrix& m, aiMatrix4x4 &aim) {
 #ifdef openGL
-    m.m[0][0] = aim.a1;
-    m.m[0][1] = aim.a2;
-    m.m[0][2] = aim.a3;
-    m.m[0][3] = aim.a4;
-    m.m[1][0] = aim.b1;
-    m.m[1][1] = aim.b2;
-    m.m[1][2] = aim.b3;
-    m.m[1][3] = aim.b4;
-    m.m[2][0] = aim.c1;
-    m.m[2][1] = aim.c2;
-    m.m[2][1] = aim.c3;
-    m.m[2][3] = aim.c4;
-    m.m[3][0] = aim.d1;
-    m.m[3][1] = aim.d2;
-    m.m[3][2] = aim.d3;
-    m.m[3][3] = aim.d4;
+    aim=aim.Transpose();
+    m.m[0].x = aim.a1;
+    m.m[0].y = aim.a2;
+    m.m[0].z = aim.a3;
+    m.m[0].w = aim.a4;
+    m.m[1].x = aim.b1;
+    m.m[1].y = aim.b2;
+    m.m[1].z = aim.b3;
+    m.m[1].w = aim.b4;
+    m.m[2].x = aim.c1;
+    m.m[2].y = aim.c2;
+    m.m[2].z = aim.c3;
+    m.m[2].w = aim.c4;
+    m.m[3].x = aim.d1;
+    m.m[3].y = aim.d2;
+    m.m[3].z = aim.d3;
+    m.m[3].w = aim.d4;
 #endif
 #ifdef directX
     m.m[0] = aim.a1;
