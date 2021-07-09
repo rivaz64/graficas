@@ -129,8 +129,15 @@ namespace GraphicsModule {
 			}
 			if (mo->BonesNum != 0) {
 				mo->BoneTransform(timer);
-				devcon.UpdateSubresource(mo->BonesB, mo->bonesPos);
-				getmanager()->getConext()->VSSetConstantBuffers(8, &mo->BonesB);
+#ifdef openGL
+				GLuint ID;
+				ID = glGetUniformLocation(actualchader, ("b" + std::to_string(8)).c_str());
+
+				glUniformMatrix4fv(ID, 32, GL_FALSE, glm::value_ptr(mo->bonesPos->offset.m));
+				//glUniform1f(ID, al.k);
+#endif
+				//devcon.UpdateSubresource(mo->BonesB, mo->bonesPos);
+				//getmanager()->getConext()->VSSetConstantBuffers(8, &mo->BonesB,32);
 			}
 #ifdef openGL
 			glBindVertexArray(mo->vao);

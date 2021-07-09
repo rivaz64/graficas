@@ -291,8 +291,8 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
             }
             if (mesh->HasBones()) {
                 
-                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[128];
-                mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[128];
+                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[32];
+                mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[32];
                 //mes->modelo[numodel]->BonesNum = mesh->mNumBones;
                 mes->modelo[numodel]->m_GlobalInverseTransform = scene->mRootNode->mTransformation.Inverse();
                 

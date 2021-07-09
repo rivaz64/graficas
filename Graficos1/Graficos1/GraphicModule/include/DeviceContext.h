@@ -36,6 +36,7 @@ namespace GraphicsModule {
 		void IASetIndexBuffer(Buffer* b);
 
 		void VSSetConstantBuffers(int i, Buffer* b);
+		void VSSetConstantBuffers(int i, Buffer* b,int size);
 		void PSSetConstantBuffers(int i, Buffer* b);
 
 		void UpdateView(camera* cam);

@@ -448,7 +448,7 @@ namespace GraphicsModule {
         glEnableVertexAttribArray(3);
         glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(11 * sizeof(float)));
         glEnableVertexAttribArray(4);
-        glVertexAttribPointer(5, 4, GL_INT, GL_FALSE, 22 * sizeof(float), (void*)(14 * sizeof(int)));
+        glVertexAttribIPointer(5, 4, GL_INT, 22 * sizeof(float), (void*)(14 * sizeof(int)));
         glEnableVertexAttribArray(5);
         glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 22 * sizeof(float), (void*)(18 * sizeof(float)));
         glEnableVertexAttribArray(6);
