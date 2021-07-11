@@ -9,17 +9,7 @@
 namespace GraphicsModule {
 
 
-	void DeviceContext::RSSetViewports(Viewport& vp)
-	{
-		/*v.Width = vp.Width;
-		v.Height = vp.Height;
-		v.MinDepth = vp.MinDepth;
-		v.MaxDepth = vp.MaxDepth;
-		v.TopLeftX = vp.TopLeftX;
-		v.TopLeftY = vp.TopLeftY;
-
-		devcon.g_pImmediateContext->RSSetViewports(1, &v);*/
-	}
+	
 
 
 
@@ -125,7 +115,7 @@ namespace GraphicsModule {
 	void DeviceContext::IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY pt)
 	{
 #ifdef directX
-		g_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+		g_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)pt);
 #endif
 	}
 
@@ -201,10 +191,14 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void DeviceContext::draw(int n)
+	void DeviceContext::draw(int n, PRIMITIVE_TOPOLOGY pt)
 	{
 #ifdef directX
+		g_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)pt);
 		g_pImmediateContext->DrawIndexed(n, 0, 0);
+#endif
+#ifdef openGL
+		glDrawElements((GLenum)pt,n, GL_UNSIGNED_INT, 0);
 #endif
 	}
 

@@ -134,12 +134,6 @@ namespace GraphicsModule
         if (FAILED(hr))
             return hr;
 
-        //man->createrendertarget(deferedtv);
-        //mainrender.init(FORMAT::UNKNOWN,FORMAT::FLOAT,false);
-        //defered.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT,true);
-
-        if (FAILED(hr))
-            return hr;
 
         pantaia.points = new mesh::vertex[4];
 #ifdef directX
@@ -170,7 +164,6 @@ namespace GraphicsModule
         }
         for (int i = 0; i < 9; i++)
             man->saves->mod->modelo[0]->material.push_back(new Textura);
-        ///screen.loadfromfile("Earth.dds", false,SRV_DIMENSION::TEXTURECUBE);
 
         Viewport vp;
         vp.Width = (FLOAT)width;
@@ -193,7 +186,7 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         //GL_FRONT;
         Gbuffer.compile("Gbuffer", {
             "#define VERTEX_LIGHT",
@@ -207,7 +200,7 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         //Gbuffer.setear();
         //Gbuffer.chaders[Gbuffer.chadernum].setShader();
         lights.compile("lights", {
@@ -222,8 +215,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
-        AmbientOcluccion.compile("AO", { "" }, false, { 4 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        AmbientOcluccion.compile("AO", { "" }, false, { 4 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
         tonemap.compile("tonemap", {
             "#define BASIC",
@@ -238,13 +231,10 @@ namespace GraphicsModule
          "#define UNCHARTED2TONEMAP\n#define DEFFERED",
          "#define UNCHARTED2\n#define DEFFERED",
          "#define ALL\n#define DEFFERED",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
-#ifdef directX
-        random.compile("randomnoise", { "" }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
-#endif
-        skypas.compile("skybox", { "" }, false, { 5 }, SRV_DIMENSION::TEXTURE2D, true, CULING::BACK);
-        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, SRV_DIMENSION::TEXTURE2D, true, CULING::FRONT);
+        skypas.compile("skybox", { "" }, false, { 5 }, SRV_DIMENSION::TEXTURE2D, CULING::BACK, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
         cam = new camera;
 
@@ -315,13 +305,6 @@ namespace GraphicsModule
         aob.CPUAccessFlags = 0;
         man->getDevice()->CreateBuffer(aob);
 
-        
-        /*BoneB.Usage = USAGE::DEFAULT;
-        BoneB.ByteWidth = sizeof(float[1024]);
-        BoneB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
-        BoneB.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(BoneB);*/
-        // Create the sample state
         paseprueba.vc.insert({ 0, &translation });
         paseprueba.vc.insert({ 1, &view });
         paseprueba.vc.insert({ 2, &proyection });
@@ -375,8 +358,6 @@ namespace GraphicsModule
         man->View = cbNeverChanges;
         man->getConext()->UpdateSubresource(view, &cbNeverChanges);
 
-        // Initialize the projection matrix
-        //g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
         cam->angle = 0.785398163f;
         cam->ratio = width / (FLOAT)heigh;
         cam->nearp = 0.01f;
@@ -385,10 +366,10 @@ namespace GraphicsModule
         cam->getProyectionMatrixPerspective(cbChangesOnResize);
         man->Projection = cbChangesOnResize;
         man->getConext()->UpdateSubresource(proyection, &cbChangesOnResize);
+        
 
-#ifdef directX
-        getmanager()->getConext()->IASetPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-#endif
+        
+
         
   //Para ka textura nueva
         if (FAILED(hr))

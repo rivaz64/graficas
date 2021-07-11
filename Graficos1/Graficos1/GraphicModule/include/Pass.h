@@ -25,9 +25,9 @@ namespace GraphicsModule {
 		int size;
 		vector<int> outs;
 		static bool first;
-		bool setear;
 		CULING c;
-		void compile(std::string file, std::vector<std::string> tecnicas,bool ultimo,vector<int> n, SRV_DIMENSION d,bool set,CULING cul);
+		PRIMITIVE_TOPOLOGY primitiveTopology;
+		void compile(std::string file, std::vector<std::string> tecnicas,bool ultimo,vector<int> n, SRV_DIMENSION d,CULING cul, PRIMITIVE_TOPOLOGY p);
 		void render( std::vector<objeto*> objts);
 		
 	};

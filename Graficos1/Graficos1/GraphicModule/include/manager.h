@@ -59,14 +59,13 @@ namespace GraphicsModule {
         std::vector<Textura*> materials;
         objeto* screen;
         objeto* saves;
+        PRIMITIVE_TOPOLOGY actualPrimitiveTopology;
         void create(HWND g_hWnd);
         void descrivesch();
         HRESULT init(DRIVER_TYPE v_driverType, UINT createDeviceFlags, FEATURE_LEVEL* featureLevels, UINT numFeatureLevels, FEATURE_LEVEL g_featureLevel);
         void createrendertarget(RenderTargetView& rtv);
         void RSSetViewports(Viewport& vp);
         void draw(objeto *o,  Buffer* changeveryFrameB,chader& chad);
-        void draw(objeto* o, Buffer* changeveryFrameB, matrix& m);
-        void setrenderfortextur(RenderTargetView& rtv);
         //void compileshaders(std::string file,string tecnica);
         //HRESULT compileVS(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,VertexShader& vs ,InputLayout& il, string tecnica);
         //HRESULT compilePX(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, PixelShader& px, string tecnica);

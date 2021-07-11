@@ -25,7 +25,7 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     glUniform1i(glGetUniformLocation(man->actualchader, "AmbientOclucion"), 4);
     glUniform1i(glGetUniformLocation(man->actualchader, "cubemap"), 5);
 #endif
-    if (setear) {
+    if (true) {//aka47
         ren.setTargets();
         ren.clearTargets();
     }
@@ -41,8 +41,8 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
 #endif
     chaders[chadernum].setShader();
 
-    
-
+    man->actualPrimitiveTopology = primitiveTopology;
+   
     if(vc.size()>1)
     for (std::pair<int, Buffer*> p : vc) {
         getmanager()->getConext()->VSSetConstantBuffers(p.first,p.second);
@@ -59,12 +59,12 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     
 
 
-    if (!ulti&&setear) {
+    if (!ulti&&true) {//aka47
         for (int i = 0; i < size; i++)
         {
 #ifdef directX
-            getmanager()->saves->mod->modelo[0]->material[outn]->srv = ren.rtv.srv[i];
-            getmanager()->screen->mod->modelo[0]->material[outs[i]]->srv = ren.rtv.srv[i];
+            man->saves->mod->modelo[0]->material[outn]->srv = ren.rtv.srv[i];
+            man->screen->mod->modelo[0]->material[outs[i]]->srv = ren.rtv.srv[i];
 #endif
 #ifdef openGL
             man->screen->mod->modelo[0]->material[outs[i]]->get = ren.rtv.textur[i].get;
@@ -77,12 +77,12 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
 
 }
 
-void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n, SRV_DIMENSION d, bool set, CULING cul) {
+void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n, SRV_DIMENSION d, CULING cul, PRIMITIVE_TOPOLOGY p) {
     ulti = ultimo;
     outs = n;
     size = n.size();
-    setear = set;
     c = cul;
+    primitiveTopology = p;
     if (ultimo) {
         ren.init(FORMAT::UNKNOWN, FORMAT::FLOAT, false, n.size(),d,cul);
     }

@@ -31,7 +31,6 @@ namespace GraphicsModule {
 #endif
 		float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
 		float g_vMeshColor[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
-		void RSSetViewports(Viewport& vp);
 		void IASetVertexBuffers(Buffer* b);
 		void IASetIndexBuffer(Buffer* b);
 
@@ -54,7 +53,7 @@ namespace GraphicsModule {
 		void VSSetShader(VertexShader& vs);
 		void IASetInputLayout(InputLayout& il);
 
-		void draw(int n);
+		void draw(int n, PRIMITIVE_TOPOLOGY pt);
 		friend class manager;
 		~DeviceContext();
 	};

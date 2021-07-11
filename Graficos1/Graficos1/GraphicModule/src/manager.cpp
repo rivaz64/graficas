@@ -141,52 +141,17 @@ namespace GraphicsModule {
 			}
 #ifdef openGL
 			glBindVertexArray(mo->vao);
-			glDrawElements((GLenum)PRIMITIVE_TOPOLOGY::TRIANGLELIST, mo->indexnum, GL_UNSIGNED_INT, 0);
 #endif
 #ifdef directX
 			devcon.IASetVertexBuffers(mo->getvertex());
 			devcon.IASetIndexBuffer(mo->getindices());
-			devcon.draw(mo->indexnum);
-			/*for (int b = 0; b < mo->BonesNum; b++) {//g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o->rot[0] / 180.f * PI, o->rot[1] / 180.f * PI, o->rot[2] / 180.f * PI), g_World);
-				cubito->posi[0] = mo->databones[b].offset.m[0];
-				cubito->posi[1] = mo->databones[b].offset.m[5];
-				cubito->posi[2] = mo->databones[b].offset.m[10];
-				draw(cubito, changeveryFrameB, chad);
-			}*/
 #endif
+			devcon.draw(mo->indexnum, actualPrimitiveTopology);
 		}
 
 	}
-	void manager::draw(objeto* o , Buffer* changeveryFrameB, matrix& m)
-	{
-#ifdef directX
-		XMMATRIX g_World;
-		CBChangesEveryFrame cb;
-		g_World = XMMatrixMultiply(XMMatrixScaling(o->size[0], o->size[1], o->size[2]), m.m);
-		cb.mWorld = XMMatrixTranspose(g_World);
-		if (changeveryFrameB != NULL) {
-			devcon.UpdateSubresource(*changeveryFrameB, &cb);
-		}
-		devcon.IASetVertexBuffers(o->mod->modelo[0]->getvertex());
-		devcon.IASetIndexBuffer(o->mod->modelo[0]->getindices());
-		devcon.draw(o->mod->modelo[0]->indexnum);
-#endif
-	}
-	void manager::setrenderfortextur(RenderTargetView& rtv)
-	{
-#ifdef  directX
-		/*rtv.release();
-		rtv.textur.release();
-		rtv.textur.describe(FORMAT::R8G8B8A8_UNORM, BIND_FLAG::RENDER_TARGET);
-		dev.CreateTexture2D(rtv.textur);
-		rtv.Format = FORMAT::R8G8B8A8_UNORM;
-		rtv.ViewDimension = DIMENSION::TEXTURE2DARRAY;
-		rtv.MostDetailedMip = 0;
-		rtv.MipLevels = 1;
-		dev.CreateShaderResourceView(rtv);
-		dev.CreateRenderTargetView(rtv,false);*/
-#endif
-	}
+	
+	
 
 	
 	
