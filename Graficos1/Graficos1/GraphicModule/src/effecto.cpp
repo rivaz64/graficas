@@ -1,9 +1,9 @@
 #include "effecto.h"
 
-void GraphicsModule::effecto::render(std::vector<objeto*> v)
+void GraphicsModule::effecto::render()
 {
-	pases[0]->render(v);
-	for (int i = 1; i < pases.size(); i++){
-		pases[i]->render(objts[i - 1]);
+	//pases[0]->render(&v);
+	for (int i = 0; i < pases.size(); i++){
+		pases[i]->render(objts[i]);
 	}
 }

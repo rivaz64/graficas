@@ -120,6 +120,7 @@ namespace GraphicsModule
       effecto forward;
       effecto skeletal;
      
+      vector<GraphicsModule::objeto*>* objectsToDraw;
       
       amblight al;
       dirlight dl;

@@ -117,8 +117,6 @@ namespace GraphicsModule {
     {
         delete[] points;
         delete[] indices;
-        if (boneMesh) {
-            delete boneMesh;
-        }
+        
     }
 }

@@ -5,7 +5,7 @@
 #include<iostream>
 #include"manager.h"
 int GraphicsModule::Pass::outn=0;
-void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
+void GraphicsModule::Pass::render(std::vector<objeto*>* objts)//)
 {
     manager* man = getmanager();
 #ifdef openGL
@@ -25,7 +25,7 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     glUniform1i(glGetUniformLocation(man->actualchader, "AmbientOclucion"), 4);
     glUniform1i(glGetUniformLocation(man->actualchader, "cubemap"), 5);
 #endif
-    if (true) {//aka47
+    if (clear) {//aka47
         ren.setTargets();
         ren.clearTargets();
     }
@@ -45,6 +45,9 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
    
     if(vc.size()>1)
     for (std::pair<int, Buffer*> p : vc) {
+        if (!p.second) {
+            int x=0;
+        }
         getmanager()->getConext()->VSSetConstantBuffers(p.first,p.second);
     }
     for (std::pair<int, Buffer*> p : pc) {
@@ -53,7 +56,8 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
     for (std::pair<int, Textura*> p : pt) {
         getmanager()->getConext()->PSSetShaderResources(p.second, p.first);
     }
-    for (GraphicsModule::objeto* i : objts)
+    if(objts)
+    for (GraphicsModule::objeto* i : *objts)
         getmanager()->draw(i, vc[0], chaders[chadernum]);
 
     
@@ -63,12 +67,12 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
         for (int i = 0; i < size; i++)
         {
 #ifdef directX
-            man->saves->mod->modelo[0]->material[outn]->srv = ren.rtv.srv[i];
-            man->screen->mod->modelo[0]->material[outs[i]]->srv = ren.rtv.srv[i];
+            man->saves->mod->modelo[0]->material[outn]->srv = man->actualRen->rtv.srv[i];
+            man->screen->mod->modelo[0]->material[outs[i]]->srv = man->actualRen->rtv.srv[i];
 #endif
 #ifdef openGL
-            man->screen->mod->modelo[0]->material[outs[i]]->get = ren.rtv.textur[i].get;
-            man->saves->mod->modelo[0]->material[outn]->get = ren.rtv.textur[i].get;
+            man->screen->mod->modelo[0]->material[outs[i]]->get = man->actualRen->rtv.textur[i].get;
+            man->saves->mod->modelo[0]->material[outn]->get = man->actualRen->textur[i].get;
 #endif
             outn++;
 

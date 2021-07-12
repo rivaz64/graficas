@@ -31,7 +31,7 @@ namespace GraphicsModule {
 		
 		vertex* points;
 		
-		mesh* boneMesh=NULL;
+		
 		
 		unsigned int* indices;
 		std::vector<Textura*> material;

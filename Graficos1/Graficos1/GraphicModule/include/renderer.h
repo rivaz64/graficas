@@ -1,11 +1,11 @@
 #pragma once
 #include "Textura.h"
-#include "manager.h"
 #include"DepthStencil.h"
 #include"viewport.h"
 #include "chader.h"
 #include <vector>
 #include "Rasterizer.h"
+#include "..\include\RenderTargetView.h"
 namespace GraphicsModule {
 	class Renderer
 	{

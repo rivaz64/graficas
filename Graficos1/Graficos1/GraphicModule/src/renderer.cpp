@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "manager.h"
 #ifdef directX
 #include <d3d11.h>
 #include <d3dx11.h>
@@ -134,10 +135,9 @@ namespace GraphicsModule {
 #ifdef directX
 		getmanager()->getConext()->get()->OMSetRenderTargets(size, rtv.get.data(), depth.view);
 #endif
-		//getmanager()->getConext()->OMSetRenderTargets(rtv, depth);
 		getmanager()->RSSetViewports(vp);
 		ras.setear();
-		//getmanager()->getConext()->get()->RSSetState(g_Rasterizer);
+		getmanager()->actualRen = this;
 	}
 	void Renderer::clearTargets()
 	{

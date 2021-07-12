@@ -21,6 +21,7 @@ namespace GraphicsModule {
 		std::map<int, Textura*> pt;
 		std::map<int, Buffer*> vt;
 		bool ulti;
+		bool clear=true;
 		Renderer ren;
 		int size;
 		vector<int> outs;
@@ -28,7 +29,7 @@ namespace GraphicsModule {
 		CULING c;
 		PRIMITIVE_TOPOLOGY primitiveTopology;
 		void compile(std::string file, std::vector<std::string> tecnicas,bool ultimo,vector<int> n,CULING cul, PRIMITIVE_TOPOLOGY p);
-		void render( std::vector<objeto*> objts);
+		void render( std::vector<objeto*>* objts);
 		
 	};
 }

@@ -1,5 +1,8 @@
 #include "model.h"
 #include "manager.h"
+#include "mesh.h"
+#include <iostream>
+#include "objeto.h"
 void readmatrix(matrix& m, const aiMatrix4x4& aim) {
 #ifdef openGL
     m.m[0].x = aim.a1;
@@ -107,6 +110,9 @@ GraphicsModule::model::~model()
 	for (mesh* m : modelo) {
 		delete m;
 	}
+    if (boneMesh) {
+        delete boneMesh;
+    }
 }
 namespace GraphicsModule {
     void model::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
@@ -262,7 +268,7 @@ namespace GraphicsModule {
             unsigned int BoneIndex = m_BoneMapping[NodeName];
             readmatrix(bonofset, bones[BoneIndex]);
             readmatrix(bonesPos[BoneIndex], m_GlobalInverseTransform * GlobalTransformation * bonofset);
-
+            readmatrix(bonesEskeleton[BoneIndex], m_GlobalInverseTransform * GlobalTransformation);
         }
         for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
             ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
@@ -281,6 +287,39 @@ namespace GraphicsModule {
         ReadNodeHeirarchy(AnimationTime, m_pScene->mRootNode, ide);
     }
 
+    void model::makePalo(std::string Name, int n)
+    {
+        std::vector< aiNode*> actuals = { m_pScene->mRootNode };
+        std::vector< aiNode*> nexts;
+        int nu = -1;
+        while (actuals.size() > 0) {
+            for (aiNode* node : actuals) {
+                for (int i = 0; i < node->mNumChildren; i++) {
+                    if (node->mChildren[i]->mName.C_Str() == Name) {
+                        if (m_BoneMapping.find(node->mName.C_Str()) != m_BoneMapping.end()) {
+                            boneMesh->mod->modelo[0]->indices[n * 2] = n;
+                            
+                            for (std::map<std::string, unsigned int>::iterator it = m_BoneMapping.begin(); it != m_BoneMapping.end(); it++) {
+                                nu++;
+                                if (node->mName.C_Str() == it->first) {
+                                    break;
+                                }
+                            }
+                            boneMesh->mod->modelo[0]->indices[n * 2 + 1] = nu;
+                            //std::cout <<Name<< " "<< n << " " << node->mName.C_Str()<<" "<< nu << std::endl;
+                        }
+                        return;
+                    }
+                    nexts.push_back(node->mChildren[i]);
+                }
+            }
+            actuals = nexts;
+            nexts.clear();
+        }
+    }
+
+    
+
     void model::init() {
         if (BonesNum > 0) {
             BonesB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
@@ -289,6 +328,34 @@ namespace GraphicsModule {
             BonesB.CPUAccessFlags = 0;
             BonesB.Mem = bones;
             getmanager()->getDevice()->CreateBuffer(BonesB);
+            skeletonB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+            skeletonB.Usage = USAGE::DEFAULT;
+            skeletonB.ByteWidth = sizeof(matrix) * 32;
+            skeletonB.CPUAccessFlags = 0;
+            skeletonB.Mem = bones;
+            getmanager()->getDevice()->CreateBuffer(skeletonB);
+            
+
+            bonesEskeleton = new matrix[32];
+
+            boneMesh = new objeto;
+            boneMesh->mod = new model;
+            boneMesh->mod->modelo.push_back(new mesh);
+            boneMesh->mod->modelo[0]->points = new mesh::vertex[m_BoneMapping.size()];
+            boneMesh->mod->modelo[0]->indices = new unsigned int[m_BoneMapping.size() * 2];
+            int n = 0;
+            for (std::map<std::string, unsigned int>::iterator it = m_BoneMapping.begin(); it != m_BoneMapping.end(); it++) {
+                //std::cout << it->first << std::endl;
+                boneMesh->mod->modelo[0]->points[n].boneid[0] = it->second;
+                boneMesh->mod->modelo[0]->points[n].Weight[0] = 1;
+                makePalo(it->first, n);
+                n++;
+                //if(n==5)
+                //break;
+            }
+            boneMesh->mod->modelo[0]->init(m_BoneMapping.size(), m_BoneMapping.size() * 2);
+            getmanager()->skeletons->push_back(boneMesh);
         }
+        
     }
 }

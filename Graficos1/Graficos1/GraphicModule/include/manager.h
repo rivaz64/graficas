@@ -20,6 +20,7 @@
 
 #include "camera.h"
 #include"chader.h"
+#include "renderer.h"
 namespace GraphicsModule {
     class manager
     {
@@ -61,6 +62,8 @@ namespace GraphicsModule {
         objeto* screen;
         objeto* skeleto;
         objeto* saves;
+        Renderer* actualRen = NULL;
+        vector<GraphicsModule::objeto*>* skeletons;
         PRIMITIVE_TOPOLOGY actualPrimitiveTopology;
         void create(HWND g_hWnd);
         void descrivesch();

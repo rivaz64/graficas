@@ -1,4 +1,5 @@
 #include"objeto.h"
+#include"mesh.h"
 namespace GraphicsModule {
     void objeto::setTexture(RenderTargetView rtv)
     {

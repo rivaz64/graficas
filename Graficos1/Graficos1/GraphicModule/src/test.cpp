@@ -25,9 +25,9 @@ namespace GraphicsModule
     }
 #endif
     test* test::esta = NULL;
-    
 
-    HRESULT test::InitWindow(LONG _width, LONG _height, LRESULT prochan(HWND, UINT, WPARAM, LPARAM) )
+
+    HRESULT test::InitWindow(LONG _width, LONG _height, LRESULT prochan(HWND, UINT, WPARAM, LPARAM))
     {
         man = getmanager();
         width = _width;
@@ -83,14 +83,14 @@ namespace GraphicsModule
             return E_FAIL;
         }
         ShowWindow(g_hwnd, SW_SHOWNORMAL);
-       
+
 #endif
         return S_OK;
     }
 
     HRESULT test::InitDevice()
     {
-        
+
         man = getmanager();
 
         man->create(g_hwnd);
@@ -143,7 +143,7 @@ namespace GraphicsModule
         pantaia.points[3] = { 1.f,1.f,0.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 #endif
 #ifdef openGL
-        pantaia.points[0] = { -1.f,-1.f,0.f,0.f,0.f,  0.f, 0.f, 0.f,  0.f, 0.f, 0.f, 0.f, 0.f, 0.f};
+        pantaia.points[0] = { -1.f,-1.f,0.f,0.f,0.f,  0.f, 0.f, 0.f,  0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
         pantaia.points[1] = { 1.f,-1.f,0.f,1.f,0.f, 0.f,0.f,0.f, 0.f,0.f,0.f,0.f,0.f,0.f };
         pantaia.points[2] = { -1.f,1.f,0.f,0.f,1.f,0.f,0.f,0.f, 0.f,0.f,0.f,0.f,0.f,0.f };
         pantaia.points[3] = { 1.f,1.f,0.f,1.f,1.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
@@ -186,7 +186,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+            }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        paseprueba.clear = false;
         //GL_FRONT;
         Gbuffer.compile("Gbuffer", {
             "#define VERTEX_LIGHT",
@@ -200,7 +201,7 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0,1,2,3 },CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+            }, false, { 0,1,2,3 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         //Gbuffer.setear();
         //Gbuffer.chaders[Gbuffer.chadernum].setShader();
         lights.compile("lights", {
@@ -215,7 +216,7 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 },CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+            }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         AmbientOcluccion.compile("AO", { "" }, false, { 4 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
         tonemap.compile("tonemap", {
@@ -225,20 +226,14 @@ namespace GraphicsModule
          "#define UNCHARTED2TONEMAP",
          "#define UNCHARTED2",
          "#define ALL",
-          "#define BASIC\n#define DEFFERED",
-         "#define REINHARD\n#define DEFFERED",
-         "#define BURGES_DAWSON\n#define DEFFERED",
-         "#define UNCHARTED2TONEMAP\n#define DEFFERED",
-         "#define UNCHARTED2\n#define DEFFERED",
-         "#define ALL\n#define DEFFERED",
-            }, false, { 0 },  CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+            }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
-        skypas.compile("skybox", { "" }, false, { 5 },  CULING::BACK, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        skypas.compile("skybox", { "" }, false, { 5 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         animSkeleton.compile("skeletal", {
             "",
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::LINELIST);
-
-        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 },  CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        animSkeleton.clear = false;
+        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
         cam = new camera;
 
@@ -337,10 +332,13 @@ namespace GraphicsModule
         skypas.vc.insert({ 0, &translation });
         skypas.vc.insert({ 1, &view });
         skypas.vc.insert({ 2, &proyection });
+        animSkeleton.vc.insert({ 0, &translation });
+        animSkeleton.vc.insert({ 1, &view });
+        animSkeleton.vc.insert({ 2, &proyection });
 #ifdef openGL
-        
+
 #endif
-        
+
 #ifdef directX
         D3D11_SAMPLER_DESC sampDesc;
         ZeroMemory(&samsta.desc, sizeof(samsta.desc));
@@ -356,7 +354,7 @@ namespace GraphicsModule
         if (FAILED(hr))
             return hr;
 
-       
+
         matrix cbNeverChanges;
         cam->getView(cbNeverChanges);
         man->View = cbNeverChanges;
@@ -370,12 +368,12 @@ namespace GraphicsModule
         cam->getProyectionMatrixPerspective(cbChangesOnResize);
         man->Projection = cbChangesOnResize;
         man->getConext()->UpdateSubresource(proyection, &cbChangesOnResize);
-        
 
-        
 
-        
-  //Para ka textura nueva
+
+        objectsToDraw = new vector<GraphicsModule::objeto*>;
+
+        //Para ka textura nueva
         if (FAILED(hr))
             return hr;
         //lights.pt.insert({ 8,skypox->material[0] });
@@ -407,7 +405,7 @@ namespace GraphicsModule
         static float t = 0.0f;
         static int ti = 0;
         if (ti > 36) {
-            ti=0;
+            ti = 0;
         }
         ti++;
         LPPOINT p = new POINT;
@@ -426,7 +424,7 @@ namespace GraphicsModule
                 cam->click = false;
         }
         delete p;
-        
+
         float v = 36;
         if (GetKeyState('W') & 0x8000)
         {
@@ -460,8 +458,8 @@ namespace GraphicsModule
             man->View = cbNeverChanges;
             man->getConext()->UpdateSubresource(view, &cbNeverChanges);
         }
-        
-       
+
+
         fpl->posi[0] = pl.pos[0];
         fpl->posi[1] = pl.pos[1];
         fpl->posi[2] = pl.pos[2];
@@ -479,11 +477,11 @@ namespace GraphicsModule
         man->getConext()->UpdateSubresource(Spotlight, &sl);
         man->getConext()->UpdateSubresource(specularb, f);
         f[0] = exp;
-        f[1] = exp+expo;
+        f[1] = exp + expo;
         man->getConext()->UpdateSubresource(exposure, f);
         man->getConext()->UpdateSubresource(aob, &amoc);
 #ifdef openGL
-        
+
         /*GLuint dirlID;
         dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "kambience");
         glUniform1f(dirlID, al.k);
@@ -519,32 +517,33 @@ namespace GraphicsModule
         glUniform1f(dirlID, shinines);
         dirlID = glGetUniformLocation(paseprueba.chaders[paseprueba.chadernum].shader, "viewPosition");
         glUniform3f(dirlID, cam->eye.x, cam->eye.y, cam->eye.z);*/
-        
+
 #endif
     }
     void test::clear()
     {
     }
-  
-  void test::draw(vector<GraphicsModule::objeto*>& v)
-  {
-      
-      Pass::outn = 0;
+
+    void test::draw(vector<GraphicsModule::objeto*>& v)
+    {
+
+        Pass::outn = 0;
 #ifdef directX
-      for (int i = 0; i < 6; i++) {
-          getmanager()->screen->mod->modelo[0]->material[i]->srv = NULL;
-      }
+        for (int i = 0; i < 6; i++) {
+            getmanager()->screen->mod->modelo[0]->material[i]->srv = NULL;
+        }
 #endif
 
-      lights.chadernum = Gbuffer.chadernum;
+        lights.chadernum = Gbuffer.chadernum;
+        *objectsToDraw = v;
       if (deferar) {
-          deferred.render(v);
+          deferred.render();
       }
       else if (animskel) {
-          skeletal.render(v);
+          skeletal.render();
       }
       else {
-          forward.render(v);
+          forward.render();
       }
   }
   

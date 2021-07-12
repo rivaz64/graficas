@@ -245,7 +245,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
 
 
                             _splitpath_s(Path.data, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
-                            std::cout << fname << std::endl;
+                            //std::cout << fname << std::endl;
                             Filename = fname;
                             Filename += ext;
                             tx = new GraphicsModule::Textura;
@@ -288,13 +288,8 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                     mes->modelo[numodel]->points[i].uv[0] = mesh->mTextureCoords[0][i].x;
                     mes->modelo[numodel]->points[i].uv[1] = mesh->mTextureCoords[0][i].y;
                 }
-                
-                
-
             }
             if (mesh->HasBones()) {
-                
-                
                 mes->m_GlobalInverseTransform = scene->mRootNode->mTransformation.Inverse();
                 for (int i = 0; i < mesh->mNumBones; i++) {
                     unsigned int BoneIndex = 0;
@@ -461,6 +456,17 @@ void UIRender()
             ImGui::DragFloat3("location", objects[cual]->posi, .001f);
             ImGui::DragFloat3("size", objects[cual]->size, .001f);
             ImGui::DragFloat3("rotation", objects[cual]->rot, .1f);
+            if (objects[cual]->mod->BonesNum > 0) {
+                objects[cual]->mod->boneMesh->posi[0] = objects[cual]->posi[0];
+                objects[cual]->mod->boneMesh->posi[1] = objects[cual]->posi[1];
+                objects[cual]->mod->boneMesh->posi[2] = objects[cual]->posi[2];
+                objects[cual]->mod->boneMesh->size[0] = objects[cual]->size[0];
+                objects[cual]->mod->boneMesh->size[1] = objects[cual]->size[1];
+                objects[cual]->mod->boneMesh->size[2] = objects[cual]->size[2];
+                objects[cual]->mod->boneMesh->rot[0] = objects[cual]->rot[0];
+                objects[cual]->mod->boneMesh->rot[1] = objects[cual]->rot[1];
+                objects[cual]->mod->boneMesh->rot[2] = objects[cual]->rot[2];
+            }
         }
 
 
@@ -653,15 +659,18 @@ int main()
         "skybox"
 #endif
         , false, GraphicsModule::SRV_DIMENSION::TEXTURECUBE);
+    std::vector<GraphicsModule::objeto*>* scirn = new std::vector<GraphicsModule::objeto*>({ GraphicsModule::getmanager()->screen });
+    std::vector<GraphicsModule::objeto*>* fondo = new std::vector<GraphicsModule::objeto*>({ MiObj.skypox });
+    GraphicsModule::getmanager()->skeletons = new vector<GraphicsModule::objeto*>;
     GraphicsModule::getmanager()->getConext()->PSSetShaderResources(MiObj.skypox->mod->modelo[0]->material[0], 8);
     MiObj.deferred.pases = { &MiObj.Gbuffer,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
-    MiObj.deferred.objts = { {GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ GraphicsModule::getmanager()->screen },{ MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } };
+    MiObj.deferred.objts = { MiObj.objectsToDraw,scirn,scirn,scirn,fondo ,scirn };
 
-    MiObj.forward.pases = { &MiObj.paseprueba,&MiObj.skypas,&MiObj.tonemap, &MiObj.Copy };
-    MiObj.forward.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
+    MiObj.forward.pases = { &MiObj.skypas ,&MiObj.paseprueba,&MiObj.tonemap, &MiObj.Copy };
+    MiObj.forward.objts = { fondo ,MiObj.objectsToDraw,scirn ,scirn };
 
-    MiObj.skeletal.pases = { &MiObj.animSkeleton,&MiObj.skypas,&MiObj.tonemap, &MiObj.Copy };
-    MiObj.skeletal.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
+    MiObj.skeletal.pases = { &MiObj.skypas,&MiObj.paseprueba ,&MiObj.animSkeleton,&MiObj.tonemap, &MiObj.Copy };
+    MiObj.skeletal.objts = { fondo ,MiObj.objectsToDraw,GraphicsModule::getmanager()->skeletons,scirn ,scirn };
 
     
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl","origin");

@@ -33,6 +33,7 @@ namespace GraphicsModule {
 	void DeviceContext::VSSetConstantBuffers(int i, Buffer* b)
 	{
 #ifdef directX
+		if(b)
 		g_pImmediateContext->VSSetConstantBuffers(i, 1, &b->buf);
 #endif
 #ifdef openGL

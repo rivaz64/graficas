@@ -7,8 +7,9 @@ namespace GraphicsModule {
 	{
 	public:
 		std::vector<Pass*>pases;
-		std::vector<std::vector<objeto*>>objts;
-		void render(std::vector<objeto*> v);
+		std::vector<std::vector<objeto*>*>objts;
+		void render();
+
 		//render();
 	};
 

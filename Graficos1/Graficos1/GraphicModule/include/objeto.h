@@ -1,10 +1,10 @@
 #pragma once
-#include"mesh.h"
+
 #include"Textura.h"
 #include"model.h"
 #include"vector3.h"
 #include "RenderTargetView.h"
-
+class mesh;
 namespace GraphicsModule {
 	class objeto {
 	public:

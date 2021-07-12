@@ -130,6 +130,7 @@ namespace GraphicsModule {
 			o->mod->BoneTransform(timer);
 #ifdef directX
 			devcon.UpdateSubresource(o->mod->BonesB, o->mod->bonesPos);
+			devcon.UpdateSubresource(o->mod->skeletonB, o->mod->bonesEskeleton);
 #endif
 		}
 
@@ -146,6 +147,7 @@ namespace GraphicsModule {
 				
 #ifdef directX
 				getmanager()->getConext()->VSSetConstantBuffers(8, &o->mod->BonesB);
+				getmanager()->getConext()->VSSetConstantBuffers(9, &o->mod->skeletonB);
 #endif
 #ifdef openGL
 				GLuint ID;
