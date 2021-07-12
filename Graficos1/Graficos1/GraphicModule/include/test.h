@@ -113,12 +113,14 @@ namespace GraphicsModule
       Pass Copy;
       Pass random;
       Pass skypas;
+      Pass animSkeleton;
       Pass* actual;
 
       effecto deferred;
       effecto forward;
+      effecto skeletal;
      
-
+      
       amblight al;
       dirlight dl;
       pointlight pl;
@@ -132,6 +134,7 @@ namespace GraphicsModule
       AOC amoc;
       HWND g_hwnd;
       mesh pantaia;
+      mesh skeleto;
 #ifdef openGL
       GLFWwindow* window;
 #endif
@@ -157,6 +160,8 @@ namespace GraphicsModule
       Buffer BoneB;
       
       bool deferar=false;
+      bool animskel = false;
+      
       bool gbuf;
       bool lightson;
       bool sao;

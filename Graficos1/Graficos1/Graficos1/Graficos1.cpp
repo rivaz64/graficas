@@ -209,7 +209,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
     if (true/*std::find(filenames.begin(), filenames.end(), sfile) == filenames.end()*/) {
         //objects.push_back(new GraphicsModule::objeto);
         //filenames.push_back(sfile);
-        const aiScene* scene = importer.ReadFile(estefile, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph);
+        const aiScene* scene = importer.ReadFile(estefile, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_OptimizeGraph | aiProcess_OptimizeGraph);
         
         if (scene == NULL) {
             return "";
@@ -222,9 +222,9 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
         int numodel = 0;
         for (int o = 0; o < scene->mNumMeshes; o++) {
             mesh = scene->mMeshes[o];
-            mes->modelo.push_back(new GraphicsModule::mesh);
+            mes->add(new GraphicsModule::mesh);
             numodel = mes->modelo.size() - 1;
-            mes->modelo[numodel]->m_pScene = scene;
+            mes->m_pScene = scene;
             mes->modelo[numodel]->points = new GraphicsModule::mesh::vertex[mesh->mNumVertices];
             mes->modelo[numodel]->indices = new unsigned int[mesh->mNumFaces * 3];
             aiMaterial* siaimatirial;// = scene->mMaterials[scene->mMeshes[o]->mMaterialIndex];
@@ -291,29 +291,27 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
             }
             if (mesh->HasBones()) {
                 
-                mes->modelo[numodel]->bones = new GraphicsModule::mesh::Bone[32];
-                mes->modelo[numodel]->bonesPos = new GraphicsModule::mesh::Bone[32];
-                //mes->modelo[numodel]->BonesNum = mesh->mNumBones;
-                mes->modelo[numodel]->m_GlobalInverseTransform = scene->mRootNode->mTransformation.Inverse();
-                
-                //m_GlobalInverseTransform.Inverse();
+                mes->bones = new matrix[32];
+                mes->bonesPos = new matrix[32];
+                mes->m_GlobalInverseTransform = scene->mRootNode->mTransformation.Inverse();
                 for (int i = 0; i < mesh->mNumBones; i++) {
                     unsigned int BoneIndex = 0;
                     string BoneName(mesh->mBones[i]->mName.C_Str());
-                    if (mes->modelo[numodel]->m_BoneMapping.find(BoneName) == mes->modelo[numodel]->m_BoneMapping.end()) {
-                        BoneIndex = mes->modelo[numodel]->BonesNum;
-                        mes->modelo[numodel]->BonesNum++;
-                        mes->modelo[numodel]->m_BoneMapping.insert({ BoneName,BoneIndex });
-                        
+                    if (mes->m_BoneMapping.find(BoneName) == mes->m_BoneMapping.end()) {
+                        BoneIndex = mes->BonesNum;
+                        mes->BonesNum++;
+                        mes->m_BoneMapping.insert({ BoneName,BoneIndex });
+                        mes->m_BoneMapping[BoneName] = BoneIndex;
+                        readmatrix(mes->bones[BoneIndex], mesh->mBones[i]->mOffsetMatrix);
                     }
                     else {
-                        BoneIndex = mes->modelo[numodel]->m_BoneMapping[BoneName];
+                        continue;
+                        BoneIndex = mes->m_BoneMapping[BoneName];
                     }
+                    
 
-                    readmatrix(mes->modelo[numodel]->bones[BoneIndex].offset, mesh->mBones[BoneIndex]->mOffsetMatrix);
-
-                    for (int u = 0; u < mesh->mBones[BoneIndex]->mNumWeights; u++) {
-                        vertexId = mesh->mBones[BoneIndex]->mWeights[u].mVertexId;
+                    for (int u = 0; u < mesh->mBones[i]->mNumWeights; u++) {
+                        vertexId = mesh->mBones[i]->mWeights[u].mVertexId;
                         v = &mes->modelo[numodel]->points[vertexId];
                         if (v->Weight[3] != 0) {
                             std::cout << "nesesita mas" << std::endl;
@@ -321,7 +319,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
                         for (int n = 0; n < 4; n++) {
                             if (v->Weight[n] == 0) {
                                 v->boneid[n] = BoneIndex;
-                                v->Weight[n] = mesh->mBones[BoneIndex]->mWeights[u].mWeight;
+                                v->Weight[n] = mesh->mBones[i]->mWeights[u].mWeight;
                                 break;
                             }
                         }
@@ -398,7 +396,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
             }
         }
         
-        //delete scene;
+        mes->init();
         obj->mod = mes;
         if (objects.size() > 1)
             MiObj.fpl = objects[1];
@@ -522,6 +520,9 @@ void UIRender()
     }
     ImGui::End();
     if (ImGui::Begin("shaders", nullptr)) {
+        GraphicsModule::manager* man = GraphicsModule::getmanager();
+        ImGui::Checkbox("Pose Te", &man->tpose);
+        ImGui::Checkbox("animation skeleton", &MiObj.animskel);
         if (ImGui::TreeNode("Light")) {
             if (MiObj.deferar) {
                 MiObj.actual = &MiObj.Gbuffer;
@@ -656,6 +657,9 @@ int main()
 
     MiObj.forward.pases = { &MiObj.paseprueba,&MiObj.skypas,&MiObj.tonemap, &MiObj.Copy };
     MiObj.forward.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
+
+    MiObj.skeletal.pases = { &MiObj.animSkeleton,&MiObj.skypas,&MiObj.tonemap, &MiObj.Copy };
+    MiObj.skeletal.objts = { { MiObj.skypox } ,{ GraphicsModule::getmanager()->screen } ,{ GraphicsModule::getmanager()->screen } };
 
     
     loadModel("D:/github/graficas/Graficos1/Graficos1/bin/3D_model_of_a_Cube.stl","origin");

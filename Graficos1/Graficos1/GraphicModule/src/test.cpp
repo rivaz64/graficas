@@ -186,7 +186,7 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::LINELIST);
+            }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         //GL_FRONT;
         Gbuffer.compile("Gbuffer", {
             "#define VERTEX_LIGHT",
@@ -200,7 +200,7 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0,1,2,3 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+            }, false, { 0,1,2,3 },CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         //Gbuffer.setear();
         //Gbuffer.chaders[Gbuffer.chadernum].setShader();
         lights.compile("lights", {
@@ -215,8 +215,8 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-        AmbientOcluccion.compile("AO", { "" }, false, { 4 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+            }, false, { 0 },CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        AmbientOcluccion.compile("AO", { "" }, false, { 4 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
         tonemap.compile("tonemap", {
             "#define BASIC",
@@ -231,10 +231,14 @@ namespace GraphicsModule
          "#define UNCHARTED2TONEMAP\n#define DEFFERED",
          "#define UNCHARTED2\n#define DEFFERED",
          "#define ALL\n#define DEFFERED",
-            }, false, { 0 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+            }, false, { 0 },  CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
-        skypas.compile("skybox", { "" }, false, { 5 }, SRV_DIMENSION::TEXTURE2D, CULING::BACK, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, SRV_DIMENSION::TEXTURE2D, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        skypas.compile("skybox", { "" }, false, { 5 },  CULING::BACK, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        animSkeleton.compile("skeletal", {
+            "",
+            }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::LINELIST);
+
+        Copy.compile("copy", { "","#define DEFERED" }, true, { 0 },  CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
         cam = new camera;
 
@@ -535,6 +539,9 @@ namespace GraphicsModule
       lights.chadernum = Gbuffer.chadernum;
       if (deferar) {
           deferred.render(v);
+      }
+      else if (animskel) {
+          skeletal.render(v);
       }
       else {
           forward.render(v);

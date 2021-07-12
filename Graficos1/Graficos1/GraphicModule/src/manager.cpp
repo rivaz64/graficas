@@ -82,6 +82,7 @@ namespace GraphicsModule {
 	void manager::draw(objeto* o, Buffer* changeveryFrameB, chader& chad)
 	{
 #ifdef openGL
+		
 		glActiveTexture(GL_TEXTURE0);
 		
 		glm::mat4 Model = glm::mat4(1.0f);
@@ -121,35 +122,79 @@ namespace GraphicsModule {
 		for (int m = 0; m < o->mod->modelo[0]->material.size(); m++) {
 			devcon.PSSetShaderResources(o->mod->modelo[0]->material[m], m);
 		}
+
+
+
+
+		if (o->mod->BonesNum != 0) {
+			o->mod->BoneTransform(timer);
+#ifdef directX
+			devcon.UpdateSubresource(o->mod->BonesB, o->mod->bonesPos);
+#endif
+		}
+
+
+
+
 		for (mesh* mo : (o->mod->modelo)) {
 
 			for (int m = 0; m < mo->material.size(); m++) {
 
 				devcon.PSSetShaderResources(mo->material[m], m);
 			}
-			if (mo->BonesNum != 0) {
-				mo->BoneTransform(timer);
+			if (o->mod->BonesNum != 0) {
+				
 #ifdef directX
-				devcon.UpdateSubresource(mo->BonesB, mo->bonesPos);
-				getmanager()->getConext()->VSSetConstantBuffers(8, &mo->BonesB);
+				getmanager()->getConext()->VSSetConstantBuffers(8, &o->mod->BonesB);
 #endif
 #ifdef openGL
 				GLuint ID;
 				ID = glGetUniformLocation(actualchader, ("b" + std::to_string(8)).c_str());
 
-				glUniformMatrix4fv(ID, 32, GL_FALSE, glm::value_ptr(mo->bonesPos->offset.m));
+				glUniformMatrix4fv(ID, 32, GL_FALSE, glm::value_ptr(mo->offset.m));
 #endif
-				//devcon.UpdateSubresource(mo->BonesB, mo->bonesPos);
-				//getmanager()->getConext()->VSSetConstantBuffers(8, &mo->BonesB,32);
-			}
 #ifdef openGL
-			glBindVertexArray(mo->vao);
+				glBindVertexArray(mo->vao);
 #endif
 #ifdef directX
-			devcon.IASetVertexBuffers(mo->getvertex());
-			devcon.IASetIndexBuffer(mo->getindices());
+				devcon.IASetVertexBuffers(mo->getvertex());
+				devcon.IASetIndexBuffer(mo->getindices());
 #endif
-			devcon.draw(mo->indexnum, actualPrimitiveTopology);
+
+				devcon.draw(mo->indexnum, actualPrimitiveTopology);
+				if (mo->showbones) {
+					/*mo->BoneTransform(timer);
+#ifdef directX
+					devcon.UpdateSubresource(mo->BonesB, mo->bonesPos);
+					getmanager()->getConext()->VSSetConstantBuffers(8, &mo->BonesB);
+#endif
+#ifdef openGL
+					GLuint ID;
+					ID = glGetUniformLocation(actualchader, ("b" + std::to_string(8)).c_str());
+
+					glUniformMatrix4fv(ID, 32, GL_FALSE, glm::value_ptr(mo->bonesPos->offset.m));
+#endif
+#ifdef openGL
+					glBindVertexArray(mo->boneMesh->vao);
+#endif
+#ifdef directX
+					devcon.IASetVertexBuffers(mo->boneMesh->getvertex());
+					devcon.IASetIndexBuffer(mo->boneMesh->getindices());
+#endif
+					
+						devcon.draw(mo->boneMesh->indexnum, PRIMITIVE_TOPOLOGY::LINELIST);*/
+				}
+			}
+			else {
+#ifdef openGL
+					glBindVertexArray(mo->vao);
+#endif
+#ifdef directX
+					devcon.IASetVertexBuffers(mo->getvertex());
+					devcon.IASetIndexBuffer(mo->getindices());
+#endif
+					devcon.draw(mo->indexnum, actualPrimitiveTopology);
+				}
 		}
 
 	}

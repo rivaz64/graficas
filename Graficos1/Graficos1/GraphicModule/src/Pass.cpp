@@ -77,17 +77,17 @@ void GraphicsModule::Pass::render(std::vector<objeto*> objts)//)
 
 }
 
-void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n, SRV_DIMENSION d, CULING cul, PRIMITIVE_TOPOLOGY p) {
+void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n, CULING cul, PRIMITIVE_TOPOLOGY p) {
     ulti = ultimo;
     outs = n;
     size = n.size();
     c = cul;
     primitiveTopology = p;
     if (ultimo) {
-        ren.init(FORMAT::UNKNOWN, FORMAT::FLOAT, false, n.size(),d,cul);
+        ren.init(FORMAT::UNKNOWN, FORMAT::FLOAT, false, n.size(), SRV_DIMENSION::TEXTURE2D,cul);
     }
     else {
-        ren.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT, true, n.size(),d, cul);
+        ren.init(FORMAT::R32G32B32A32_FLOAT, FORMAT::UNORM_S8_UINT, true, n.size(), SRV_DIMENSION::TEXTURE2D, cul);
     }
     for (int i = 0; i < tecnicas.size(); i++) {
         chaders.push_back(chader());

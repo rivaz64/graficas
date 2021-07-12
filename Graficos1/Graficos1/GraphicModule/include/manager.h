@@ -55,9 +55,11 @@ namespace GraphicsModule {
 #ifdef openGL
         int actualchader;
 #endif
+        bool tpose = false;
         float timer = 0;
         std::vector<Textura*> materials;
         objeto* screen;
+        objeto* skeleto;
         objeto* saves;
         PRIMITIVE_TOPOLOGY actualPrimitiveTopology;
         void create(HWND g_hWnd);
