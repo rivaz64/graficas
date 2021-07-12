@@ -219,10 +219,13 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
         std::string Filename = "";
         aiMesh* mesh;// = scene->mMeshes[0];
         aiString Path;
+        mes->bones = new matrix[32];
+        mes->bonesPos = new matrix[32];
         int numodel = 0;
         for (int o = 0; o < scene->mNumMeshes; o++) {
             mesh = scene->mMeshes[o];
             mes->add(new GraphicsModule::mesh);
+            
             numodel = mes->modelo.size() - 1;
             mes->m_pScene = scene;
             mes->modelo[numodel]->points = new GraphicsModule::mesh::vertex[mesh->mNumVertices];
@@ -291,8 +294,7 @@ std::string loadModel(string estefile, GraphicsModule::objeto*& obj) {
             }
             if (mesh->HasBones()) {
                 
-                mes->bones = new matrix[32];
-                mes->bonesPos = new matrix[32];
+                
                 mes->m_GlobalInverseTransform = scene->mRootNode->mTransformation.Inverse();
                 for (int i = 0; i < mesh->mNumBones; i++) {
                     unsigned int BoneIndex = 0;
