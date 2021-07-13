@@ -228,7 +228,7 @@ namespace GraphicsModule
          "#define ALL",
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
-        skypas.compile("skybox", { "" }, false, { 5 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        skypas.compile("skybox", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         animSkeleton.compile("skeletal", {
             "",
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::LINELIST);

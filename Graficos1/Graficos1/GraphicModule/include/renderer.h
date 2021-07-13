@@ -26,7 +26,7 @@ namespace GraphicsModule {
 #endif
 		void init(FORMAT f,FORMAT d,bool b,int n, SRV_DIMENSION dsrv,CULING cul);
 		void setTargets();
-		void clearTargets();
+		void clearTargets(bool clearDepth);
 		void render();
 	};
 }

@@ -139,14 +139,16 @@ namespace GraphicsModule {
 		ras.setear();
 		getmanager()->actualRen = this;
 	}
-	void Renderer::clearTargets()
+	void Renderer::clearTargets(bool clearDepth)
 	{
 #ifdef openGL
 		glClearColor(.0f, .0f, 1.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 #endif
-		getmanager()->getConext()->ClearRenderTargetView(rtv,size);
+		
 		getmanager()->getConext()->ClearDepthStencilView(depth);
+		if(clearDepth)
+			getmanager()->getConext()->ClearRenderTargetView(rtv, size);
 	}
 	void Renderer::render()
 	{
