@@ -182,7 +182,7 @@ namespace GraphicsModule {
 		srvd.ViewDimension = (D3D11_SRV_DIMENSION)d;
 		srvd.Texture2D.MipLevels = 1; // same as orig texture
 
-		GraphicsModule::getmanager()->getDevice()->get()->CreateShaderResourceView(tex->get, &srvd, &tex->srv);//*/
+		GraphicsModule::getmanager()->getDevice()->get()->CreateShaderResourceView(tex->get, &srvd, &tex->srv.get);//*/
 
 #endif
 		//return success

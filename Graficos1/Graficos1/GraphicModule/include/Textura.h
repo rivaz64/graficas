@@ -16,16 +16,28 @@
 #include<string>
 using std::string;
 namespace GraphicsModule {
+
+
+	struct ShaderResourseView {
+#ifdef directX
+		ID3D11ShaderResourceView* get;
+#endif
+#ifdef openGL
+		unsigned int get;
+#endif
+	};
+
+
 	class Textura
 	{
 
 	public:
+		ShaderResourseView srv;
 #ifdef directX
 		D3D11_TEXTURE2D_DESC des;
 		ID3D11Texture2D* get=NULL;
-		ID3D11ShaderResourceView* srv = NULL;
-#else 
-		unsigned int srv =0;
+#endif
+#ifdef openGL
 		GLenum format= GL_TEXTURE_2D;
 #endif
 

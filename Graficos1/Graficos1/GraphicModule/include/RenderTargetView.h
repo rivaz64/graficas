@@ -11,16 +11,14 @@
 #include "flags.h"
 #include <vector>
 namespace GraphicsModule {
+
 	class RenderTargetView
 	{
 	public:
 #ifdef directX
 		std::vector<ID3D11RenderTargetView*> get;
-		std::vector < ID3D11ShaderResourceView*> srv;
 #endif
-#ifdef openGL
-		std::vector<unsigned int> srv;
-#endif
+		std::vector<ShaderResourseView> srv;
 		FORMAT Format;
 		DIMENSION ViewDimension;
 		UINT MostDetailedMip;

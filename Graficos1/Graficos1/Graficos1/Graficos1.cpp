@@ -430,10 +430,7 @@ void UIRender()
         for (int i = 0; i < 8; i++)
         {
 #ifdef directX
-            ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->mod->modelo[0]->material[i]->srv), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
-#endif
-#ifdef openGL
-            ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->mod->modelo[0]->material[i]->srv), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+            ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->mod->modelo[0]->material[i]->srv.get), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
 #endif
         }
         //if (cual >= 3 && cual < objects.size()) {

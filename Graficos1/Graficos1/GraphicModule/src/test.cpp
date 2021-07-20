@@ -229,9 +229,11 @@ namespace GraphicsModule
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
         skypas.compile("skybox", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+#ifdef directX
         animSkeleton.compile("skeletal", {
             "",
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::LINELIST);
+#endif
         animSkeleton.clear = false;
         Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
@@ -530,7 +532,7 @@ namespace GraphicsModule
         Pass::outn = 0;
 #ifdef directX
         for (int i = 0; i < 6; i++) {
-            getmanager()->screen->mod->modelo[0]->material[i]->srv = NULL;
+            getmanager()->screen->mod->modelo[0]->material[i]->srv.get = 0;
         }
 #endif
 

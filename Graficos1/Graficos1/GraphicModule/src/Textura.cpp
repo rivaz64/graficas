@@ -41,17 +41,4 @@ namespace GraphicsModule {
         get->Release();
 #endif
     }
-#ifdef openGL
-    unsigned int
-#endif
-#ifdef directX
-        ID3D11ShaderResourceView*
-#endif
-        Textura::geter() {
-        return srv;
-
-    }
-
-
-    
 }

@@ -88,8 +88,16 @@ namespace GraphicsModule {
 	void Device::CreateRenderTargetView(RenderTargetView& rtv,bool des,int n)
 	{
 #ifdef openGL
-		for (int i = 0; i < n; i++)
-		CreateTexture2D(rtv.textur[i]);
+		for (int i = 0; i < n; i++) {
+			glGenTextures(1, &rtv.srv[i]);
+			glBindTexture(GL_TEXTURE_2D, rtv.srv[i]);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getmanager()->width, getmanager()->height, 0, GL_RGBA, GL_FLOAT, 0);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
 #endif
 #ifdef directX
 		for (int i = 0; i < n; i++)
@@ -189,9 +197,8 @@ namespace GraphicsModule {
 
 	void Device::CreateShaderResourceView(RenderTargetView& rtv,int n,SRV_DIMENSION d)
 	{
+		rtv.srv.resize(n);
 #ifdef directX
-		for (int i = 0; i < n; i++)
-			rtv.srv.push_back(NULL);
 		D3D11_SHADER_RESOURCE_VIEW_DESC descViewRT;
 		ZeroMemory(&descViewRT, sizeof(descViewRT));
 		descViewRT.Format = (DXGI_FORMAT)rtv.Format;
@@ -199,7 +206,7 @@ namespace GraphicsModule {
 		descViewRT.Texture2D.MostDetailedMip = rtv.MostDetailedMip;
 		descViewRT.Texture2D.MipLevels = 1;// rtv.MipLevels;
 		for(int i=0;i<n;i++)
-		g_pd3dDevice->CreateShaderResourceView(rtv.textur[i].get, &descViewRT, &rtv.srv[i]);
+		g_pd3dDevice->CreateShaderResourceView(rtv.textur[i].get, &descViewRT, &rtv.srv[i].get);
 #endif
 	}
 

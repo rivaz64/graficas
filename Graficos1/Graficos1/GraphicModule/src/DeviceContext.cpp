@@ -132,7 +132,7 @@ namespace GraphicsModule {
 	void DeviceContext::PSSetShaderResources(Textura* t,int cual)
 	{
 #ifdef directX
-		g_pImmediateContext->PSSetShaderResources(cual, 1, &t->srv);
+		g_pImmediateContext->PSSetShaderResources(cual, 1, &t->srv.get);
 #endif
 #ifdef openGL
 		glActiveTexture(GL_TEXTURE0 + cual);

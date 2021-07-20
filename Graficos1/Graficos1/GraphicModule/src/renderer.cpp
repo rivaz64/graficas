@@ -64,6 +64,7 @@ namespace GraphicsModule {
 			rtv.Format = f;
 			rtv.ViewDimension = DIMENSION::TEXTURE2D;
 			rtv.textur = tex;
+			rtv.srv.resize(n);
 
 			getmanager()->getDevice()->CreateRenderTargetView(rtv, true,n);
 			//getmanager()->getDevice()->CreateShaderResourceView(rtv);
