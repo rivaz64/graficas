@@ -5,6 +5,7 @@
 #include "chader.h"
 #include <vector>
 #include "Rasterizer.h"
+#include "SamplerState.h"
 #include "..\include\RenderTargetView.h"
 namespace GraphicsModule {
 	class Renderer
@@ -12,7 +13,7 @@ namespace GraphicsModule {
 		int size;
 	public:
 
-		
+		SamplerState samsta;
 		std::vector<Textura> tex;
 		RenderTargetView rtv;
 		DepthStencil depth;

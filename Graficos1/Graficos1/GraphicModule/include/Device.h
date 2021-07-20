@@ -66,7 +66,7 @@ namespace GraphicsModule {
 #endif
 		void CreateBuffer(Buffer& b);
 		//void CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT n, ID3DBlob* blob, InputLayout& il);
-		void CreateSamplerState(SamplerState ss);
+		void CreateSamplerState(SamplerState& ss);
 		~Device();
 		friend class manager;
 	};

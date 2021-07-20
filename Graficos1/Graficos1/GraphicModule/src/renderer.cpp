@@ -94,6 +94,19 @@ namespace GraphicsModule {
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			return ;
 #endif
+#ifdef directX
+		D3D11_SAMPLER_DESC sampDesc;
+		ZeroMemory(&samsta.desc, sizeof(samsta.desc));
+		samsta.desc.Filter = (D3D11_FILTER)FILTER::COMPARISON_MIN_MAG_MIP_LINEAR;
+		samsta.desc.AddressU = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+		samsta.desc.AddressV = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+		samsta.desc.AddressW = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
+		samsta.desc.ComparisonFunc = (D3D11_COMPARISON_FUNC)COMPARISON_FUNC::NEVER;
+		samsta.desc.MipLODBias = 0;
+		samsta.desc.MinLOD = 0;
+		samsta.desc.MaxLOD = D3D11_FLOAT32_MAX;
+		getmanager()->getDevice()->CreateSamplerState(samsta);
+#endif
 /*#ifdef openGL
 		if (b) {
 			glGenFramebuffers(1, &FramebufferName);
@@ -135,7 +148,9 @@ namespace GraphicsModule {
 #endif
 #ifdef directX
 		getmanager()->getConext()->get()->OMSetRenderTargets(size, rtv.get.data(), depth.view);
+		getmanager()->getConext()->get()->PSSetSamplers(0,1,&samsta.get);
 #endif
+		
 		getmanager()->RSSetViewports(vp);
 		ras.setear();
 		getmanager()->actualRen = this;

@@ -251,10 +251,10 @@ namespace GraphicsModule {
 #endif
 	}*/
 
-	void Device::CreateSamplerState(SamplerState ss)
+	void Device::CreateSamplerState(SamplerState& ss)
 	{
 #ifdef directX
-		g_pd3dDevice->CreateSamplerState(&ss.desc, &ss.g_pSamplerLinear);
+		g_pd3dDevice->CreateSamplerState(&ss.desc, &ss.get);
 #endif
 	}
 

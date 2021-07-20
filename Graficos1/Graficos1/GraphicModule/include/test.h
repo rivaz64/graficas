@@ -74,7 +74,13 @@ namespace GraphicsModule
       float intensity;
       int sampleIterations;
   };
-  
+  struct xtras
+  {
+      float viewPosition[3];
+      float kSpecular;
+      float shinines;
+      int mipmapa=0;
+  };
   struct CBChangeOnResize
   {
 #ifdef openGL
@@ -115,7 +121,7 @@ namespace GraphicsModule
       Pass skypas;
       Pass animSkeleton;
       Pass* actual;
-
+      xtras xtrs;
       effecto deferred;
       effecto forward;
       effecto skeletal;
@@ -126,6 +132,7 @@ namespace GraphicsModule
       dirlight dl;
       pointlight pl;
       spotlight sl;
+
       float specular;
       float shinines = 6.f;
       float exp = 1;
@@ -167,7 +174,7 @@ namespace GraphicsModule
       bool lightson;
       bool sao;
       bool isky;
-      SamplerState samsta;
+      
       //pase paseprueba;
       static test* esta;
       objeto* fpl;

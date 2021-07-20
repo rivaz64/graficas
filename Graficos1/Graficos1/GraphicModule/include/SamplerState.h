@@ -12,16 +12,8 @@ namespace GraphicsModule {
 	{
 	public:
 #ifdef directX
-		ID3D11SamplerState* g_pSamplerLinear = NULL;
+		ID3D11SamplerState* get = NULL;
 		D3D11_SAMPLER_DESC desc;
-#endif
-	public:
-#ifdef directX
-		ID3D11SamplerState* get() {
-			return g_pSamplerLinear;
-		}
-#else
-		void get() {}
 #endif
 
 	};
