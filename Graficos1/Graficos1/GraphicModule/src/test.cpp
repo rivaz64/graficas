@@ -538,15 +538,17 @@ namespace GraphicsModule
 
         lights.chadernum = Gbuffer.chadernum;
         *objectsToDraw = v;
+        //forward.render();
+        
       if (deferar) {
           deferred.render();
       }
-      else if (animskel) {
+      /*else if (animskel) {
           skeletal.render();
-      }
+      }*/
       else {
           forward.render();
-      }
+      }//*/
   }
   
   void test::Render()

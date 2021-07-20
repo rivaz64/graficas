@@ -429,9 +429,8 @@ void UIRender()
     if (ImGui::Begin("shader resourse views", nullptr)) {
         for (int i = 0; i < 8; i++)
         {
-#ifdef directX
             ImGui::Image((ImTextureID)(GraphicsModule::getmanager()->saves->mod->modelo[0]->material[i]->srv.get), ImVec2(MiObj.width / 6.f, MiObj.heigh / 6.f), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
-#endif
+
         }
         //if (cual >= 3 && cual < objects.size()) {
           //  ImGui::Image((ImTextureID)objects[cual]->material[0]->srv, ImVec2(256, 256), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
@@ -663,8 +662,12 @@ int main()
     MiObj.deferred.pases = { &MiObj.Gbuffer,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
     MiObj.deferred.objts = { MiObj.objectsToDraw,scirn,scirn,scirn,fondo ,scirn };
 
-    MiObj.forward.pases = { &MiObj.skypas ,&MiObj.paseprueba,&MiObj.tonemap, &MiObj.Copy };
-    MiObj.forward.objts = { fondo ,MiObj.objectsToDraw,scirn ,scirn };
+    //MiObj.forward.pases = { &MiObj.skypas ,&MiObj.paseprueba,&MiObj.tonemap, &MiObj.Copy };
+    //MiObj.forward.objts = { fondo ,MiObj.objectsToDraw,scirn ,scirn };
+
+    MiObj.forward.pases = { &MiObj.skypas, &MiObj.Copy };
+    MiObj.forward.objts = { fondo,scirn };
+
 
     MiObj.skeletal.pases = { &MiObj.skypas,&MiObj.paseprueba ,&MiObj.animSkeleton,&MiObj.tonemap, &MiObj.Copy };
     MiObj.skeletal.objts = { fondo ,MiObj.objectsToDraw,GraphicsModule::getmanager()->skeletons,scirn ,scirn };
