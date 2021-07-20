@@ -44,7 +44,6 @@ void GraphicsModule::Pass::render(std::vector<objeto*>* objts,bool bol)//)
 
     man->actualPrimitiveTopology = primitiveTopology;
    
-    if(vc.size()>1)
     for (std::pair<int, Buffer*> p : vc) {
         if (!p.second) {
             int x=0;

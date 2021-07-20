@@ -525,6 +525,7 @@ void UIRender()
     ImGui::End();
     if (ImGui::Begin("shaders", nullptr)) {
         GraphicsModule::manager* man = GraphicsModule::getmanager();
+        ImGui::DragInt("mipmap", &MiObj.xtrs.mipmapa, .036f);
         ImGui::Checkbox("Pose Te", &man->tpose);
         ImGui::Checkbox("animation skeleton", &MiObj.animskel);
         if (ImGui::TreeNode("Light")) {
@@ -662,11 +663,11 @@ int main()
     MiObj.deferred.pases = { &MiObj.Gbuffer,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
     MiObj.deferred.objts = { MiObj.objectsToDraw,scirn,scirn,scirn,fondo ,scirn };
 
-    //MiObj.forward.pases = { &MiObj.skypas ,&MiObj.paseprueba,&MiObj.tonemap, &MiObj.Copy };
-    //MiObj.forward.objts = { fondo ,MiObj.objectsToDraw,scirn ,scirn };
+    MiObj.forward.pases = { &MiObj.skypas ,&MiObj.paseprueba,&MiObj.tonemap, &MiObj.Copy };
+    MiObj.forward.objts = { fondo ,MiObj.objectsToDraw,scirn ,scirn };
 
-    MiObj.forward.pases = { &MiObj.skypas, &MiObj.Copy };
-    MiObj.forward.objts = { fondo,scirn };
+    //MiObj.forward.pases = { &MiObj.skypas, &MiObj.Copy };
+    //MiObj.forward.objts = { fondo,scirn };
 
 
     MiObj.skeletal.pases = { &MiObj.skypas,&MiObj.paseprueba ,&MiObj.animSkeleton,&MiObj.tonemap, &MiObj.Copy };

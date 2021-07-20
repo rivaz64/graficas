@@ -136,8 +136,8 @@ namespace GraphicsModule {
 		ZeroMemory(&tex->des, sizeof(tex->des));
 		tex->des.Width = width;
 		tex->des.Height = height;
-		tex->des.MipLevels = 1;
-		tex->des.ArraySize = 1;//esta fue modificada para cube, debria ser 1
+		tex->des.MipLevels = 0;
+		tex->des.ArraySize = 1;
 		if (d == SRV_DIMENSION::TEXTURECUBE) {
 			tex->des.ArraySize = 6;
 		}
@@ -153,9 +153,9 @@ namespace GraphicsModule {
 		tex->des.SampleDesc.Count = 1;
 		tex->des.SampleDesc.Quality = 0;
 		tex->des.Usage = (D3D11_USAGE)GraphicsModule::USAGE::DEFAULT;
-		tex->des.BindFlags = (UINT)GraphicsModule::BIND_FLAG::SHADER_RESOURCE;
+		tex->des.BindFlags = (UINT)(GraphicsModule::BIND_FLAG::SHADER_RESOURCE)| (UINT)(GraphicsModule::BIND_FLAG::RENDER_TARGET);
 		tex->des.CPUAccessFlags = 0;
-		tex->des.MiscFlags = 0;//esta fue modificada para cube, debria ser 0
+		tex->des.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 		if (d == SRV_DIMENSION::TEXTURECUBE) {
 			tex->des.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
 			D3DX11_IMAGE_LOAD_INFO loadSMInfo;
@@ -169,6 +169,7 @@ namespace GraphicsModule {
 			GraphicsModule::getmanager()->getDevice()->CreateTexture2D(*tex);
 			unsigned int esta = FreeImage_GetPitch(dib);
 			GraphicsModule::getmanager()->getConext()->get()->UpdateSubresource(tex->get, 0, NULL, bits, FreeImage_GetPitch(dib), 0);
+			
 		}
 
 		
@@ -180,10 +181,10 @@ namespace GraphicsModule {
 		else if (Flags & MODEL_LOAD_FORMAT_BGRA)
 			srvd.Format = FORMAT_B8G8R8A8_UNORM;//*/
 		srvd.ViewDimension = (D3D11_SRV_DIMENSION)d;
-		srvd.Texture2D.MipLevels = 1; // same as orig texture
+		srvd.Texture2D.MipLevels = -1; 
 
 		GraphicsModule::getmanager()->getDevice()->get()->CreateShaderResourceView(tex->get, &srvd, &tex->srv.get);//*/
-
+		GraphicsModule::getmanager()->getConext()->get()->GenerateMips(tex->srv.get);
 #endif
 		//return success
 		return true;

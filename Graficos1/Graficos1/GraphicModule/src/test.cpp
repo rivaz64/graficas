@@ -186,6 +186,17 @@ namespace GraphicsModule
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG",
          "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
          "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG",
+         "#define VERTEX_LIGHT\n#define ANIMATED",
+         "#define PIXEL_LIGHT\n#define ANIMATED",
+         "#define NORMAL_MAP_LIGHT\n#define ANIMATED",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define ANIMATED",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define ANIMATED",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define ANIMATED",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define ANIMATED",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define BLINN_PHONG\n#define ANIMATED",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define BLINN_PHONG\n#define ANIMATED",
+         "#define PIXEL_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG\n#define ANIMATED",
+         "#define NORMAL_MAP_LIGHT\n#define PHONG\n#define SPECULAR_MAP_LIGHT\n#define BLINN_PHONG\n#define ANIMATED",
             }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         paseprueba.clear = false;
         //GL_FRONT;
@@ -341,18 +352,7 @@ namespace GraphicsModule
 
 #endif
 
-#ifdef directX
-        D3D11_SAMPLER_DESC sampDesc;
-        ZeroMemory(&samsta.desc, sizeof(samsta.desc));
-        samsta.desc.Filter = (D3D11_FILTER)FILTER::COMPARISON_MIN_MAG_MIP_LINEAR;
-        samsta.desc.AddressU = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
-        samsta.desc.AddressV = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
-        samsta.desc.AddressW = (D3D11_TEXTURE_ADDRESS_MODE)ADDRESS_MODE::WRAP;
-        samsta.desc.ComparisonFunc = (D3D11_COMPARISON_FUNC)COMPARISON_FUNC::NEVER;
-        samsta.desc.MinLOD = 0;
-        samsta.desc.MaxLOD = D3D11_FLOAT32_MAX;
-        man->getDevice()->CreateSamplerState(samsta);
-#endif
+
         if (FAILED(hr))
             return hr;
 
@@ -468,16 +468,18 @@ namespace GraphicsModule
         fsl->posi[0] = sl.Pos[0];
         fsl->posi[1] = sl.Pos[1];
         fsl->posi[2] = sl.Pos[2];
-        f[0] = cam->eye.x;
-        f[1] = cam->eye.y;
-        f[2] = cam->eye.z;
-        f[3] = specular;
-        f[4] = shinines;
+       
+        xtrs.viewPosition[0]= cam->eye.x;
+        xtrs.viewPosition[1] = cam->eye.y;
+        xtrs.viewPosition[2] = cam->eye.z;
+        xtrs.kSpecular = specular;
+        xtrs.shinines = shinines;
+       
         man->getConext()->UpdateSubresource(Ambilight, &al);
         man->getConext()->UpdateSubresource(Dirlight, &dl);
         man->getConext()->UpdateSubresource(Poslight, &pl);//*/
         man->getConext()->UpdateSubresource(Spotlight, &sl);
-        man->getConext()->UpdateSubresource(specularb, f);
+        man->getConext()->UpdateSubresource(specularb, &xtrs);
         f[0] = exp;
         f[1] = exp + expo;
         man->getConext()->UpdateSubresource(exposure, f);
