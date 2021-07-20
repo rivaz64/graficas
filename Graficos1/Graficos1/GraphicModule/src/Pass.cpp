@@ -15,7 +15,7 @@ void GraphicsModule::Pass::render(std::vector<objeto*>* objts,bool bol)//)
     else {
         glBindFramebuffer(GL_FRAMEBUFFER, ren.FramebufferName);
         for (int i = 0; i < outs.size(); i++) {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, ren.DrawBuffers[i], GL_TEXTURE_2D, ren.rtv.textur[i].srv,0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, ren.DrawBuffers[i], GL_TEXTURE_2D, ren.rtv.textur[i].srv.get,0);
         }
     }
     glUniform1i(glGetUniformLocation(man->actualchader, "texture1"), 0);
