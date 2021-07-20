@@ -15,7 +15,7 @@ void GraphicsModule::Pass::render(std::vector<objeto*>* objts,bool bol)//)
     else {
         glBindFramebuffer(GL_FRAMEBUFFER, ren.FramebufferName);
         for (int i = 0; i < outs.size(); i++) {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, ren.DrawBuffers[i], GL_TEXTURE_2D, ren.rtv.textur[i].get,0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, ren.DrawBuffers[i], GL_TEXTURE_2D, ren.rtv.textur[i].srv,0);
         }
     }
     glUniform1i(glGetUniformLocation(man->actualchader, "texture1"), 0);
@@ -67,14 +67,8 @@ void GraphicsModule::Pass::render(std::vector<objeto*>* objts,bool bol)//)
     if (!ulti&&true) {//aka47
         for (int i = 0; i < size; i++)
         {
-#ifdef directX
             man->saves->mod->modelo[0]->material[outn]->srv = man->actualRen->rtv.srv[i];
             man->screen->mod->modelo[0]->material[outs[i]]->srv = man->actualRen->rtv.srv[i];
-#endif
-#ifdef openGL
-            man->screen->mod->modelo[0]->material[outs[i]]->get = man->actualRen->rtv.textur[i].get;
-            man->saves->mod->modelo[0]->material[outn]->get = man->actualRen->textur[i].get;
-#endif
             outn++;
 
         }

@@ -25,7 +25,7 @@ namespace GraphicsModule {
 		ID3D11Texture2D* get=NULL;
 		ID3D11ShaderResourceView* srv = NULL;
 #else 
-		unsigned int get=0;
+		unsigned int srv =0;
 		GLenum format= GL_TEXTURE_2D;
 #endif
 

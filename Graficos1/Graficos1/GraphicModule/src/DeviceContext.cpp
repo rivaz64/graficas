@@ -136,7 +136,7 @@ namespace GraphicsModule {
 #endif
 #ifdef openGL
 		glActiveTexture(GL_TEXTURE0 + cual);
-		glBindTexture(t->format, t->get);
+		glBindTexture(t->format, t->srv);
 #endif
 	}
 

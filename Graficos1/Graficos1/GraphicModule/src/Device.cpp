@@ -118,8 +118,8 @@ namespace GraphicsModule {
 		HRESULT hr = g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
 #endif
 #ifdef openGL
-		glGenTextures(1, &tx.get);
-		glBindTexture(GL_TEXTURE_2D, tx.get);
+		glGenTextures(1, &tx.srv);
+		glBindTexture(GL_TEXTURE_2D, tx.srv);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getmanager()->width, getmanager()->height,0, GL_RGBA, GL_FLOAT, 0);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

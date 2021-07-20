@@ -18,6 +18,9 @@ namespace GraphicsModule {
 		std::vector<ID3D11RenderTargetView*> get;
 		std::vector < ID3D11ShaderResourceView*> srv;
 #endif
+#ifdef openGL
+		std::vector<unsigned int> srv;
+#endif
 		FORMAT Format;
 		DIMENSION ViewDimension;
 		UINT MostDetailedMip;

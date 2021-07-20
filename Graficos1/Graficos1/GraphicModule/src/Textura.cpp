@@ -48,12 +48,7 @@ namespace GraphicsModule {
         ID3D11ShaderResourceView*
 #endif
         Textura::geter() {
-#ifdef directX
         return srv;
-#endif
-#ifdef openGL
-        return get;
-#endif
 
     }
 

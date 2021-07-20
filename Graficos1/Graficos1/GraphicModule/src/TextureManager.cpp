@@ -98,8 +98,8 @@ namespace GraphicsModule {
 #ifdef openGL
 		if (d == SRV_DIMENSION::TEXTURECUBE) {
 			std::vector<std::string> faces= {"right.jpg","left.jpg","top.jpg","bottom.jpg","front.jpg","back.jpg"};
-			glGenTextures(1, &tex->get);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, tex->get);
+			glGenTextures(1, &tex->srv);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, tex->srv);
 			tex->format = GL_TEXTURE_CUBE_MAP;
 			//int width, height, nrChannels;
 			for (unsigned int i = 0; i < 6; i++) {
@@ -119,8 +119,8 @@ namespace GraphicsModule {
 		else {
 			tex->format = GL_TEXTURE_2D;
 			bits = readTexture(filename, width, height, dib);
-			glGenTextures(1, &tex->get);
-			glBindTexture(GL_TEXTURE_2D, tex->get);
+			glGenTextures(1, &tex->srv);
+			glBindTexture(GL_TEXTURE_2D, tex->srv);
 			GLenum formats[5] = { GL_BGRA,GL_RGBA,GL_RED,GL_GREEN };
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, formats[inverted], GL_UNSIGNED_BYTE, bits);
 			FreeImage_Unload(dib);

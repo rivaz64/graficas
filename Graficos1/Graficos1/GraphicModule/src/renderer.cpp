@@ -35,7 +35,7 @@ namespace GraphicsModule {
 			tex[i].describe(f, BIND_FLAG::RENDER_TARGET);
 			getmanager()->getDevice()->CreateTexture2D(tex[i]);
 #ifdef openGL
-			glFramebufferTexture(GL_FRAMEBUFFER, DrawBuffers[i], getmanager()->screen->mod->modelo[0]->material[i]->get, 0);
+			glFramebufferTexture(GL_FRAMEBUFFER, DrawBuffers[i], getmanager()->screen->mod->modelo[0]->material[i]->srv, 0);
 			Draws[i] = DrawBuffers[i];
 #endif
 		}
