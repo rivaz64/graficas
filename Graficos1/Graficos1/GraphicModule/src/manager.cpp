@@ -128,10 +128,8 @@ namespace GraphicsModule {
 
 		if (o->mod->BonesNum != 0) {
 			o->mod->BoneTransform(timer);
-#ifdef directX
 			devcon.UpdateSubresource(o->mod->BonesB, o->mod->bonesPos);
 			devcon.UpdateSubresource(o->mod->skeletonB, o->mod->bonesEskeleton);
-#endif
 		}
 
 
@@ -149,12 +147,12 @@ namespace GraphicsModule {
 				getmanager()->getConext()->VSSetConstantBuffers(8, &o->mod->BonesB);
 				getmanager()->getConext()->VSSetConstantBuffers(9, &o->mod->skeletonB);
 #endif
-#ifdef openGL
+/*#ifdef openGL
 				GLuint ID;
 				ID = glGetUniformLocation(actualchader, ("b" + std::to_string(8)).c_str());
 
 				glUniformMatrix4fv(ID, 32, GL_FALSE, glm::value_ptr(mo->offset.m));
-#endif
+#endif*/
 #ifdef openGL
 				glBindVertexArray(mo->vao);
 #endif
