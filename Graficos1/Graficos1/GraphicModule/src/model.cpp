@@ -327,13 +327,13 @@ namespace GraphicsModule {
             BonesB.ByteWidth = sizeof(matrix) * 32;
             BonesB.CPUAccessFlags = 0;
             BonesB.Mem = bones;
-            getmanager()->getDevice()->CreateBuffer(BonesB);
+            BonesB.init();
             skeletonB.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
             skeletonB.Usage = USAGE::DEFAULT;
             skeletonB.ByteWidth = sizeof(matrix) * 32;
             skeletonB.CPUAccessFlags = 0;
             skeletonB.Mem = bones;
-            getmanager()->getDevice()->CreateBuffer(skeletonB);
+            skeletonB.init();
             
 
             bonesEskeleton = new matrix[32];

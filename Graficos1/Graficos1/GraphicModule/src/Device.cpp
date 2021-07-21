@@ -212,32 +212,6 @@ namespace GraphicsModule {
 
 	
 
-	void Device::CreateBuffer (Buffer& b)
-	{
-#ifdef openGL
-		
-		glGenBuffers(1, &b.buf);
- 		glBindBuffer((GLenum)b.BindFlags, b.buf);
-		glBufferData((GLenum)b.BindFlags, b.ByteWidth, b.Mem, (GLenum)b.Usage);
-		
-#endif
-#ifdef directX
-		D3D11_BUFFER_DESC bd;
-		D3D11_SUBRESOURCE_DATA InitData;
-		ZeroMemory(&bd, sizeof(bd));
-		ZeroMemory(&InitData, sizeof(InitData));
-		bd.Usage = (D3D11_USAGE)b.Usage;
-		bd.ByteWidth = b.ByteWidth;
-		bd.BindFlags = (D3D11_BIND_FLAG)b.BindFlags;
-		bd.CPUAccessFlags = 0;
-		InitData.pSysMem = b.Mem;
-		if(b.Mem==NULL)
-		g_pd3dDevice->CreateBuffer(&bd, NULL, &b.buf);
-		else 
-		g_pd3dDevice->CreateBuffer(&bd, &InitData, &b.buf);
-#endif
-	}
-
 	/*void Device::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT n, ID3DBlob* blob, InputLayout& il)
 	{
 #ifdef directX

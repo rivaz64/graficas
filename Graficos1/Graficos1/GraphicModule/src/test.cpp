@@ -261,61 +261,61 @@ namespace GraphicsModule
         view.ByteWidth = sizeof(CBNeverChanges);
         view.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         view.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(view);
+        view.init();
 
         proyection.Usage = USAGE::DEFAULT;
         proyection.ByteWidth = sizeof(CBChangeOnResize);
         proyection.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         proyection.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(proyection);
+        proyection.init();
 
         translation.Usage = USAGE::DEFAULT;
         translation.ByteWidth = sizeof(CBChangesEveryFrame);
         translation.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         translation.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(translation);
+        translation.init();
 
         Ambilight.Usage = USAGE::DEFAULT;
         Ambilight.ByteWidth = sizeof(float[4]);
         Ambilight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         Ambilight.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(Ambilight);
+        Ambilight.init();
 
         Dirlight.Usage = USAGE::DEFAULT;
         Dirlight.ByteWidth = sizeof(float[8]);
         Dirlight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         Dirlight.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(Dirlight);
+        Dirlight.init();
 
         Poslight.Usage = USAGE::DEFAULT;
         Poslight.ByteWidth = sizeof(float[8]);
         Poslight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         Poslight.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(Poslight);
+        Poslight.init();
 
         Spotlight.Usage = USAGE::DEFAULT;
         Spotlight.ByteWidth = sizeof(float[16]);
         Spotlight.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         Spotlight.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(Spotlight);
+        Spotlight.init();
 
         specularb.Usage = USAGE::DEFAULT;
         specularb.ByteWidth = sizeof(float[8]);
         specularb.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         specularb.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(specularb);
+        specularb.init();
 
         exposure.Usage = USAGE::DEFAULT;
         exposure.ByteWidth = sizeof(float[4]);
         exposure.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         exposure.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(exposure);
+        exposure.init();
 
         aob.Usage = USAGE::DEFAULT;
         aob.ByteWidth = sizeof(float[8]);
         aob.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
         aob.CPUAccessFlags = 0;
-        man->getDevice()->CreateBuffer(aob);
+        aob.init();
 
         paseprueba.vc.insert({ 0, &translation });
         paseprueba.vc.insert({ 1, &view });

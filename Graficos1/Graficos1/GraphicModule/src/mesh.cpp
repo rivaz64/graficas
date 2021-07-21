@@ -47,8 +47,8 @@ namespace GraphicsModule {
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
 #endif
-        getmanager()->getDevice()->CreateBuffer(vertexB);
-        getmanager()->getDevice()->CreateBuffer(indexB);
+        vertexB.init();
+        indexB.init();
 
         
 #ifdef openGL
