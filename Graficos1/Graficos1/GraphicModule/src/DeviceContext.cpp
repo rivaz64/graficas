@@ -154,19 +154,7 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void DeviceContext::UpdateSubresource(Buffer& b, 
-#ifdef directX
-		const
-#endif
-		void* c) {
-#ifdef openGL
-		//b.Mem = &((matrix*)c)->m;
-		b.data = *((glm::mat4*)c);
-#endif
-#ifdef directX
-		g_pImmediateContext->UpdateSubresource(b.buf, 0, NULL, c, 0, 0);
-#endif
-	}
+	
 
 	void DeviceContext::VSSetShader(VertexShader& vs)
 	{

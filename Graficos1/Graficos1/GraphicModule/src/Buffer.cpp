@@ -26,4 +26,13 @@ namespace GraphicsModule {
 			getmanager()->getDevice()->get()->CreateBuffer(&bd, &InitData, &buf);
 #endif
 	}
+	void Buffer::update(void* c)
+	{
+#ifdef openGL
+		data = *((glm::mat4*)c);
+#endif
+#ifdef directX
+		getmanager()->getConext()->get()->UpdateSubresource(buf, 0, NULL, c, 0, 0);
+#endif
+	}
 }

@@ -360,7 +360,7 @@ namespace GraphicsModule
         matrix cbNeverChanges;
         cam->getView(cbNeverChanges);
         man->View = cbNeverChanges;
-        man->getConext()->UpdateSubresource(view, &cbNeverChanges);
+        view.update(&cbNeverChanges);
 
         cam->angle = 0.785398163f;
         cam->ratio = width / (FLOAT)heigh;
@@ -369,7 +369,7 @@ namespace GraphicsModule
         matrix cbChangesOnResize;
         cam->getProyectionMatrixPerspective(cbChangesOnResize);
         man->Projection = cbChangesOnResize;
-        man->getConext()->UpdateSubresource(proyection, &cbChangesOnResize);
+        proyection.update(&cbChangesOnResize);
 
 
 
@@ -418,7 +418,7 @@ namespace GraphicsModule
             //man->getConext()->UpdateSubresource(cam);
             cam->getView(cbNeverChanges);
 
-            man->getConext()->UpdateSubresource(view, &cbNeverChanges);
+            view.update(&cbNeverChanges);
             man->View = cbNeverChanges;
         }
         else {
@@ -458,7 +458,7 @@ namespace GraphicsModule
 
             cam->getView(cbNeverChanges);
             man->View = cbNeverChanges;
-            man->getConext()->UpdateSubresource(view, &cbNeverChanges);
+            view.update(&cbNeverChanges);
         }
 
 
@@ -475,15 +475,15 @@ namespace GraphicsModule
         xtrs.kSpecular = specular;
         xtrs.shinines = shinines;
        
-        man->getConext()->UpdateSubresource(Ambilight, &al);
-        man->getConext()->UpdateSubresource(Dirlight, &dl);
-        man->getConext()->UpdateSubresource(Poslight, &pl);//*/
-        man->getConext()->UpdateSubresource(Spotlight, &sl);
-        man->getConext()->UpdateSubresource(specularb, &xtrs);
+        Ambilight.update(&al);
+        Dirlight.update(&dl);
+        Poslight.update(&pl);//*/
+        Spotlight.update(&sl);
+        specularb.update(&xtrs);
         f[0] = exp;
         f[1] = exp + expo;
-        man->getConext()->UpdateSubresource(exposure, f);
-        man->getConext()->UpdateSubresource(aob, &amoc);
+        exposure.update(f);
+        aob.update(&amoc);
 #ifdef openGL
 
         /*GLuint dirlID;

@@ -32,6 +32,7 @@ namespace GraphicsModule {
         void get() {  };
 #endif
         void init();
+        void update(void *c);
     };
 }
 

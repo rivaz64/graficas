@@ -115,7 +115,7 @@ namespace GraphicsModule {
 		g_World = XMMatrixMultiply(XMMatrixRotationRollPitchYaw(o->rot[0]/180.f*PI, o->rot[1] / 180.f * PI, o->rot[2] / 180.f * PI), g_World);
 		cb.mWorld = XMMatrixTranspose(g_World);
 		if (changeveryFrameB != NULL) {
-			devcon.UpdateSubresource(*changeveryFrameB, &cb);
+			changeveryFrameB->update(&cb);
 		}
 		
 #endif
@@ -128,8 +128,8 @@ namespace GraphicsModule {
 
 		if (o->mod->BonesNum != 0) {
 			o->mod->BoneTransform(timer);
-			devcon.UpdateSubresource(o->mod->BonesB, o->mod->bonesPos);
-			devcon.UpdateSubresource(o->mod->skeletonB, o->mod->bonesEskeleton);
+			o->mod->BonesB.update(o->mod->bonesPos);
+			o->mod->skeletonB.update(o->mod->bonesEskeleton);
 		}
 
 
