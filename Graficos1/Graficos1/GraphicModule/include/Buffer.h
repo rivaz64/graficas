@@ -31,8 +31,6 @@ namespace GraphicsModule {
 #else
         void get() {  };
 #endif
-        void describe();
-        ~Buffer();
     };
 }
 
