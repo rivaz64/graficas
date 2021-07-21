@@ -211,12 +211,7 @@ namespace GraphicsModule {
 	}
 
 	
-#ifdef directX
-	void Device::CreateBuffer(D3D11_BUFFER_DESC& bd, D3D11_SUBRESOURCE_DATA& InitData, Buffer& b)
-	{
-		 g_pd3dDevice->CreateBuffer(&bd, &InitData, &b.buf);
-	}
-#endif // directX
+
 	void Device::CreateBuffer (Buffer& b)
 	{
 #ifdef openGL
