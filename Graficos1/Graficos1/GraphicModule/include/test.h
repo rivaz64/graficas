@@ -120,6 +120,7 @@ namespace GraphicsModule
       Pass random;
       Pass skypas;
       Pass animSkeleton;
+      Pass HDR;
       Pass* actual;
       xtras xtrs;
       effecto deferred;

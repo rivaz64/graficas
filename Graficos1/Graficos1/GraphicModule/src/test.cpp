@@ -244,6 +244,7 @@ namespace GraphicsModule
         animSkeleton.compile("skeletal", {
             "",
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::LINELIST);
+        HDR.compile("HDR", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 #endif
         animSkeleton.clear = false;
         Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
