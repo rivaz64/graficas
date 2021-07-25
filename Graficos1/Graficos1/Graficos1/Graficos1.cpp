@@ -525,7 +525,8 @@ void UIRender()
     ImGui::End();
     if (ImGui::Begin("shaders", nullptr)) {
         GraphicsModule::manager* man = GraphicsModule::getmanager();
-        ImGui::DragInt("mipmap", &MiObj.xtrs.mipmapa, .036f);
+        ImGui::DragInt("mipmap", &MiObj.xpos.mipmap, .036f);
+        ImGui::DragFloat("brigthTreshold", &MiObj.xpos.brigthTreshold, .001f);
         ImGui::Checkbox("Pose Te", &man->tpose);
         ImGui::Checkbox("animation skeleton", &MiObj.animskel);
         if (ImGui::TreeNode("Light")) {

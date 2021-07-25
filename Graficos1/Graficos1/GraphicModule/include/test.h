@@ -81,6 +81,13 @@ namespace GraphicsModule
       float shinines;
       int mipmapa=0;
   };
+  struct xposure
+  {
+      float exposure=0;
+      float exponent=0;
+      float brigthTreshold=0;
+      int mipmap=0;
+  };
   struct CBChangeOnResize
   {
 #ifdef openGL
@@ -123,6 +130,7 @@ namespace GraphicsModule
       Pass HDR;
       Pass* actual;
       xtras xtrs;
+      xposure xpos;
       effecto deferred;
       effecto forward;
       effecto skeletal;

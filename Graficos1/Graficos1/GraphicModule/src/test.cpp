@@ -343,6 +343,7 @@ namespace GraphicsModule
         lights.pc.insert({ 4, &Ambilight });
         AmbientOcluccion.pc.insert({ 0,&aob });
         tonemap.pc.insert({ 0,&exposure });
+        HDR.pc.insert({ 0,&exposure });
         skypas.vc.insert({ 0, &translation });
         skypas.vc.insert({ 1, &view });
         skypas.vc.insert({ 2, &proyection });
@@ -481,9 +482,9 @@ namespace GraphicsModule
         Poslight.update(&pl);//*/
         Spotlight.update(&sl);
         specularb.update(&xtrs);
-        f[0] = exp;
-        f[1] = exp + expo;
-        exposure.update(f);
+        xpos.exposure = exp;
+        xpos.exponent = exp + expo;
+        exposure.update(&xpos);
         aob.update(&amoc);
 #ifdef openGL
 
