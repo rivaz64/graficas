@@ -37,6 +37,11 @@ namespace GraphicsModule {
 			tex[i].des.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 #endif
 			tex[i].init();
+			CD3D11_SHADER_RESOURCE_VIEW_DESC srvd;
+			ZeroMemory(&srvd, sizeof(srvd));
+			srvd.ViewDimension = (D3D11_SRV_DIMENSION)SRV_DIMENSION::TEXTURE2D;
+			srvd.Texture2D.MipLevels = -1;
+			getmanager()->getDevice()->get()->CreateShaderResourceView(tex[i].get, &srvd, &tex[i].srv.get);
 #ifdef openGL
 			glFramebufferTexture(GL_FRAMEBUFFER, DrawBuffers[i], getmanager()->screen->mod->modelo[0]->material[i]->srv.get, 0);
 			Draws[i] = DrawBuffers[i];

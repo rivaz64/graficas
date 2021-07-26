@@ -46,6 +46,7 @@ namespace GraphicsModule {
 		void loadfromfile(LPCSTR f,int inverted, SRV_DIMENSION d);
 		void init();
 		void update(unsigned char*& bits, unsigned int pitch);
+		void GenerateMips();
 		//unsigned int loadCubemap(vector<std::string> faces);
 		void release();
 #ifdef openGL

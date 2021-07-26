@@ -138,7 +138,7 @@ namespace GraphicsModule {
 		for (mesh* mo : (o->mod->modelo)) {
 
 			for (int m = 0; m < mo->material.size(); m++) {
-
+				//mo->material[m]->GenerateMips();
 				devcon.PSSetShaderResources(mo->material[m], m);
 			}
 			if (o->mod->BonesNum != 0) {

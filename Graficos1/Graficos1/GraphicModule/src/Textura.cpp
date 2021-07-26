@@ -57,6 +57,19 @@ namespace GraphicsModule {
         glBindTexture(GL_TEXTURE_2D, 0);
 #endif
     }
+    void Textura::GenerateMips()
+    {
+        if (get) {
+            CD3D11_SHADER_RESOURCE_VIEW_DESC srvd;
+            ZeroMemory(&srvd, sizeof(srvd));
+            srvd.ViewDimension = (D3D11_SRV_DIMENSION)SRV_DIMENSION::TEXTURE2D;
+            srvd.Texture2D.MipLevels = -1;
+
+            GraphicsModule::getmanager()->getDevice()->get()->CreateShaderResourceView(get, &srvd, &srv.get);
+            getmanager()->getConext()->get()->GenerateMips(srv.get);
+        }
+        
+    }
     void Textura::update(unsigned char*& bits, unsigned int pitch)
     {
        getmanager()->getConext()->get()->UpdateSubresource(get, 0, NULL, bits, pitch, 0);

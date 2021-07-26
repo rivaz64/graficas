@@ -67,7 +67,9 @@ void GraphicsModule::Pass::render(std::vector<objeto*>* objts,bool bol)//)
         for (int i = 0; i < size; i++)
         {
             man->saves->mod->modelo[0]->material[outn]->srv = man->actualRen->rtv.srv[i];
+            //man->saves->mod->modelo[0]->material[outn]->GenerateMips();
             man->screen->mod->modelo[0]->material[outs[i]]->srv = man->actualRen->rtv.srv[i];
+            getmanager()->getConext()->get()->GenerateMips(man->screen->mod->modelo[0]->material[outs[i]]->srv.get);
             outn++;
 
         }

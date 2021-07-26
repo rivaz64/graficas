@@ -183,7 +183,8 @@ namespace GraphicsModule {
 		srvd.Texture2D.MipLevels = -1; 
 
 		GraphicsModule::getmanager()->getDevice()->get()->CreateShaderResourceView(tex->get, &srvd, &tex->srv.get);//*/
-		GraphicsModule::getmanager()->getConext()->get()->GenerateMips(tex->srv.get);
+		getmanager()->getConext()->get()->GenerateMips(tex->srv.get);
+		//tex->GenerateMips();
 #endif
 		//return success
 		return true;
