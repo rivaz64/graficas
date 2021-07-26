@@ -21,8 +21,6 @@ namespace GraphicsModule {
 #ifdef directX
 	void Device::createVSwithInput(ID3D11VertexShader** vs, ID3D11InputLayout** il, ID3DBlob* Blob)
 	{
-
-		
 		g_pd3dDevice->CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize(), NULL, vs);
 		ID3D11ShaderReflection* reflection = NULL;
 		if (FAILED(D3DReflect(Blob->GetBufferPointer(), Blob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection)))
@@ -120,23 +118,7 @@ namespace GraphicsModule {
 #endif
 	}
 
-	void Device::CreateTexture2D(Textura& tx)
-	{
-#ifdef directX
-		HRESULT hr = g_pd3dDevice->CreateTexture2D(&tx.des, NULL, &tx.get);
-#endif
-#ifdef openGL
-		glGenTextures(1, &tx.srv.get);
-		glBindTexture(GL_TEXTURE_2D, tx.srv.get);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getmanager()->width, getmanager()->height,0, GL_RGBA, GL_FLOAT, 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		
-#endif
-	}
+	
 
 	void Device::CreateDepthStencilView(DepthStencil& ds)
 	{

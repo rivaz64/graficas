@@ -9,7 +9,7 @@ namespace GraphicsModule {
         ZeroMemory(&des, sizeof(des));
         des.Width = getmanager()->width;
         des.Height = getmanager()->height;
-        des.MipLevels = 1;
+        des.MipLevels = 0;
         des.ArraySize = 1;
         des.Format = (DXGI_FORMAT)f;
         des.SampleDesc.Count = 1;
@@ -40,5 +40,25 @@ namespace GraphicsModule {
         if(get!=NULL)
         get->Release();
 #endif
+    }
+    void Textura::init()
+    {
+#ifdef directX
+        HRESULT hr = getmanager()->getDevice()->get()->CreateTexture2D(&des, NULL, &get);
+#endif
+#ifdef openGL
+        glGenTextures(1, &srv.get);
+        glBindTexture(GL_TEXTURE_2D, srv.get);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getmanager()->width, getmanager()->height, 0, GL_RGBA, GL_FLOAT, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glBindTexture(GL_TEXTURE_2D, 0);
+#endif
+    }
+    void Textura::update(unsigned char*& bits, unsigned int pitch)
+    {
+       getmanager()->getConext()->get()->UpdateSubresource(get, 0, NULL, bits, pitch, 0);
     }
 }

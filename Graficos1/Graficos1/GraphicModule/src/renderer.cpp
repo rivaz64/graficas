@@ -33,7 +33,10 @@ namespace GraphicsModule {
 		for (int i = 0; i < n; i++) {
 			tex.push_back(Textura());
 			tex[i].describe(f, BIND_FLAG::RENDER_TARGET);
-			getmanager()->getDevice()->CreateTexture2D(tex[i]);
+#ifdef directX
+			tex[i].des.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+#endif
+			tex[i].init();
 #ifdef openGL
 			glFramebufferTexture(GL_FRAMEBUFFER, DrawBuffers[i], getmanager()->screen->mod->modelo[0]->material[i]->srv.get, 0);
 			Draws[i] = DrawBuffers[i];
@@ -50,7 +53,7 @@ namespace GraphicsModule {
 		depth.textur.des.BindFlags = (D3D11_BIND_FLAG)BIND_FLAG::DEPTH_STENCIL;
 #endif
 
-		getmanager()->getDevice()->CreateTexture2D(depth.textur);
+		depth.textur.init();
 		depth.describeview();
 
 		getmanager()->getDevice()->CreateDepthStencilView(depth);

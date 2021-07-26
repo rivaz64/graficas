@@ -621,7 +621,7 @@ int main()
     
     //nombrechader = "qwerty";
 #endif
-    if (FAILED(MiObj.InitWindow(1280, 720, WndProc)))
+    if (FAILED(MiObj.InitWindow(/*1280, 720*/1024,1024, WndProc)))
     {
         DestroyWindow(g_hwnd);
         return 0;

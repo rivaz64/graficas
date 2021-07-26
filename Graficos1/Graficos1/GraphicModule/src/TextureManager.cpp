@@ -166,9 +166,8 @@ namespace GraphicsModule {
 		
 		
 		if (d == SRV_DIMENSION::TEXTURE2D) {
-			GraphicsModule::getmanager()->getDevice()->CreateTexture2D(*tex);
-			unsigned int esta = FreeImage_GetPitch(dib);
-			GraphicsModule::getmanager()->getConext()->get()->UpdateSubresource(tex->get, 0, NULL, bits, FreeImage_GetPitch(dib), 0);
+			tex->init();
+			tex->update(bits, FreeImage_GetPitch(dib));
 			
 		}
 

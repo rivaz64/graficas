@@ -34,15 +34,18 @@ namespace GraphicsModule {
 	public:
 		ShaderResourseView srv;
 #ifdef directX
+		ID3D11Texture2D* get = NULL;
 		D3D11_TEXTURE2D_DESC des;
-		ID3D11Texture2D* get=NULL;
+		
 #endif
 #ifdef openGL
 		GLenum format= GL_TEXTURE_2D;
 #endif
-
+	public:
 		void describe(FORMAT f, BIND_FLAG bf);
 		void loadfromfile(LPCSTR f,int inverted, SRV_DIMENSION d);
+		void init();
+		void update(unsigned char*& bits, unsigned int pitch);
 		//unsigned int loadCubemap(vector<std::string> faces);
 		void release();
 #ifdef openGL
