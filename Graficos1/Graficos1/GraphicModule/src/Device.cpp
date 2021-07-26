@@ -186,7 +186,7 @@ namespace GraphicsModule {
 		descViewRT.Format = (DXGI_FORMAT)rtv.Format;
 		descViewRT.ViewDimension = (D3D11_SRV_DIMENSION)d;// (D3D_SRV_DIMENSION)rtv.ViewDimension;
 		descViewRT.Texture2D.MostDetailedMip = rtv.MostDetailedMip;
-		descViewRT.Texture2D.MipLevels = 1;// rtv.MipLevels;
+		descViewRT.Texture2D.MipLevels = -1;// rtv.MipLevels;
 		for(int i=0;i<n;i++)
 		g_pd3dDevice->CreateShaderResourceView(rtv.textur[i].get, &descViewRT, &rtv.srv[i].get);
 #endif
