@@ -5,7 +5,7 @@
 #include<iostream>
 #include"manager.h"
 int GraphicsModule::Pass::outn=0;
-void GraphicsModule::Pass::render(std::vector<objeto*>* objts,bool bol)//)
+void GraphicsModule::Pass::render(std::vector<objeto*>* objts,int n)//)
 {
     manager* man = getmanager();
 #ifdef openGL
@@ -26,10 +26,9 @@ void GraphicsModule::Pass::render(std::vector<objeto*>* objts,bool bol)//)
     glUniform1i(glGetUniformLocation(man->actualchader, "cubemap"), 5);
 #endif
 
-    if (clear) {//aka47
+    
         ren.setTargets();
         ren.clearTargets(clear);
-    }
 #ifdef openGL
     glEnable(GL_CULL_FACE);
     glCullFace((GLenum)c);

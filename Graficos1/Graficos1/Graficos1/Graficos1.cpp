@@ -589,7 +589,7 @@ void UIRender()
                 ImGui::DragFloat("exponent", &MiObj.expo, .001f);
                 ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 5);
                 //MiObj.actual = &MiObj.Gbuffer;
-                MiObj.tonemap.chadernum += 6;
+                //MiObj.tonemap.chadernum += 6;
                 MiObj.Copy.chadernum = 1;
             }
             else {
@@ -661,10 +661,10 @@ int main()
     std::vector<GraphicsModule::objeto*>* fondo = new std::vector<GraphicsModule::objeto*>({ MiObj.skypox });
     GraphicsModule::getmanager()->skeletons = new vector<GraphicsModule::objeto*>;
     GraphicsModule::getmanager()->getConext()->PSSetShaderResources(MiObj.skypox->mod->modelo[0]->material[0], 8);
-    MiObj.deferred.pases = { &MiObj.Gbuffer,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.HDR,&MiObj.skypas,&MiObj.Copy };
-    MiObj.deferred.objts = { MiObj.objectsToDraw,scirn,scirn,scirn,fondo ,scirn };
+    MiObj.deferred.pases = { &MiObj.Gbuffer     ,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.HDRL,&MiObj.HDRB,&MiObj.HDRH,&MiObj.HDRV/*,&MiObj.HDRA*/,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
+    MiObj.deferred.objts = { MiObj.objectsToDraw,scirn        ,scirn                  ,scirn      ,scirn      ,scirn      ,scirn      /*,scirn      */,scirn         ,fondo        ,scirn };
 
-    MiObj.forward.pases = { &MiObj.skypas ,&MiObj.paseprueba,&MiObj.HDR, &MiObj.Copy };
+    MiObj.forward.pases = { &MiObj.skypas ,&MiObj.paseprueba, &MiObj.Copy };
     MiObj.forward.objts = { fondo ,MiObj.objectsToDraw,scirn ,scirn };
 
     //MiObj.forward.pases = { &MiObj.skypas, &MiObj.Copy };

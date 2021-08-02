@@ -127,7 +127,11 @@ namespace GraphicsModule
       Pass random;
       Pass skypas;
       Pass animSkeleton;
-      Pass HDR;
+      Pass HDRL;
+      Pass HDRB;
+      Pass HDRH;
+      Pass HDRV;
+      Pass HDRA;
       Pass* actual;
       xtras xtrs;
       xposure xpos;

@@ -239,12 +239,16 @@ namespace GraphicsModule
          "#define ALL",
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
-        skypas.compile("skybox", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        skypas.compile("skybox", { "" }, false, { 5 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 #ifdef directX
         animSkeleton.compile("skeletal", {
             "",
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::LINELIST);
-        HDR.compile("HDR", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRL.compile("HDR_luminance", { "" }, false, { 1 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRB.compile("HDR_bright", { "" }, false, { 2 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRH.compile("HDR_blurH", { "" }, false, { 3 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRV.compile("HDR_blurV", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRA.compile("HDR_addbright", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 #endif
         animSkeleton.clear = false;
         Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
@@ -343,7 +347,9 @@ namespace GraphicsModule
         lights.pc.insert({ 4, &Ambilight });
         AmbientOcluccion.pc.insert({ 0,&aob });
         tonemap.pc.insert({ 0,&exposure });
-        HDR.pc.insert({ 0,&exposure });
+        HDRB.pc.insert({ 0,&exposure });
+        HDRV.pc.insert({ 0,&exposure });
+        HDRH.pc.insert({ 0,&exposure });
         skypas.vc.insert({ 0, &translation });
         skypas.vc.insert({ 1, &view });
         skypas.vc.insert({ 2, &proyection });
@@ -482,8 +488,8 @@ namespace GraphicsModule
         Poslight.update(&pl);//*/
         Spotlight.update(&sl);
         specularb.update(&xtrs);
-        xpos.exposure = exp;
-        xpos.exponent = exp + expo;
+        xpos.exposure = (float)heigh;
+        xpos.exponent = (float)width;
         exposure.update(&xpos);
         aob.update(&amoc);
 #ifdef openGL
