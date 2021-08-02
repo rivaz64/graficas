@@ -24,7 +24,7 @@ namespace GraphicsModule {
 		UINT MostDetailedMip;
 		UINT MipLevels;
 		std::vector<Textura> textur;
-		float ClearColor[4]= { 0.0f, 0.125f, 0.3f, 1.0f };
+		float ClearColor[4]= { 0.0f, 0.0f, 0.0f, 1.0f };
 		void setClearColor(std::initializer_list<float> c);
 		void release();
 	};

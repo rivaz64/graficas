@@ -661,8 +661,8 @@ int main()
     std::vector<GraphicsModule::objeto*>* fondo = new std::vector<GraphicsModule::objeto*>({ MiObj.skypox });
     GraphicsModule::getmanager()->skeletons = new vector<GraphicsModule::objeto*>;
     GraphicsModule::getmanager()->getConext()->PSSetShaderResources(MiObj.skypox->mod->modelo[0]->material[0], 8);
-    MiObj.deferred.pases = { &MiObj.Gbuffer     ,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.HDRL,&MiObj.HDRB,&MiObj.HDRH,&MiObj.HDRV/*,&MiObj.HDRA*/,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
-    MiObj.deferred.objts = { MiObj.objectsToDraw,scirn        ,scirn                  ,scirn      ,scirn      ,scirn      ,scirn      /*,scirn      */,scirn         ,fondo        ,scirn };
+    MiObj.deferred.pases = { &MiObj.Gbuffer     ,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.HDRL,&MiObj.HDRB,&MiObj.HDRH,&MiObj.HDRV,&MiObj.HDRA,&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
+    MiObj.deferred.objts = { MiObj.objectsToDraw,scirn        ,scirn                  ,scirn      ,scirn      ,scirn      ,scirn      ,scirn      ,scirn         ,fondo        ,scirn };
 
     MiObj.forward.pases = { &MiObj.skypas ,&MiObj.paseprueba, &MiObj.Copy };
     MiObj.forward.objts = { fondo ,MiObj.objectsToDraw,scirn ,scirn };

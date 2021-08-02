@@ -246,8 +246,8 @@ namespace GraphicsModule
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::LINELIST);
         HDRL.compile("HDR_luminance", { "" }, false, { 1 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         HDRB.compile("HDR_bright", { "" }, false, { 2 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-        HDRH.compile("HDR_blurH", { "" }, false, { 3 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-        HDRV.compile("HDR_blurV", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRH.compile("HDR_blurH", { "" }, false, { 6 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRV.compile("HDR_blurV", { "" }, false, { 7 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         HDRA.compile("HDR_addbright", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 #endif
         animSkeleton.clear = false;
