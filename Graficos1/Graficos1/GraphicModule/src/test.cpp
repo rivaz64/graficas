@@ -156,13 +156,13 @@ namespace GraphicsModule
         man->saves = new objeto;
         man->saves->mod = new model;
         man->saves->mod->modelo = { &pantaia };
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             man->screen->mod->modelo[0]->material.push_back(new Textura);
 #ifdef openGL
             man->getDevice()->CreateTexture2D(*man->screen->mod->modelo[0]->material[man->screen->mod->modelo[0]->material.size() - 1]);
 #endif
         }
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < 27; i++)
             man->saves->mod->modelo[0]->material.push_back(new Textura);
 
         Viewport vp;
@@ -249,6 +249,10 @@ namespace GraphicsModule
         HDRH.compile("HDR_blurH", { "" }, false, { 6 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         HDRV.compile("HDR_blurV", { "" }, false, { 7 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         HDRA.compile("HDR_addbright", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRH.blurb = &exposure;
+        HDRV.blurb = &exposure;
+        HDRH.blur = &xpos;
+        HDRV.blur = &xpos;
 #endif
         animSkeleton.clear = false;
         Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);

@@ -4,9 +4,17 @@
 #include "Pass.h"
 #include<iostream>
 #include"manager.h"
+#include"test.h"
 int GraphicsModule::Pass::outn=0;
 void GraphicsModule::Pass::render(std::vector<objeto*>* objts,int n)//)
 {
+    int memo;
+    if (blur) {
+        memo = blur->mipmap;
+        blur->mipmap = n;
+        blurb->update(blur);
+    }
+    
     manager* man = getmanager();
 #ifdef openGL
     if (ulti) {
@@ -73,7 +81,10 @@ void GraphicsModule::Pass::render(std::vector<objeto*>* objts,int n)//)
 
         }
     }
-
+    if (blur) {
+        blur->mipmap = memo;
+    }
+    
 }
 
 void GraphicsModule::Pass::compile(std::string file, std::vector<std::string> tecnicas, bool ultimo,vector<int> n, CULING cul, PRIMITIVE_TOPOLOGY p) {

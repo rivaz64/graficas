@@ -9,6 +9,7 @@
 #include<objeto.h>
 #include<Textura.h>
 namespace GraphicsModule {
+	struct xposure;
 	class Pass
 	{
 	public:
@@ -20,6 +21,9 @@ namespace GraphicsModule {
 		std::map<int, Buffer*> pc;
 		std::map<int, Textura*> pt;
 		std::map<int, Buffer*> vt;
+		Buffer* blurb=NULL;
+		xposure* blur = NULL;
+		
 		bool ulti;
 		bool clear=true;
 		Renderer ren;

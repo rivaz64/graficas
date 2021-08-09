@@ -2,8 +2,12 @@
 
 void GraphicsModule::effecto::render()
 {
-	//pases[0]->render(&v);
+	loopnum = initloop;
 	for (int i = 0; i < pases.size(); i++){
-		pases[i]->render(objts[i],i);
+		pases[i]->render(objts[i], loopnum);
+		if (i == 8&&loopnum>0) {
+			i = 6;
+			loopnum--;
+		}
 	}
 }
