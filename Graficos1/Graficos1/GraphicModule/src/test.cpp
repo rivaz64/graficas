@@ -246,13 +246,13 @@ namespace GraphicsModule
             }, false, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::LINELIST);
         HDRL.compile("HDR_luminance", { "" }, false, { 1 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         HDRB.compile("HDR_bright", { "" }, false, { 2 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-        HDRH.compile("HDR_blurH", { "" }, false, { 6 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRH.compile("HDR_blurH", { "" }, false, { 6}, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
         HDRV.compile("HDR_blurV", { "" }, false, { 7 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-        HDRA.compile("HDR_addbright", { "" }, false, { 0 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
-        HDRH.blurb = &exposure;
-        HDRV.blurb = &exposure;
-        HDRH.blur = &xpos;
-        HDRV.blur = &xpos;
+        HDRA.compile("HDR_addbright", { "" }, false, { 8 }, CULING::NONE, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
+        HDRH.blurb = &blurb;
+        HDRV.blurb = &blurb;
+        HDRH.blur = &blur;
+        HDRV.blur = &blur;
 #endif
         animSkeleton.clear = false;
         Copy.compile("copy", { "","#define DEFERED" }, true, { 0 }, CULING::FRONT, PRIMITIVE_TOPOLOGY::TRIANGLELIST);
@@ -314,6 +314,12 @@ namespace GraphicsModule
         specularb.CPUAccessFlags = 0;
         specularb.init();
 
+        blurb.Usage = USAGE::DEFAULT;
+        blurb.ByteWidth = sizeof(float[4]);
+        blurb.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
+        blurb.CPUAccessFlags = 0;
+        blurb.init();
+
         exposure.Usage = USAGE::DEFAULT;
         exposure.ByteWidth = sizeof(float[4]);
         exposure.BindFlags = BIND_FLAG::CONSTANT_BUFFER;
@@ -351,9 +357,9 @@ namespace GraphicsModule
         lights.pc.insert({ 4, &Ambilight });
         AmbientOcluccion.pc.insert({ 0,&aob });
         tonemap.pc.insert({ 0,&exposure });
-        HDRB.pc.insert({ 0,&exposure });
-        HDRV.pc.insert({ 0,&exposure });
-        HDRH.pc.insert({ 0,&exposure });
+        HDRB.pc.insert({ 0,&blurb });
+        HDRV.pc.insert({ 0,&blurb });
+        HDRH.pc.insert({ 0,&blurb });
         skypas.vc.insert({ 0, &translation });
         skypas.vc.insert({ 1, &view });
         skypas.vc.insert({ 2, &proyection });
@@ -492,9 +498,10 @@ namespace GraphicsModule
         Poslight.update(&pl);//*/
         Spotlight.update(&sl);
         specularb.update(&xtrs);
-        xpos.exposure = (float)heigh;
-        xpos.exponent = (float)width;
-        exposure.update(&xpos);
+        blur.exposure = (float)heigh;
+        blur.exponent = (float)width;
+        blurb.update(&blur);
+        exposure.update(&exposura);
         aob.update(&amoc);
 #ifdef openGL
 

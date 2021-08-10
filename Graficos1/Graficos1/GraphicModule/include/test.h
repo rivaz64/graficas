@@ -48,7 +48,7 @@ namespace GraphicsModule
   struct dirlight
   {
       float color[4];
-      float dir[4];
+      float dir[4] = { 0.0f,-1.0f,0.0f };
   };
   struct pointlight
   {
@@ -134,7 +134,7 @@ namespace GraphicsModule
       Pass HDRA;
       Pass* actual;
       xtras xtrs;
-      xposure xpos;
+      xposure blur;
       effecto deferred;
       effecto forward;
       effecto skeletal;
@@ -165,7 +165,7 @@ namespace GraphicsModule
       UINT heigh;
       camera* cam;
       Textura screen;
-
+      float exposura=1;
       
 
       Buffer view;
@@ -176,11 +176,12 @@ namespace GraphicsModule
       Buffer Poslight;
       Buffer Spotlight;
       Buffer specularb;
+      Buffer blurb;
       Buffer exposure;
       Buffer aob;
       Buffer BoneB;
       
-      bool deferar=false;
+      bool deferar=true;
       bool animskel = false;
       
       bool gbuf;

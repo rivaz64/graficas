@@ -525,9 +525,9 @@ void UIRender()
     ImGui::End();
     if (ImGui::Begin("shaders", nullptr)) {
         GraphicsModule::manager* man = GraphicsModule::getmanager();
-        ImGui::DragInt("mipmap", &MiObj.xpos.mipmap, .036f);
+        ImGui::DragInt("mipmap", &MiObj.blur.mipmap, .036f);
         ImGui::DragInt("blur", &MiObj.deferred.initloop, .036f);
-        ImGui::DragFloat("brigthTreshold", &MiObj.xpos.brigthTreshold, .001f);
+        ImGui::DragFloat("brigthTreshold", &MiObj.blur.brigthTreshold, .001f);
         ImGui::Checkbox("Pose Te", &man->tpose);
         ImGui::Checkbox("animation skeleton", &MiObj.animskel);
         if (ImGui::TreeNode("Light")) {
@@ -576,7 +576,7 @@ void UIRender()
         }
         if (ImGui::TreeNode("Tone Correction")) {
 
-            ImGui::DragFloat("exposure", &MiObj.exp, .001f);
+            ImGui::DragFloat("exposure", &MiObj.exposura, .001f);
             ImGui::DragInt("defe", &MiObj.tonemap.chadernum, .006f, 0, 11);
             ImGui::TreePop();
         }
@@ -662,8 +662,8 @@ int main()
     std::vector<GraphicsModule::objeto*>* fondo = new std::vector<GraphicsModule::objeto*>({ MiObj.skypox });
     GraphicsModule::getmanager()->skeletons = new vector<GraphicsModule::objeto*>;
     GraphicsModule::getmanager()->getConext()->PSSetShaderResources(MiObj.skypox->mod->modelo[0]->material[0], 8);
-    MiObj.deferred.pases = { &MiObj.Gbuffer     ,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.HDRL,&MiObj.HDRB,&MiObj.HDRH,&MiObj.HDRV,&MiObj.HDRA,&MiObj.tonemap,/*&MiObj.skypas,*/&MiObj.Copy };
-    MiObj.deferred.objts = { MiObj.objectsToDraw,scirn        ,scirn                  ,scirn      ,scirn      ,scirn      ,scirn      ,scirn      ,scirn         ,/*fondo        ,*/scirn };
+    MiObj.deferred.pases = { &MiObj.Gbuffer     ,&MiObj.lights,&MiObj.AmbientOcluccion,&MiObj.HDRL,&MiObj.HDRB,&MiObj.HDRH,&MiObj.HDRV,&MiObj.HDRA,/**/&MiObj.tonemap,&MiObj.skypas,&MiObj.Copy };
+    MiObj.deferred.objts = { MiObj.objectsToDraw,scirn        ,scirn                  ,scirn      ,scirn      ,scirn      ,scirn      ,scirn      ,/**/scirn         ,fondo        ,scirn };
 
     MiObj.forward.pases = { &MiObj.skypas ,&MiObj.paseprueba, &MiObj.Copy };
     MiObj.forward.objts = { fondo ,MiObj.objectsToDraw,scirn ,scirn };
